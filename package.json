@@ -1,7 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.7",
-    "private": true,
+    "version": "1.0.9",
     "scripts": {
         "serve": "vite build && vite preview",
         "build": "vite build",
@@ -14,7 +13,8 @@
     ],
     "dependencies": {
         "vue": "^3.0.5",
-        "vue-router": "4"
+        "vue-router": "4",
+        "vuex": "^4.0.2"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^1.4.0",
