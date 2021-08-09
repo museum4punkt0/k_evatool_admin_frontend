@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "scripts": {
         "serve": "vite build && vite preview",
         "build": "vite build",
@@ -16,9 +16,9 @@
         "vue": "^3.0.5"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue": "^1.3.0",
-        "@vue/cli-plugin-eslint": "~4.5.0",
-        "@vue/compiler-sfc": "^3.0.5",
+        "@vitejs/plugin-vue": "^1.4.0",
+        "@vue/cli-plugin-eslint": "~4.5.13",
+        "@vue/compiler-sfc": "^3.1.5",
         "@vue/eslint-config-prettier": "^6.0.0",
         "autoprefixer": "^10.3.1",
         "babel-eslint": "^10.1.0",
