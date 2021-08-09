@@ -1,0 +1,12 @@
+
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+
+### test get api.github
+get {{$dotenv [%]BASEURL}}/
+Content-Type: application/json
+x-direct: {{$dotenv [%]XDIRECT}}
+
+{
+}
+
