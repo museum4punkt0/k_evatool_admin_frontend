@@ -1,14 +1,14 @@
 <template>
     <h2>{{ $t('message.language') }}</h2>
-    <button @click="refresh">refresh</button>
+    <Button @click="refresh">refresh</Button>
     <ul>
         <li v-for="language in languages" :key="language.id">
             {{ language.id }} {{ language.title }} {{ language.code }}
             {{ language.sub_code }}
             {{ language.default }}
             {{ language.published }}
-            <button @click="deleteLanguage(language.id)">delete</button>
-            <button
+            <Button @click="deleteLanguage(language.id)">delete</Button>
+            <Button
                 @click="
                     updateLanguage({
                         id: language.id,
@@ -17,7 +17,7 @@
                 "
             >
                 update
-            </button>
+            </Button>
         </li>
     </ul>
     <button
@@ -37,10 +37,14 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
+import Button from './Button'
 
 const { useState, useActions } = createNamespacedHelpers('languages')
 
 export default {
+    components: {
+        Button,
+    },
     setup(props) {
         const { languages } = useState(['languages'])
         const { refresh, addLanguage, updateLanguage, deleteLanguage } =

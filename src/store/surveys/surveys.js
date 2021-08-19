@@ -7,7 +7,7 @@ export default {
     state: () => initialState,
     mutations: {
         setSurveys(state, value) {
-            state.languages = value
+            state.surveys = value
         },
     },
     actions: {

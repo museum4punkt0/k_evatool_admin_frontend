@@ -1,102 +1,42 @@
 <template>
-    <div>
-        <ul>
-            <li>
-                <router-link to="/">Home</router-link>
-            </li>
-            <li>
-                <router-link to="/about">About</router-link>
-            </li>
-        </ul>
-
-        <form>
-            <label>{{ $t('message.language') }}</label>
-            <select v-model="$i18n.locale">
-                <option value="en">en</option>
-                <option value="de">de</option>
-            </select>
-        </form>
-        <p>{{ $t('message.hello') }}</p>
-
-        Store Title: {{ title }}
-        <router-view></router-view>
-        <Languages></Languages>
-        <Surveys></Surveys>
-    </div>
+    <Container>
+        <Layout>
+            <Menu></Menu>
+            <Content>
+                <router-view></router-view>
+            </Content>
+        </Layout>
+        <Footer></Footer>
+    </Container>
 </template>
 
 <script>
-import surveyLanguagesService from './services/surveyLanguages'
-import surveysService from './services/surveys'
+import styled from 'vue3-styled-components'
 
-import Languages from './components/Languages.vue'
-import Surveys from './components/Surveys.vue'
-surveyLanguagesService.getAll(
-    (data) => {
-        console.log('got all languages', data)
-    },
-    (error) => {
-        console.error('could not get all languages', error)
-    },
-)
+import Layout from './components/Layout.vue'
+import Footer from './components/Footer.vue'
+import Menu from './components/Menu.vue'
+import Content from './components/Content.vue'
 
-surveyLanguagesService.getOne(
-    2,
-    (data) => {
-        console.log('got one language', data)
-    },
-    (error) => {
-        console.error('could not get one language', error)
-    },
-)
+const Container = styled.div`
+    width: 100vw;
+    height 100vh;
+    display: flex;
+    flex-direction: column;
+`
 
 export default {
     components: {
-        Languages,
-        Surveys,
+        Container,
+        Footer,
+        Menu,
+        Layout,
+        Content,
     },
     data() {
         return {
             title: this.$store.state.title,
         }
-    },
-    async mounted() {
-        const languages = await surveyLanguagesService.getAll()
-        console.log('languages', languages)
-
-        const language = await surveyLanguagesService.getOne(2)
-        console.log('language', language)
-
-        const createdLanguage = await surveyLanguagesService.createOne({
-            code: 'de',
-            sub_code: 'de_DE',
-            title: 'Deutsch',
-            default: true,
-            published: true,
-        })
-        console.log('createdLanguage', createdLanguage)
-        const updatedLanguage = await surveyLanguagesService.updateOne(
-            createdLanguage.id,
-            {
-                code: 'de',
-                sub_code: 'de_DE',
-                title: 'Deutsch',
-                default: true,
-                published: false,
-            },
-        )
-        console.log('updatedLanguage', updatedLanguage)
-        const deletedLanguage = await surveyLanguagesService.deleteOne(
-            createdLanguage.id,
-        )
-        console.log('deletedLanguage', deletedLanguage)
-
-        const surveys = await surveysService.getAll()
-        console.log(surveys)
-        const surveySteps = await surveysService.getAllSurveySteps(
-            surveys[0].id,
-        )
-        console.log(surveySteps)
     },
 }
 </script>
