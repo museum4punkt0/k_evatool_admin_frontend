@@ -23,6 +23,7 @@ export default {
     setup(props) {
         const { surveys } = useState(['surveys'])
         const { refresh } = useActions(['refresh'])
+        refresh()
         return {
             surveys,
             refresh,

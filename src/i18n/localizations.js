@@ -1,14 +1,12 @@
 export default {
     en: {
-        message: {
-            language: 'Language',
-            hello: 'hello world!',
-        },
+        survey: 'Survey',
+        language: 'Language',
+        hello: 'hello world!',
     },
     de: {
-        message: {
-            language: 'Sprache',
-            hello: 'hallo Welt!',
-        },
+        survey: 'Umfrage',
+        language: 'Sprache',
+        hello: 'hallo Welt!',
     },
 }

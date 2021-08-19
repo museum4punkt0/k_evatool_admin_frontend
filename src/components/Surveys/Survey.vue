@@ -1,6 +1,15 @@
 <template>
-    <h2>Survey</h2>
-    id: {{ id }}
+    <h2>
+        {{ $t('survey') }}
+    </h2>
+    id (param): {{ id }}
+    <br />
+    <ul v-if="survey">
+        <li>id: {{ survey.id }}</li>
+        <li>name: {{ survey.name }}</li>
+        <li>description: {{ survey.description }}</li>
+        <li>step count: {{ survey.surveyStepsCount }}</li>
+    </ul>
     <Button>
         <router-link :to="{ name: 'surveySteps', params: { id } }">
             steps
@@ -11,10 +20,13 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import Button from '../Button'
+
+const { useState, useActions } = createNamespacedHelpers('currentSurvey')
 
 export default {
     components: {
@@ -22,8 +34,9 @@ export default {
     },
     setup(props) {
         const id = ref()
-
         const route = useRoute()
+        const { survey } = useState(['survey'])
+        const { clear, setSurvey } = useActions(['clear', 'setSurvey'])
         onBeforeRouteUpdate(async (to, from) => {
             console.log('before route update')
             if (to.params.id !== from.params.id) {
@@ -32,15 +45,17 @@ export default {
             }
         })
         id.value = route.params.id
+        setSurvey(id.value)
         watch(
             () => route.params.id,
             (newId) => {
                 id.value = newId
-                //     TODO: fetch survey with id
+                setSurvey(newId)
             },
         )
         return {
             id,
+            survey,
         }
     },
 }

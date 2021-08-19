@@ -6,7 +6,9 @@
                 <router-link to="/">Home</router-link>
             </li>
             <li>
-                <router-link to="/surveys">surveys</router-link>
+                <router-link to="/surveys">
+                    {{ $t('survey') }}
+                </router-link>
             </li>
             <li>
                 <router-link to="/languages">languages</router-link>
