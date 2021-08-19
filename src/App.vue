@@ -20,12 +20,16 @@
 
         Store Title: {{ title }}
         <router-view></router-view>
+        <Languages></Languages>
     </div>
 </template>
 
 <script>
-import surveyLanguageService from './services/surveyLanguages'
-surveyLanguageService.getAll(
+import surveyLanguagesService from './services/surveyLanguages'
+import surveysService from './services/surveys'
+
+import Languages from './components/Languages.vue'
+surveyLanguagesService.getAll(
     (data) => {
         console.log('got all languages', data)
     },
@@ -34,7 +38,7 @@ surveyLanguageService.getAll(
     },
 )
 
-surveyLanguageService.getOne(
+surveyLanguagesService.getOne(
     2,
     (data) => {
         console.log('got one language', data)
@@ -45,19 +49,22 @@ surveyLanguageService.getOne(
 )
 
 export default {
+    components: {
+        Languages,
+    },
     data() {
         return {
             title: this.$store.state.title,
         }
     },
     async mounted() {
-        const languages = await surveyLanguageService.getAll()
+        const languages = await surveyLanguagesService.getAll()
         console.log('languages', languages)
 
-        const language = await surveyLanguageService.getOne(2)
+        const language = await surveyLanguagesService.getOne(2)
         console.log('language', language)
 
-        const createdLanguage = await surveyLanguageService.createOne({
+        const createdLanguage = await surveyLanguagesService.createOne({
             code: 'de',
             sub_code: 'de_DE',
             title: 'Deutsch',
@@ -65,7 +72,7 @@ export default {
             published: true,
         })
         console.log('createdLanguage', createdLanguage)
-        const updatedLanguage = await surveyLanguageService.updateOne(
+        const updatedLanguage = await surveyLanguagesService.updateOne(
             createdLanguage.id,
             {
                 code: 'de',
@@ -76,10 +83,17 @@ export default {
             },
         )
         console.log('updatedLanguage', updatedLanguage)
-        const deletedLanguage = await surveyLanguageService.deleteOne(
+        const deletedLanguage = await surveyLanguagesService.deleteOne(
             createdLanguage.id,
         )
         console.log('deletedLanguage', deletedLanguage)
+
+        const surveys = await surveysService.getAll()
+        console.log(surveys)
+        const surveySteps = await surveysService.getAllSurveySteps(
+            surveys[0].id,
+        )
+        console.log(surveySteps)
     },
 }
 </script>
