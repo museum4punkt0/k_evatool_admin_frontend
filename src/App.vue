@@ -21,6 +21,7 @@
         Store Title: {{ title }}
         <router-view></router-view>
         <Languages></Languages>
+        <Surveys></Surveys>
     </div>
 </template>
 
@@ -29,6 +30,7 @@ import surveyLanguagesService from './services/surveyLanguages'
 import surveysService from './services/surveys'
 
 import Languages from './components/Languages.vue'
+import Surveys from './components/Surveys.vue'
 surveyLanguagesService.getAll(
     (data) => {
         console.log('got all languages', data)
@@ -51,6 +53,7 @@ surveyLanguagesService.getOne(
 export default {
     components: {
         Languages,
+        Surveys,
     },
     data() {
         return {
