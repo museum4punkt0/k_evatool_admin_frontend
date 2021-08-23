@@ -4,8 +4,13 @@
 
 <script>
 import styled from 'vue3-styled-components'
+import theme from '../theme'
 const Container = styled.div`
-    background-color: lightblue;
+    background-color: ${theme.tertiaryBackgroundColor};
+    color: ${theme.tertiaryColor};
+    padding-left: 24px;
+    padding-right: 24px;
+    text-align: right;
 `
 export default {
     components: {

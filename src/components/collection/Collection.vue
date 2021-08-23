@@ -1,15 +1,17 @@
 <template>
     <Container>
-        <h2>{{ title }}</h2>
-        <Toolbar
-            :selected="selected"
-            :on-refresh="onRefresh"
-            :on-create="onCreate"
-            :on-edit="onEdit"
-            :on-delete="onDelete"
-            :on-filter-text-change="onFilterTextChange"
-        ></Toolbar>
-        <table>
+        <Header>
+            <Title>{{ title }}</Title>
+            <Toolbar
+                :selected="selected"
+                :on-refresh="onRefresh"
+                :on-create="onCreate"
+                :on-edit="onEdit"
+                :on-delete="onDelete"
+                :on-filter-text-change="onFilterTextChange"
+            ></Toolbar>
+        </Header>
+        <StyledTable>
             <tr>
                 <th></th>
                 <th>id</th>
@@ -27,7 +29,7 @@
                 :on-edit="onEdit"
                 :on-delete="onDelete"
             ></Row>
-        </table>
+        </StyledTable>
         <slot></slot>
     </Container>
 </template>
@@ -40,12 +42,41 @@ import Button from '../Button'
 import styled from 'vue3-styled-components'
 
 const Container = styled.div``
+const Header = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 24px;
+`
+const Title = styled.div`
+    flex-grow: 1;
+    font-size: 24px;
+`
+const StyledTable = styled.table`
+    width: 100%;
+    tr:nth-child(even) {
+        background: #fff;
+    }
+    th {
+        text-align: left;
+        &:last-child {
+            text-align: right;
+        }
+    }
+    tr {
+        td:last-child {
+            text-align: right;
+        }
+    }
+`
 const List = styled.ul``
 
 export default {
     components: {
         Button,
         Container,
+        Header,
+        Title,
+        StyledTable,
         List,
         Row: Item,
         Toolbar,

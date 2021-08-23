@@ -34,7 +34,11 @@ export default {
             return `${item.title} (${item.code}, ${item.sub_code})`
         }
         const textFilter = (item, text) => {
-            return item.name.includes(text)
+            return (
+                item.code.includes(text) ||
+                item.sub_code.includes(text) ||
+                item.title.includes(text)
+            )
         }
         const onCreate = () => {
             createOne({

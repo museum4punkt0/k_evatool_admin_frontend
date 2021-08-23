@@ -1,6 +1,5 @@
 <template>
     <Container>
-        <h2>menu</h2>
         <ul>
             <li>
                 <router-link to="/">Home</router-link>
@@ -22,9 +21,12 @@
 
 <script>
 import styled from 'vue3-styled-components'
+import theme from '../theme'
 const Container = styled.div`
-    background-color: lightpink;
     height: 100%;
+    padding: 24px;
+    background-color: ${theme.secondaryBackgroundColor};
+    color: ${theme.secondaryColor};
 `
 export default {
     components: {
