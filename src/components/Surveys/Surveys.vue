@@ -14,14 +14,12 @@
 <script>
 import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
-import Button from '../Button'
 import Collection from '../collection/Collection.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
 
 export default {
     components: {
-        Button,
         Collection,
     },
     setup(props) {

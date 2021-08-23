@@ -26,7 +26,6 @@
                 :on-checked-change="onItemSelectedChange(item)"
                 :on-edit="onEdit"
                 :on-delete="onDelete"
-                @click="onEdit(item)"
             >
                 <!-- <router-link :to="{ name: 'survey', params: { id: item.id } }">
                     {{ item.id }} {{ item.name }}
