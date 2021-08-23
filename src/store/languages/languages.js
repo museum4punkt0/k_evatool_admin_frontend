@@ -29,17 +29,17 @@ export default {
                 commit('setLanguages', surveyLanguages)
             })
         },
-        addLanguage({ commit }, data) {
+        createOne({ commit }, data) {
             surveyLanguagesService.createOne(data, (language) => {
                 commit('addLanguage', language)
             })
         },
-        updateLanguage({ commit }, { id, data }) {
+        updateOne({ commit }, { id, data }) {
             surveyLanguagesService.updateOne(id, data, (language) => {
                 commit('replaceLanguage', language)
             })
         },
-        deleteLanguage({ commit }, id) {
+        deleteOne({ commit }, { id }) {
             surveyLanguagesService.deleteOne(id, (language) => {
                 commit('deleteLanguage', language.id)
             })

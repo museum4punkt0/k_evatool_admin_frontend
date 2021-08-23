@@ -39,26 +39,26 @@ export default {
         const onCreate = () => {
             createOne({ name: 'new survey' })
         }
-        const onEdit = (surveys) => {
+        const onEdit = (items) => {
             console.log(surveys, typeof surveys)
-            if (typeof surveys === 'array') {
-                surveys.forEach((item) => {
+            if (Array.isArray(items)) {
+                items.forEach((item) => {
                     router.push({
                         name: 'survey',
-                        params: { id: surveys[0].id },
+                        params: { id: item.id },
                     })
                 })
-            } else if (typeof surveys === 'object') {
-                router.push({ name: 'survey', params: { id: surveys.id } })
+            } else if (typeof items === 'object') {
+                router.push({ name: 'survey', params: { id: items.id } })
             }
         }
-        const onDelete = (surveys) => {
-            if (typeof surveys === 'array') {
-                surveys.forEach((item) => {
+        const onDelete = (items) => {
+            if (Array.isArray(items)) {
+                items.forEach((item) => {
                     deleteOne(item)
                 })
-            } else if (typeof surveys === 'object') {
-                deleteOne(surveys)
+            } else if (typeof items === 'object') {
+                deleteOne(items)
             }
         }
 
@@ -73,7 +73,6 @@ export default {
             refresh,
         }
     },
-    methods: {},
 }
 </script>
 

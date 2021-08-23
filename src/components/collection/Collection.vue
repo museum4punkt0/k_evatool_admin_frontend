@@ -26,11 +26,7 @@
                 :on-checked-change="onItemSelectedChange(item)"
                 :on-edit="onEdit"
                 :on-delete="onDelete"
-            >
-                <!-- <router-link :to="{ name: 'survey', params: { id: item.id } }">
-                    {{ item.id }} {{ item.name }}
-                </router-link> -->
-            </Row>
+            ></Row>
         </table>
         <slot></slot>
     </Container>

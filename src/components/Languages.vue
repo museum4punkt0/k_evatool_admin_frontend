@@ -1,65 +1,81 @@
 <template>
-    <h2>{{ $t('message.language') }}</h2>
-    <Button @click="refresh">refresh</Button>
-    <ul>
-        <li v-for="language in languages" :key="language.id">
-            {{ language.id }} {{ language.title }} {{ language.code }}
-            {{ language.sub_code }}
-            {{ language.default }}
-            {{ language.published }}
-            <Button @click="deleteLanguage(language.id)">delete</Button>
-            <Button
-                @click="
-                    updateLanguage({
-                        id: language.id,
-                        data: { title: 'updated title' },
-                    })
-                "
-            >
-                update
-            </Button>
-        </li>
-    </ul>
-    <button
-        @click="
-            addLanguage({
-                title: 'Espanol',
-                code: 'es',
-                sub_code: 'es_ES',
-                default: false,
-                published: false,
-            })
-        "
-    >
-        add spanish
-    </button>
+    <Collection
+        :title="$t('message.language')"
+        :item-title-selector="itemTitleSelector"
+        :items="languages"
+        :text-filter="textFilter"
+        :on-refresh="refresh"
+        :on-create="onCreate"
+        :on-edit="onEdit"
+        :on-delete="onDelete"
+    ></Collection>
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
-import Button from './Button'
+import Collection from './collection/Collection.vue'
 
 const { useState, useActions } = createNamespacedHelpers('languages')
 
 export default {
     components: {
-        Button,
+        Collection,
     },
     setup(props) {
+        const router = useRouter()
         const { languages } = useState(['languages'])
-        const { refresh, addLanguage, updateLanguage, deleteLanguage } =
-            useActions([
-                'refresh',
-                'addLanguage',
-                'updateLanguage',
-                'deleteLanguage',
-            ])
+        const { createOne, deleteOne, refresh } = useActions([
+            'createOne',
+            'deleteOne',
+            'refresh',
+        ])
+        const itemTitleSelector = (item) => {
+            return `${item.title} (${item.code}, ${item.sub_code})`
+        }
+        const textFilter = (item, text) => {
+            return item.name.includes(text)
+        }
+        const onCreate = () => {
+            createOne({
+                code: 'de',
+                sub_code: 'de_DE',
+                title: 'new language',
+                default: false,
+                published: true,
+            })
+        }
+        const onEdit = (items) => {
+            if (Array.isArray(items)) {
+                items.forEach((item) => {
+                    router.push({
+                        name: 'survey',
+                        params: { id: item.id },
+                    })
+                })
+            } else if (typeof items === 'object') {
+                router.push({ name: 'survey', params: { id: items.id } })
+            }
+        }
+        const onDelete = (items) => {
+            if (Array.isArray(items)) {
+                items.forEach((item) => {
+                    deleteOne(item)
+                })
+            } else if (typeof items === 'object') {
+                deleteOne(items)
+            }
+        }
+
+        refresh()
         return {
             languages,
+            itemTitleSelector,
+            textFilter,
+            onCreate,
+            onEdit,
+            onDelete,
             refresh,
-            addLanguage,
-            updateLanguage,
-            deleteLanguage,
         }
     },
 }
