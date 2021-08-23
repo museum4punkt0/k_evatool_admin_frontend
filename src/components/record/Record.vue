@@ -1,42 +1,24 @@
 <template>
     <Container>
         <Header>
-            <Title>{{ title }}</Title>
-            <!-- <Toolbar
-                :selected="selected"
-                :on-refresh="onRefresh"
-                :on-create="onCreate"
-                :on-edit="onEdit"
-                :on-delete="onDelete"
-                :on-filter-text-change="onFilterTextChange"
-            ></Toolbar> -->
+            <Title>{{ titleSelector(data) }}</Title>
+            <Toolbar :data="data" :on-delete="onDelete"></Toolbar>
         </Header>
-        <!-- <StyledTable>
-            <tr>
-                <th></th>
-                <th>id</th>
-                <th>name</th>
-                <th>actions</th>
-            </tr>
-            <Row
-                v-for="(item, index) in items"
-                v-show="filterText === '' || textFilter(item, filterText)"
-                :key="index"
-                :data="item"
-                :id-selector="itemIdSelector"
-                :title-selector="itemTitleSelector"
-                :on-checked-change="onItemSelectedChange(item)"
-                :on-edit="onEdit"
-                :on-delete="onDelete"
-            ></Row>
-        </StyledTable> -->
-        <slot></slot>
+        <Meta>
+            <SectionTitle>Meta</SectionTitle>
+            <ul>
+                <li v-for="(item, index) in meta" :key="index">
+                    {{ item }}: {{ data[item] }}
+                </li>
+            </ul>
+        </Meta>
+        <!-- <slot></slot> -->
     </Container>
 </template>
 
 <script>
 import { ref } from 'vue'
-// import Toolbar from './Toolbar.vue'
+import Toolbar from './Toolbar.vue'
 // import Item from './Item.vue'
 import Button from '../Button'
 import styled from 'vue3-styled-components'
@@ -51,6 +33,11 @@ const Title = styled.div`
     flex-grow: 1;
     font-size: 24px;
 `
+const SectionTitle = styled.div`
+    flex-grow: 1;
+    font-size: 20px;
+`
+const Meta = styled.div``
 const StyledTable = styled.table`
     width: 100%;
     tr:nth-child(even) {
@@ -74,61 +61,30 @@ export default {
         Container,
         Header,
         Title,
+        SectionTitle,
+        Meta,
         StyledTable,
-        // Row: Item,
-        // Toolbar,
+        Toolbar,
     },
     props: {
-        title: {
-            type: String,
-            default: 'collection',
-        },
         itemIdSelector: {
             type: Function,
             required: true,
         },
-        itemTitleSelector: {
+        titleSelector: {
             type: Function,
             required: true,
         },
-        items: {
-            type: Array,
+        data: {
+            type: Object,
             required: true,
         },
-        textFilter: {
-            type: Function,
-            default: () => true,
-        },
-        onRefresh: { type: Function, default: () => {} },
-        onCreate: { type: Function, default: () => {} },
-        onEdit: { type: Function, default: () => {} },
+        meta: { type: Array, default: () => ['id', 'createdAt', 'updatedAT'] },
         onDelete: { type: Function, default: () => {} },
     },
     setup(props) {
-        const selected = ref([])
-        const filterText = ref('')
-        const onFilterTextChange = (value) => {
-            filterText.value = value.target.value
-        }
-        const onItemSelectedChange = (selectedItem) => {
-            return (event) => {
-                if (event.target.checked) {
-                    selected.value.push(selectedItem)
-                } else {
-                    selected.value = selected.value.filter(
-                        (item) => item.id !== selectedItem.id,
-                    )
-                }
-            }
-        }
-        return {
-            selected,
-            filterText,
-            onItemSelectedChange,
-            onFilterTextChange,
-        }
+        return {}
     },
-    methods: {},
 }
 </script>
 

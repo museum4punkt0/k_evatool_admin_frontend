@@ -1,5 +1,5 @@
 <template>
-    <Record :title="survey.name">
+    <Record :title="survey.name" :data="survey" :title-selector="titleSelector">
         <h2>
             {{ $t('survey') }}
         </h2>
@@ -40,6 +40,10 @@ export default {
         const route = useRoute()
         const { survey } = useState(['survey'])
         const { clear, setSurvey } = useActions(['clear', 'setSurvey'])
+
+        const titleSelector = (item) => {
+            return item.name
+        }
         onBeforeRouteUpdate(async (to, from) => {
             console.log('before route update')
             if (to.params.id !== from.params.id) {
@@ -59,6 +63,7 @@ export default {
         return {
             id,
             survey,
+            titleSelector,
         }
     },
 }
