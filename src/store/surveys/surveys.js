@@ -19,17 +19,17 @@ export default {
         },
     },
     actions: {
-        createOne({ commit }, data) {
+        createOneAndUpdateStore({ commit }, data) {
             surveysService.createOne(data, (survey) => {
                 commit('addSurvey', survey)
             })
         },
-        deleteOne({ commit }, { id }) {
+        deleteOneAndUpdateStore({ commit }, { id }) {
             surveysService.deleteOne(id, (survey) => {
                 commit('removeSurvey', survey)
             })
         },
-        refresh({ commit }) {
+        getAllAndUpdateStore({ commit }) {
             surveysService.getAll((surveys) => {
                 commit('setSurveys', surveys)
             })

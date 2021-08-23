@@ -1,22 +1,23 @@
 <template>
-    <h2>
-        {{ $t('survey') }}
-    </h2>
-    id (param): {{ id }}
-    <br />
-    <ul v-if="survey">
-        <li>id: {{ survey.id }}</li>
-        <li>name: {{ survey.name }}</li>
-        <li>description: {{ survey.description }}</li>
-        <li>step count: {{ survey.surveyStepsCount }}</li>
-    </ul>
-    <Button>
-        <router-link :to="{ name: 'surveySteps', params: { id } }">
-            steps
-        </router-link>
-    </Button>
-
-    <router-view></router-view>
+    <Record :title="survey.name">
+        <h2>
+            {{ $t('survey') }}
+        </h2>
+        id (param): {{ id }}
+        <br />
+        <ul v-if="survey">
+            <li>id: {{ survey.id }}</li>
+            <li>name: {{ survey.name }}</li>
+            <li>description: {{ survey.description }}</li>
+            <li>step count: {{ survey.surveyStepsCount }}</li>
+        </ul>
+        <Button>
+            <router-link :to="{ name: 'surveySteps', params: { id } }">
+                steps
+            </router-link>
+        </Button>
+        <router-view></router-view>
+    </Record>
 </template>
 
 <script>
@@ -25,12 +26,14 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import Button from '../Button'
+import Record from '../record/Record.vue'
 
 const { useState, useActions } = createNamespacedHelpers('currentSurvey')
 
 export default {
     components: {
         Button,
+        Record,
     },
     setup(props) {
         const id = ref()

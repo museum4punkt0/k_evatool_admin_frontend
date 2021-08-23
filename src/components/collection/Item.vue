@@ -7,6 +7,7 @@
         <td>{{ titleSelector(data) }}</td>
         <td>
             <Button @click="onEdit(data)">edit</Button>
+            <Button @click="onEdit(data)">duplicate</Button>
             <Button @click="onDelete(data)">delete</Button>
         </td>
     </Container>

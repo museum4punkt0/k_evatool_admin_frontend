@@ -25,10 +25,14 @@ export default {
     setup(props) {
         const router = useRouter()
         const { surveys } = useState(['surveys'])
-        const { createOne, deleteOne, refresh } = useActions([
-            'createOne',
-            'deleteOne',
-            'refresh',
+        const {
+            getAllAndUpdateStore,
+            createOneAndUpdateStore,
+            deleteOneAndUpdateStore,
+        } = useActions([
+            'getAllAndUpdateStore',
+            'createOneAndUpdateStore',
+            'deleteOneAndUpdateStore',
         ])
         const itemTitleSelector = (item) => {
             return item.name
@@ -37,10 +41,9 @@ export default {
             return item.name.includes(text)
         }
         const onCreate = () => {
-            createOne({ name: 'new survey' })
+            createOneAndUpdateStore({ name: 'new survey' })
         }
         const onEdit = (items) => {
-            console.log(surveys, typeof surveys)
             if (Array.isArray(items)) {
                 items.forEach((item) => {
                     router.push({
@@ -55,14 +58,14 @@ export default {
         const onDelete = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
-                    deleteOne(item)
+                    deleteOneAndUpdateStore(item)
                 })
             } else if (typeof items === 'object') {
-                deleteOne(items)
+                deleteOneAndUpdateStore(items)
             }
         }
 
-        refresh()
+        getAllAndUpdateStore()
         return {
             surveys,
             itemTitleSelector,
@@ -70,7 +73,7 @@ export default {
             onCreate,
             onEdit,
             onDelete,
-            refresh,
+            getAllAndUpdateStore,
         }
     },
 }

@@ -14,7 +14,7 @@
 <script>
 import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
-import Collection from './collection/Collection.vue'
+import Collection from '../collection/Collection.vue'
 
 const { useState, useActions } = createNamespacedHelpers('languages')
 
@@ -25,10 +25,14 @@ export default {
     setup(props) {
         const router = useRouter()
         const { languages } = useState(['languages'])
-        const { createOne, deleteOne, refresh } = useActions([
-            'createOne',
-            'deleteOne',
-            'refresh',
+        const {
+            getAllAndUpdateStore,
+            createOneAndUpdateStore,
+            deleteOneAndUpdateStore,
+        } = useActions([
+            'getAllAndUpdateStore',
+            'createOneAndUpdateStore',
+            'deleteOneAndUpdateStore',
         ])
         const itemTitleSelector = (item) => {
             return `${item.title} (${item.code}, ${item.sub_code})`
@@ -41,7 +45,7 @@ export default {
             )
         }
         const onCreate = () => {
-            createOne({
+            createOneAndUpdateStore({
                 code: 'de',
                 sub_code: 'de_DE',
                 title: 'new language',
@@ -53,25 +57,25 @@ export default {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
                     router.push({
-                        name: 'survey',
+                        name: 'language',
                         params: { id: item.id },
                     })
                 })
             } else if (typeof items === 'object') {
-                router.push({ name: 'survey', params: { id: items.id } })
+                router.push({ name: 'language', params: { id: items.id } })
             }
         }
         const onDelete = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
-                    deleteOne(item)
+                    deleteOneAndUpdateStore(item)
                 })
             } else if (typeof items === 'object') {
-                deleteOne(items)
+                deleteOneAndUpdateStore(items)
             }
         }
 
-        refresh()
+        getAllAndUpdateStore()
         return {
             languages,
             itemTitleSelector,
@@ -79,7 +83,7 @@ export default {
             onCreate,
             onEdit,
             onDelete,
-            refresh,
+            getAllAndUpdateStore,
         }
     },
 }

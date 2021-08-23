@@ -24,22 +24,22 @@ export default {
         },
     },
     actions: {
-        refresh({ commit }) {
+        getAllAndUpdateStore({ commit }) {
             surveyLanguagesService.getAll((surveyLanguages) => {
                 commit('setLanguages', surveyLanguages)
             })
         },
-        createOne({ commit }, data) {
+        createOneAndUpdateStore({ commit }, data) {
             surveyLanguagesService.createOne(data, (language) => {
                 commit('addLanguage', language)
             })
         },
-        updateOne({ commit }, { id, data }) {
+        updateOneAndUpdateStore({ commit }, { id, data }) {
             surveyLanguagesService.updateOne(id, data, (language) => {
                 commit('replaceLanguage', language)
             })
         },
-        deleteOne({ commit }, { id }) {
+        deleteOneAndUpdateStore({ commit }, { id }) {
             surveyLanguagesService.deleteOne(id, (language) => {
                 commit('deleteLanguage', language.id)
             })

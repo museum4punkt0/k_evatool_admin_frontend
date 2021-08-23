@@ -2,16 +2,16 @@
     <Container>
         <Header>
             <Title>{{ title }}</Title>
-            <Toolbar
+            <!-- <Toolbar
                 :selected="selected"
                 :on-refresh="onRefresh"
                 :on-create="onCreate"
                 :on-edit="onEdit"
                 :on-delete="onDelete"
                 :on-filter-text-change="onFilterTextChange"
-            ></Toolbar>
+            ></Toolbar> -->
         </Header>
-        <StyledTable>
+        <!-- <StyledTable>
             <tr>
                 <th></th>
                 <th>id</th>
@@ -29,15 +29,15 @@
                 :on-edit="onEdit"
                 :on-delete="onDelete"
             ></Row>
-        </StyledTable>
+        </StyledTable> -->
         <slot></slot>
     </Container>
 </template>
 
 <script>
 import { ref } from 'vue'
-import Toolbar from './Toolbar.vue'
-import Item from './Item.vue'
+// import Toolbar from './Toolbar.vue'
+// import Item from './Item.vue'
 import Button from '../Button'
 import styled from 'vue3-styled-components'
 
@@ -75,8 +75,8 @@ export default {
         Header,
         Title,
         StyledTable,
-        Row: Item,
-        Toolbar,
+        // Row: Item,
+        // Toolbar,
     },
     props: {
         title: {

@@ -3,7 +3,8 @@ import Home from '../components/Home.vue'
 import Surveys from '../components/Surveys/Surveys.vue'
 import Survey from '../components/Surveys/Survey.vue'
 import SurveySteps from '../components/Surveys/SurveySteps/SurveySteps.vue'
-import Languages from '../components/Languages.vue'
+import Languages from '../components/Languages/Languages.vue'
+import Language from '../components/Languages/Language.vue'
 import Settings from '../components/Settings.vue'
 
 const routes = [
@@ -17,7 +18,8 @@ const routes = [
             { name: 'surveySteps', path: 'steps', component: SurveySteps },
         ],
     },
-    { path: '/languages', component: Languages },
+    { name: 'languages', path: '/languages', component: Languages },
+    { name: 'language', path: '/languages/:id', component: Language },
     { path: '/settings', component: Settings },
 ]
 
