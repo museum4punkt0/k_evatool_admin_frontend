@@ -1,15 +1,13 @@
 <template>
-    <input
-        v-model="query"
-        placeholder="edit me"
-        @keyup="onSearchChange"
-        @change="onSearchChange"
-    />
+    <input v-model="query" placeholder="filter" @keyup="onFilterTextChange" />
     {{ query }}
-    <Button>search</Button>
-    <Button>delete</Button>
-    <Button>edit</Button>
-    <Button>create</Button>
+    <Button v-show="selected.length > 0" @click="onDelete(selected)">
+        delete
+    </Button>
+    <Button v-show="selected.length === 1" @click="onEdit(selected)">
+        edit
+    </Button>
+    <Button v-show="selected.length === 0" @click="onCreate">create</Button>
     <Button @click="onRefresh">refresh</Button>
 </template>
 
@@ -21,8 +19,11 @@ export default {
         Button,
     },
     props: {
-        onSearch: { type: Function, default: () => {} },
-        onSearchChange: { type: Function, default: () => {} },
+        selected: {
+            type: Array,
+            default: [],
+        },
+        onFilterTextChange: { type: Function, default: () => {} },
         onEdit: { type: Function, default: () => {} },
         onDelete: { type: Function, default: () => {} },
         onCreate: { type: Function, default: () => {} },

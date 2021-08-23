@@ -1,13 +1,9 @@
 <template>
     <Container>
-        <input
-            v-model="toggle"
-            type="checkbox"
-            true-value="yes"
-            false-value="no"
-            @change="onCheckedChange"
-        />
+        <input v-model="toggle" type="checkbox" @change="onCheckedChange" />
         <slot></slot>
+        <Button>edit</Button>
+        <Button>delete</Button>
     </Container>
 </template>
 
@@ -24,6 +20,14 @@ export default {
     },
     props: {
         onCheckedChange: {
+            type: Function,
+            default: () => {},
+        },
+        onEdit: {
+            type: Function,
+            default: () => {},
+        },
+        onDelete: {
             type: Function,
             default: () => {},
         },
