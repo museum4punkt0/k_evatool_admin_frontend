@@ -1,44 +1,28 @@
 <template>
-    <h2>Surveys</h2>
-    <Toolbar
+    <Collection
+        title="surveys"
+        :item-title-selector="itemTitleSelector"
+        :items="surveys"
+        :text-filter="textFilter"
         :on-refresh="refresh"
         :on-create="onCreate"
         :on-edit="onEdit"
         :on-delete="onDelete"
-        :on-filter-text-change="onFilterTextChange"
-        :selected="selected"
-    ></Toolbar>
-    <List>
-        <ListItem
-            v-for="survey in surveys"
-            v-show="filterText === '' || survey.name.includes(filterText)"
-            :key="survey.id"
-            :on-checked-change="onCheckedChange(survey)"
-        >
-            <router-link :to="{ name: 'survey', params: { id: survey.id } }">
-                {{ survey.id }} {{ survey.name }}
-            </router-link>
-        </ListItem>
-    </List>
+    ></Collection>
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Button from '../Button'
-import Toolbar from '../collection/Toolbar.vue'
-import List from '../collection/List.vue'
-import ListItem from '../collection/Item.vue'
+import Collection from '../collection/Collection.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
 
 export default {
     components: {
         Button,
-        Toolbar,
-        List,
-        ListItem,
+        Collection,
     },
     setup(props) {
         const router = useRouter()
@@ -48,46 +32,47 @@ export default {
             'deleteOne',
             'refresh',
         ])
-        const selected = ref([])
-        const filterText = ref('')
-        const onCheckedChange = (survey) => {
-            return (event) => {
-                if (event.target.checked) {
-                    selected.value.push(survey)
-                } else {
-                    selected.value = selected.value.filter(
-                        (item) => item.id !== survey.id,
-                    )
-                }
-                console.log(selected.value)
-            }
+        const itemTitleSelector = (item) => {
+            return item.name
+        }
+        const textFilter = (item, text) => {
+            return item.name.includes(text)
         }
         const onCreate = () => {
             createOne({ name: 'new survey' })
         }
         const onEdit = (surveys) => {
-            router.push({ name: 'survey', params: { id: surveys[0].id } })
+            console.log(surveys, typeof surveys)
+            if (typeof surveys === 'array') {
+                surveys.forEach((item) => {
+                    router.push({
+                        name: 'survey',
+                        params: { id: surveys[0].id },
+                    })
+                })
+            } else if (typeof surveys === 'object') {
+                router.push({ name: 'survey', params: { id: surveys.id } })
+            }
         }
         const onDelete = (surveys) => {
-            surveys.forEach((item) => {
-                console.log(item.id)
-                deleteOne(item)
-            })
+            if (typeof surveys === 'array') {
+                surveys.forEach((item) => {
+                    deleteOne(item)
+                })
+            } else if (typeof surveys === 'object') {
+                deleteOne(surveys)
+            }
         }
-        const onFilterTextChange = (value) => {
-            filterText.value = value.target.value
-        }
+
         refresh()
         return {
             surveys,
-            filterText,
+            itemTitleSelector,
+            textFilter,
             onCreate,
             onEdit,
             onDelete,
             refresh,
-            selected,
-            onCheckedChange,
-            onFilterTextChange,
         }
     },
     methods: {},

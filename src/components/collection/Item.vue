@@ -1,9 +1,14 @@
 <template>
     <Container>
-        <input v-model="toggle" type="checkbox" @change="onCheckedChange" />
-        <slot></slot>
-        <Button>edit</Button>
-        <Button>delete</Button>
+        <td>
+            <input v-model="toggle" type="checkbox" @change="onCheckedChange" />
+        </td>
+        <td>{{ idSelector(data) }}</td>
+        <td>{{ titleSelector(data) }}</td>
+        <td>
+            <Button @click="onEdit(data)">edit</Button>
+            <Button @click="onDelete(data)">delete</Button>
+        </td>
     </Container>
 </template>
 
@@ -11,7 +16,7 @@
 import Button from '../Button'
 import styled from 'vue3-styled-components'
 
-const Container = styled.li``
+const Container = styled.tr``
 
 export default {
     components: {
@@ -19,6 +24,18 @@ export default {
         Container,
     },
     props: {
+        data: {
+            type: Object,
+            required: true,
+        },
+        idSelector: {
+            type: Function,
+            default: (item) => item.id,
+        },
+        titleSelector: {
+            type: Function,
+            default: (item) => '',
+        },
         onCheckedChange: {
             type: Function,
             default: () => {},
@@ -33,9 +50,7 @@ export default {
         },
     },
     setup(props) {
-        return {
-            query: '',
-        }
+        return {}
     },
     methods: {},
 }
