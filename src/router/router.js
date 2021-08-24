@@ -11,19 +11,21 @@ import Settings from '../components/Settings.vue'
 const routes = [
     { path: '/', component: Home },
     { name: 'languages', path: '/languages', component: Languages },
+    { name: 'languages.new', path: '/languages/new', component: Languages },
     { name: 'language', path: '/languages/:id', component: Language },
     { path: '/surveys', component: Surveys },
+    { name: 'survey.new', path: '/surveys/new', component: Surveys },
     {
         name: 'survey',
         path: '/surveys/:id',
         component: Survey,
-        // children: [
-        //     {
-        //         name: 'surveySurveySteps',
-        //         path: 'steps',
-        //         component: SurveySurveySteps,
-        //     },
-        // ],
+        children: [
+            {
+                name: 'surveySurveySteps',
+                path: 'steps',
+                component: SurveySurveySteps,
+            },
+        ],
     },
     { name: 'surveySteps', path: '/survey-steps', component: SurveySteps },
     { path: '/settings', component: Settings },

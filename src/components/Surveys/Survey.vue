@@ -17,6 +17,7 @@
             </li>
         </ul>
     </Record>
+    <router-view></router-view>
 </template>
 
 <script>
