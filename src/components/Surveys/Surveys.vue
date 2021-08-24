@@ -52,7 +52,7 @@ export default {
                     })
                 })
             } else if (typeof items === 'object') {
-                router.push({ name: 'survey', params: { id: items.id } })
+                router.push({ name: 'surveySteps', params: { id: items.id } })
             }
         }
         const onDelete = (items) => {

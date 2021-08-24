@@ -17,12 +17,12 @@ export default {
         clear({ commit }) {
             commit('clear')
         },
-        setSurvey({ commit }, id) {
+        getOneAndUpdateStore({ commit }, { id }) {
             surveysService.getOne(id, (survey) => {
                 commit('setSurvey', survey)
             })
         },
-        updateSurvey({ commit }, { id, data }) {
+        updateOneAndUpdateStore({ commit }, { id, data }) {
             surveysService.updateOne(id, data, (survey) => {
                 commit('setSurvey', survey)
             })

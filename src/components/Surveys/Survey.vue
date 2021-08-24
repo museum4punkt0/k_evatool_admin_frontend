@@ -1,21 +1,22 @@
 <template>
     <Record :title="survey.name" :data="survey" :title-selector="titleSelector">
-        <h2>
+        <!-- <h2>
             {{ $t('survey') }}
-        </h2>
-        id (param): {{ id }}
-        <br />
+        </h2> -->
+        <ul>
+            <li><input v-model.lazy="survey.name" @change="update" /></li>
+            <li>
+                <input v-model.lazy="survey.description" @change="update" />
+            </li>
+        </ul>
         <ul v-if="survey">
-            <li>id: {{ survey.id }}</li>
-            <li>name: {{ survey.name }}</li>
-            <li>description: {{ survey.description }}</li>
             <li>step count: {{ survey.surveyStepsCount }}</li>
         </ul>
-        <Button>
+        <!-- <Button>
             <router-link :to="{ name: 'surveySteps', params: { id } }">
                 steps
             </router-link>
-        </Button>
+        </Button> -->
         <router-view></router-view>
     </Record>
 </template>
@@ -39,7 +40,16 @@ export default {
         const id = ref()
         const route = useRoute()
         const { survey } = useState(['survey'])
-        const { clear, setSurvey } = useActions(['clear', 'setSurvey'])
+        const { clear, getOneAndUpdateStore, updateOneAndUpdateStore } =
+            useActions([
+                'clear',
+                'getOneAndUpdateStore',
+                'updateOneAndUpdateStore',
+            ])
+
+        const update = () => {
+            updateOneAndUpdateStore({ id: survey.value.id, data: survey.value })
+        }
 
         const titleSelector = (item) => {
             return item.name
@@ -52,18 +62,19 @@ export default {
             }
         })
         id.value = route.params.id
-        setSurvey(id.value)
+        getOneAndUpdateStore({ id: id.value })
         watch(
             () => route.params.id,
             (newId) => {
                 id.value = newId
-                setSurvey(newId)
+                getOneAndUpdateStore({ id: newId })
             },
         )
         return {
             id,
             survey,
             titleSelector,
+            update,
         }
     },
 }
