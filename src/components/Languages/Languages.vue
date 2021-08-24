@@ -77,8 +77,9 @@ export default {
             languages,
             textFilter,
             selectors: {
-                itemTitle: (item) =>
-                    `${item.title} (${item.code}, ${item.sub_code})`,
+                itemTitle: (item) => {
+                    return `${item.title} (${item.code}, ${item.sub_code})`
+                },
             },
             handlers: {
                 onRefresh: getAllAndUpdateStore,

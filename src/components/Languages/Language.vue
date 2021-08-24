@@ -1,5 +1,10 @@
 <template>
-    <Record :data="selectedLanguage" :title-selector="selectors.title"></Record>
+    <Record
+        v-if="selectedLanguage"
+        :data="selectedLanguage"
+        :title-selector="selectors.title"
+        :on-delete="handlers.onDelete"
+    ></Record>
 </template>
 
 <script>
@@ -19,9 +24,15 @@ export default {
         const id = ref()
         const route = useRoute()
         const { selectedLanguage } = useState(['selectedLanguage'])
-        const { selectOneAndUpdateStore, updateOneAndUpdateStore } = useActions(
-            ['selectOneAndUpdateStore', 'updateOneAndUpdateStore'],
-        )
+        const {
+            selectOneAndUpdateStore,
+            updateSelectedAndUpdateStore,
+            deleteSelectedAndUpdateStore,
+        } = useActions([
+            'selectOneAndUpdateStore',
+            'updateSelectedAndUpdateStore',
+            'deleteSelectedAndUpdateStore',
+        ])
 
         id.value = route.params.id
         selectOneAndUpdateStore({ id: id.value })
@@ -45,6 +56,11 @@ export default {
             //     update,
             selectors: {
                 title: (item) => item.title,
+            },
+            handlers: {
+                onDelete: () => {
+                    deleteSelectedAndUpdateStore()
+                },
             },
         }
     },

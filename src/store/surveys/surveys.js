@@ -13,10 +13,10 @@ export default {
         setSelectedSurvey(state, value) {
             state.selectedSurvey = value
         },
-        selectedSurvey(state, id) {
-            // TODO: understand vuex, proxies, ....
-            state.selectedSurvey = state.surveys.find((item) => item.id === id)
-        },
+        // selectSurvey(state, id) {
+        //     // TODO: understand vuex, proxies, ....
+        //     state.selectedSurvey = state.surveys.find((item) => item.id === id)
+        // },
         addSurvey(state, value) {
             state.surveys.push(value)
         },

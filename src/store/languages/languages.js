@@ -61,6 +61,12 @@ export default {
                 commit('deleteLanguage', language.id)
             })
         },
+        deleteSelectedAndUpdateStore({ commit }, { id }) {
+            surveyLanguagesService.deleteOne(id, (language) => {
+                commit('deleteLanguage', language.id)
+                commit('setSelectedLanguage', null)
+            })
+        },
     },
     getters: {},
 }

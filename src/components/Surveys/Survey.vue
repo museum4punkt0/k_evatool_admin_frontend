@@ -1,9 +1,9 @@
 <template>
     <Record
         v-if="selectedSurvey"
-        :title="selectedSurvey.name"
         :data="selectedSurvey"
         :title-selector="selectors.title"
+        :on-delete="handlers.onDelete"
     >
         <ul>
             <li>
@@ -69,6 +69,9 @@ export default {
             selectedSurvey,
             selectors: {
                 title: (item) => item.name,
+            },
+            handlers: {
+                onDelete: (item) => {},
             },
             update,
         }
