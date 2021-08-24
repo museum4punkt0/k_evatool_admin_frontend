@@ -2,15 +2,11 @@ import axios from 'axios'
 
 const prefix = (value) => `${import.meta.env.VITE_API_BASE_URL}/${value}`
 const urls = {
-    getAll: () => prefix(`evaluation-tool/surveys`),
-    getOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
-    createOne: () => prefix(`evaluation-tool/surveys`),
-    updateOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
-    deleteOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
-    getAllSurveySteps: (id) =>
-        prefix(`evaluation-tool/surveys/${id}/survey-steps`),
-    deleteOneSurveyStep: (id, stepId) =>
-        prefix(`evaluation-tool/surveys/${id}/survey-steps/${stepId}`),
+    getAll: () => prefix(`evaluation-tool/survey-steps`),
+    getOne: (id) => prefix(`evaluation-tool/survey-steps/${id}`),
+    createOne: () => prefix(`evaluation-tool/survey-steps`),
+    updateOne: (id) => prefix(`evaluation-tool/survey-steps/${id}`),
+    deleteOne: (id) => prefix(`evaluation-tool/survey-steps/${id}`),
 }
 
 export default {
@@ -24,7 +20,7 @@ export default {
                 } else if (errorCallback) {
                     errorCallback(response)
                 } else {
-                    console.error('could not get all surveys')
+                    console.error('could not get all survey steps')
                 }
             })
         } else {
@@ -42,7 +38,7 @@ export default {
                 } else if (errorCallback) {
                     errorCallback(response)
                 } else {
-                    console.error('could not get one survey', id)
+                    console.error('could not get one survey step', id)
                 }
             })
         } else {
@@ -61,7 +57,7 @@ export default {
                 } else if (errorCallback) {
                     errorCallback(response)
                 } else {
-                    console.error('could not create one survey', data)
+                    console.error('could not create one survey step', data)
                 }
             })
         } else {
@@ -80,7 +76,7 @@ export default {
                 } else if (errorCallback) {
                     errorCallback(response)
                 } else {
-                    console.error('could not update one survey', id, data)
+                    console.error('could not update one survey step', id, data)
                 }
             })
         } else {
@@ -99,48 +95,12 @@ export default {
                 } else if (errorCallback) {
                     errorCallback(response)
                 } else {
-                    console.error('could not delete one survey', id)
+                    console.error('could not delete one survey step', id)
                 }
             })
         } else {
             const response = await axios({ url, method })
             return response.data.data
-        }
-    },
-    async getAllSurveySteps(id, successCallback, errorCallback) {
-        const url = urls.getAllSurveySteps(id)
-
-        if (successCallback) {
-            axios.get(url).then((response) => {
-                if (response.data) {
-                    successCallback(response.data)
-                } else if (errorCallback) {
-                    errorCallback(response)
-                } else {
-                    console.error('could not get all survey steps')
-                }
-            })
-        } else {
-            const response = await axios.get(url)
-            return response.data
-        }
-    },
-    async deleteOneSurveyStep(id, stepId, successCallback, errorCallback) {
-        const url = urls.deleteOneSurveyStep(id, stepId)
-
-        if (successCallback) {
-            axios.get(url).then((response) => {
-                if (response.data) {
-                    successCallback(response.data)
-                } else if (errorCallback) {
-                    errorCallback(response)
-                } else {
-                    console.error('could not delete one survey step')
-                }
-            })
-        } else {
-            const response = await axios.get(url)
-            return response.data
         }
     },
 }

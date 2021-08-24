@@ -1,13 +1,13 @@
 <template>
     <Collection
         title="surveys"
-        :item-title-selector="itemTitleSelector"
         :items="surveys"
         :text-filter="textFilter"
-        :on-refresh="refresh"
-        :on-create="onCreate"
-        :on-edit="onEdit"
-        :on-delete="onDelete"
+        :item-title-selector="selectors.itemTitle"
+        :on-refresh="handlers.onRefresh"
+        :on-create="handlers.onCreate"
+        :on-edit="handlers.onEdit"
+        :on-delete="handlers.onDelete"
     ></Collection>
 </template>
 
@@ -34,9 +34,6 @@ export default {
             'createOneAndUpdateStore',
             'deleteOneAndUpdateStore',
         ])
-        const itemTitleSelector = (item) => {
-            return item.name
-        }
         const textFilter = (item, text) => {
             return item.name.includes(text)
         }
@@ -52,7 +49,10 @@ export default {
                     })
                 })
             } else if (typeof items === 'object') {
-                router.push({ name: 'surveySteps', params: { id: items.id } })
+                router.push({
+                    name: 'survey',
+                    params: { id: items.id },
+                })
             }
         }
         const onDelete = (items) => {
@@ -68,12 +68,16 @@ export default {
         getAllAndUpdateStore()
         return {
             surveys,
-            itemTitleSelector,
             textFilter,
-            onCreate,
-            onEdit,
-            onDelete,
-            getAllAndUpdateStore,
+            selectors: {
+                itemTitle: (item) => item.name,
+            },
+            handlers: {
+                onRefresh: getAllAndUpdateStore,
+                onCreate,
+                onEdit,
+                onDelete,
+            },
         }
     },
 }

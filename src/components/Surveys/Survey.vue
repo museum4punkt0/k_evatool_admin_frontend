@@ -1,79 +1,75 @@
 <template>
-    <Record :title="survey.name" :data="survey" :title-selector="titleSelector">
-        <!-- <h2>
-            {{ $t('survey') }}
-        </h2> -->
+    <Record
+        v-if="selectedSurvey"
+        :title="selectedSurvey.name"
+        :data="selectedSurvey"
+        :title-selector="selectors.title"
+    >
         <ul>
-            <li><input v-model.lazy="survey.name" @change="update" /></li>
             <li>
-                <input v-model.lazy="survey.description" @change="update" />
+                <input v-model.lazy="selectedSurvey.name" @change="update" />
+            </li>
+            <li>
+                <input
+                    v-model.lazy="selectedSurvey.description"
+                    @change="update"
+                />
             </li>
         </ul>
-        <ul v-if="survey">
-            <li>step count: {{ survey.surveyStepsCount }}</li>
-        </ul>
-        <!-- <Button>
-            <router-link :to="{ name: 'surveySteps', params: { id } }">
-                steps
-            </router-link>
-        </Button> -->
-        <router-view></router-view>
     </Record>
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-import Button from '../Button'
+import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Record from '../record/Record.vue'
 
-const { useState, useActions } = createNamespacedHelpers('currentSurvey')
+const { useState, useActions } = createNamespacedHelpers('surveys')
 
 export default {
     components: {
-        Button,
         Record,
     },
     setup(props) {
         const id = ref()
         const route = useRoute()
-        const { survey } = useState(['survey'])
-        const { clear, getOneAndUpdateStore, updateOneAndUpdateStore } =
+        const { selectedSurvey } = useState(['selectedSurvey'])
+        const { selectOneAndUpdateStore, updateSelectedAndUpdateStore } =
             useActions([
-                'clear',
-                'getOneAndUpdateStore',
-                'updateOneAndUpdateStore',
+                'selectOneAndUpdateStore',
+                'updateSelectedAndUpdateStore',
             ])
 
         const update = () => {
-            updateOneAndUpdateStore({ id: survey.value.id, data: survey.value })
+            updateSelectedAndUpdateStore({
+                id: selectedSurvey.value.id,
+                data: selectedSurvey.value,
+            })
         }
 
-        const titleSelector = (item) => {
-            return item.name
-        }
         onBeforeRouteUpdate(async (to, from) => {
-            console.log('before route update')
             if (to.params.id !== from.params.id) {
-                console.log('param changed on update', to.params.id)
-                //     TODO: fetch survey with id
+                id.value = to.params.id
+                selectOneAndUpdateStore(id.value)
             }
         })
         id.value = route.params.id
-        getOneAndUpdateStore({ id: id.value })
+        selectOneAndUpdateStore({ id: id.value })
         watch(
             () => route.params.id,
             (newId) => {
                 id.value = newId
-                getOneAndUpdateStore({ id: newId })
+                selectOneAndUpdateStore({ id: newId })
             },
         )
         return {
             id,
-            survey,
-            titleSelector,
+            selectedSurvey,
+            selectors: {
+                title: (item) => item.name,
+            },
             update,
         }
     },

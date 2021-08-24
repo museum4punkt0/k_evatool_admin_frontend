@@ -1,15 +1,13 @@
 import { createStore } from 'vuex'
 import languages from './languages/languages'
 import surveys from './surveys/surveys'
-import currentSurvey from './currentSurvey/currentSurvey'
+import surveySteps from './surveySteps/surveySteps'
 
 export default createStore({
     modules: {
         languages,
         surveys,
-        currentSurvey,
+        surveySteps,
     },
-    state: {
-        title: 'Vue3 Store',
-    },
+    state: {},
 })

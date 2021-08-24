@@ -10,6 +10,11 @@
                 </router-link>
             </li>
             <li>
+                <router-link to="/survey-steps">
+                    {{ $t('survey-steps') }}
+                </router-link>
+            </li>
+            <li>
                 <router-link to="/languages">languages</router-link>
             </li>
             <li>

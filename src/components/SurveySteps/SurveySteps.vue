@@ -1,7 +1,7 @@
 <template>
     <Collection
-        :title="$t('message.language')"
-        :items="languages"
+        title="survey steps"
+        :items="surveySteps"
         :text-filter="textFilter"
         :item-title-selector="selectors.itemTitle"
         :on-refresh="handlers.onRefresh"
@@ -16,7 +16,7 @@ import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Collection from '../collection/Collection.vue'
 
-const { useState, useActions } = createNamespacedHelpers('languages')
+const { useState, useActions } = createNamespacedHelpers('surveySteps')
 
 export default {
     components: {
@@ -24,7 +24,7 @@ export default {
     },
     setup(props) {
         const router = useRouter()
-        const { languages } = useState(['languages'])
+        const { surveySteps } = useState(['surveySteps'])
         const {
             getAllAndUpdateStore,
             createOneAndUpdateStore,
@@ -34,32 +34,16 @@ export default {
             'createOneAndUpdateStore',
             'deleteOneAndUpdateStore',
         ])
-        const textFilter = (item, text) => {
-            return (
-                item.code.includes(text) ||
-                item.sub_code.includes(text) ||
-                item.title.includes(text)
-            )
-        }
-        const onCreate = () => {
-            createOneAndUpdateStore({
-                code: 'de',
-                sub_code: 'de_DE',
-                title: 'new language',
-                default: false,
-                published: true,
-            })
-        }
         const onEdit = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
                     router.push({
-                        name: 'language',
+                        name: 'surveyStep',
                         params: { id: item.id },
                     })
                 })
             } else if (typeof items === 'object') {
-                router.push({ name: 'language', params: { id: items.id } })
+                router.push({ name: 'surveyStep', params: { id: items.id } })
             }
         }
         const onDelete = (items) => {
@@ -74,15 +58,19 @@ export default {
 
         getAllAndUpdateStore()
         return {
-            languages,
-            textFilter,
+            surveySteps,
+            textFilter: (item, text) => item.name.includes(text),
             selectors: {
                 itemTitle: (item) =>
-                    `${item.title} (${item.code}, ${item.sub_code})`,
+                    `${item.survey_id} - ${item.survey_element_id}`,
             },
             handlers: {
                 onRefresh: getAllAndUpdateStore,
-                onCreate,
+                onCreate: () =>
+                    createOneAndUpdateStore({
+                        survey_id: 1,
+                        survey_element_id: 1,
+                    }),
                 onEdit,
                 onDelete,
             },

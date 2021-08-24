@@ -1,6 +1,7 @@
 import surveyLanguagesService from '../../services/surveyLanguages'
 const initialState = {
     languages: [],
+    selectedLanguage: null,
 }
 export default {
     namespaced: true,
@@ -8,6 +9,16 @@ export default {
     mutations: {
         setLanguages(state, languages) {
             state.languages = languages
+        },
+        setSelectedLanguage(state, language) {
+            state.selectedLanguage = language
+        },
+        selectLanguage(state, id) {
+            // TODO: understand vuex, proxies, ....
+            state.selectedLanguage = state.languages.find(
+                (item) => item.id === id,
+            )
+            console.log(state.languages, id)
         },
         addLanguage(state, language) {
             state.languages.push(language)
@@ -27,6 +38,12 @@ export default {
         getAllAndUpdateStore({ commit }) {
             surveyLanguagesService.getAll((surveyLanguages) => {
                 commit('setLanguages', surveyLanguages)
+            })
+        },
+        selectOneAndUpdateStore({ commit }, { id }) {
+            //     commit('selectLanguage', id)
+            surveyLanguagesService.getOne(id, (surveyLanguage) => {
+                commit('setSelectedLanguage', surveyLanguage)
             })
         },
         createOneAndUpdateStore({ commit }, data) {
