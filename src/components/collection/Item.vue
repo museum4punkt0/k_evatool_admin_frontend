@@ -1,7 +1,11 @@
 <template>
     <Container>
         <td>
-            <input v-model="toggle" type="checkbox" @change="onCheckedChange" />
+            <input
+                v-model="selected"
+                type="checkbox"
+                @change="onCheckedChange"
+            />
         </td>
         <td>{{ idSelector(data) }}</td>
         <td>{{ titleSelector(data) }}</td>
@@ -51,7 +55,9 @@ export default {
         },
     },
     setup(props) {
-        return {}
+        return {
+            selected: false,
+        }
     },
     methods: {},
 }

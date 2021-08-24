@@ -13,9 +13,11 @@
         </Header>
         <StyledTable>
             <tr>
-                <th></th>
+                <th>
+                    <input type="checkbox" @change="onBulkSelectedChange" />
+                </th>
                 <th>id</th>
-                <th>name</th>
+                <th>title</th>
                 <th>actions</th>
             </tr>
             <Row
@@ -121,10 +123,20 @@ export default {
                 }
             }
         }
+        const onBulkSelectedChange = (event) => {
+            console.log(event.target.checked)
+            if (event.target.checked) {
+                selected.value = props.items
+                // TODO: update models within items, refs? props? ...
+            } else {
+                selected.value = []
+            }
+        }
         return {
             selected,
             filterText,
             onItemSelectedChange,
+            onBulkSelectedChange,
             onFilterTextChange,
         }
     },
