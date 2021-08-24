@@ -48,6 +48,12 @@ export default {
                 // TODO: update already stored surveys
             })
         },
+        deleteSelectedAndUpdateStore({ commit }, { id }) {
+            surveysService.deleteOne(id, (item) => {
+                commit('deleteSurvey', item.id)
+                commit('setSelectedSurvey', null)
+            })
+        },
         deleteOneAndUpdateStore({ commit }, { id }) {
             surveysService.deleteOne(id, (survey) => {
                 commit('removeSurvey', survey)

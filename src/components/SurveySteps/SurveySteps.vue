@@ -14,7 +14,7 @@
 <script>
 import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
-import Collection from '../collection/Collection.vue'
+import Collection from '../Collection/Collection.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveySteps')
 

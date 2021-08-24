@@ -12,7 +12,7 @@ import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-import Record from '../record/Record.vue'
+import Record from '../Record/Record.vue'
 
 const { useState, useActions } = createNamespacedHelpers('languages')
 

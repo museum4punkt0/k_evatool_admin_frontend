@@ -24,7 +24,7 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
-import Record from '../record/Record.vue'
+import Record from '../Record/Record.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
 
@@ -36,11 +36,15 @@ export default {
         const id = ref()
         const route = useRoute()
         const { selectedSurvey } = useState(['selectedSurvey'])
-        const { selectOneAndUpdateStore, updateSelectedAndUpdateStore } =
-            useActions([
-                'selectOneAndUpdateStore',
-                'updateSelectedAndUpdateStore',
-            ])
+        const {
+            selectOneAndUpdateStore,
+            updateSelectedAndUpdateStore,
+            deleteSelectedAndUpdateStore,
+        } = useActions([
+            'selectOneAndUpdateStore',
+            'updateSelectedAndUpdateStore',
+            'deleteSelectedAndUpdateStore',
+        ])
 
         const update = () => {
             updateSelectedAndUpdateStore({
@@ -71,7 +75,9 @@ export default {
                 title: (item) => item.name,
             },
             handlers: {
-                onDelete: (item) => {},
+                onDelete: (item) => {
+                    deleteSelectedAndUpdateStore()
+                },
             },
             update,
         }
