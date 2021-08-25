@@ -56,11 +56,11 @@
 
 <script>
 import { ref } from 'vue'
-import Header from '../Common/Header.vue'
-import Button from '../Common/Button'
-import Layout from '../Common/Layout'
-import ScrollContent from '../Common/ScrollContent'
-import Toolbar from '../Common/Toolbar.vue'
+import Header from '../Header.vue'
+import Button from '../Button'
+import Layout from '../Layout'
+import ScrollContent from '../ScrollContent'
+import Toolbar from '../Toolbar.vue'
 import Item from './Item.vue'
 import styled from 'vue3-styled-components'
 

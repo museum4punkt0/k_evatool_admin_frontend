@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Button from '../Common/Button'
+import Button from '../Button'
 import styled from 'vue3-styled-components'
 
 const Container = styled.tr``

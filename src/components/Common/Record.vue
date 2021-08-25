@@ -29,12 +29,12 @@
 
 <script>
 import { ref } from 'vue'
-import Toolbar from './Common/Toolbar.vue'
+import Toolbar from './Toolbar.vue'
 // import Item from './Item.vue'
-import Button from './Common/Button'
-import Layout from './Common/Layout'
-import Header from './Common/Header.vue'
-import ScrollContent from './Common/ScrollContent'
+import Button from './Button'
+import Layout from './Layout'
+import Header from './Header.vue'
+import ScrollContent from './ScrollContent'
 import styled from 'vue3-styled-components'
 
 const SectionTitle = styled.div`
