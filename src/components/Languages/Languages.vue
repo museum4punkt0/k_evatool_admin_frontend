@@ -36,9 +36,9 @@ export default {
         ])
         const textFilter = (item, text) => {
             return (
-                item.code.includes(text) ||
-                item.sub_code.includes(text) ||
-                item.title.includes(text)
+                item.code.toLowerCase().includes(text.toLowerCase()) ||
+                item.sub_code.toLowerCase().includes(text.toLowerCase()) ||
+                item.title.toLowerCase().includes(text.toLowerCase())
             )
         }
         const onEdit = (items) => {

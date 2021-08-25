@@ -3,6 +3,7 @@
         <PageHeader :title="title">
             <Toolbar>
                 <input
+                    v-if="textFilter"
                     v-model="query"
                     placeholder="filter"
                     @keyup="onFilterTextChange"

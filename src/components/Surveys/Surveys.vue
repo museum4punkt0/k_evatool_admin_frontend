@@ -34,9 +34,6 @@ export default {
             'createOneAndUpdateStore',
             'deleteOneAndUpdateStore',
         ])
-        const textFilter = (item, text) => {
-            return item.name.includes(text)
-        }
         const onEdit = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
@@ -65,7 +62,8 @@ export default {
         getAllAndUpdateStore()
         return {
             surveys,
-            textFilter,
+            textFilter: (item, text) =>
+                item.name.toLowerCase().includes(text.toLowerCase()),
             selectors: {
                 itemTitle: (item) => item.name,
             },
