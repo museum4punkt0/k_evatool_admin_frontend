@@ -1,6 +1,6 @@
 <template>
     <Collection
-        title="survey steps"
+        :title="$t('survey steps')"
         :items="surveySteps"
         :text-filter="textFilter"
         :item-title-selector="selectors.itemTitle"
@@ -67,9 +67,8 @@ export default {
             handlers: {
                 onRefresh: getAllAndUpdateStore,
                 onCreate: () =>
-                    createOneAndUpdateStore({
-                        survey_id: 1,
-                        survey_element_id: 1,
+                    router.push({
+                        name: 'surveySteps/new',
                     }),
                 onEdit,
                 onDelete,

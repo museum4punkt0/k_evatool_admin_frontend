@@ -1,7 +1,7 @@
 <template>
     <Collection
-        :title="$t('survey')"
-        :items="surveys"
+        :title="$t('localization')"
+        :items="localizations"
         :text-filter="textFilter"
         :item-title-selector="selectors.itemTitle"
         :on-refresh="handlers.onRefresh"
@@ -16,7 +16,7 @@ import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Collection from '../Collection/Collection.vue'
 
-const { useState, useActions } = createNamespacedHelpers('surveys')
+const { useState, useActions } = createNamespacedHelpers('localizations')
 
 export default {
     components: {
@@ -24,7 +24,7 @@ export default {
     },
     setup(props) {
         const router = useRouter()
-        const { surveys } = useState(['surveys'])
+        const { localizations } = useState(['localizations'])
         const {
             getAllAndUpdateStore,
             createOneAndUpdateStore,
@@ -35,21 +35,18 @@ export default {
             'deleteOneAndUpdateStore',
         ])
         const textFilter = (item, text) => {
-            return item.name.includes(text)
+            return true
         }
         const onEdit = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
                     router.push({
-                        name: 'survey',
+                        name: 'localization',
                         params: { id: item.id },
                     })
                 })
             } else if (typeof items === 'object') {
-                router.push({
-                    name: 'survey',
-                    params: { id: items.id },
-                })
+                router.push({ name: 'localization', params: { id: items.id } })
             }
         }
         const onDelete = (items) => {
@@ -64,17 +61,16 @@ export default {
 
         getAllAndUpdateStore()
         return {
-            surveys,
+            localizations,
             textFilter,
             selectors: {
-                itemTitle: (item) => item.name,
+                itemTitle: (item) => {
+                    return `${item.field}: ${item.value}`
+                },
             },
             handlers: {
                 onRefresh: getAllAndUpdateStore,
-                onCreate: () =>
-                    router.push({
-                        name: 'surveys/new',
-                    }),
+                onCreate: () => router.push({ name: 'localization/new' }),
                 onEdit,
                 onDelete,
             },

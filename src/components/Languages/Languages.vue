@@ -1,6 +1,6 @@
 <template>
     <Collection
-        :title="$t('message.language')"
+        :title="$t('language')"
         :items="languages"
         :text-filter="textFilter"
         :item-title-selector="selectors.itemTitle"
@@ -41,15 +41,6 @@ export default {
                 item.title.includes(text)
             )
         }
-        const onCreate = () => {
-            createOneAndUpdateStore({
-                code: 'de',
-                sub_code: 'de_DE',
-                title: 'new language',
-                default: false,
-                published: true,
-            })
-        }
         const onEdit = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
@@ -83,7 +74,7 @@ export default {
             },
             handlers: {
                 onRefresh: getAllAndUpdateStore,
-                onCreate,
+                onCreate: () => router.push({ name: 'languages/new' }),
                 onEdit,
                 onDelete,
             },

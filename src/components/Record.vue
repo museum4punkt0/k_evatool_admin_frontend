@@ -1,45 +1,42 @@
 <template>
-    <Container>
-        <Header>
-            <Title>{{ titleSelector(data) }}</Title>
-            <Toolbar :data="data" :on-delete="onDelete"></Toolbar>
-        </Header>
-        <Meta>
-            <SectionTitle>Meta</SectionTitle>
-            <Button v-show="showMeta" @click="toggleShowMeta">hide</Button>
-            <Button v-show="!showMeta" @click="toggleShowMeta">show</Button>
-            <div v-show="showMeta">
-                <ul>
-                    <li v-for="(item, index) in meta" :key="index">
-                        {{ item }}: {{ data[item] }}
-                    </li>
-                </ul>
-            </div>
-        </Meta>
-        <Content>
-            <SectionTitle>Details</SectionTitle>
-            <slot></slot>
-        </Content>
-    </Container>
+    <Layout>
+        <PageHeader :title="titleSelector(data)">
+            <Toolbar>
+                <Button @click="onDelete(data)">delete</Button>
+                <Button @click="onRefresh">refresh</Button>
+            </Toolbar>
+        </PageHeader>
+        <ScrollContent>
+            <Meta>
+                <SectionTitle>Meta</SectionTitle>
+                <Button v-show="showMeta" @click="toggleShowMeta">hide</Button>
+                <Button v-show="!showMeta" @click="toggleShowMeta">show</Button>
+                <div v-show="showMeta">
+                    <ul>
+                        <li v-for="(item, index) in meta" :key="index">
+                            {{ item }}: {{ data[item] }}
+                        </li>
+                    </ul>
+                </div>
+            </Meta>
+            <Content>
+                <SectionTitle>Details</SectionTitle>
+                <slot></slot>
+            </Content>
+        </ScrollContent>
+    </Layout>
 </template>
 
 <script>
 import { ref } from 'vue'
-import Toolbar from './Toolbar.vue'
+import Toolbar from './Common/Toolbar.vue'
 // import Item from './Item.vue'
-import Button from '../Button'
+import Button from './Common/Button'
+import Layout from './Common/Layout'
+import Header from './Common/Header.vue'
+import ScrollContent from './Common/ScrollContent'
 import styled from 'vue3-styled-components'
 
-const Container = styled.div``
-const Header = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 24px;
-`
-const Title = styled.div`
-    flex-grow: 1;
-    font-size: 24px;
-`
 const SectionTitle = styled.div`
     flex-grow: 1;
     font-size: 20px;
@@ -68,9 +65,8 @@ const StyledTable = styled.table`
 export default {
     components: {
         Button,
-        Container,
-        Header,
-        Title,
+        Layout,
+        PageHeader: Header,
         SectionTitle,
         Meta,
         Content,

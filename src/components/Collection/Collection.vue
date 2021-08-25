@@ -1,54 +1,69 @@
 <template>
-    <Container>
-        <Header>
-            <Title>{{ title }}</Title>
-            <Toolbar
-                :selected="selected"
-                :on-refresh="onRefresh"
-                :on-create="onCreate"
-                :on-edit="onEdit"
-                :on-delete="onDelete"
-                :on-filter-text-change="onFilterTextChange"
-            ></Toolbar>
-        </Header>
-        <StyledTable>
-            <tr>
-                <th>
-                    <input type="checkbox" @change="onBulkSelectedChange" />
-                </th>
-                <th>id</th>
-                <th>title</th>
-                <th>actions</th>
-            </tr>
-            <Row
-                v-for="(item, index) in items"
-                v-show="filterText === '' || textFilter(item, filterText)"
-                :key="index"
-                :data="item"
-                :id-selector="itemIdSelector"
-                :title-selector="itemTitleSelector"
-                :on-checked-change="onItemSelectedChange(item)"
-                :on-edit="onEdit"
-                :on-delete="onDelete"
-            ></Row>
-        </StyledTable>
-        <slot></slot>
-    </Container>
+    <Layout>
+        <PageHeader :title="title">
+            <Toolbar>
+                <input
+                    v-model="query"
+                    placeholder="filter"
+                    @keyup="onFilterTextChange"
+                />
+                {{ query }}
+                <Button
+                    v-show="selected.length > 0"
+                    @click="onDelete(selected)"
+                >
+                    delete
+                </Button>
+                <Button
+                    v-show="selected.length === 1"
+                    @click="onEdit(selected)"
+                >
+                    edit
+                </Button>
+                <Button v-show="selected.length === 0" @click="onCreate">
+                    create
+                </Button>
+                <Button @click="onRefresh">refresh</Button>
+            </Toolbar>
+        </PageHeader>
+        <ScrollContent>
+            <StyledTable>
+                <tr>
+                    <th>
+                        <input type="checkbox" @change="onBulkSelectedChange" />
+                    </th>
+                    <th>id</th>
+                    <th>title</th>
+                    <th>actions</th>
+                </tr>
+                <Row
+                    v-for="(item, index) in items"
+                    v-show="filterText === '' || textFilter(item, filterText)"
+                    :key="itemIdSelector(item)"
+                    :data="item"
+                    :id-selector="itemIdSelector"
+                    :title-selector="itemTitleSelector"
+                    :on-checked-change="onItemSelectedChange(item)"
+                    :on-edit="onEdit"
+                    :on-delete="onDelete"
+                ></Row>
+            </StyledTable>
+            <slot></slot>
+        </ScrollContent>
+    </Layout>
 </template>
 
 <script>
 import { ref } from 'vue'
-import Toolbar from './Toolbar.vue'
+import Header from '../Common/Header.vue'
+import Button from '../Common/Button'
+import Layout from '../Common/Layout'
+import ScrollContent from '../Common/ScrollContent'
+import Toolbar from '../Common/Toolbar.vue'
 import Item from './Item.vue'
-import Button from '../Button'
 import styled from 'vue3-styled-components'
 
 const Container = styled.div``
-const Header = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 24px;
-`
 const Title = styled.div`
     flex-grow: 1;
     font-size: 24px;
@@ -74,7 +89,9 @@ export default {
     components: {
         Button,
         Container,
-        Header,
+        PageHeader: Header,
+        Layout,
+        ScrollContent,
         Title,
         StyledTable,
         Row: Item,
@@ -87,7 +104,7 @@ export default {
         },
         itemIdSelector: {
             type: Function,
-            required: true,
+            default: (item) => item.id,
         },
         itemTitleSelector: {
             type: Function,

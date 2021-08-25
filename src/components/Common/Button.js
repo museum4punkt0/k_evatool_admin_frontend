@@ -1,5 +1,5 @@
 import styled from 'vue3-styled-components'
-import theme from '../theme'
+import theme from '../../theme'
 
 export default styled.button`
     background-color: ${theme.secondaryBackgroundColor};

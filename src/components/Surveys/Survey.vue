@@ -16,8 +16,8 @@
                 />
             </li>
         </ul>
+        <router-view></router-view>
     </Record>
-    <router-view></router-view>
 </template>
 
 <script>
@@ -25,7 +25,7 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
-import Record from '../Record/Record.vue'
+import Record from '../Record.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
 

@@ -1,29 +1,27 @@
 <template>
     <Container>
-        <Button @click="onDelete(data)">delete</Button>
-        <Button @click="onRefresh">refresh</Button>
+        <slot></slot>
     </Container>
 </template>
 
 <script>
-import Button from '../Button'
+import Button from './Button'
 import styled from 'vue3-styled-components'
 const Container = styled.div`
     text-align: right;
+`
+const Title = styled.div`
+    flex-grow: 1;
+    font-size: 24px;
 `
 
 export default {
     components: {
         Button,
         Container,
+        Title,
     },
-    props: {
-        data: {
-            type: Object,
-            required: true,
-        },
-        onDelete: { type: Function, default: () => {} },
-    },
+    props: { title: { type: String, default: '' } },
     setup(props) {
         return {}
     },

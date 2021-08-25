@@ -18,6 +18,9 @@
                 <router-link to="/languages">languages</router-link>
             </li>
             <li>
+                <router-link to="/localizations">localizations</router-link>
+            </li>
+            <li>
                 <router-link to="/settings">settings</router-link>
             </li>
         </ul>
