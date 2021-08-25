@@ -11,6 +11,7 @@
         <td>{{ statusSelector(data) }}</td>
         <td>{{ titleSelector(data) }}</td>
         <td>
+            <Button @click="onView(data)">view</Button>
             <Button @click="onEdit(data)">edit</Button>
             <Button @click="onEdit(data)">duplicate</Button>
             <Button @click="onDelete(data)">delete</Button>
@@ -47,6 +48,10 @@ export default {
             default: (item) => '',
         },
         onCheckedChange: {
+            type: Function,
+            default: () => {},
+        },
+        onView: {
             type: Function,
             default: () => {},
         },

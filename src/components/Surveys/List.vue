@@ -5,7 +5,8 @@
         :text-filter="textFilter"
         :item-title-selector="selectors.itemTitle"
         :on-refresh="handlers.onRefresh"
-        :on-create="handlers.onCreate"
+        :on-new="handlers.onNew"
+        :on-view="handlers.onView"
         :on-edit="handlers.onEdit"
         :on-delete="handlers.onDelete"
     ></Collection>
@@ -34,7 +35,7 @@ export default {
             'createOneAndUpdateStore',
             'deleteOneAndUpdateStore',
         ])
-        const onEdit = (items) => {
+        const onView = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
                     router.push({
@@ -44,7 +45,22 @@ export default {
                 })
             } else if (typeof items === 'object') {
                 router.push({
-                    name: 'survey',
+                    name: 'survey/view',
+                    params: { id: items.id },
+                })
+            }
+        }
+        const onEdit = (items) => {
+            if (Array.isArray(items)) {
+                items.forEach((item) => {
+                    router.push({
+                        name: 'survey/edit',
+                        params: { id: item.id },
+                    })
+                })
+            } else if (typeof items === 'object') {
+                router.push({
+                    name: 'survey/edit',
                     params: { id: items.id },
                 })
             }
@@ -69,10 +85,13 @@ export default {
             },
             handlers: {
                 onRefresh: getAllAndUpdateStore,
-                onCreate: () =>
-                    router.push({
+                onNew: () => {
+                    console.log('on new')
+                    return router.push({
                         name: 'surveys/new',
-                    }),
+                    })
+                },
+                onView,
                 onEdit,
                 onDelete,
             },

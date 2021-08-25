@@ -5,7 +5,8 @@
         :text-filter="textFilter"
         :item-title-selector="selectors.itemTitle"
         :on-refresh="handlers.onRefresh"
-        :on-create="handlers.onCreate"
+        :on-new="handlers.onNew"
+        :on-view="handlers.onView"
         :on-edit="handlers.onEdit"
         :on-delete="handlers.onDelete"
     ></Collection>
@@ -41,16 +42,28 @@ export default {
                 item.title.toLowerCase().includes(text.toLowerCase())
             )
         }
-        const onEdit = (items) => {
+        const onView = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
                     router.push({
-                        name: 'language',
+                        name: 'language/view',
                         params: { id: item.id },
                     })
                 })
             } else if (typeof items === 'object') {
-                router.push({ name: 'language', params: { id: items.id } })
+                router.push({ name: 'language/view', params: { id: items.id } })
+            }
+        }
+        const onEdit = (items) => {
+            if (Array.isArray(items)) {
+                items.forEach((item) => {
+                    router.push({
+                        name: 'language/edit',
+                        params: { id: item.id },
+                    })
+                })
+            } else if (typeof items === 'object') {
+                router.push({ name: 'language/edit', params: { id: items.id } })
             }
         }
         const onDelete = (items) => {
@@ -74,7 +87,8 @@ export default {
             },
             handlers: {
                 onRefresh: getAllAndUpdateStore,
-                onCreate: () => router.push({ name: 'languages/new' }),
+                onNew: () => router.push({ name: 'languages/new' }),
+                onView,
                 onEdit,
                 onDelete,
             },

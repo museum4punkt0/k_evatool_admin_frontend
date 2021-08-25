@@ -2,7 +2,8 @@
     <Layout>
         <PageHeader :title="titleSelector(data)">
             <Toolbar>
-                <Button @click="onDelete(data)">delete</Button>
+                <Button v-if="onEdit" @click="onEdit(data)">edit</Button>
+                <Button v-if="onDelete" @click="onDelete(data)">delete</Button>
                 <Button @click="onRefresh">refresh</Button>
             </Toolbar>
         </PageHeader>
@@ -99,7 +100,8 @@ export default {
             required: true,
         },
         meta: { type: Array, default: () => ['id', 'createdAt', 'updatedAT'] },
-        onDelete: { type: Function, default: () => {} },
+        onDelete: { type: Function, required: false },
+        onEdit: { type: Function, required: false },
     },
     setup(props) {
         const showMeta = ref(true)

@@ -11,12 +11,15 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import styled from 'vue3-styled-components'
 
 import Layout from './components/Layout.vue'
 import Footer from './components/Footer.vue'
 import Menu from './components/Menu.vue'
 import Content from './components/Content.vue'
+
+const { useState, useActions } = createNamespacedHelpers('elementTypes')
 
 const Container = styled.div`
     width: 100vw;
@@ -33,10 +36,10 @@ export default {
         Layout,
         Content,
     },
-    data() {
-        return {
-            title: this.$store.state.title,
-        }
+    setup() {
+        const { getAllAndUpdateStore } = useActions(['getAllAndUpdateStore'])
+        getAllAndUpdateStore()
+        return {}
     },
 }
 </script>

@@ -44,7 +44,7 @@ export default {
                     createOneSelectAndUpdateStore(survey.value).then(
                         (response) => {
                             router.push({
-                                name: 'survey',
+                                name: 'survey/edit',
                                 params: { id: response.id },
                             })
                         },

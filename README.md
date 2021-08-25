@@ -15,6 +15,7 @@
 /surveys
 /surveys/new
 /surveys/:surveyId
+/surveys/:surveyId/edit
 /surveys/:surveyId/results
 
 /survey-steps
@@ -33,6 +34,7 @@
 /languages
 /languages/new
 /languages/:languageId
+/languages/:languageId/edit
 
 /localizations
 /localizations/new (?)

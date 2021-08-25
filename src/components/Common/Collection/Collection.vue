@@ -8,23 +8,23 @@
                     placeholder="filter"
                     @keyup="onFilterTextChange"
                 />
-                {{ query }}
-                <Button
-                    v-show="selected.length > 0"
-                    @click="onDelete(selected)"
-                >
-                    delete
+
+                <Button v-if="onNew && selected.length === 0" @click="onNew">
+                    new
                 </Button>
                 <Button
-                    v-show="selected.length === 1"
+                    v-if="onEdit && selected.length === 1"
                     @click="onEdit(selected)"
                 >
                     edit
                 </Button>
-                <Button v-show="selected.length === 0" @click="onCreate">
-                    create
+                <Button
+                    v-if="onDelete && selected.length > 0"
+                    @click="onDelete(selected)"
+                >
+                    delete
                 </Button>
-                <Button @click="onRefresh">refresh</Button>
+                <Button v-if="onRefresh" @click="onRefresh">refresh</Button>
             </Toolbar>
         </PageHeader>
         <ScrollContent>
@@ -46,6 +46,7 @@
                     :id-selector="itemIdSelector"
                     :title-selector="itemTitleSelector"
                     :on-checked-change="onItemSelectedChange(item)"
+                    :on-view="onView"
                     :on-edit="onEdit"
                     :on-delete="onDelete"
                 ></Row>
@@ -120,10 +121,11 @@ export default {
             type: Function,
             default: () => true,
         },
-        onRefresh: { type: Function, default: () => {} },
-        onCreate: { type: Function, default: () => {} },
-        onEdit: { type: Function, default: () => {} },
-        onDelete: { type: Function, default: () => {} },
+        onRefresh: { type: Function, required: false },
+        onNew: { type: Function, required: false },
+        onView: { type: Function, required: false },
+        onEdit: { type: Function, required: false },
+        onDelete: { type: Function, required: false },
     },
     setup(props) {
         const selected = ref([])

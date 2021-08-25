@@ -65,7 +65,7 @@ export default {
                     createOneSelectAndUpdateStore(language.value).then(
                         (response) => {
                             router.push({
-                                name: 'language',
+                                name: 'language/edit',
                                 params: { id: response.id },
                             })
                         },
