@@ -4,7 +4,42 @@
         :data="selectedLanguage"
         :title-selector="selectors.title"
         :on-delete="handlers.onDelete"
-    ></Record>
+    >
+        <ul>
+            <li>
+                <input
+                    v-model.lazy="selectedLanguage.code"
+                    @change="handlers.onUpdate"
+                />
+            </li>
+            <li>
+                <input
+                    v-model.lazy="selectedLanguage.sub_code"
+                    @change="handlers.onUpdate"
+                />
+            </li>
+            <li>
+                <input
+                    v-model.lazy="selectedLanguage.title"
+                    @change="handlers.onUpdate"
+                />
+            </li>
+            <li>
+                <input
+                    v-model="selectedLanguage.default"
+                    type="checkbox"
+                    @change="handlers.onUpdate"
+                />
+            </li>
+            <li>
+                <input
+                    v-model="selectedLanguage.published"
+                    type="checkbox"
+                    @change="handlers.onUpdate"
+                />
+            </li>
+        </ul>
+    </Record>
 </template>
 
 <script>
@@ -26,11 +61,11 @@ export default {
         const { selectedLanguage } = useState(['selectedLanguage'])
         const {
             selectOneAndUpdateStore,
-            updateSelectedAndUpdateStore,
+            updateOneSelectAndUpdateStore,
             deleteSelectedAndUpdateStore,
         } = useActions([
             'selectOneAndUpdateStore',
-            'updateSelectedAndUpdateStore',
+            'updateOneSelectAndUpdateStore',
             'deleteSelectedAndUpdateStore',
         ])
 
@@ -58,6 +93,12 @@ export default {
                 title: (item) => item.title,
             },
             handlers: {
+                onUpdate: () => {
+                    updateOneSelectAndUpdateStore({
+                        id: selectedLanguage.value.id,
+                        data: selectedLanguage.value,
+                    })
+                },
                 onDelete: () => {
                     deleteSelectedAndUpdateStore()
                 },

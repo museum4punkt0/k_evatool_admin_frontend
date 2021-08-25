@@ -8,6 +8,7 @@
             />
         </td>
         <td>{{ idSelector(data) }}</td>
+        <td>{{ statusSelector(data) }}</td>
         <td>{{ titleSelector(data) }}</td>
         <td>
             <Button @click="onEdit(data)">edit</Button>
@@ -36,6 +37,10 @@ export default {
         idSelector: {
             type: Function,
             default: (item) => item.id,
+        },
+        statusSelector: {
+            type: Function,
+            default: (item) => (item.published ? 'published' : 'draft'),
         },
         titleSelector: {
             type: Function,

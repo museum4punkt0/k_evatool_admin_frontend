@@ -71,6 +71,12 @@ export default {
                 commit('replace', value)
             })
         },
+        updateOneSelectAndUpdateStore({ commit }, { id, data }) {
+            service.updateOne(id, data, (value) => {
+                commit('setSelected', value)
+                commit('replace', value)
+            })
+        },
         deleteOneAndUpdateStore({ commit }, { id }) {
             service.deleteOne(id, (value) => {
                 commit('delete', value.id)

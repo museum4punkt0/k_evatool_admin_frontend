@@ -12,6 +12,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     margin-bottom: 24px;
+    background-color: rgba(0, 0, 0, 0.1);
 `
 const Title = styled.div`
     flex-grow: 1;

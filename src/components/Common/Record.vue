@@ -8,9 +8,15 @@
         </PageHeader>
         <ScrollContent>
             <Meta>
-                <SectionTitle>Meta</SectionTitle>
-                <Button v-show="showMeta" @click="toggleShowMeta">hide</Button>
-                <Button v-show="!showMeta" @click="toggleShowMeta">show</Button>
+                <MetaHeader>
+                    <SectionTitle>Meta</SectionTitle>
+                    <Button v-show="showMeta" @click="toggleShowMeta">
+                        hide
+                    </Button>
+                    <Button v-show="!showMeta" @click="toggleShowMeta">
+                        show
+                    </Button>
+                </MetaHeader>
                 <div v-show="showMeta">
                     <ul>
                         <li v-for="(item, index) in meta" :key="index">
@@ -43,6 +49,11 @@ const SectionTitle = styled.div`
 `
 const Meta = styled.div`
     margin-bottom: 24px;
+    background-color: rgba(0, 0, 0, 0.1);
+`
+const MetaHeader = styled.div`
+    display: flex;
+    flex-direction: row;
 `
 const Content = styled.div``
 const StyledTable = styled.table`
@@ -69,6 +80,7 @@ export default {
         PageHeader: Header,
         SectionTitle,
         Meta,
+        MetaHeader,
         Content,
         StyledTable,
         Toolbar,

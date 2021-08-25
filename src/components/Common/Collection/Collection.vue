@@ -34,6 +34,7 @@
                         <input type="checkbox" @change="onBulkSelectedChange" />
                     </th>
                     <th>id</th>
+                    <th>status</th>
                     <th>title</th>
                     <th>actions</th>
                 </tr>
