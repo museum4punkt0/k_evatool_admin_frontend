@@ -6,6 +6,10 @@
 -   cp .env.local.example .env.local
 -   yarn dev
 
+## architecture
+
+![architecture diagram](./doc/architecture.svg)
+
 ## routes
 
 /surveys
