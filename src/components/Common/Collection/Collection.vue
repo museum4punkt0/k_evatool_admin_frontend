@@ -20,7 +20,7 @@
                 </Button>
                 <Button
                     v-if="onDelete && selected.length > 0"
-                    @click="onDelete(selected)"
+                    @click=";[onDelete(selected), onItemsDeleted(selected)]"
                 >
                     delete
                 </Button>
@@ -39,13 +39,18 @@
                     <th>actions</th>
                 </tr>
                 <Row
-                    v-for="(item, index) in items"
+                    v-for="item in items"
                     v-show="filterText === '' || textFilter(item, filterText)"
                     :key="itemIdSelector(item)"
                     :data="item"
                     :id-selector="itemIdSelector"
                     :title-selector="itemTitleSelector"
-                    :on-checked-change="onItemSelectedChange(item)"
+                    :selected="
+                        selected.filter(
+                            (selectedItem) => selectedItem.id === item.id,
+                        ).length > 0
+                    "
+                    :on-selected-toggle="onItemSelectToggleCreator(item)"
                     :on-view="onView"
                     :on-edit="onEdit"
                     :on-delete="onDelete"
@@ -133,22 +138,29 @@ export default {
         const onFilterTextChange = (value) => {
             filterText.value = value.target.value
         }
-        const onItemSelectedChange = (selectedItem) => {
-            return (event) => {
-                if (event.target.checked) {
-                    selected.value.push(selectedItem)
-                } else {
+        const onItemsDeleted = (items) => {
+            console.log('items deleted', selected, items)
+            selected.value = selected.value.filter((selectedItem) =>
+                items.filter((item) => item.id !== selectedItem.id),
+            )
+            console.log('items deleted', selected, items)
+        }
+        const onItemSelectToggleCreator = (item) => {
+            return (currentValue) => {
+                if (currentValue) {
+                    //current value is true, needs to be removed from the selected array
                     selected.value = selected.value.filter(
-                        (item) => item.id !== selectedItem.id,
+                        (selectedItem) => selectedItem.id !== item.id,
                     )
+                } else {
+                    //current value is false, id needs to be added to selected array
+                    selected.value.push(item)
                 }
             }
         }
         const onBulkSelectedChange = (event) => {
-            console.log(event.target.checked)
             if (event.target.checked) {
                 selected.value = props.items
-                // TODO: update models within items, refs? props? ...
             } else {
                 selected.value = []
             }
@@ -156,7 +168,8 @@ export default {
         return {
             selected,
             filterText,
-            onItemSelectedChange,
+            onItemSelectToggleCreator,
+            onItemsDeleted,
             onBulkSelectedChange,
             onFilterTextChange,
         }

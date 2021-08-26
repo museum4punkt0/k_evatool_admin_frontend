@@ -2,9 +2,9 @@
     <Container>
         <td>
             <input
-                v-model="selected"
                 type="checkbox"
-                @change="onCheckedChange"
+                :checked="selected"
+                @click="onSelectedToggle(selected)"
             />
         </td>
         <td>{{ idSelector(data) }}</td>
@@ -47,9 +47,13 @@ export default {
             type: Function,
             default: (item) => '',
         },
-        onCheckedChange: {
+        selected: {
+            type: Boolean,
+            required: true,
+        },
+        onSelectedToggle: {
             type: Function,
-            default: () => {},
+            required: true,
         },
         onView: {
             type: Function,
@@ -65,9 +69,7 @@ export default {
         },
     },
     setup(props) {
-        return {
-            selected: false,
-        }
+        return {}
     },
     methods: {},
 }
