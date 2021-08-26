@@ -20,12 +20,12 @@ const { useState, useActions } = createNamespacedHelpers('notifications')
 
 const Container = styled.ul`
     position: absolute;
-    top: 0;
+    bottom: 48px;
     left: 0;
     background-color: rgba(0, 0, 0, 0.9);
     padding: 24px;
     color: white;
-    width: 100vw;
+    width: 50vw;
 `
 const Item = styled.li`
     display: flex;

@@ -1,10 +1,11 @@
 <template>
-    <Container>footer</Container>
+    <Container>version: {{ packageConfig.version }}</Container>
 </template>
 
 <script>
 import styled from 'vue3-styled-components'
 import theme from '../theme'
+import packageConfig from '../../package.json'
 const Container = styled.div`
     background-color: ${theme.tertiaryBackgroundColor};
     color: ${theme.tertiaryColor};
@@ -17,7 +18,7 @@ export default {
         Container,
     },
     setup(props) {
-        return {}
+        return { packageConfig }
     },
 }
 </script>

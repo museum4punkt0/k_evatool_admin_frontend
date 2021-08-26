@@ -1,5 +1,5 @@
 const initialState = {
-    notifications: [],
+    notifications: [{ id: 0, type: 'ERROR', message: 'testmessage' }],
 }
 const types = {
     INFO: 'INFO',
