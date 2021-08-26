@@ -4,6 +4,7 @@ import surveySteps from './surveySteps'
 import languages from './surveyLanguages'
 import elementTypes from './surveyElementTypes'
 import localizations from './surveyLocalizations'
+import notifications from './notifications'
 
 export default createStore({
     modules: {
@@ -12,6 +13,7 @@ export default createStore({
         surveySteps,
         languages,
         localizations,
+        notifications,
     },
     state: {},
 })

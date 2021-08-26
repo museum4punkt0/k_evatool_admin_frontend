@@ -125,16 +125,17 @@ export default {
             })
         },
         deleteOneSelectAndUpdateStore({ commit }, { id }) {
-            return new Promise(
-                (resolve, reject) => {
-                    service.deleteOne(id, (value) => {
+            return new Promise((resolve, reject) => {
+                service.deleteOne(
+                    id,
+                    (value) => {
                         commit('delete', value.id)
                         commit('setSelected', null)
                         resolve(value)
-                    })
-                },
-                (error) => reject(error),
-            )
+                    },
+                    (error) => reject(error),
+                )
+            })
         },
     },
     getters: {},

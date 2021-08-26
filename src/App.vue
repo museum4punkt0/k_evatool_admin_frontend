@@ -8,6 +8,7 @@
         </Layout>
         <Footer></Footer>
     </Container>
+    <Notifications></Notifications>
 </template>
 
 <script>
@@ -18,6 +19,7 @@ import Layout from './components/Layout.vue'
 import Footer from './components/Footer.vue'
 import Menu from './components/Menu.vue'
 import Content from './components/Content.vue'
+import Notifications from './components/Notifications/Notifications.vue'
 
 const { useState, useActions } = createNamespacedHelpers('elementTypes')
 
@@ -35,6 +37,8 @@ export default {
         Menu,
         Layout,
         Content,
+        Notifications,
+        Notifications,
     },
     setup() {
         const { getAllAndUpdateStore } = useActions(['getAllAndUpdateStore'])

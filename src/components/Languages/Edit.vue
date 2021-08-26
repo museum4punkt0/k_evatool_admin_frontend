@@ -92,7 +92,6 @@ export default {
         return {
             id,
             selectedLanguage,
-            //     update,
             selectors: {
                 title: (item) => item.title,
             },
