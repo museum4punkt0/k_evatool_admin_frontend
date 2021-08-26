@@ -61,11 +61,11 @@ export default {
         const router = useRouter()
         const { selectedLanguage } = useState(['selectedLanguage'])
         const {
-            selectOneAndUpdateStore,
+            getOneSelectAndUpdateStore,
             updateOneSelectAndUpdateStore,
             deleteOneSelectAndUpdateStore,
         } = useActions([
-            'selectOneAndUpdateStore',
+            'getOneSelectAndUpdateStore',
             'updateOneSelectAndUpdateStore',
             'deleteOneSelectAndUpdateStore',
         ])
@@ -73,7 +73,7 @@ export default {
         onBeforeRouteUpdate(async (to, from) => {
             if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
-                selectOneAndUpdateStore({ id: to.params.id })
+                getOneSelectAndUpdateStore({ id: to.params.id })
             }
         })
         watch(
@@ -81,13 +81,13 @@ export default {
             (newId) => {
                 id.value = newId
                 if (id.value) {
-                    selectOneAndUpdateStore({ id: newId })
+                    getOneSelectAndUpdateStore({ id: newId })
                 }
             },
         )
         id.value = route.params.id
         if (id.value) {
-            selectOneAndUpdateStore({ id: id.value })
+            getOneSelectAndUpdateStore({ id: id.value })
         }
         return {
             id,

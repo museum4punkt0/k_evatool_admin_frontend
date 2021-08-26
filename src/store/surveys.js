@@ -1,4 +1,3 @@
-import { routeLocationKey } from 'vue-router'
 import service from '../services/surveys'
 const initialState = {
     surveys: [],
@@ -33,21 +32,48 @@ export default {
                 (survey) => survey.id !== value.id,
             )
         },
+        replace(state, value) {
+            state.surveys = state.surveys.map((item) =>
+                item.id === value.id ? value : item,
+            )
+        },
     },
     actions: {
         getAllAndUpdateStore({ commit }) {
-            service.getAll((value) => {
-                commit('set', value)
+            return new Promise((resolve, reject) => {
+                service.getAll(
+                    (value) => {
+                        commit('set', value)
+                        resolve(value)
+                    },
+                    (error) => {
+                        reject(error)
+                    },
+                )
             })
         },
         selectOneAndUpdateStore({ commit }, { id }) {
-            service.getOne(id, (value) => {
-                commit('setSelected', value)
+            return new Promise((resolve, reject) => {
+                service.getOne(
+                    id,
+                    (value) => {
+                        commit('setSelected', value)
+                        resolve(value)
+                    },
+                    (error) => reject(error),
+                )
             })
         },
         createOneAndUpdateStore({ commit }, data) {
-            service.createOne(data, (value) => {
-                commit('add', value)
+            return new Promise((resolve, reject) => {
+                service.createOne(
+                    data,
+                    (value) => {
+                        commit('add', value)
+                        resolve(value)
+                    },
+                    (error) => reject(error),
+                )
             })
         },
         createOneSelectAndUpdateStore({ commit }, data) {
@@ -63,24 +89,51 @@ export default {
                         reject(error)
                     },
                 )
-                // )
             })
         },
         updateOneSelectAndUpdateStore({ commit }, { id, data }) {
-            service.updateOne(id, data, (value) => {
-                commit('setSelected', value)
-                // TODO: update already stored surveys
+            return new Promise((resolve, reject) => {
+                service.updateOne(
+                    id,
+                    data,
+                    (value) => {
+                        commit('setSelected', value)
+                        commit('replace', value)
+                        resolve(value)
+                    },
+                    (error) => {
+                        reject(error)
+                    },
+                )
             })
         },
         deleteOneSelectAndUpdateStore({ commit }, { id }) {
-            service.deleteOne(id, (value) => {
-                commit('delete', value.id)
-                commit('setSelected', null)
+            return new Promise((resolve, reject) => {
+                service.deleteOne(
+                    id,
+                    (value) => {
+                        commit('delete', value.id)
+                        commit('setSelected', null)
+                        resolve(value)
+                    },
+                    (error) => {
+                        reject(error)
+                    },
+                )
             })
         },
         deleteOneAndUpdateStore({ commit }, { id }) {
-            service.deleteOne(id, (value) => {
-                commit('delete', value)
+            return new Promise((resolve, reject) => {
+                service.deleteOne(
+                    id,
+                    (value) => {
+                        commit('delete', value)
+                        resolve(value)
+                    },
+                    (error) => {
+                        reject(error)
+                    },
+                )
             })
         },
     },
