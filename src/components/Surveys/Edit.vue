@@ -40,16 +40,16 @@ export default {
         const { selectedSurvey } = useState(['selectedSurvey'])
         const {
             selectOneAndUpdateStore,
-            updateSelectedAndUpdateStore,
-            deleteSelectedAndUpdateStore,
+            updateOneSelectAndUpdateStore,
+            deleteOneSelectAndUpdateStore,
         } = useActions([
             'selectOneAndUpdateStore',
-            'updateSelectedAndUpdateStore',
-            'deleteSelectedAndUpdateStore',
+            'updateOneSelectAndUpdateStore',
+            'deleteOneSelectAndUpdateStore',
         ])
 
         const update = () => {
-            updateSelectedAndUpdateStore({
+            updateOneSelectAndUpdateStore({
                 id: selectedSurvey.value.id,
                 data: selectedSurvey.value,
             })
@@ -82,7 +82,7 @@ export default {
             },
             handlers: {
                 onDelete: (item) => {
-                    deleteSelectedAndUpdateStore(item)
+                    deleteOneSelectAndUpdateStore(item)
                     // TODO: wait for promise to resolve
                     router.push({
                         name: 'surveys',

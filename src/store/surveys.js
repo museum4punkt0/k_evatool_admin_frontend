@@ -66,13 +66,13 @@ export default {
                 // )
             })
         },
-        updateSelectedAndUpdateStore({ commit }, { id, data }) {
+        updateOneSelectAndUpdateStore({ commit }, { id, data }) {
             service.updateOne(id, data, (value) => {
                 commit('setSelected', value)
                 // TODO: update already stored surveys
             })
         },
-        deleteSelectedAndUpdateStore({ commit }, { id }) {
+        deleteOneSelectAndUpdateStore({ commit }, { id }) {
             service.deleteOne(id, (value) => {
                 commit('delete', value.id)
                 commit('setSelected', null)

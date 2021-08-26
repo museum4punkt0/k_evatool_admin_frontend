@@ -63,11 +63,11 @@ export default {
         const {
             selectOneAndUpdateStore,
             updateOneSelectAndUpdateStore,
-            deleteSelectedAndUpdateStore,
+            deleteOneSelectAndUpdateStore,
         } = useActions([
             'selectOneAndUpdateStore',
             'updateOneSelectAndUpdateStore',
-            'deleteSelectedAndUpdateStore',
+            'deleteOneSelectAndUpdateStore',
         ])
 
         onBeforeRouteUpdate(async (to, from) => {
@@ -104,7 +104,7 @@ export default {
                     })
                 },
                 onDelete: (item) => {
-                    deleteSelectedAndUpdateStore(item)
+                    deleteOneSelectAndUpdateStore(item)
                     // TODO: wait for promise to resolve
                     router.push({
                         name: 'languages',

@@ -82,7 +82,7 @@ export default {
                 commit('delete', value.id)
             })
         },
-        deleteSelectedAndUpdateStore({ commit }, { id }) {
+        deleteOneSelectAndUpdateStore({ commit }, { id }) {
             service.deleteOne(id, (value) => {
                 commit('delete', value.id)
                 commit('setSelected', null)

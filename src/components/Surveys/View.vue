@@ -46,22 +46,11 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const { selectedSurvey } = useState(['selectedSurvey'])
-        const {
-            selectOneAndUpdateStore,
-            updateSelectedAndUpdateStore,
-            deleteSelectedAndUpdateStore,
-        } = useActions([
-            'selectOneAndUpdateStore',
-            'updateSelectedAndUpdateStore',
-            'deleteSelectedAndUpdateStore',
-        ])
-
-        const update = () => {
-            updateSelectedAndUpdateStore({
-                id: selectedSurvey.value.id,
-                data: selectedSurvey.value,
-            })
-        }
+        const { selectOneAndUpdateStore, deleteOneSelectAndUpdateStore } =
+            useActions([
+                'selectOneAndUpdateStore',
+                'deleteOneSelectAndUpdateStore',
+            ])
 
         onBeforeRouteUpdate(async (to, from) => {
             if (to.params.id !== from.params.id && to.params.id) {
@@ -96,7 +85,7 @@ export default {
                     })
                 },
                 onDelete: (item) => {
-                    deleteSelectedAndUpdateStore(item)
+                    deleteOneSelectAndUpdateStore(item)
                     // TODO: wait for promise to resolve
                     router.push({
                         name: 'surveys',
@@ -109,7 +98,6 @@ export default {
                     })
                 },
             },
-            update,
         }
     },
 }
