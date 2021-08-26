@@ -1,28 +1,28 @@
 <template>
     <Container>
         <ul>
-            <li>
+            <Item>
                 <router-link to="/">Home</router-link>
-            </li>
-            <li>
+            </Item>
+            <Item>
                 <router-link to="/surveys">
                     {{ $t('survey') }}
                 </router-link>
-            </li>
-            <li>
+            </Item>
+            <Item>
                 <router-link to="/survey-steps">
                     {{ $t('survey-steps') }}
                 </router-link>
-            </li>
-            <li>
+            </Item>
+            <Item>
                 <router-link to="/languages">languages</router-link>
-            </li>
-            <li>
+            </Item>
+            <Item>
                 <router-link to="/localizations">localizations</router-link>
-            </li>
-            <li>
+            </Item>
+            <Item>
                 <router-link to="/settings">settings</router-link>
-            </li>
+            </Item>
         </ul>
     </Container>
 </template>
@@ -36,9 +36,20 @@ const Container = styled.div`
     background-color: ${theme.secondaryBackgroundColor};
     color: ${theme.secondaryColor};
 `
+
+const Item = styled.li`
+    a {
+        display: block;
+        &.router-link-active {
+            background-color: ${theme.primaryBackgroundColor};
+            color: black;
+        }
+    }
+`
 export default {
     components: {
         Container,
+        Item,
     },
     setup(props) {
         return {}
