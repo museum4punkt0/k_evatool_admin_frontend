@@ -139,11 +139,17 @@ export default {
             filterText.value = value.target.value
         }
         const onItemsDeleted = (items) => {
-            console.log('items deleted', selected, items)
-            selected.value = selected.value.filter((selectedItem) =>
-                items.filter((item) => item.id !== selectedItem.id),
-            )
-            console.log('items deleted', selected, items)
+            selected.value = []
+            // console.log('items deleted', selected, items)
+            // selected.value = selected.value.filter((selectedItem) => {
+            //     console.log(
+            //         'check if selectedItem is in deletedItems',
+            //         selectedItem,
+            //         items,
+            //     )
+            //     return items.filter((item) => item.id !== selectedItem.id)
+            // })
+            // console.log('items deleted', selected, items)
         }
         const onItemSelectToggleCreator = (item) => {
             return (currentValue) => {
