@@ -11,10 +11,16 @@
         <td>{{ statusSelector(data) }}</td>
         <td @click="onView(data)">{{ titleSelector(data) }}</td>
         <td>
-            <Button @click="onView(data)">view</Button>
-            <Button @click="onEdit(data)">edit</Button>
-            <Button @click="onEdit(data)">duplicate</Button>
-            <Button @click="onDelete(data)">delete</Button>
+            <Button @click="onView(data)">
+                <font-awesome-icon :icon="['fas', 'eye']" />
+            </Button>
+            <Button @click="onEdit(data)">
+                <font-awesome-icon :icon="['fas', 'edit']" />
+            </Button>
+            <!-- <Button @click="onEdit(data)">duplicate</Button> -->
+            <Button @click="onDelete(data)">
+                <font-awesome-icon :icon="['fas', 'trash']" />
+            </Button>
         </td>
     </Container>
 </template>

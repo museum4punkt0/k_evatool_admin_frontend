@@ -6,7 +6,9 @@
                 {{ notification.message }}
             </Message>
             <Actions>
-                <Button @click="handlers.onRemove(notification)">close</Button>
+                <Button @click="handlers.onRemove(notification)">
+                    <font-awesome-icon :icon="['fas', 'times']" />
+                </Button>
             </Actions>
         </Item>
     </Container>

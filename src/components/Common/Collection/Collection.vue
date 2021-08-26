@@ -11,21 +11,23 @@
                 <slot name="toolbar"></slot>
 
                 <Button v-if="onNew && selected.length === 0" @click="onNew">
-                    new
+                    <font-awesome-icon :icon="['fas', 'plus']" />
                 </Button>
                 <Button
                     v-if="onEdit && selected.length === 1"
                     @click="onEdit(selected)"
                 >
-                    edit
+                    <font-awesome-icon :icon="['fas', 'edit']" />
                 </Button>
                 <Button
                     v-if="onDelete && selected.length > 0"
                     @click=";[onDelete(selected), onItemsDeleted(selected)]"
                 >
-                    delete
+                    <font-awesome-icon :icon="['fas', 'trash']" />
                 </Button>
-                <Button v-if="onRefresh" @click="onRefresh">refresh</Button>
+                <Button v-if="onRefresh" @click="onRefresh">
+                    <font-awesome-icon :icon="['fas', 'sync']" />
+                </Button>
             </Toolbar>
         </PageHeader>
         <ScrollContent>
