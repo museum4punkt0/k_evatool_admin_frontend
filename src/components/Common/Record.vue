@@ -2,6 +2,7 @@
     <Layout>
         <PageHeader :title="titleSelector(data)">
             <Toolbar>
+                <slot name="toolbar"></slot>
                 <Button v-if="onEdit" @click="onEdit(data)">edit</Button>
                 <Button v-if="onDelete" @click="onDelete(data)">delete</Button>
                 <Button @click="onRefresh">refresh</Button>
@@ -105,7 +106,7 @@ export default {
         onEdit: { type: Function, required: false },
     },
     setup(props) {
-        const showMeta = ref(true)
+        const showMeta = ref(false)
         const toggleShowMeta = () => {
             showMeta.value = !showMeta.value
         }

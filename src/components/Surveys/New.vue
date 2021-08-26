@@ -27,6 +27,8 @@ import Layout from '../Common/Layout'
 import ScrollContent from '../Common/ScrollContent'
 import Button from '../Common/Button'
 const { useState, useActions } = createNamespacedHelpers('surveys')
+const { useActions: useNotificationsActions } =
+    createNamespacedHelpers('notifications')
 
 export default {
     components: { Button, Layout, PageHeader: Header, ScrollContent },
@@ -37,8 +39,6 @@ export default {
         const { createOneSelectAndUpdateStore } = useActions([
             'createOneSelectAndUpdateStore',
         ])
-        const { useActions: useNotificationsActions } =
-            createNamespacedHelpers('notifications')
         const { addError } = useNotificationsActions(['addError'])
         return {
             survey,
@@ -51,7 +51,7 @@ export default {
                                 params: { id: response.id },
                             })
                         })
-                        .catch((error) => addError(error))
+                        .catch((error) => addError({ message: error }))
                 },
             },
         }

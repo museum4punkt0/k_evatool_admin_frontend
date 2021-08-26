@@ -7,9 +7,9 @@ const types = {
     ERROR: 'ERROR',
 }
 const durations = {
-    INFO: 5000,
-    WARNING: 5000,
-    ERROR: 5000,
+    INFO: 10000,
+    WARNING: 10000,
+    ERROR: 20000,
 }
 var idCounter = 1
 export default {

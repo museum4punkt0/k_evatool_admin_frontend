@@ -18,6 +18,8 @@ import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Collection from '../Common/Collection/Collection.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
+const { useActions: useNotificationsActions } =
+    createNamespacedHelpers('notifications')
 
 export default {
     components: {
@@ -26,15 +28,11 @@ export default {
     setup(props) {
         const router = useRouter()
         const { surveys } = useState(['surveys'])
-        const {
-            getAllAndUpdateStore,
-            createOneAndUpdateStore,
-            deleteOneAndUpdateStore,
-        } = useActions([
+        const { getAllAndUpdateStore, deleteOneAndUpdateStore } = useActions([
             'getAllAndUpdateStore',
-            'createOneAndUpdateStore',
             'deleteOneAndUpdateStore',
         ])
+        const { addError } = useNotificationsActions(['addError'])
         const onView = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
@@ -68,10 +66,14 @@ export default {
         const onDelete = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
-                    deleteOneAndUpdateStore(item)
+                    deleteOneAndUpdateStore(item).catch((error) =>
+                        addError({ message: error }),
+                    )
                 })
             } else if (typeof items === 'object') {
-                deleteOneAndUpdateStore(items)
+                deleteOneAndUpdateStore(items).catch((error) =>
+                    addError({ message: error }),
+                )
             }
         }
 

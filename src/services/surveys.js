@@ -147,7 +147,7 @@ export default {
                 .get(url)
                 .then((response) => {
                     if (response.data) {
-                        successCallback(response.data)
+                        successCallback(response.data.data)
                     } else if (errorCallback) {
                         errorCallback(response)
                     } else {

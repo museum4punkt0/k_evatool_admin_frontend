@@ -52,13 +52,21 @@ export default {
                 )
             })
         },
-        selectOneAndUpdateStore({ commit }, { id }) {
+        getOneSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
                 service.getOne(
                     id,
                     (value) => {
-                        commit('setSelected', value)
-                        resolve(value)
+                        service.getAllSurveySteps(
+                            id,
+                            (steps) => {
+                                console.log('got steps')
+                                value.steps = steps
+                                commit('setSelected', value)
+                                resolve(value)
+                            },
+                            (error) => reject(error),
+                        )
                     },
                     (error) => reject(error),
                 )
@@ -136,6 +144,8 @@ export default {
                 )
             })
         },
+
+        getAllStepsAddToSurveyAndUpdateStore({ commit }, { id }) {},
     },
     getters: {},
 }

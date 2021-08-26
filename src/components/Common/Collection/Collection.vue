@@ -8,6 +8,7 @@
                     placeholder="filter"
                     @keyup="onFilterTextChange"
                 />
+                <slot name="toolbar"></slot>
 
                 <Button v-if="onNew && selected.length === 0" @click="onNew">
                     new

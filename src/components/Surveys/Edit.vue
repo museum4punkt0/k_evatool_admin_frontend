@@ -28,6 +28,8 @@ import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Record from '../Common/Record.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
+const { useActions: useNotificationsActions } =
+    createNamespacedHelpers('notifications')
 
 export default {
     components: {
@@ -39,14 +41,15 @@ export default {
         const router = useRouter()
         const { selectedSurvey } = useState(['selectedSurvey'])
         const {
-            selectOneAndUpdateStore,
+            getOneSelectAndUpdateStore,
             updateOneSelectAndUpdateStore,
             deleteOneSelectAndUpdateStore,
         } = useActions([
-            'selectOneAndUpdateStore',
+            'getOneSelectAndUpdateStore',
             'updateOneSelectAndUpdateStore',
             'deleteOneSelectAndUpdateStore',
         ])
+        const { addError } = useNotificationsActions(['addError'])
 
         const update = () => {
             updateOneSelectAndUpdateStore({
@@ -58,7 +61,7 @@ export default {
         onBeforeRouteUpdate(async (to, from) => {
             if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
-                selectOneAndUpdateStore(id.value)
+                getOneSelectAndUpdateStore(id.value)
             }
         })
         watch(
@@ -66,13 +69,13 @@ export default {
             (newId) => {
                 id.value = newId
                 if (id.value) {
-                    selectOneAndUpdateStore({ id: newId })
+                    getOneSelectAndUpdateStore({ id: newId })
                 }
             },
         )
         id.value = route.params.id
         if (id.value) {
-            selectOneAndUpdateStore({ id: id.value })
+            getOneSelectAndUpdateStore({ id: id.value })
         }
         return {
             id,
@@ -83,10 +86,14 @@ export default {
             handlers: {
                 onDelete: (item) => {
                     deleteOneSelectAndUpdateStore(item)
-                    // TODO: wait for promise to resolve
-                    router.push({
-                        name: 'surveys',
-                    })
+                        .then((value) => {
+                            router.push({
+                                name: 'surveys',
+                            })
+                        })
+                        .catch((error) => {
+                            addError({ message: error })
+                        })
                 },
             },
             update,

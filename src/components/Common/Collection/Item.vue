@@ -9,7 +9,7 @@
         </td>
         <td>{{ idSelector(data) }}</td>
         <td>{{ statusSelector(data) }}</td>
-        <td>{{ titleSelector(data) }}</td>
+        <td @click="onView(data)">{{ titleSelector(data) }}</td>
         <td>
             <Button @click="onView(data)">view</Button>
             <Button @click="onEdit(data)">edit</Button>

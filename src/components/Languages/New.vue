@@ -57,11 +57,10 @@ export default {
             published: true,
             default: false,
         })
-        // const { surveys } = useState(['surveys'])
+        const { addError } = useNotificationsActions(['addError'])
         const { createOneSelectAndUpdateStore } = useActions([
             'createOneSelectAndUpdateStore',
         ])
-        const { addError } = useNotificationsActions(['addError'])
         return {
             language,
             handlers: {
@@ -73,7 +72,7 @@ export default {
                                 params: { id: response.id },
                             })
                         })
-                        .catch((error) => addError(error))
+                        .catch((error) => addError({ message: error }))
                 },
             },
         }

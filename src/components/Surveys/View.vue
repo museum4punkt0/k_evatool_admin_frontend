@@ -6,6 +6,11 @@
         :on-delete="handlers.onDelete"
         :on-edit="handlers.onEdit"
     >
+        <template #toolbar>
+            <Button @click="handlers.onShowResults(selectedSurvey)">
+                results
+            </Button>
+        </template>
         <ul>
             <li>
                 {{ selectedSurvey.name }}
@@ -15,12 +20,10 @@
             </li>
         </ul>
 
+        <h4>TODO: steps view</h4>
         <ul>
-            <li>steps come here</li>
-            <li>
-                <Button @click="handlers.onShowResults(selectedSurvey)">
-                    and results are linked here
-                </Button>
+            <li v-for="step in selectedSurvey.steps" :key="step.id">
+                id: {{ step.id }} - element id: {{ step.survey_element_id }}
             </li>
         </ul>
     </Record>
@@ -46,16 +49,16 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const { selectedSurvey } = useState(['selectedSurvey'])
-        const { selectOneAndUpdateStore, deleteOneSelectAndUpdateStore } =
+        const { getOneSelectAndUpdateStore, deleteOneSelectAndUpdateStore } =
             useActions([
-                'selectOneAndUpdateStore',
+                'getOneSelectAndUpdateStore',
                 'deleteOneSelectAndUpdateStore',
             ])
 
         onBeforeRouteUpdate(async (to, from) => {
             if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
-                selectOneAndUpdateStore(id.value)
+                getOneSelectAndUpdateStore(id.value)
             }
         })
         watch(
@@ -63,13 +66,13 @@ export default {
             (newId) => {
                 id.value = newId
                 if (id.value) {
-                    selectOneAndUpdateStore({ id: newId })
+                    getOneSelectAndUpdateStore({ id: newId })
                 }
             },
         )
         id.value = route.params.id
         if (id.value) {
-            selectOneAndUpdateStore({ id: id.value })
+            getOneSelectAndUpdateStore({ id: id.value })
         }
         return {
             id,
