@@ -14,15 +14,22 @@ export default {
         const url = urls.getAll()
 
         if (successCallback) {
-            axios.get(url).then((response) => {
-                if (response.data) {
-                    successCallback(response.data.data)
-                } else if (errorCallback) {
-                    errorCallback(response)
-                } else {
-                    console.error('could not get all langauges')
-                }
-            })
+            axios
+                .get(url)
+                .then((response) => {
+                    if (response.data) {
+                        successCallback(response.data.data)
+                    } else if (errorCallback) {
+                        errorCallback(response)
+                    } else {
+                        console.error('could not get all langauges')
+                    }
+                })
+                .catch((error) => {
+                    if (errorCallback) {
+                        errorCallback(error)
+                    }
+                })
         } else {
             const response = await axios.get(url)
             return response.data
@@ -32,15 +39,22 @@ export default {
         const url = urls.getOne(id)
 
         if (successCallback) {
-            axios.get(url).then((response) => {
-                if (response.data) {
-                    successCallback(response.data.data)
-                } else if (errorCallback) {
-                    errorCallback(response)
-                } else {
-                    console.error('could not get one language', id)
-                }
-            })
+            axios
+                .get(url)
+                .then((response) => {
+                    if (response.data) {
+                        successCallback(response.data.data)
+                    } else if (errorCallback) {
+                        errorCallback(response)
+                    } else {
+                        console.error('could not get one language', id)
+                    }
+                })
+                .catch((error) => {
+                    if (errorCallback) {
+                        errorCallback(error)
+                    }
+                })
         } else {
             const response = await axios.get(url)
             return response.data.data
@@ -51,15 +65,21 @@ export default {
         const method = 'post'
 
         if (successCallback) {
-            axios({ url, method, data }).then((response) => {
-                if (response.data) {
-                    successCallback(response.data.data)
-                } else if (errorCallback) {
-                    errorCallback(response)
-                } else {
-                    console.error('could not create one language', data)
-                }
-            })
+            axios({ url, method, data })
+                .then((response) => {
+                    if (response.data) {
+                        successCallback(response.data.data)
+                    } else if (errorCallback) {
+                        errorCallback(response)
+                    } else {
+                        console.error('could not create one language', data)
+                    }
+                })
+                .catch((error) => {
+                    if (errorCallback) {
+                        errorCallback(error)
+                    }
+                })
         } else {
             const response = await axios({ url, method, data })
             return response.data.data
@@ -70,15 +90,21 @@ export default {
         const method = 'put'
 
         if (successCallback) {
-            axios({ url, method, data }).then((response) => {
-                if (response.data) {
-                    successCallback(response.data.data)
-                } else if (errorCallback) {
-                    errorCallback(response)
-                } else {
-                    console.error('could not update one language', id, data)
-                }
-            })
+            axios({ url, method, data })
+                .then((response) => {
+                    if (response.data) {
+                        successCallback(response.data.data)
+                    } else if (errorCallback) {
+                        errorCallback(response)
+                    } else {
+                        console.error('could not update one language', id, data)
+                    }
+                })
+                .catch((error) => {
+                    if (errorCallback) {
+                        errorCallback(error)
+                    }
+                })
         } else {
             const response = await axios({ url, method, data })
             return response.data.data
@@ -89,15 +115,21 @@ export default {
         const method = 'delete'
 
         if (successCallback) {
-            axios({ url, method }).then((response) => {
-                if (response.data) {
-                    successCallback(response.data.data)
-                } else if (errorCallback) {
-                    errorCallback(response)
-                } else {
-                    console.error('could not delete one language', id)
-                }
-            })
+            axios({ url, method })
+                .then((response) => {
+                    if (response.data) {
+                        successCallback(response.data.data)
+                    } else if (errorCallback) {
+                        errorCallback(response)
+                    } else {
+                        console.error('could not delete one language', id)
+                    }
+                })
+                .catch((error) => {
+                    if (errorCallback) {
+                        errorCallback(error)
+                    }
+                })
         } else {
             const response = await axios({ url, method })
             return response.data.data

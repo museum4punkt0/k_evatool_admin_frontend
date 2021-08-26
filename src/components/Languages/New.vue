@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Button from '../Common/Button'
@@ -36,12 +36,15 @@ import Header from '../Common/Header.vue'
 import Layout from '../Common/Layout'
 import ScrollContent from '../Common/ScrollContent'
 import Toolbar from '../Common/Toolbar.vue'
-const { useState, useActions } = createNamespacedHelpers('languages')
+const { useActions } = createNamespacedHelpers('languages')
+const { useActions: useNotificationsActions } =
+    createNamespacedHelpers('notifications')
 
 export default {
     components: {
         Button,
         PageHeader: Header,
+        ScrollContent,
         Layout,
         Toolbar,
     },
@@ -58,18 +61,19 @@ export default {
         const { createOneSelectAndUpdateStore } = useActions([
             'createOneSelectAndUpdateStore',
         ])
+        const { addError } = useNotificationsActions(['addError'])
         return {
             language,
             handlers: {
                 onCreate: () => {
-                    createOneSelectAndUpdateStore(language.value).then(
-                        (response) => {
+                    createOneSelectAndUpdateStore(language.value)
+                        .then((response) => {
                             router.push({
                                 name: 'language/edit',
                                 params: { id: response.id },
                             })
-                        },
-                    )
+                        })
+                        .catch((error) => addError(error))
                 },
             },
         }

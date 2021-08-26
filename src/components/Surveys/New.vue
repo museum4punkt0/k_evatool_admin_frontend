@@ -37,18 +37,21 @@ export default {
         const { createOneSelectAndUpdateStore } = useActions([
             'createOneSelectAndUpdateStore',
         ])
+        const { useActions: useNotificationsActions } =
+            createNamespacedHelpers('notifications')
+        const { addError } = useNotificationsActions(['addError'])
         return {
             survey,
             handlers: {
                 onCreate: () => {
-                    createOneSelectAndUpdateStore(survey.value).then(
-                        (response) => {
+                    createOneSelectAndUpdateStore(survey.value)
+                        .then((response) => {
                             router.push({
                                 name: 'survey/edit',
                                 params: { id: response.id },
                             })
-                        },
-                    )
+                        })
+                        .catch((error) => addError(error))
                 },
             },
         }
