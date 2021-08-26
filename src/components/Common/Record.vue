@@ -79,6 +79,7 @@ export default {
         Button,
         Layout,
         PageHeader: Header,
+        ScrollContent,
         SectionTitle,
         Meta,
         MetaHeader,
