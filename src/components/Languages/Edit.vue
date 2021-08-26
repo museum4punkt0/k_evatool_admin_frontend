@@ -45,7 +45,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import Record from '../Common/Record.vue'
 
@@ -58,6 +58,7 @@ export default {
     setup(props) {
         const id = ref()
         const route = useRoute()
+        const router = useRouter()
         const { selectedLanguage } = useState(['selectedLanguage'])
         const {
             selectOneAndUpdateStore,
@@ -69,11 +70,8 @@ export default {
             'deleteSelectedAndUpdateStore',
         ])
 
-        id.value = route.params.id
-        selectOneAndUpdateStore({ id: id.value })
-
         onBeforeRouteUpdate(async (to, from) => {
-            if (to.params.id !== from.params.id) {
+            if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
                 selectOneAndUpdateStore({ id: to.params.id })
             }
@@ -82,9 +80,15 @@ export default {
             () => route.params.id,
             (newId) => {
                 id.value = newId
-                selectOneAndUpdateStore({ id: newId })
+                if (id.value) {
+                    selectOneAndUpdateStore({ id: newId })
+                }
             },
         )
+        id.value = route.params.id
+        if (id.value) {
+            selectOneAndUpdateStore({ id: id.value })
+        }
         return {
             id,
             selectedLanguage,
@@ -99,8 +103,12 @@ export default {
                         data: selectedLanguage.value,
                     })
                 },
-                onDelete: () => {
-                    deleteSelectedAndUpdateStore()
+                onDelete: (item) => {
+                    deleteSelectedAndUpdateStore(item)
+                    // TODO: wait for promise to resolve
+                    router.push({
+                        name: 'languages',
+                    })
                 },
             },
         }

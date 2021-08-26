@@ -64,20 +64,24 @@ export default {
         }
 
         onBeforeRouteUpdate(async (to, from) => {
-            if (to.params.id !== from.params.id) {
+            if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
                 selectOneAndUpdateStore(id.value)
             }
         })
-        id.value = route.params.id
-        selectOneAndUpdateStore({ id: id.value })
         watch(
             () => route.params.id,
             (newId) => {
                 id.value = newId
-                selectOneAndUpdateStore({ id: newId })
+                if (id.value) {
+                    selectOneAndUpdateStore({ id: newId })
+                }
             },
         )
+        id.value = route.params.id
+        if (id.value) {
+            selectOneAndUpdateStore({ id: id.value })
+        }
         return {
             id,
             selectedSurvey,
@@ -92,7 +96,11 @@ export default {
                     })
                 },
                 onDelete: (item) => {
-                    deleteSelectedAndUpdateStore()
+                    deleteSelectedAndUpdateStore(item)
+                    // TODO: wait for promise to resolve
+                    router.push({
+                        name: 'surveys',
+                    })
                 },
                 onShowResults: (item) => {
                     router.push({
