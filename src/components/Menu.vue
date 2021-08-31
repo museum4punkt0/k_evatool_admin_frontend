@@ -21,7 +21,7 @@
                 <router-link to="/localizations">localizations</router-link>
             </Item>
             <Item>
-                <router-link to="/settings">settings</router-link>
+                <router-link to="/user/settings">settings</router-link>
             </Item>
         </ul>
     </Container>

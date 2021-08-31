@@ -40,7 +40,7 @@
 /localizations/new (?)
 /localizations/:localizationId
 
-/login
-/logout
-/signup
-/settings (?)
+/users/register
+/users/login
+/users/:userId/logout
+/users/:userId/settings (?)

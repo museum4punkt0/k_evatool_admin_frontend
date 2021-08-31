@@ -5,6 +5,11 @@
         :title-selector="selectors.title"
         :on-delete="handlers.onDelete"
     >
+        <template #toolbar>
+            <Button @click="handlers.onShowResults(selectedSurvey)">
+                results
+            </Button>
+        </template>
         <ul>
             <li>
                 <input v-model.lazy="selectedSurvey.name" @change="update" />
@@ -25,6 +30,7 @@ import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
+import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
@@ -33,6 +39,7 @@ const { useActions: useNotificationsActions } =
 
 export default {
     components: {
+        Button,
         Record,
     },
     setup(props) {
@@ -94,6 +101,12 @@ export default {
                         .catch((error) => {
                             addError({ message: error })
                         })
+                },
+                onShowResults: (item) => {
+                    router.push({
+                        name: 'survey/results',
+                        params: { id: item.id },
+                    })
                 },
             },
             update,

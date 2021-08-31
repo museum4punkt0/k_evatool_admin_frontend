@@ -64,7 +64,11 @@ const routes = [
         path: '/localization/:id',
         component: Localization,
     },
-    { path: '/settings', component: Settings },
+    { path: '/users/register', component: Settings },
+    { path: '/users/login', component: Settings },
+    { path: '/users/password-reset', component: Settings },
+    { path: '/user/logout', component: Settings },
+    { path: '/user/settings', component: Settings },
     // { path: '*', redirect: '/' },
 ]
 
