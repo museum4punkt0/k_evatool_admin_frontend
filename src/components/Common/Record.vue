@@ -37,7 +37,7 @@
 
 <script>
 import { ref } from 'vue'
-import Toolbar from './Toolbar.vue'
+import Toolbar from './Toolbar'
 // import Item from './Item.vue'
 import Button from './Button'
 import Layout from './Layout'
