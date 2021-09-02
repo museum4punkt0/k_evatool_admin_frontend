@@ -134,51 +134,28 @@
                                 >
                                     {{ survey.surveyStepsCount }}
                                 </td>
-                                <td
-                                    class="
-                                        px-6
-                                        py-4
-                                        whitespace-nowrap
-                                        text-right text-sm
-                                        font-medium
-                                    "
-                                >
-                                    <Button
-                                        class="mx-1"
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <EyeIcon
+                                        class="mx-1 h-5 w-5"
                                         @click="handlers.onView(survey)"
-                                    >
-                                        <font-awesome-icon
-                                            :icon="['fas', 'eye']"
-                                        />
-                                    </Button>
-                                    <Button
-                                        class="mx-1"
+                                    />
+                                    <PencilAltIcon
+                                        class="mx-1 h-5 w-5"
                                         @click="handlers.onEdit(survey)"
-                                    >
-                                        <font-awesome-icon
-                                            :icon="['fas', 'edit']"
-                                        />
-                                    </Button>
-                                    <!-- <Button @click="onEdit(data)">duplicate</Button> -->
-                                    <Button
-                                        class="mx-1"
+                                    />
+                                    <TrashIcon
+                                        class="mx-1 h-5 w-5"
                                         @click="handlers.onDelete(survey)"
-                                    >
-                                        <font-awesome-icon
-                                            :icon="['fas', 'trash']"
-                                        />
-                                    </Button>
+                                    />
                                 </td>
                             </tr>
-
-                            <!-- More people... -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <Collection
+    <!--    <Collection
         :title="$t('survey')"
         :items="surveys"
         :text-filter="textFilter"
@@ -188,10 +165,11 @@
         :on-view="handlers.onView"
         :on-edit="handlers.onEdit"
         :on-delete="handlers.onDelete"
-    ></Collection>
+    ></Collection>-->
 </template>
 
 <script>
+import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/vue/outline'
 import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Collection from '../Common/Collection/Collection.vue'
@@ -204,6 +182,9 @@ export default {
     name: 'SurveysList',
     components: {
         Collection,
+        TrashIcon,
+        EyeIcon,
+        PencilAltIcon,
     },
     setup() {
         const router = useRouter()
