@@ -3331,11 +3331,6 @@ launch-editor@^2.2.1:
     chalk "^2.3.0"
     shell-quote "^1.6.1"
 
-leader-line-vue@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/leader-line-vue/-/leader-line-vue-2.1.1.tgz#738ff22bd80a62a694840fd7358f936ceb3ad898"
-  integrity sha512-ZfNoDcwgfHESNLErfPBdJ4I/1tbXLBUFwGfbqAZvTcOghcm7UtUm7mUPZVAOThlO3q75n8pZmDTGtM/Gwfx+xA==
-
 levn@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.4.1.tgz#ae4562c007473b932a6200d403268dd2fffc6ade"
@@ -5565,6 +5560,11 @@ vue-router@4:
   integrity sha512-sha6I8fx9HWtvTrFZfxZkiQQBpqSeT+UCwauYjkdOQYRvwsGwimlQQE2ayqUwuuXGzquFpCPoXzYKWlzL4OuXg==
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.14"
+
+vue3-leaderline@^1.1.11:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/vue3-leaderline/-/vue3-leaderline-1.1.11.tgz#910e41e67afb109bca1820d97833eb8314b602fa"
+  integrity sha512-c/prW2bfZwaSrqDrG7ZO9H6QO/5XaY1AIHijYRFquB/8iPlqpkJ1SBhrtNgjn0zf4424l25pldr1CtOup4rwOA==
 
 vue3-styled-components@^1.2.1:
   version "1.2.1"
