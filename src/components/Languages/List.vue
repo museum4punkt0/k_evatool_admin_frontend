@@ -23,16 +23,11 @@ export default {
     components: {
         Collection,
     },
-    setup(props) {
+    setup() {
         const router = useRouter()
         const { languages } = useState(['languages'])
-        const {
-            getAllAndUpdateStore,
-            createOneAndUpdateStore,
-            deleteOneAndUpdateStore,
-        } = useActions([
+        const { getAllAndUpdateStore, deleteOneAndUpdateStore } = useActions([
             'getAllAndUpdateStore',
-            'createOneAndUpdateStore',
             'deleteOneAndUpdateStore',
         ])
         const textFilter = (item, text) => {

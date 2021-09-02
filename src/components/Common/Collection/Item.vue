@@ -51,7 +51,7 @@ export default {
         },
         titleSelector: {
             type: Function,
-            default: (item) => '',
+            default: () => '',
         },
         selected: {
             type: Boolean,
@@ -74,7 +74,7 @@ export default {
             default: () => {},
         },
     },
-    setup(props) {
+    setup() {
         return {}
     },
     methods: {},

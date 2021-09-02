@@ -22,7 +22,7 @@ export default {
         Title,
     },
     props: { title: { type: String, default: '' } },
-    setup(props) {
+    setup() {
         return {}
     },
     methods: {},

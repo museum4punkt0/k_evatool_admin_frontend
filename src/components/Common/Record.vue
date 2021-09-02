@@ -105,7 +105,7 @@ export default {
         onDelete: { type: Function, required: false },
         onEdit: { type: Function, required: false },
     },
-    setup(props) {
+    setup() {
         const showMeta = ref(false)
         const toggleShowMeta = () => {
             showMeta.value = !showMeta.value

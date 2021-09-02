@@ -46,7 +46,7 @@
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { onBeforeRouteUpdate } from 'vue-router'
 import Record from '../Common/Record.vue'
 
 const { useState, useActions } = createNamespacedHelpers('languages')
@@ -55,7 +55,7 @@ export default {
     components: {
         Record,
     },
-    setup(props) {
+    setup() {
         const id = ref()
         const route = useRoute()
         const router = useRouter()

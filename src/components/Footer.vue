@@ -17,7 +17,7 @@ export default {
     components: {
         Container,
     },
-    setup(props) {
+    setup() {
         return { packageConfig }
     },
 }

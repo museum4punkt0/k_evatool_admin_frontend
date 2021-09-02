@@ -48,7 +48,7 @@ export default {
         Layout,
         Toolbar,
     },
-    setup(props) {
+    setup() {
         const router = useRouter()
         const language = ref({
             code: '',

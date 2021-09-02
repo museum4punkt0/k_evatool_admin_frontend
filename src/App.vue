@@ -21,7 +21,7 @@ import Menu from './components/Menu.vue'
 import Content from './components/Content.vue'
 import Notifications from './components/Notifications/Notifications.vue'
 
-const { useState, useActions } = createNamespacedHelpers('elementTypes')
+const { useActions } = createNamespacedHelpers('elementTypes')
 
 const Container = styled.div`
     width: 100vw;
@@ -37,7 +37,6 @@ export default {
         Menu,
         Layout,
         Content,
-        Notifications,
         Notifications,
     },
     setup() {

@@ -146,7 +146,7 @@ export default {
         const onFilterTextChange = (value) => {
             filterText.value = value.target.value
         }
-        const onItemsDeleted = (items) => {
+        const onItemsDeleted = () => {
             selected.value = []
             // console.log('items deleted', selected, items)
             // selected.value = selected.value.filter((selectedItem) => {
