@@ -21,7 +21,9 @@ import Menu from './components/Menu.vue'
 import Content from './components/Content.vue'
 import Notifications from './components/Notifications/Notifications.vue'
 
-const { useActions } = createNamespacedHelpers('elementTypes')
+const { useActions: useElementTypesActions } =
+    createNamespacedHelpers('elementTypes')
+const { useActions: useLanguagesActions } = createNamespacedHelpers('languages')
 
 const Container = styled.div`
     width: 100vw;
@@ -40,8 +42,14 @@ export default {
         Notifications,
     },
     setup() {
-        const { getAllAndUpdateStore } = useActions(['getAllAndUpdateStore'])
-        getAllAndUpdateStore()
+        const { getAllElementTypesAndUpdateStore } = useElementTypesActions([
+            'getAllElementTypesAndUpdateStore',
+        ])
+        const { getAllLanguagesAndUpdateStore } = useLanguagesActions([
+            'getAllLanguagesAndUpdateStore',
+        ])
+        getAllElementTypesAndUpdateStore()
+        getAllLanguagesAndUpdateStore()
         return {}
     },
 }

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const prefix = (value) => `${import.meta.env.VITE_API_BASE_URL}/${value}`
 const urls = {
-    getAll: () => prefix(`evaluation-tool/survey-languages`),
+    getAll: () => prefix(`evaluation-tool/survey-languages?all`),
     getOne: (id) => prefix(`evaluation-tool/survey-languages/${id}`),
     createOne: () => prefix(`evaluation-tool/survey-languages`),
     updateOne: (id) => prefix(`evaluation-tool/survey-languages/${id}`),

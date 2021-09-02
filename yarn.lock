@@ -5561,6 +5561,11 @@ vue-router@4:
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.14"
 
+vue3-leaderline@^1.1.11:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/vue3-leaderline/-/vue3-leaderline-1.1.11.tgz#910e41e67afb109bca1820d97833eb8314b602fa"
+  integrity sha512-c/prW2bfZwaSrqDrG7ZO9H6QO/5XaY1AIHijYRFquB/8iPlqpkJ1SBhrtNgjn0zf4424l25pldr1CtOup4rwOA==
+
 vue3-styled-components@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/vue3-styled-components/-/vue3-styled-components-1.2.1.tgz#de338c77e8e8bb2139be5939c5813bbe7347bc50"

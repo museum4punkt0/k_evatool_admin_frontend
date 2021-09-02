@@ -26,9 +26,12 @@ export default {
     setup() {
         const router = useRouter()
         const { languages } = useState(['languages'])
-        const { getAllAndUpdateStore, deleteOneAndUpdateStore } = useActions([
-            'getAllAndUpdateStore',
-            'deleteOneAndUpdateStore',
+        const {
+            getAllLanguagesAndUpdateStore,
+            deleteOneLanguageAndUpdateStore,
+        } = useActions([
+            'getAllLanguagesAndUpdateStore',
+            'deleteOneLanguageAndUpdateStore',
         ])
         const textFilter = (item, text) => {
             return (
@@ -64,14 +67,14 @@ export default {
         const onDelete = (items) => {
             if (Array.isArray(items)) {
                 items.forEach((item) => {
-                    deleteOneAndUpdateStore(item)
+                    deleteOneLanguageAndUpdateStore(item)
                 })
             } else if (typeof items === 'object') {
-                deleteOneAndUpdateStore(items)
+                deleteOneLanguageAndUpdateStore(items)
             }
         }
 
-        getAllAndUpdateStore()
+        getAllLanguagesAndUpdateStore()
         return {
             languages,
             textFilter,
@@ -81,7 +84,7 @@ export default {
                 },
             },
             handlers: {
-                onRefresh: getAllAndUpdateStore,
+                onRefresh: getAllLanguagesAndUpdateStore,
                 onNew: () => router.push({ name: 'languages/new' }),
                 onView,
                 onEdit,
