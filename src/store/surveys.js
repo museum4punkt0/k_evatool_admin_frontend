@@ -60,7 +60,6 @@ export default {
                         service.getAllSurveySteps(
                             id,
                             (steps) => {
-                                console.log('got steps')
                                 value.steps = steps
                                 commit('setSelected', value)
                                 resolve(value)

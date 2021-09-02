@@ -25,7 +25,7 @@ export default {
     components: {
         Collection,
     },
-    setup(props) {
+    setup() {
         const router = useRouter()
         const { surveys } = useState(['surveys'])
         const { getAllAndUpdateStore, deleteOneAndUpdateStore } = useActions([

@@ -21,12 +21,7 @@
                 />
             </li>
         </ul>
-        <NodeEditor
-            :nodes="selectedSurvey.steps"
-            :node-component="nodeComponent"
-            :get-inlets-for-node="getInletsForNode"
-            :get-outlets-for-node="getOutletsForNode"
-        />
+        <NodeEditor :nodes="selectedSurvey.steps" />
         <router-view></router-view>
     </Record>
 </template>
@@ -39,7 +34,6 @@ import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
-import Node from './NodeContent.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
 const { useActions: useNotificationsActions } =
@@ -50,7 +44,6 @@ export default {
         Button,
         Record,
         NodeEditor,
-        Node,
     },
     setup() {
         const id = ref()
@@ -118,12 +111,6 @@ export default {
                         params: { id: item.id },
                     })
                 },
-            },
-            getInletsForNode: () => [{ name: 'in' }],
-            getOutletsForNode: (node) => {
-                console.log(node)
-                const outlets = [{ name: 'out1' }, { name: 'out2' }]
-                return outlets
             },
             nodeComponent: Node,
             update,

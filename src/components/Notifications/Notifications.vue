@@ -45,7 +45,7 @@ export default {
         Actions,
         Button,
     },
-    setup(props) {
+    setup() {
         const { notifications } = useState(['notifications'])
         const { remove, addWarning } = useActions(['remove', 'addWarning'])
 

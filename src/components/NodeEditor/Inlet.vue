@@ -1,5 +1,5 @@
 <template>
-    <Container>
+    <Container @click="onClick">
         {{ name }}
     </Container>
 </template>
@@ -10,6 +10,7 @@ const Container = styled.div`
     background: yellow;
     font-size: 12px;
     border-radius: 16px;
+    padding: 4px;
 `
 export default {
     components: {
@@ -20,9 +21,23 @@ export default {
             type: String,
             required: true,
         },
+        value: {
+            type: String,
+            required: false,
+            default: () => '',
+        },
+        onClick: {
+            type: Function,
+            required: false,
+            default: () => {
+                return () => {}
+            },
+        },
     },
     setup() {
-        return {}
+        return {
+            selected: false,
+        }
     },
 }
 </script>

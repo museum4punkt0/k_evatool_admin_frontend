@@ -19,20 +19,20 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Header from '../Common/Header.vue'
 import Layout from '../Common/Layout'
 import ScrollContent from '../Common/ScrollContent'
 import Button from '../Common/Button'
-const { useState, useActions } = createNamespacedHelpers('surveys')
+const { useActions } = createNamespacedHelpers('surveys')
 const { useActions: useNotificationsActions } =
     createNamespacedHelpers('notifications')
 
 export default {
     components: { Button, Layout, PageHeader: Header, ScrollContent },
-    setup(props) {
+    setup() {
         const router = useRouter()
         const survey = ref({ name: 'new name', description: 'new description' })
         // const { surveys } = useState(['surveys'])

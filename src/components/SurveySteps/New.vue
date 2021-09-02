@@ -3,7 +3,7 @@
 <script>
 export default {
     components: {},
-    setup(props) {
+    setup() {
         return {}
     },
 }
