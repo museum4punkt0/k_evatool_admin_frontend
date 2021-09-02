@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.56",
+    "version": "1.0.57",
     "scripts": {
         "serve": "vite build && vite preview",
         "build": "vite build",
@@ -17,6 +17,7 @@
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
         "@fortawesome/free-solid-svg-icons": "^5.15.4",
         "@fortawesome/vue-fontawesome": "^3.0.0-4",
+        "@heroicons/vue": "^1.0.4",
         "axios": "^0.21.1",
         "vue": "^3.0.5",
         "vue-i18n": "^9.1.7",

@@ -12,6 +12,7 @@
 
                 <Button v-if="onNew && selected.length === 0" @click="onNew">
                     <font-awesome-icon :icon="['fas', 'plus']" />
+                    <!-- <PlusIcon class="h-6 w-6"></PlusIcon> -->
                 </Button>
                 <Button
                     v-if="onEdit && selected.length === 1"
@@ -27,6 +28,7 @@
                 </Button>
                 <Button v-if="onRefresh" @click="onRefresh">
                     <font-awesome-icon :icon="['fas', 'sync']" />
+                    <!-- <RefreshIcon class="h-6 w-6"></RefreshIcon> -->
                 </Button>
             </Toolbar>
         </PageHeader>
@@ -73,6 +75,7 @@ import ScrollContent from '../ScrollContent'
 import Toolbar from '../Toolbar.vue'
 import Item from './Item.vue'
 import styled from 'vue3-styled-components'
+// import { PlusIcon, RefreshIcon } from '@heroicons/vue/solid'
 
 const Container = styled.div``
 const Title = styled.div`
@@ -107,6 +110,8 @@ export default {
         StyledTable,
         Row: Item,
         Toolbar,
+        // PlusIcon,
+        // RefreshIcon,
     },
     props: {
         title: {
