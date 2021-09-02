@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.63",
+    "version": "1.0.64",
     "scripts": {
         "serve": "vite build && vite preview",
         "build": "vite build",
@@ -21,6 +21,7 @@
         "@headlessui/vue": "^1.4.1",
         "@heroicons/vue": "^1.0.4",
         "axios": "^0.21.1",
+        "leader-line-vue": "^2.1.1",
         "vue": "^3.0.5",
         "vue-i18n": "^9.1.7",
         "vue-router": "4",
