@@ -145,7 +145,7 @@ export default {
             })
         },
 
-        getAllStepsAddToSurveyAndUpdateStore({ commit }, { id }) {},
+        // getAllStepsAddToSurveyAndUpdateStore({ commit }, { id }) {},
     },
     getters: {},
 }

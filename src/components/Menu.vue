@@ -51,7 +51,7 @@ export default {
         Container,
         Item,
     },
-    setup(props) {
+    setup() {
         return {}
     },
 }

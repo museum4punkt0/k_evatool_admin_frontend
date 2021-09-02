@@ -32,7 +32,7 @@
 <script>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { onBeforeRouteUpdate } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Record from '../Common/Record.vue'
 import Button from '../Common/Button'
@@ -44,7 +44,7 @@ export default {
         Button,
         Record,
     },
-    setup(props) {
+    setup() {
         const id = ref()
         const route = useRoute()
         const router = useRouter()

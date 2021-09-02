@@ -22,16 +22,11 @@ export default {
     components: {
         Collection,
     },
-    setup(props) {
+    setup() {
         const router = useRouter()
         const { surveySteps } = useState(['surveySteps'])
-        const {
-            getAllAndUpdateStore,
-            createOneAndUpdateStore,
-            deleteOneAndUpdateStore,
-        } = useActions([
+        const { getAllAndUpdateStore, deleteOneAndUpdateStore } = useActions([
             'getAllAndUpdateStore',
-            'createOneAndUpdateStore',
             'deleteOneAndUpdateStore',
         ])
         const onEdit = (items) => {

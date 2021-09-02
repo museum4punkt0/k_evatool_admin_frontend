@@ -21,6 +21,12 @@
                 />
             </li>
         </ul>
+        <NodeEditor
+            :nodes="selectedSurvey.steps"
+            :node-component="nodeComponent"
+            :get-inlets-for-node="getInletsForNode"
+            :get-outlets-for-node="getOutletsForNode"
+        />
         <router-view></router-view>
     </Record>
 </template>
@@ -28,10 +34,12 @@
 <script>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { onBeforeRouteUpdate } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
+import NodeEditor from '../NodeEditor/NodeEditor.vue'
+import Node from './NodeContent.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
 const { useActions: useNotificationsActions } =
@@ -41,8 +49,10 @@ export default {
     components: {
         Button,
         Record,
+        NodeEditor,
+        Node,
     },
-    setup(props) {
+    setup() {
         const id = ref()
         const route = useRoute()
         const router = useRouter()
@@ -93,7 +103,7 @@ export default {
             handlers: {
                 onDelete: (item) => {
                     deleteOneSelectAndUpdateStore(item)
-                        .then((value) => {
+                        .then(() => {
                             router.push({
                                 name: 'surveys',
                             })
@@ -109,6 +119,13 @@ export default {
                     })
                 },
             },
+            getInletsForNode: () => [{ name: 'in' }],
+            getOutletsForNode: (node) => {
+                console.log(node)
+                const outlets = [{ name: 'out1' }, { name: 'out2' }]
+                return outlets
+            },
+            nodeComponent: Node,
             update,
         }
     },
