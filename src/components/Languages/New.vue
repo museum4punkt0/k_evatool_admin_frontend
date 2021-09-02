@@ -58,14 +58,14 @@ export default {
             default: false,
         })
         const { addError } = useNotificationsActions(['addError'])
-        const { createOneSelectAndUpdateStore } = useActions([
-            'createOneSelectAndUpdateStore',
+        const { createOneLanguageSelectAndUpdateStore } = useActions([
+            'createOneLanguageSelectAndUpdateStore',
         ])
         return {
             language,
             handlers: {
                 onCreate: () => {
-                    createOneSelectAndUpdateStore(language.value)
+                    createOneLanguageSelectAndUpdateStore(language.value)
                         .then((response) => {
                             router.push({
                                 name: 'language/edit',

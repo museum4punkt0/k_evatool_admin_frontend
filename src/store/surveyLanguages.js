@@ -35,7 +35,7 @@ export default {
         },
     },
     actions: {
-        getAllAndUpdateStore({ commit }) {
+        getAllLanguagesAndUpdateStore({ commit }) {
             return new Promise((resolve, reject) => {
                 service.getAll(
                     (value) => {
@@ -46,7 +46,7 @@ export default {
                 )
             })
         },
-        getOneSelectAndUpdateStore({ commit }, { id }) {
+        getOneLanguageSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
                 service.getOne(
                     id,
@@ -58,7 +58,7 @@ export default {
                 )
             })
         },
-        createOneAndUpdateStore({ commit }, data) {
+        createOneLanguageAndUpdateStore({ commit }, data) {
             return new Promise((resolve, reject) => {
                 service.createOne(
                     data,
@@ -70,7 +70,7 @@ export default {
                 )
             })
         },
-        createOneSelectAndUpdateStore({ commit }, data) {
+        createOneLanguageSelectAndUpdateStore({ commit }, data) {
             return new Promise((resolve, reject) => {
                 service.createOne(
                     data,
@@ -85,7 +85,7 @@ export default {
                 )
             })
         },
-        updateOneAndUpdateStore({ commit }, { id, data }) {
+        updateOneLanguageAndUpdateStore({ commit }, { id, data }) {
             return new Promise((resolve, reject) => {
                 service.updateOne(
                     id,
@@ -98,7 +98,7 @@ export default {
                 )
             })
         },
-        updateOneSelectAndUpdateStore({ commit }, { id, data }) {
+        updateOneLangaugeSelectAndUpdateStore({ commit }, { id, data }) {
             return new Promise((resolve, reject) => {
                 service.updateOne(
                     id,
@@ -112,7 +112,7 @@ export default {
                 )
             })
         },
-        deleteOneAndUpdateStore({ commit }, { id }) {
+        deleteOneLanguageAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
                 service.deleteOne(
                     id,
@@ -124,7 +124,7 @@ export default {
                 )
             })
         },
-        deleteOneSelectAndUpdateStore({ commit }, { id }) {
+        deleteOneLanguageSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
                 service.deleteOne(
                     id,
