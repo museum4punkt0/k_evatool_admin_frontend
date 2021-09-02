@@ -35,7 +35,7 @@ import Button from '../Common/Button'
 import Header from '../Common/Header.vue'
 import Layout from '../Common/Layout'
 import ScrollContent from '../Common/ScrollContent'
-import Toolbar from '../Common/Toolbar.vue'
+import Toolbar from '../Common/Toolbar'
 const { useActions } = createNamespacedHelpers('languages')
 const { useActions: useNotificationsActions } =
     createNamespacedHelpers('notifications')
