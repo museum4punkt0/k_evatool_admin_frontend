@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../components/Home.vue'
 
-import ListSurveys from '../components/Surveys/List.vue'
+import ListSurveys from '../components/Surveys/SurveysList.vue'
 import ViewSurvey from '../components/Surveys/View.vue'
 import NewSurvey from '../components/Surveys/New.vue'
 import EditSurvey from '../components/Surveys/Edit.vue'
