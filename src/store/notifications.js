@@ -11,7 +11,7 @@ const durations = {
     WARNING: 10000,
     ERROR: 20000,
 }
-var idCounter = 1
+let idCounter = 1
 export default {
     namespaced: true,
     state: () => initialState,
@@ -28,7 +28,7 @@ export default {
     actions: {
         add({ commit }, { type, message, duration }) {
             const notification = { id: idCounter++, type, message }
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 commit('add', notification)
                 if (duration) {
                     setTimeout(() => {
@@ -40,7 +40,7 @@ export default {
         },
         addInfo({ commit }, { message }) {
             const notification = { id: idCounter++, type: types.INFO, message }
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 commit('add', notification)
                 setTimeout(() => {
                     commit('remove', notification)
@@ -54,7 +54,7 @@ export default {
                 type: types.WARNING,
                 message,
             }
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 commit('add', notification)
                 setTimeout(() => {
                     commit('remove', notification)
@@ -68,7 +68,7 @@ export default {
                 type: types.ERROR,
                 message,
             }
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 commit('add', notification)
                 setTimeout(() => {
                     commit('remove', notification)
@@ -77,7 +77,7 @@ export default {
             })
         },
         remove({ commit }, { notification }) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 commit('remove', notification)
                 resolve(notification)
             })

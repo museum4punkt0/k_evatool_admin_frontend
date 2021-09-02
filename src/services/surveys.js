@@ -19,7 +19,7 @@ export default {
 
         if (successCallback) {
             axios
-                .get(url)
+                .get('evaluation-tool/surveys')
                 .then((response) => {
                     if (response.data) {
                         successCallback(response.data.data)
