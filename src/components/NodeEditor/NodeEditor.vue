@@ -5,20 +5,22 @@
     <Node
         v-for="node in nodes"
         :id="'evtool_node_' + node.id"
-        :key="node.title"
-        :ref="
-            (el) => {
-                nodeRefs[node.id] = el
-            }
-        "
-        :inlets="getInletsForNode(node)"
-        :outlets="getOutletsForNode(node)"
+        :ref="(el) => (nodeRefs[node.id] = el)"
+        :key="'draggable_node' + node.title"
         :data="node"
-    ></Node>
+        @nodeOutletClick="nodeOutletClick(node)"
+    />
 </template>
 
 <script>
-import { ref, watch, onBeforeUpdate, onUnmounted } from 'vue'
+import {
+    ref,
+    watch,
+    onBeforeUpdate,
+    onUpdated,
+    onMounted,
+    onUnmounted,
+} from 'vue'
 import styled from 'vue3-styled-components'
 import Node from './Node.vue'
 import LeaderLine from 'vue3-leaderline'
@@ -28,6 +30,7 @@ const Container = styled.div`
 `
 
 export default {
+    name: 'NodeEditor',
     components: {
         Container,
         Node,
@@ -40,11 +43,13 @@ export default {
     },
     setup(props) {
         console.log(LeaderLine)
-        const nodeRefs = ref({})
-        const connectionElements = ref([])
+        const nodeRefs = ref([])
+        let connectionElements = ref([])
+        /*
         props.nodes.forEach((node) => {
             nodeRefs.value[node.id] = null
         })
+        */
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
         watch(
@@ -53,7 +58,15 @@ export default {
                 console.log('nodes changed', nodes)
             },
         )
-        onBeforeUpdate(() => {})
+        onBeforeUpdate(() => {
+            // nodeRefs = []
+        })
+        onUpdated(() => {
+            console.log(nodeRefs)
+        })
+        onMounted(() => {
+            console.log(nodeRefs)
+        })
         onUnmounted(() => {
             connectionElements.value.forEach((connectionElement) => {
                 // document.removeChild(connectionElement)
@@ -75,19 +88,37 @@ export default {
                 console.log(LeaderLine)
                 const keys = Object.keys(nodeRefs.value)
                 console.log(keys)
+
+                console.log('---------------------------')
+                console.log(nodeRefs.value)
+                console.log('---------------------------')
+
                 if (keys.length > 1) {
                     console.log(
-                        // nodeRefs.value[keys[0]],
-                        // nodeRefs.value[keys[1]].get(),
-                        document.getElementById('evtool_node_' + keys[0]),
-                        document.getElementById('evtool_node_' + keys[1]),
+                        nodeRefs,
+                        nodeRefs.value,
+                        // document.getElementById('evtool_node_' + keys[0]),
+                        // document.getElementById('evtool_node_' + keys[1]),
                     )
+
                     const line = new LeaderLine(
                         document.getElementById('evtool_node_' + keys[0]),
                         document.getElementById('evtool_node_' + keys[1]),
                         { color: 'red', size: 8 },
                     )
                     connectionElements.value.push(line)
+                    /*
+                    const line = new LeaderLine(
+                        nodeRefs.value[0],
+                        nodeRefs.value[1],
+                        {
+                            color: 'red',
+                            size: 8,
+                        },
+                    )
+
+                }
+                */
                 }
             },
             updateConnections: () => {
@@ -96,6 +127,11 @@ export default {
                 })
             },
         }
+    },
+    methods: {
+        nodeOutletClick(node) {
+            console.log(node)
+        },
     },
 }
 </script>
