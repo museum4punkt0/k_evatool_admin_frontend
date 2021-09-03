@@ -189,7 +189,6 @@ const sidebarNavigation = [
         icon: UserGroupIcon,
         current: false,
     },
-    { name: 'Settings', href: '/settings', icon: CogIcon, current: false },
 ]
 
 export default {
