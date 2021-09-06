@@ -1,5 +1,5 @@
 <template>
-    <Container @click="onClick">
+    <Container :id="key" @click="onClick">
         {{ name }}
     </Container>
 </template>
@@ -13,10 +13,15 @@ const Container = styled.div`
     padding: 4px;
 `
 export default {
+    name: 'Inlet',
     components: {
         Container,
     },
     props: {
+        key: {
+            type: String,
+            required: true,
+        },
         name: {
             type: String,
             required: true,

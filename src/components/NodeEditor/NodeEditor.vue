@@ -1,15 +1,19 @@
 <template>
-    <Container>node editor</Container>
-    <button @click="drawConnections">test draw connection</button>
-    <button @click="updateConnections">test update connection</button>
-    <Node
-        v-for="node in nodes"
-        :id="'evtool_node_' + node.id"
-        :ref="(el) => (nodeRefs[node.id] = el)"
-        :key="'draggable_node' + node.title"
-        :data="node"
-        @nodeOutletClick="nodeOutletClick(node)"
-    />
+    <Container @scroll="updateConnections">
+        <button @click="drawConnections">test draw connection</button>
+        <button @click="updateConnections">test update connection</button>
+        <Node
+            v-for="node in nodes"
+            :id="'evtool_node_' + node.id"
+            :ref="(el) => (nodeRefs[node.id] = el)"
+            :key="'draggable_node' + node.id"
+            :data="node"
+            :inlets="getInletsForNode(node)"
+            :outlets="getOutletsForNode(node)"
+            :on-move="updateConnections"
+            @nodeOutletClick="nodeOutletClick(node)"
+        />
+    </Container>
 </template>
 
 <script>
@@ -42,90 +46,99 @@ export default {
         },
     },
     setup(props) {
-        console.log(LeaderLine)
         const nodeRefs = ref([])
+        const connections = ref([])
         let connectionElements = ref([])
-        /*
-        props.nodes.forEach((node) => {
-            nodeRefs.value[node.id] = null
-        })
-        */
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
+        const drawConnections = () => {
+            clearConnections()
+            props.nodes.forEach((node) => {
+                if (node.nextStepId) {
+                    connections.value.push({
+                        from: `evtool_node_${node.id}_outlet_next`,
+                        to: `evtool_node_${node.nextStepId}_inlet`,
+                    })
+                }
+            })
+            console.log('connections', connections.value)
+            connections.value.forEach((connection) => {
+                const line = new LeaderLine(
+                    // document.getElementById('evtool_node_' + keys[0]),
+                    // document.getElementById('evtool_node_' + keys[1]),
+                    document.getElementById(connection.from),
+                    document.getElementById(connection.to),
+                    { color: 'darkblue', size: 4 },
+                )
+                connectionElements.value.push(line)
+            })
+        }
+        const clearConnections = () => {
+            // connections.value.clear()
+            connectionElements.value.forEach((connectionElement) => {
+                connectionElement.remove()
+            })
+            // connectionElements.value.clear()
+        }
+
+        const updateConnections = () => {
+            connectionElements.value.forEach((connectionElement) => {
+                connectionElement.position()
+            })
+        }
         watch(
             () => props.nodes,
             (nodes) => {
                 console.log('nodes changed', nodes)
+                drawConnections()
             },
         )
         onBeforeUpdate(() => {
             // nodeRefs = []
         })
         onUpdated(() => {
-            console.log(nodeRefs)
+            console.log('updated', nodeRefs)
         })
         onMounted(() => {
             console.log(nodeRefs)
+            drawConnections()
+            window.addEventListener('scroll', updateConnections)
         })
         onUnmounted(() => {
-            connectionElements.value.forEach((connectionElement) => {
-                // document.removeChild(connectionElement)
-                connectionElement.remove()
-            })
+            clearConnections()
+            window.removeEventListener('scroll', updateConnections)
         })
+
         return {
+            connections,
             highlightInlets,
             highlightOutlets,
-            getInletsForNode: () => [{ name: 'in' }],
+            getInletsForNode: (node) => [
+                {
+                    key: `evtool_node_${node.id}_inlet`,
+                    name: 'in',
+                },
+            ],
             getOutletsForNode: (node) => {
-                const outlets = [{ name: 'next', value: node.nextStepId }]
+                const outlets = [
+                    {
+                        key: `evtool_node_${node.id}_outlet_next`,
+                        name: 'next',
+                        value: node.nextStepId,
+                    },
+                    {
+                        key: `evtool_node_${node.id}_outlet_dummy_0`,
+                        name: 'dummy',
+                        value: '',
+                    },
+                ]
                 return outlets
             },
             nodeRefs,
             connectionElements,
-            connections: [{ from: null, to: null }],
-            drawConnections: () => {
-                console.log(LeaderLine)
-                const keys = Object.keys(nodeRefs.value)
-                console.log(keys)
-
-                console.log('---------------------------')
-                console.log(nodeRefs.value)
-                console.log('---------------------------')
-
-                if (keys.length > 1) {
-                    console.log(
-                        nodeRefs,
-                        nodeRefs.value,
-                        // document.getElementById('evtool_node_' + keys[0]),
-                        // document.getElementById('evtool_node_' + keys[1]),
-                    )
-
-                    const line = new LeaderLine(
-                        document.getElementById('evtool_node_' + keys[0]),
-                        document.getElementById('evtool_node_' + keys[1]),
-                        { color: 'red', size: 8 },
-                    )
-                    connectionElements.value.push(line)
-                    /*
-                    const line = new LeaderLine(
-                        nodeRefs.value[0],
-                        nodeRefs.value[1],
-                        {
-                            color: 'red',
-                            size: 8,
-                        },
-                    )
-
-                }
-                */
-                }
-            },
-            updateConnections: () => {
-                connectionElements.value.forEach((connectionElement) => {
-                    connectionElement.position()
-                })
-            },
+            drawConnections,
+            updateConnections,
+            clearConnections,
         }
     },
     methods: {
