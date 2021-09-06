@@ -1,15 +1,20 @@
 <template>
-    <Collection
-        :title="$t('language')"
-        :items="languages"
-        :text-filter="textFilter"
-        :item-title-selector="selectors.itemTitle"
-        :on-refresh="handlers.onRefresh"
-        :on-new="handlers.onNew"
-        :on-view="handlers.onView"
-        :on-edit="handlers.onEdit"
-        :on-delete="handlers.onDelete"
-    ></Collection>
+    <div class="flex-1 flex items-stretch overflow-hidden">
+        <main class="flex-1 overflow-y-auto p-3">
+            <h1>Languages</h1>
+            <Collection
+                :title="$t('language')"
+                :items="languages"
+                :text-filter="textFilter"
+                :item-title-selector="selectors.itemTitle"
+                :on-refresh="handlers.onRefresh"
+                :on-new="handlers.onNew"
+                :on-view="handlers.onView"
+                :on-edit="handlers.onEdit"
+                :on-delete="handlers.onDelete"
+            ></Collection>
+        </main>
+    </div>
 </template>
 
 <script>
