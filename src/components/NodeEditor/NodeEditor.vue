@@ -2,10 +2,11 @@
     <Container @scroll="updateConnections">
         <button @click="drawConnections">test draw connection</button>
         <button @click="updateConnections">test update connection</button>
+        <button @click="serializeLayout">layout</button>
         <Node
             v-for="node in nodes"
             :id="'evtool_node_' + node.id"
-            :ref="(el) => (nodeRefs[node.id] = el)"
+            :ref="(el) => setNodeRef(node.id, el)"
             :key="'draggable_node' + node.id"
             :data="node"
             :inlets="getInletsForNode(node)"
@@ -51,6 +52,12 @@ export default {
         let connectionElements = ref([])
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
+        const setNodeRef = (key, el) => {
+            if (el) {
+                nodeRefs[key] = el
+            }
+        }
+
         const drawConnections = () => {
             clearConnections()
             props.nodes.forEach((node) => {
@@ -84,6 +91,13 @@ export default {
         const updateConnections = () => {
             connectionElements.value.forEach((connectionElement) => {
                 connectionElement.position()
+            })
+        }
+
+        const serializeLayout = () => {
+            console.log('serialize', nodeRefs.value)
+            nodeRefs.value.forEach((node) => {
+                console.log('node', node)
             })
         }
         watch(
@@ -135,10 +149,12 @@ export default {
                 return outlets
             },
             nodeRefs,
+            setNodeRef,
             connectionElements,
             drawConnections,
             updateConnections,
             clearConnections,
+            serializeLayout,
         }
     },
     methods: {

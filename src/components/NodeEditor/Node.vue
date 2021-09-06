@@ -4,7 +4,7 @@
         v-draggable=""
         class="
             h-32
-            w-44
+            w-64
             p-2
             bg-white
             shadow
