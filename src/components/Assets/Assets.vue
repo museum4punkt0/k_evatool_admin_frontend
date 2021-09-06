@@ -18,7 +18,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="asset in assets.data" :key="asset.id">
+                            <tr
+                                v-for="(asset, i) in assets.data"
+                                :key="asset.id"
+                                :ref="
+                                    (el) => {
+                                        assetRefs['asset' + i] = el
+                                    }
+                                "
+                            >
                                 <td>
                                     {{ asset.id }}
                                 </td>
@@ -55,7 +63,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onUpdated, ref, onMounted, onBeforeUpdate, watchEffect } from 'vue'
 
 import { Dashboard } from '@uppy/vue'
 
@@ -69,7 +77,6 @@ import Tus from '@uppy/tus'
 import German from '@uppy/locales/lib/de_DE'
 
 import ASSETS from '../../services/assetService'
-import { onMounted } from 'vue'
 
 export default {
     name: 'Assets',
@@ -78,6 +85,7 @@ export default {
     },
     setup() {
         const assets = ref(null)
+        const assetRefs = ref([])
 
         async function fetchAssets() {
             assets.value = await ASSETS.ASSETS_get()
@@ -87,6 +95,11 @@ export default {
             fetchAssets()
         })
 
+        watchEffect(() => {})
+
+        onBeforeUpdate(() => {})
+        onUpdated(() => {})
+
         return {
             dashboardOptions: {
                 theme: 'light',
@@ -95,6 +108,7 @@ export default {
                 width: '100%',
             },
             assets,
+            assetRefs,
         }
     },
     computed: {
