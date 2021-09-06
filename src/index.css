@@ -37,3 +37,7 @@ tbody {
 td {
     @apply px-6 py-2 whitespace-nowrap
 }
+
+.router-link-active {
+    @apply bg-blue-800 text-white
+}

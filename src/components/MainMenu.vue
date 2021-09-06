@@ -13,12 +13,18 @@
                     v-for="item in sidebarNavigation"
                     :key="item.name"
                     :to="item.href"
-                    :class="[
-                        item.current
-                            ? 'bg-blue-800 text-white'
-                            : 'text-blue-100 hover:bg-blue-800 hover:text-white',
-                        'group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium',
-                    ]"
+                    class="
+                        text-blue-100
+                        hover:bg-blue-800 hover:text-white
+                        group
+                        w-full
+                        p-3
+                        rounded-md
+                        flex flex-col
+                        items-center
+                        text-xs
+                        font-medium
+                    "
                     :aria-current="item.current ? 'page' : undefined"
                 >
                     <component
@@ -165,11 +171,9 @@ import {
     Menu,
     MenuButton,
     MenuItem,
-    MenuItems,
 } from '@headlessui/vue'
 
 import {
-    CogIcon,
     HomeIcon,
     PhotographIcon,
     UserGroupIcon,
