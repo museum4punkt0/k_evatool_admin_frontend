@@ -16,4 +16,5 @@ export default createStore({
         notifications,
     },
     state: {},
+    actions: {},
 })

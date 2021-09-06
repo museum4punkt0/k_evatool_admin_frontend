@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.71",
+    "version": "1.0.72",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -21,6 +21,7 @@
         "@fortawesome/vue-fontawesome": "^3.0.0-4",
         "@headlessui/vue": "^1.4.1",
         "@heroicons/vue": "^1.0.4",
+        "@tailwindcss/forms": "^0.3.3",
         "@uppy/core": "^2.0.2",
         "@uppy/locales": "^2.0.0",
         "@uppy/tus": "^2.0.1",

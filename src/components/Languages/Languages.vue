@@ -1,27 +1,29 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1>Languages</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Code</th>
-                        <th>Subcode</th>
-                        <th>Default</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="language in languages" :key="language.id">
-                        <td>{{ language.id }}</td>
-                        <td>{{ language.code }}</td>
-                        <td>{{ language.subCode }}</td>
-                        <td>{{ language.default }}</td>
-                        <td>{{ language.published }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h1 class="mb-3">{{ $tc('languages', 2) }}</h1>
+            <div class="table-wrap">
+                <table class="table-fixed">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Code</th>
+                            <th>Subcode</th>
+                            <th>Default</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="language in languages" :key="language.id">
+                            <td>{{ language.id }}</td>
+                            <td>{{ language.code }}</td>
+                            <td>{{ language.subCode }}</td>
+                            <td>{{ language.default }}</td>
+                            <td>{{ language.published }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <!--            <Collection
                 :title="$t('language')"
                 :items="languages"
