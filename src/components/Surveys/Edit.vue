@@ -1,28 +1,48 @@
 <template>
-    <Record
-        v-if="selectedSurvey"
-        :data="selectedSurvey"
-        :title-selector="selectors.title"
-        :on-delete="handlers.onDelete"
-    >
-        <template #toolbar>
-            <Button @click="handlers.onShowResults(selectedSurvey)">
-                results
-            </Button>
-        </template>
-        <ul>
-            <li>
-                <input v-model.lazy="selectedSurvey.name" @change="update" />
-            </li>
-            <li>
-                <input
-                    v-model.lazy="selectedSurvey.description"
-                    @change="update"
-                />
-            </li>
-        </ul>
-        <NodeEditor :nodes="selectedSurvey.steps" />
-    </Record>
+    <div class="flex-1 flex items-stretch overflow-hidden">
+        <main class="flex-1 overflow-y-auto p-3">
+            <Record
+                v-if="selectedSurvey"
+                :data="selectedSurvey"
+                :title-selector="selectors.title"
+                :on-delete="handlers.onDelete"
+            >
+                <template #toolbar>
+                    <Button @click="handlers.onShowResults(selectedSurvey)">
+                        results
+                    </Button>
+                </template>
+                <ul>
+                    <li>
+                        <input
+                            v-model.lazy="selectedSurvey.name"
+                            @change="update"
+                        />
+                    </li>
+                    <li>
+                        <input
+                            v-model.lazy="selectedSurvey.description"
+                            @change="update"
+                        />
+                    </li>
+                </ul>
+                <NodeEditor :nodes="selectedSurvey.steps" />
+            </Record>
+        </main>
+        <aside
+            class="
+                hidden
+                w-96
+                bg-white
+                border-l border-gray-200
+                overflow-y-auto
+                lg:block
+                p-3
+            "
+        >
+            <survey-step />
+        </aside>
+    </div>
 </template>
 
 <script>
@@ -33,9 +53,11 @@ import { onBeforeRouteUpdate } from 'vue-router'
 import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
+import SurveyStep from './SurveyStep.vue'
 
 export default {
     components: {
+        SurveyStep,
         Button,
         Record,
         NodeEditor,
