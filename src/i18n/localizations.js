@@ -1,12 +1,7 @@
+import de from './languages/de'
+import en from './languages/en'
+
 export default {
-    en: {
-        survey: 'Survey',
-        language: 'Language',
-        hello: 'hello world!',
-    },
-    de: {
-        survey: 'Umfrage',
-        language: 'Sprache',
-        hello: 'hallo Welt!',
-    },
+    en,
+    de,
 }
