@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.64",
+    "version": "1.0.65",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -25,7 +25,7 @@
         "@uppy/locales": "^2.0.0",
         "@uppy/tus": "^2.0.1",
         "@uppy/vue": "^0.4.0",
-        "axios": "^0.21.1",
+        "axios": "^0.21.3",
         "vue": "^3.0.5",
         "vue-i18n": "^9.1.7",
         "vue-router": "4",
@@ -34,25 +34,25 @@
         "vuex-composition-helpers": "^2.0.0"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue": "^1.4.0",
+        "@vitejs/plugin-vue": "^1.6.0",
         "@vue/cli-plugin-eslint": "~4.5.13",
-        "@vue/compiler-sfc": "^3.1.5",
+        "@vue/compiler-sfc": "^3.2.9",
         "@vue/eslint-config-prettier": "^6.0.0",
-        "@vue/eslint-config-standard": "^6.0.0",
-        "autoprefixer": "^10.3.1",
+        "@vue/eslint-config-standard": "^6.1.0",
+        "autoprefixer": "^10.3.4",
         "babel-eslint": "^10.1.0",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
-        "eslint-plugin-import": "^2.23.4",
+        "eslint-plugin-import": "^2.24.2",
         "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-promise": "^5.1.0",
-        "eslint-plugin-vue": "^7.15.1",
+        "eslint-plugin-vue": "^7.17.0",
         "postcss": "^8.3.6",
         "pre-commit": "^1.2.2",
         "prettier": "^2.3.2",
-        "tailwindcss": "^2.2.7",
-        "vite": "^2.4.4",
-        "vite-plugin-vue-env": "^1.0.4"
+        "tailwindcss": "^2.2.9",
+        "vite": "^2.5.3",
+        "vite-plugin-vue-env": "^1.0.5"
     }
 }
