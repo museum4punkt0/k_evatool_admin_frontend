@@ -11,7 +11,7 @@ export default {
         },
     },
     actions: {
-        getAllAndUpdateStore({ commit }) {
+        getAllElementTypesAndUpdateStore({ commit }) {
             service.getAll((value) => {
                 commit('set', value)
             })
