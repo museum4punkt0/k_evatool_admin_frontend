@@ -6,7 +6,7 @@
         <Node
             v-for="node in nodes"
             :id="'evtool_node_' + node.id"
-            :ref="setNodeRef(node.id)"
+            :ref="(el) => (nodeRefs[node.id] = el)"
             :key="'draggable_node' + node.id"
             :data="node"
             :inlets="getInletsForNode(node)"
@@ -47,19 +47,11 @@ export default {
         },
     },
     setup(props) {
-        const nodeRefs = ref({})
+        const nodeRefs = ref([])
         const connections = ref([])
         let connectionElements = ref([])
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
-
-        const setNodeRef = (id) => {
-            return (el) => {
-                if (el) {
-                    nodeRefs.value[id] = el
-                }
-            }
-        }
 
         const drawConnections = () => {
             clearConnections()
@@ -99,11 +91,10 @@ export default {
 
         const serializeLayout = () => {
             console.log('serialize', nodeRefs)
-            const keys = Object.keys(nodeRefs)
 
-            keys.forEach((key) => {
-                console.log('node', nodeRefs.value[key])
-            })
+            // nodeRefs.value.forEach((node) => {
+            // console.log('node', node.$el.clientWidth)
+            // })
         }
         watch(
             () => props.nodes,
@@ -154,7 +145,6 @@ export default {
                 return outlets
             },
             nodeRefs,
-            setNodeRef,
             connectionElements,
             drawConnections,
             updateConnections,
