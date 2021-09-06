@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1 {
+    @apply text-3xl
+}
+
+h2 {
+    @apply text-2xl
+}
+
+h3 {
+    @apply text-xl
+}
+
+.table-wrap {
+    @apply shadow overflow-hidden border-b border-gray-200 sm:rounded-lg
+}
+
+table {
+    @apply min-w-full divide-y divide-gray-200
+}
+
+thead {
+    @apply bg-blue-500
+}
+
+th {
+    @apply px-6 py-2 text-left font-medium text-white
+}
+
+tbody {
+    @apply bg-white divide-y divide-gray-200
+}
+
+td {
+    @apply px-6 py-2 whitespace-nowrap
+}
+
+.router-link-active {
+    @apply bg-blue-800 text-white
+}

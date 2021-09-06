@@ -18,6 +18,7 @@ import Localizations from '../components/Localizations/Localizations.vue'
 import Localization from '../components/Localizations/Localization.vue'
 import NewLocalization from '../components/Localizations/New.vue'
 import Settings from '../components/Settings.vue'
+import Assets from '../components/Assets/Assets.vue'
 
 const routes = [
     { path: '/', component: Home },
@@ -69,6 +70,7 @@ const routes = [
     { path: '/users/password-reset', component: Settings },
     { path: '/user/logout', component: Settings },
     { path: '/user/settings', component: Settings },
+    { path: '/assets', component: Assets },
     // { path: '*', redirect: '/' },
 ]
 
