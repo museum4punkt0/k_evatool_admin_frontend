@@ -1,84 +1,96 @@
 <template>
-    <Container v-draggable="">
-        <InletsContainer>
+    <div
+        ref="node"
+        v-draggable=""
+        class="
+            h-32
+            w-64
+            p-2
+            bg-white
+            shadow
+            border-b border-gray-200
+            sm:rounded-lg
+            flex
+        "
+        @move="onMove"
+    >
+        <Inlets>
+            <!-- <div
+                ref="outlet"
+                @click="$emit('nodeOutletClick')"
+                @touchstart="$emit('nodeOutletClick')"
+            >
+                Out: {{ data.nextStepId }}
+            </div> -->
             <Inlet
                 v-for="inlet in inlets"
-                :key="inlet.name"
+                :id="inlet.key"
+                :key="inlet.key"
                 :name="inlet.name"
-                :on-click="creators.onInletClick(data, outlet)"
+                :value="inlet.value"
+                :on-click="creators.onInletClick(data, inlet)"
             />
-        </InletsContainer>
-        <ContentContainer>
-            <Title>
+        </Inlets>
+        <NodeContent>
+            <h2>
                 {{ data.name }}
-            </Title>
+            </h2>
             <ul>
                 <li>id: {{ data.id }}</li>
                 <li>element id: {{ data.surveyElementId }}</li>
             </ul>
-        </ContentContainer>
-        <OutletsContainer>
+        </NodeContent>
+
+        <Outlets>
+            <!-- <div
+                ref="outlet"
+                @click="$emit('nodeOutletClick')"
+                @touchstart="$emit('nodeOutletClick')"
+            >
+                Out: {{ data.nextStepId }}
+            </div> -->
             <Outlet
                 v-for="outlet in outlets"
-                :key="outlet.name"
+                :id="outlet.key"
+                :key="outlet.key"
                 :name="outlet.name"
                 :value="outlet.value"
                 :on-click="creators.onOutletClick(data, outlet)"
             />
-        </OutletsContainer>
-    </Container>
+        </Outlets>
+    </div>
 </template>
 
 <script>
-import styled from 'vue3-styled-components'
+import { defineExpose, ref } from 'vue'
+import NodeContent from './NodeContent.vue'
+import Inlets from './Inlets.vue'
 import Inlet from './Inlet.vue'
+import Outlets from './Outlets.vue'
 import Outlet from './Outlet.vue'
-import theme from '../../theme'
-
-const Container = styled.div`
-    background-color: DarkOrange;
-    width: 200px;
-    height: 80px;
-    margin: 15px;
-    display: flex;
-    flex-direction: row;
-`
-const InletsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    background: green;
-    align-items: center;
-    justify-content: space-evenly;
-`
-const OutletsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    background: red;
-    align-items: center;
-    justify-content: space-evenly;
-`
-const Title = styled.div`
-    color: ${theme.secondaryColor};
-    background-color: ${theme.secondaryBackgroundColor};
-`
-const ContentContainer = styled.div`
-    flex-grow: 1;
-`
 
 export default {
-    components: {
-        Inlet,
-        Outlet,
-        Container,
-        InletsContainer,
-        OutletsContainer,
-        ContentContainer,
-        Title,
-    },
+    name: 'Node',
+    components: { NodeContent, Outlets, Inlets, Inlet, Outlet },
     props: {
         data: {
             type: Object,
             required: true,
+            default: () => {},
+        },
+        onStart: {
+            type: Function,
+            required: false,
+            default: () => {},
+        },
+        onMove: {
+            type: Function,
+            required: true,
+        },
+        onStop: {
+            type: Function,
+            required: false,
+            default: () => {},
         },
         inlets: {
             type: Array,
@@ -92,6 +104,8 @@ export default {
         },
     },
     setup() {
+        let node = ref(null)
+        defineExpose({ node })
         return {
             creators: {
                 onInletClick: (node, inlet) => {

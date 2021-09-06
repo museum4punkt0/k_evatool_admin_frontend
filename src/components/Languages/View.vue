@@ -61,19 +61,19 @@ export default {
         const router = useRouter()
         const { selectedLanguage } = useState(['selectedLanguage'])
         const {
-            getOneSelectAndUpdateStore,
-            updateOneSelectAndUpdateStore,
-            deleteOneSelectAndUpdateStore,
+            getOneLanguageSelectAndUpdateStore,
+            updateOneLanguageSelectAndUpdateStore,
+            deleteOneLanguageSelectAndUpdateStore,
         } = useActions([
-            'getOneSelectAndUpdateStore',
-            'updateOneSelectAndUpdateStore',
-            'deleteOneSelectAndUpdateStore',
+            'getOneLanguageSelectAndUpdateStore',
+            'updateOneLanguageSelectAndUpdateStore',
+            'deleteOneLanguageSelectAndUpdateStore',
         ])
 
         onBeforeRouteUpdate(async (to, from) => {
             if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
-                getOneSelectAndUpdateStore({ id: to.params.id })
+                getOneLanguageSelectAndUpdateStore({ id: to.params.id })
             }
         })
         watch(
@@ -81,13 +81,13 @@ export default {
             (newId) => {
                 id.value = newId
                 if (id.value) {
-                    getOneSelectAndUpdateStore({ id: newId })
+                    getOneLanguageSelectAndUpdateStore({ id: newId })
                 }
             },
         )
         id.value = route.params.id
         if (id.value) {
-            getOneSelectAndUpdateStore({ id: id.value })
+            getOneLanguageSelectAndUpdateStore({ id: id.value })
         }
         return {
             id,
@@ -98,13 +98,13 @@ export default {
             },
             handlers: {
                 onUpdate: () => {
-                    updateOneSelectAndUpdateStore({
+                    updateOneLanguageSelectAndUpdateStore({
                         id: selectedLanguage.value.id,
                         data: selectedLanguage.value,
                     })
                 },
                 onDelete: (item) => {
-                    deleteOneSelectAndUpdateStore(item)
+                    deleteOneLanguageSelectAndUpdateStore(item)
                     // TODO: wait for promise to resolve
                     router.push({
                         name: 'languages',
