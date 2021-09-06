@@ -12,6 +12,7 @@
                 :placeholder="$t('name')"
             />
         </div>
+        <form-select :options="options" />
         <button type="button" class="primary mt-3">
             {{ $t('action_save') }}
         </button>
@@ -20,16 +21,25 @@
 
 <script>
 import { onMounted, reactive } from 'vue'
+import FormSelect from '../Forms/FormSelect.vue'
 
 export default {
     name: 'SurveyStep',
+    components: { FormSelect },
     setup() {
         let survey = reactive({ name: '' })
+
+        const options = [
+            { title: 'Option 1', id: 1 },
+            { title: 'Option 2', id: 2 },
+            { title: 'Option 3', id: 3 },
+        ]
 
         onMounted(() => {})
 
         return {
             survey,
+            options,
         }
     },
 }

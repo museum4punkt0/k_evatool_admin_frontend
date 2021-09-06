@@ -5,6 +5,7 @@ import languages from './surveyLanguages'
 import elementTypes from './surveyElementTypes'
 import localizations from './surveyLocalizations'
 import notifications from './notifications'
+import assets from './assets'
 
 export default createStore({
     modules: {
@@ -14,6 +15,7 @@ export default createStore({
         languages,
         localizations,
         notifications,
+        assets,
     },
     state: {},
     actions: {},
