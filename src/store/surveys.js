@@ -1,4 +1,5 @@
-import service from '../services/surveys'
+import surveysService from '../services/surveys'
+import surveyStepsService from '../services/surveySteps'
 const initialState = {
     surveys: [],
     selectedSurvey: null,
@@ -14,7 +15,6 @@ export default {
             state.selectedSurvey = value
         },
         select(state, id) {
-            // TODO: understand vuex, proxies, ....
             state.selectedSurvey = state.surveys.find((item) => item.id === id)
         },
         add(state, value) {
@@ -37,11 +37,15 @@ export default {
                 item.id === value.id ? value : item,
             )
         },
+        replaceSurveyStepOfSelectedSurvey(state, value) {
+            // state.selectedSurvey.
+            console.log(state, value)
+        },
     },
     actions: {
         getAllAndUpdateStore({ commit }) {
             return new Promise((resolve, reject) => {
-                service.getAll(
+                surveysService.getAll(
                     (value) => {
                         commit('set', value)
                         resolve(value)
@@ -54,10 +58,10 @@ export default {
         },
         getOneSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
-                service.getOne(
+                surveysService.getOne(
                     id,
                     (value) => {
-                        service.getAllSurveySteps(
+                        surveysService.getAllSurveySteps(
                             id,
                             (steps) => {
                                 value.steps = steps
@@ -73,7 +77,7 @@ export default {
         },
         createOneAndUpdateStore({ commit }, data) {
             return new Promise((resolve, reject) => {
-                service.createOne(
+                surveysService.createOne(
                     data,
                     (value) => {
                         commit('add', value)
@@ -85,7 +89,7 @@ export default {
         },
         createOneSelectAndUpdateStore({ commit }, data) {
             return new Promise((resolve, reject) => {
-                service.createOne(
+                surveysService.createOne(
                     data,
                     (value) => {
                         commit('add', value)
@@ -100,7 +104,7 @@ export default {
         },
         updateOneSelectAndUpdateStore({ commit }, { id, data }) {
             return new Promise((resolve, reject) => {
-                service.updateOne(
+                surveysService.updateOne(
                     id,
                     data,
                     (value) => {
@@ -116,7 +120,7 @@ export default {
         },
         deleteOneSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
-                service.deleteOne(
+                surveysService.deleteOne(
                     id,
                     (value) => {
                         commit('delete', value.id)
@@ -131,7 +135,7 @@ export default {
         },
         deleteOneAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
-                service.deleteOne(
+                surveysService.deleteOne(
                     id,
                     (value) => {
                         commit('delete', value)
@@ -143,8 +147,24 @@ export default {
                 )
             })
         },
-
-        // getAllStepsAddToSurveyAndUpdateStore({ commit }, { id }) {},
+        updateOneSurveyStepAndAddToSelected({ commit }, { id, data }) {
+            return new Promise((resolve, reject) => {
+                console.log(id, data)
+                surveyStepsService.updateOne(
+                    id,
+                    data,
+                    (value) => {
+                        console.log('survey step updated', value)
+                        // commit('delete', value)
+                        resolve(value)
+                    },
+                    (error) => {
+                        console.log('cannot update survey steop', error)
+                        reject(error)
+                    },
+                )
+            })
+        },
     },
     getters: {},
 }
