@@ -96,10 +96,11 @@ export default {
             // console.log('node', node.$el.clientWidth)
             // })
         }
+
         watch(
             () => props.nodes,
-            (nodes) => {
-                console.log('nodes changed', nodes)
+            (newNodes) => {
+                console.log('nodes changed', newNodes)
                 drawConnections()
             },
         )

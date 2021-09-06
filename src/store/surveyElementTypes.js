@@ -1,4 +1,4 @@
-import service from '../services/surveyElementTypes'
+import surveyElementTypesService from '../services/surveyElementTypes'
 const initialState = {
     elementTypes: [],
 }
@@ -12,7 +12,7 @@ export default {
     },
     actions: {
         getAllElementTypesAndUpdateStore({ commit }) {
-            service.getAll((value) => {
+            surveyElementTypesService.getAll((value) => {
                 commit('set', value)
             })
         },

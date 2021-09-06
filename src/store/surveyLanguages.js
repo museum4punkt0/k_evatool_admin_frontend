@@ -1,4 +1,4 @@
-import service from '../services/surveyLanguages'
+import surveyLanguagesService from '../services/surveyLanguages'
 const initialState = {
     languages: [],
     selectedLanguage: null,
@@ -14,7 +14,6 @@ export default {
             state.selectedLanguage = language
         },
         select(state, id) {
-            // TODO: understand vuex, proxies, ....
             state.selectedLanguage = state.languages.find(
                 (item) => item.id === id,
             )
@@ -37,7 +36,7 @@ export default {
     actions: {
         getAllLanguagesAndUpdateStore({ commit }) {
             return new Promise((resolve, reject) => {
-                service.getAll(
+                surveyLanguagesService.getAll(
                     (value) => {
                         commit('set', value)
                         resolve(value)
@@ -48,7 +47,7 @@ export default {
         },
         getOneLanguageSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
-                service.getOne(
+                surveyLanguagesService.getOne(
                     id,
                     (value) => {
                         commit('setSelected', value)
@@ -60,7 +59,7 @@ export default {
         },
         createOneLanguageAndUpdateStore({ commit }, data) {
             return new Promise((resolve, reject) => {
-                service.createOne(
+                surveyLanguagesService.createOne(
                     data,
                     (value) => {
                         commit('add', value)
@@ -72,7 +71,7 @@ export default {
         },
         createOneLanguageSelectAndUpdateStore({ commit }, data) {
             return new Promise((resolve, reject) => {
-                service.createOne(
+                surveyLanguagesService.createOne(
                     data,
                     (value) => {
                         commit('add', value)
@@ -87,7 +86,7 @@ export default {
         },
         updateOneLanguageAndUpdateStore({ commit }, { id, data }) {
             return new Promise((resolve, reject) => {
-                service.updateOne(
+                surveyLanguagesService.updateOne(
                     id,
                     data,
                     (value) => {
@@ -100,7 +99,7 @@ export default {
         },
         updateOneLangaugeSelectAndUpdateStore({ commit }, { id, data }) {
             return new Promise((resolve, reject) => {
-                service.updateOne(
+                surveyLanguagesService.updateOne(
                     id,
                     data,
                     (value) => {
@@ -114,7 +113,7 @@ export default {
         },
         deleteOneLanguageAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
-                service.deleteOne(
+                surveyLanguagesService.deleteOne(
                     id,
                     (value) => {
                         commit('delete', value.id)
@@ -126,7 +125,7 @@ export default {
         },
         deleteOneLanguageSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
-                service.deleteOne(
+                surveyLanguagesService.deleteOne(
                     id,
                     (value) => {
                         commit('delete', value.id)

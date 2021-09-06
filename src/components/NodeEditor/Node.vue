@@ -62,7 +62,8 @@
 </template>
 
 <script>
-import { defineExpose, ref } from 'vue'
+import { toRef } from 'vue'
+import { useStore } from 'vuex'
 import NodeContent from './NodeContent.vue'
 import Inlets from './Inlets.vue'
 import Inlet from './Inlet.vue'
@@ -103,9 +104,11 @@ export default {
             default: () => [],
         },
     },
-    setup() {
-        let node = ref(null)
-        defineExpose({ node })
+    setup(props) {
+        const store = useStore()
+        // const data = toRef(props, 'data')
+        // let node = ref(null)
+        // defineExpose({ node })
         return {
             creators: {
                 onInletClick: (node, inlet) => {
@@ -113,9 +116,18 @@ export default {
                         console.log('inlet clicked', node, inlet)
                     }
                 },
-                onOutletClick: (node, outlet) => {
+                onOutletClick: (clickedNode, outlet) => {
                     return () => {
-                        console.log('outlet clicked', node, outlet)
+                        if (outlet.name === 'next' && clickedNode.nextStepId) {
+                            console.log('remove next step id', props.data)
+                            store.dispatch(
+                                'surveys/updateOneSurveyStepAndAddToSelected',
+                                {
+                                    id: props.data.id,
+                                    data: { ...props.data, nextStepId: 24 },
+                                },
+                            )
+                        }
                     }
                 },
             },
