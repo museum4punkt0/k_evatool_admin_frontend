@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col my-5">
+    <div class="flex flex-col my-5 px-3">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div
                 class="
@@ -20,7 +20,7 @@
                     "
                 >
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-blue-500">
                             <tr>
                                 <th
                                     scope="col"
@@ -29,7 +29,7 @@
                                         py-3
                                         text-left text-xs
                                         font-medium
-                                        text-gray-500
+                                        text-white
                                         uppercase
                                     "
                                 >
@@ -42,7 +42,7 @@
                                         py-3
                                         text-left text-xs
                                         font-medium
-                                        text-gray-500
+                                        text-white
                                         uppercase
                                         tracking-wider
                                     "
@@ -56,7 +56,7 @@
                                         py-3
                                         text-left text-xs
                                         font-medium
-                                        text-gray-500
+                                        text-white
                                         uppercase
                                         tracking-wider
                                     "
@@ -70,7 +70,7 @@
                                         py-3
                                         text-left text-xs
                                         font-medium
-                                        text-gray-500
+                                        text-white
                                         uppercase
                                         tracking-wider
                                     "
@@ -119,8 +119,8 @@
                                     >
                                         {{
                                             survey.published
-                                                ? 'published'
-                                                : 'unpublished'
+                                                ? 'Published'
+                                                : 'Unpublished'
                                         }}
                                     </span>
                                 </td>

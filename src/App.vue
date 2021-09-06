@@ -205,8 +205,6 @@
                             flex flex-col
                             overflow-scroll
                             lg:order-last
-                            px-5
-                            py-3
                         "
                     >
                         <router-view />
