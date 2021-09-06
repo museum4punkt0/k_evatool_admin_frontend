@@ -9,7 +9,7 @@ import EditSurvey from '../components/Surveys/Edit.vue'
 import SurveySteps from '../components/SurveySteps/SurveySteps.vue'
 import NewSurveyStep from '../components/SurveySteps/New.vue'
 
-import ListLanguages from '../components/Languages/List.vue'
+import ListLanguages from '../components/Languages/Languages.vue'
 import ViewLanguage from '../components/Languages/View.vue'
 import NewLanguage from '../components/Languages/New.vue'
 import EditLanguage from '../components/Languages/Edit.vue'
