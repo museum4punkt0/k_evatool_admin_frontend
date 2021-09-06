@@ -63,6 +63,7 @@
 
 <script>
 import { defineExpose, ref } from 'vue'
+import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import NodeContent from './NodeContent.vue'
 import Inlets from './Inlets.vue'
 import Inlet from './Inlet.vue'
@@ -104,9 +105,14 @@ export default {
         },
     },
     setup() {
+        const { useActions } = createNamespacedHelpers('surveySteps')
+        const { updateOneStepAndUpdateStore } = useActions([
+            'updateOneStepAndUpdateStore',
+        ])
         let node = ref(null)
         defineExpose({ node })
         return {
+            updateOneStepAndUpdateStore,
             creators: {
                 onInletClick: (node, inlet) => {
                     return () => {

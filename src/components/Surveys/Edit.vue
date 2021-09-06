@@ -22,22 +22,17 @@
             </li>
         </ul>
         <NodeEditor :nodes="selectedSurvey.steps" />
-        <router-view></router-view>
     </Record>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
+import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeRouteUpdate } from 'vue-router'
-import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
-
-const { useState, useActions } = createNamespacedHelpers('surveys')
-const { useActions: useNotificationsActions } =
-    createNamespacedHelpers('notifications')
 
 export default {
     components: {
@@ -49,20 +44,13 @@ export default {
         const id = ref()
         const route = useRoute()
         const router = useRouter()
-        const { selectedSurvey } = useState(['selectedSurvey'])
-        const {
-            getOneSelectAndUpdateStore,
-            updateOneSelectAndUpdateStore,
-            deleteOneSelectAndUpdateStore,
-        } = useActions([
-            'getOneSelectAndUpdateStore',
-            'updateOneSelectAndUpdateStore',
-            'deleteOneSelectAndUpdateStore',
-        ])
-        const { addError } = useNotificationsActions(['addError'])
+        const store = useStore()
+        const selectedSurvey = computed(
+            () => store.state.surveys.selectedSurvey,
+        )
 
         const update = () => {
-            updateOneSelectAndUpdateStore({
+            store.dispatch('surveys/updateOneSelectAndUpdateStore', {
                 id: selectedSurvey.value.id,
                 data: selectedSurvey.value,
             })
@@ -71,7 +59,7 @@ export default {
         onBeforeRouteUpdate(async (to, from) => {
             if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
-                getOneSelectAndUpdateStore(id.value)
+                store.dispatch('surveys/getOneSelectAndUpdateStore', id.value)
             }
         })
         watch(
@@ -79,13 +67,17 @@ export default {
             (newId) => {
                 id.value = newId
                 if (id.value) {
-                    getOneSelectAndUpdateStore({ id: newId })
+                    store.dispatch('surveys/getOneSelectAndUpdateStore', {
+                        id: newId,
+                    })
                 }
             },
         )
         id.value = route.params.id
         if (id.value) {
-            getOneSelectAndUpdateStore({ id: id.value })
+            store.dispatch('surveys/getOneSelectAndUpdateStore', {
+                id: id.value,
+            })
         }
         return {
             id,
@@ -95,14 +87,17 @@ export default {
             },
             handlers: {
                 onDelete: (item) => {
-                    deleteOneSelectAndUpdateStore(item)
+                    store
+                        .dispatch('surveys/deleteOneSelectAndUpdateStore', item)
                         .then(() => {
                             router.push({
                                 name: 'surveys',
                             })
                         })
                         .catch((error) => {
-                            addError({ message: error })
+                            store.dispatch('notifications/addError', {
+                                message: error,
+                            })
                         })
                 },
                 onShowResults: (item) => {

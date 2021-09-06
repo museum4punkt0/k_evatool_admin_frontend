@@ -27,6 +27,7 @@ import {
     onUnmounted,
 } from 'vue'
 import styled from 'vue3-styled-components'
+import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Node from './Node.vue'
 import LeaderLine from 'vue3-leaderline'
 const Container = styled.div`
@@ -47,6 +48,7 @@ export default {
         },
     },
     setup(props) {
+        const { useState, useActions } = createNamespacedHelpers('surveySteps')
         const nodeRefs = ref([])
         const connections = ref([])
         let connectionElements = ref([])
@@ -96,10 +98,15 @@ export default {
             // console.log('node', node.$el.clientWidth)
             // })
         }
+
+        const { updateOneStepAndUpdateStore } = useActions([
+            'updateOneStepAndUpdateStore',
+        ])
+
         watch(
             () => props.nodes,
-            (nodes) => {
-                console.log('nodes changed', nodes)
+            (newNodes) => {
+                console.log('nodes changed', newNodes)
                 drawConnections()
             },
         )
