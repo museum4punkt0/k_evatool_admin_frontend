@@ -7,6 +7,7 @@ export default {
     filesize: 'filesize',
     languages: 'languages | language | languages',
     names: 'names | name | names',
+    none_selected: 'none selected',
     steps: 'steps | step | steps',
     survey: 'surveys | survey | surveys',
     titles: 'titles | title | titles',

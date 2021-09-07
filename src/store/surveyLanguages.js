@@ -1,14 +1,20 @@
 import surveyLanguagesService from '../services/surveyLanguages'
 const initialState = {
     languages: [],
+    data: null,
     selectedLanguage: null,
+    defaultLanguage: null,
+    secondaryLanguages: [],
 }
 export default {
     namespaced: true,
     state: () => initialState,
     mutations: {
-        set(state, languages) {
+        setLanguages(state, languages) {
             state.languages = languages
+            state.data = languages
+            state.defaultLanguage = state.data.find((x) => x.default)
+            state.secondaryLanguages = state.data.filter((x) => !x.default)
         },
         setSelected(state, language) {
             state.selectedLanguage = language
@@ -38,7 +44,7 @@ export default {
             return new Promise((resolve, reject) => {
                 surveyLanguagesService.getAll(
                     (value) => {
-                        commit('set', value)
+                        commit('setLanguages', value)
                         resolve(value)
                     },
                     (error) => reject(error),

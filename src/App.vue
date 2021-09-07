@@ -258,10 +258,11 @@ export default {
         const store = useStore()
 
         onMounted(async () => {
-            await store.dispatch('surveyElements/getSurveyElements')
+            await store.dispatch('languages/getAllLanguagesAndUpdateStore')
             await store.dispatch(
                 'elementTypes/getAllElementTypesAndUpdateStore',
             )
+            await store.dispatch('surveyElements/getSurveyElements')
         })
 
         return {

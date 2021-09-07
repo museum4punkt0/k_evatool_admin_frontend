@@ -1,34 +1,8 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <Record
-                v-if="selectedSurvey"
-                :data="selectedSurvey"
-                :title-selector="selectors.title"
-                :on-delete="handlers.onDelete"
-                @scroll="handlers.onScroll"
-            >
-                <template #toolbar>
-                    <Button @click="handlers.onShowResults(selectedSurvey)">
-                        results
-                    </Button>
-                </template>
-                <!-- <ul>
-                    <li>
-                        <input
-                            v-model.lazy="selectedSurvey.name"
-                            @change="update"
-                        />
-                    </li>
-                    <li>
-                        <input
-                            v-model.lazy="selectedSurvey.description"
-                            @change="update"
-                        />
-                    </li>
-                </ul> -->
-                <NodeEditor ref="nodeEditor" :nodes="selectedSurvey.steps" />
-            </Record>
+            <h1>{{ $t('survey') }}</h1>
+            <NodeEditor ref="nodeEditor" :nodes="selectedSurvey.steps" />
         </main>
         <aside
             class="
@@ -41,7 +15,8 @@
                 p-3
             "
         >
-            <survey-step />
+            <survey-step v-if="activeSurveyStep" />
+            <survey-details v-else />
         </aside>
     </div>
 </template>
@@ -55,9 +30,11 @@ import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import SurveyStep from './SurveyStep.vue'
+import SurveyDetails from './SurveyDetails.vue'
 
 export default {
     components: {
+        SurveyDetails,
         SurveyStep,
         Button,
         Record,
@@ -66,6 +43,7 @@ export default {
     setup() {
         const id = ref()
         const nodeEditor = ref(null)
+        const activeSurveyStep = ref(null)
         const route = useRoute()
         const router = useRouter()
         const store = useStore()
@@ -138,6 +116,7 @@ export default {
             },
             nodeComponent: Node,
             update,
+            activeSurveyStep,
         }
     },
 }

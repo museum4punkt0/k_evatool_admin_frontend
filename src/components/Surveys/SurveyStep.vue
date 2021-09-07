@@ -30,34 +30,37 @@
             value-key="key"
         />
 
+        {{ firstname }}
+
         <div class="mt-3">
             <element-type-star-rating
                 v-if="survey.elementType === 'starRating'"
-                v-model="survey"
+                v-model="survey.params"
             />
             <element-type-emoji
                 v-if="survey.elementType === 'emoji'"
-                v-model="survey"
+                v-model="survey.params"
             />
             <element-type-video
                 v-if="survey.elementType === 'video'"
-                v-model="survey"
+                v-model="survey.params"
             />
             <element-type-binary-question
                 v-if="survey.elementType === 'binary'"
-                v-model="survey"
+                v-model="survey.params"
             />
             <element-type-multiple-choice
                 v-if="survey.elementType === 'multipleChoice'"
-                v-model="survey"
+                v-model="survey.params"
             />
             <element-type-simple-text
                 v-if="survey.elementType === 'simpleText'"
-                v-model="survey"
+                v-model:params="survey.params"
+                v-model:firstname="firstname"
             />
             <element-type-yay-nay
                 v-if="survey.elementType === 'yayNay'"
-                v-model="survey"
+                v-model="survey.params"
             />
         </div>
 
@@ -106,7 +109,8 @@ export default {
     },
     setup() {
         const store = useStore()
-        let survey = reactive({ name: '' })
+        let survey = reactive({ name: '', params: {} })
+        const firstname = ref(null)
         const elementTypes = ref(null)
 
         onMounted(async () => {
@@ -117,6 +121,8 @@ export default {
             v$: useVuelidate(),
             survey,
             elementTypes,
+            store,
+            firstname,
         }
     },
     data() {

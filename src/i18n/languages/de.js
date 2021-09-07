@@ -7,8 +7,9 @@ export default {
     filesize: 'Größe',
     languages: 'Sprachen | Sprache | Sprachen',
     names: 'Namen | Name | Namen',
+    none_selected: 'Nicht ausgewählt',
     steps: 'Schritte | Schritt | Schritt',
-    survey: 'Umfragen | Umfrage | Umfragen',
+    surveys: 'Umfragen | Umfrage | Umfragen',
     titles: 'Titel | Titel | Titel',
     types: 'Typen | Typ | Typen',
 }
