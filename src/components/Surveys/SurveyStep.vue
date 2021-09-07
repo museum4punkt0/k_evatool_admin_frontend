@@ -1,5 +1,13 @@
 <template>
     <h1>{{ $tc('steps', 1) }}</h1>
+
+    <div
+        v-for="(error, index) of v$.survey.name.$errors"
+        :key="index"
+        class="input-errors"
+    >
+        <div class="error-msg">{{ error.$message }}</div>
+    </div>
     <div>
         <label for="email" class="capitalize">{{ $tc('names', 1) }}</label>
         <div class="mt-1">
@@ -21,7 +29,13 @@
             title-key="name"
             value-key="key"
         />
-        <button type="button" class="primary mt-3">
+        {{ v$.$invalid }}
+        <button
+            type="button"
+            class="primary mt-3"
+            :disabled="v$.$invalid"
+            @click="saveSurveyStep"
+        >
             {{ $t('action_save') }}
         </button>
         <div class="bg-yellow-100 py-3 px-3 rounded mt-3 text-xs">
@@ -34,23 +48,48 @@
 import { onMounted, reactive, ref } from 'vue'
 import FormSelect from '../Forms/FormSelect.vue'
 
-import SURVEY_ELEMENT_TYPES from '../../services/surveyElementTypes'
+import { useStore } from 'vuex'
+import useVuelidate from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
 export default {
     name: 'SurveyStep',
     components: { FormSelect },
     setup() {
+        const store = useStore()
         let survey = reactive({ name: '' })
         const elementTypes = ref(null)
 
         onMounted(async () => {
-            elementTypes.value = await SURVEY_ELEMENT_TYPES.getAll()
+            await store.dispatch(
+                'elementTypes/getAllElementTypesAndUpdateStore',
+            )
+            elementTypes.value = store.state.elementTypes
         })
 
         return {
+            v$: useVuelidate(),
             survey,
             elementTypes,
         }
+    },
+    data() {
+        return {
+            name: '',
+        }
+    },
+    methods: {
+        saveSurveyStep() {
+            console.log('save')
+        },
+    },
+    validations: {
+        survey: {
+            name: {
+                required,
+                minLength: minLength(1),
+            },
+        },
     },
 }
 </script>

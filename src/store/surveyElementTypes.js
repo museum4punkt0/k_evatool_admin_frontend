@@ -1,19 +1,21 @@
 import surveyElementTypesService from '../services/surveyElementTypes'
 const initialState = {
     elementTypes: [],
+    data: null,
 }
 export default {
     namespaced: true,
     state: () => initialState,
     mutations: {
-        set(state, value) {
+        setElementTypes(state, value) {
             state.elementTypes = value
+            state.data = value
         },
     },
     actions: {
         getAllElementTypesAndUpdateStore({ commit }) {
             surveyElementTypesService.getAll((value) => {
-                commit('set', value)
+                commit('setElementTypes', value)
             })
         },
     },

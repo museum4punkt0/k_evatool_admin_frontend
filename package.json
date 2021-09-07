@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.77",
+    "version": "1.0.78",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -26,6 +26,8 @@
         "@uppy/locales": "^2.0.0",
         "@uppy/tus": "^2.0.1",
         "@uppy/vue": "^0.4.0",
+        "@vuelidate/core": "^2.0.0-alpha.25",
+        "@vuelidate/validators": "^2.0.0-alpha.21",
         "axios": "^0.21.4",
         "vue": "^3.0.5",
         "vue-i18n": "^9.1.7",
