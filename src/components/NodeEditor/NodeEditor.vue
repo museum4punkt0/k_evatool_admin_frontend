@@ -196,10 +196,20 @@ export default {
                         case MODES.ADD: {
                             setSelectedInlet({ node, inlet })
                             if (selectedOutlet.value) {
-                                console.log(
-                                    'TODO: update connection',
-                                    selectedInlet,
-                                    selectedOutlet,
+                                // console.log(
+                                //     'TODO: update connection',
+                                //     selectedInlet,
+                                //     selectedOutlet,
+                                // )
+                                store.dispatch(
+                                    'surveys/updateOneSurveyStepAndAddToSelected',
+                                    {
+                                        data: {
+                                            ...selectedOutlet.value.node,
+                                            nextStepId:
+                                                selectedInlet.value.node.id,
+                                        },
+                                    },
                                 )
                                 setSelectedInlet(null)
                                 setSelectedOutlet(null)
@@ -228,7 +238,7 @@ export default {
                             if (outlet.name === 'next') {
                                 store.dispatch(
                                     'surveys/updateOneSurveyStepAndAddToSelected',
-                                    { ...node, nextStepId: null },
+                                    { data: { ...node, nextStepId: null } },
                                 )
                                 setMode(MODES.NONE)
                                 break
