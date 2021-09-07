@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import Toolbar from './Toolbar'
 // import Item from './Item.vue'
 import Button from './Button'
@@ -121,8 +121,8 @@ export default {
         onMounted(() => {
             scrollContent.value.$el.addEventListener('scroll', emitScroll)
         })
-        onUnmounted(() => {
-            scrollContent.value.$el.addRemoveListener('scroll', emitScroll)
+        onBeforeUnmount(() => {
+            scrollContent.value.$el.removeEventListener('scroll', emitScroll)
         })
         return {
             showMeta,
