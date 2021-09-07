@@ -16,7 +16,7 @@
             "
         >
             <survey-step v-if="activeSurveyStep" />
-            <survey-details v-else />
+            <survey-details v-else :survey-id="surveyId" />
         </aside>
     </div>
 </template>
@@ -47,6 +47,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const store = useStore()
+        const surveyId = ref(route.params.id)
         const selectedSurvey = computed(
             () => store.state.surveys.selectedSurvey,
         )
@@ -76,6 +77,7 @@ export default {
                 }
             },
         )
+
         id.value = route.params.id
         if (id.value) {
             store.dispatch('surveys/getOneSelectAndUpdateStore', {
@@ -117,6 +119,7 @@ export default {
             nodeComponent: Node,
             update,
             activeSurveyStep,
+            surveyId,
         }
     },
 }

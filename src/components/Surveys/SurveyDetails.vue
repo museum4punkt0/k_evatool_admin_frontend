@@ -1,5 +1,5 @@
 <template>
-    <h1>New survey</h1>
+    <h1>{{ surveyTitle }}</h1>
 
     <input v-model="survey.name" class="mt-3" type="text" />
     <button
@@ -16,6 +16,7 @@ import { ref, watch } from 'vue'
 import SURVEYS from '../../services/surveys'
 import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
+import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'SurveyDetails',
@@ -24,9 +25,11 @@ export default {
     },
     emits: ['saved'],
     setup: function (props, { emit }) {
+        const { t } = useI18n()
         const survey = ref({
             name: '',
         })
+        const surveyTitle = ref(t('new_survey'))
 
         watch(
             () => props.surveyId,
@@ -38,6 +41,7 @@ export default {
         const setSurvey = async (surveyId) => {
             if (surveyId > 0) {
                 survey.value = await SURVEYS.getOne(surveyId)
+                surveyTitle.value = t('edit_survey')
             } else {
                 initSurvey()
             }
@@ -55,14 +59,16 @@ export default {
             survey.value = {
                 name: '',
             }
+            surveyTitle.value = t('new_survey')
         }
 
-        setSurvey()
+        setSurvey(props.surveyId)
 
         return {
             survey,
             v$: useVuelidate(),
             saveSurvey,
+            surveyTitle,
         }
     },
     validations: {
