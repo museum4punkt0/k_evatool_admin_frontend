@@ -1,6 +1,7 @@
 <template>
     <Container @scroll="updateConnections">
         <ul>
+            <li>mode: {{ mode }}</li>
             <li>
                 <Button @click="serializeLayout">test serialize layout</Button>
             </li>
@@ -8,25 +9,29 @@
                 <Button
                     @click="
                         () => {
-                            setAddConnection(!addConnectionMode)
+                            setMode(mode === MODES.ADD ? MODES.NONE : MODES.ADD)
                         }
                     "
                 >
                     add mode
                 </Button>
-                <span v-if="addConnectionMode">click outlet and inlet</span>
+                <span v-if="mode === MODES.ADD">click outlet and inlet</span>
             </li>
             <li>
                 <Button
                     @click="
                         () => {
-                            setDeleteConnection(!deleteConnectionMode)
+                            setMode(
+                                mode === MODES.DELETE
+                                    ? MODES.NONE
+                                    : MODES.DELETE,
+                            )
                         }
                     "
                 >
                     delete mode
                 </Button>
-                <span v-if="deleteConnectionMode">click outlet</span>
+                <span v-if="mode === MODES.DELETE">click outlet</span>
             </li>
         </ul>
         <Node
@@ -65,6 +70,12 @@ const outletIdCreator = (nodeId, key) => {
     return `evtool_node_${nodeId}_outlet_${key}`
 }
 
+const MODES = {
+    NONE: 'NONE',
+    ADD: 'ADD',
+    DELETE: 'DELETE',
+}
+
 export default {
     name: 'NodeEditor',
     components: {
@@ -84,8 +95,7 @@ export default {
         const connectionElements = ref([])
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
-        const [addConnectionMode, setAddConnection] = useState(false)
-        const [deleteConnectionMode, setDeleteConnection] = useState(false)
+        const [mode, setMode] = useState(null)
         const [selectedInlet, setSelectedInlet] = useState(null)
         const [selectedOutlet, setSelectedOutlet] = useState(null)
         const store = useStore()
@@ -150,10 +160,9 @@ export default {
             connections,
             highlightInlets,
             highlightOutlets,
-            addConnectionMode,
-            setAddConnection,
-            deleteConnectionMode,
-            setDeleteConnection,
+            mode,
+            setMode,
+            MODES,
             getInletsForNode: (node) => [
                 {
                     key: inletIdCreator(node.id),
@@ -183,43 +192,48 @@ export default {
             serializeLayout,
             handlers: {
                 onInletClicked: ({ node, inlet }) => {
-                    console.log('inlet clicked', node, inlet)
-                    if (addConnectionMode.value) {
-                        setSelectedInlet({ node, inlet })
-                        if (selectedOutlet.value) {
-                            console.log(
-                                'TODO: update connection',
-                                selectedInlet,
-                                selectedOutlet,
-                            )
-                            setSelectedInlet(null)
-                            setSelectedOutlet(null)
-                            setAddConnection(false)
+                    switch (mode.value) {
+                        case MODES.ADD: {
+                            setSelectedInlet({ node, inlet })
+                            if (selectedOutlet.value) {
+                                console.log(
+                                    'TODO: update connection',
+                                    selectedInlet,
+                                    selectedOutlet,
+                                )
+                                setSelectedInlet(null)
+                                setSelectedOutlet(null)
+                                setMode(MODES.NONE)
+                            }
                         }
                     }
                 },
                 onOutletClicked: ({ node, outlet }) => {
-                    if (addConnectionMode.value) {
-                        setSelectedOutlet({ node, outlet })
-                        if (selectedInlet.value) {
-                            console.log(
-                                'TODO: update connection',
-                                selectedInlet,
-                                selectedOutlet,
-                            )
-                            setSelectedInlet(null)
-                            setSelectedOutlet(null)
-                            setAddConnection(false)
+                    switch (mode.value) {
+                        case MODES.ADD: {
+                            setSelectedOutlet({ node, outlet })
+                            if (selectedInlet.value) {
+                                console.log(
+                                    'TODO: update connection',
+                                    selectedInlet,
+                                    selectedOutlet,
+                                )
+                                setSelectedInlet(null)
+                                setSelectedOutlet(null)
+                                setMode(MODES.NONE)
+                            }
+                            break
                         }
-                    } else if (
-                        deleteConnectionMode.value &&
-                        outlet.name === 'next'
-                    ) {
-                        store.dispatch(
-                            'surveys/updateOneSurveyStepAndAddToSelected',
-                            { ...node, nextStepId: null },
-                        )
-                        setDeleteConnection(false)
+                        case MODES.DELETE: {
+                            if (outlet.name === 'next') {
+                                store.dispatch(
+                                    'surveys/updateOneSurveyStepAndAddToSelected',
+                                    { ...node, nextStepId: null },
+                                )
+                                setMode(MODES.NONE)
+                                break
+                            }
+                        }
                     }
                 },
             },
