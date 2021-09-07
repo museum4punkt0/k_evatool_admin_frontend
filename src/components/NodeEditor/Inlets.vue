@@ -7,7 +7,6 @@ import styled from 'vue3-styled-components'
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    background: lightgrey;
     align-items: center;
     justify-content: space-evenly;
 `

@@ -37,11 +37,18 @@ export default {
                 item.id === value.id ? value : item,
             )
         },
-        replaceSurveyStepOfSelectedSurvey(state, value) {
-            console.log('update survey step', value)
-            state.selectedSurvey.steps.map((item) =>
-                item.id === value.id ? value : item,
-            )
+        replaceOrAddSurveyStepOfSelectedSurvey(state, value) {
+            if (
+                state.selectedSurvey.steps.find((step) => step.id === value.id)
+            ) {
+                state.selectedSurvey.steps = state.selectedSurvey.steps.map(
+                    (item) => {
+                        return item.id === value.id ? value : item
+                    },
+                )
+            } else {
+                state.selectedSurvey.steps.push(value)
+            }
         },
     },
     actions: {
@@ -154,7 +161,7 @@ export default {
                 surveysService.updateOneSurveyStep(
                     data,
                     (value) => {
-                        commit('replaceSurveyStepOfSelectedSurvey', value)
+                        commit('replaceOrAddSurveyStepOfSelectedSurvey', value)
                         resolve(value)
                     },
                     (error) => {

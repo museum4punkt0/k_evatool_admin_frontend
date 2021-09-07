@@ -1,5 +1,5 @@
 <template>
-    <Container @scroll="updateConnections">
+    <Container @scroll="updateConnections" @click="handlers.onNodeSelected">
         <ul>
             <li>mode: {{ mode }}</li>
             <li>
@@ -43,6 +43,9 @@
             :inlets="getInletsForNode(node)"
             :outlets="getOutletsForNode(node)"
             :on-move="updateConnections"
+            :active="node.id === selectedNode?.id"
+            @click.prevent.stop="handlers.onNodeSelected(node)"
+            @mousedown.prevent.stop="handlers.onNodeSelected(node)"
             @inletClicked="handlers.onInletClicked"
             @outletClicked="handlers.onOutletClicked"
         />
@@ -98,6 +101,7 @@ export default {
         const [mode, setMode] = useState(null)
         const [selectedInlet, setSelectedInlet] = useState(null)
         const [selectedOutlet, setSelectedOutlet] = useState(null)
+        const [selectedNode, setSelectedNode] = useState(null)
         const store = useStore()
 
         const createConnections = () => {
@@ -163,6 +167,8 @@ export default {
             mode,
             setMode,
             MODES,
+            selectedNode,
+            setSelectedNode,
             getInletsForNode: (node) => [
                 {
                     key: inletIdCreator(node.id),
@@ -191,6 +197,13 @@ export default {
             clearConnections,
             serializeLayout,
             handlers: {
+                onNodeSelected: (node) => {
+                    // console.log(event)
+                    // event.preventDefault()
+                    // event.stopPropagation()
+                    setSelectedNode(node)
+                    console.log('TODO: select survey step in store')
+                },
                 onInletClicked: ({ node, inlet }) => {
                     switch (mode.value) {
                         case MODES.ADD: {

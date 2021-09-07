@@ -7,11 +7,11 @@
             w-64
             p-2
             bg-white
-            shadow
-            border-b border-gray-200
             sm:rounded-lg
             flex
+            border-gray-500 border-2
         "
+        :class="{ 'border-blue-900': active, 'border-1': active }"
         @move="onMove"
     >
         <Inlets>
@@ -87,6 +87,11 @@ export default {
             type: Array,
             required: false,
             default: () => [],
+        },
+        active: {
+            type: Boolean,
+            required: false,
+            default: () => false,
         },
     },
     emits: ['outletClicked', 'inletClicked'],
