@@ -30,8 +30,6 @@
             value-key="key"
         />
 
-        {{ firstname }}
-
         <div class="mt-3">
             <element-type-star-rating
                 v-if="survey.elementType === 'starRating'"
@@ -51,12 +49,11 @@
             />
             <element-type-multiple-choice
                 v-if="survey.elementType === 'multipleChoice'"
-                v-model="survey.params"
+                v-model:params="survey.params"
             />
             <element-type-simple-text
                 v-if="survey.elementType === 'simpleText'"
                 v-model:params="survey.params"
-                v-model:firstname="firstname"
             />
             <element-type-yay-nay
                 v-if="survey.elementType === 'yayNay'"
@@ -72,14 +69,12 @@
         >
             {{ $t('action_save') }}
         </button>
-        <div class="bg-yellow-100 py-3 px-3 rounded mt-3 text-xs">
-            <pre>{{ survey }}</pre>
-        </div>
+        <data-viewer class="mt-3" :data="survey" />
     </div>
 </template>
 
 <script>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import FormSelect from '../Forms/FormSelect.vue'
 
 import { useStore } from 'vuex'
@@ -95,9 +90,14 @@ import ElementTypeMultipleChoice from '../SurveySteps/ElementTypes/ElementTypeMu
 import ElementTypeSimpleText from '../SurveySteps/ElementTypes/ElementTypeSimpleText.vue'
 import ElementTypeYayNay from '../SurveySteps/ElementTypes/ElementTypeYayNay.vue'
 
+// default params
+import defaultParams from '../SurveySteps/ElementTypes/defaultParams'
+import DataViewer from '../Common/DataViewer.vue'
+
 export default {
     name: 'SurveyStep',
     components: {
+        DataViewer,
         ElementTypeYayNay,
         ElementTypeSimpleText,
         ElementTypeMultipleChoice,
@@ -109,31 +109,36 @@ export default {
     },
     setup() {
         const store = useStore()
-        let survey = reactive({ name: '', params: {} })
-        const firstname = ref(null)
+        let survey = reactive({ name: '', params: null })
         const elementTypes = ref(null)
 
         onMounted(async () => {
             elementTypes.value = store.state.elementTypes
         })
 
+        watch(
+            () => survey.elementType,
+            (value) => {
+                survey.params = defaultParams[value]
+            },
+        )
+
+        const saveSurveyStep = () => {
+            console.log('save')
+        }
+
         return {
             v$: useVuelidate(),
             survey,
             elementTypes,
             store,
-            firstname,
+            saveSurveyStep,
         }
     },
     data() {
         return {
             name: '',
         }
-    },
-    methods: {
-        saveSurveyStep() {
-            console.log('save')
-        },
     },
     validations: {
         survey: {

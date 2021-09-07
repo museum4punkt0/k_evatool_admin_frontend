@@ -1,28 +1,29 @@
 <template>
     <h1>Simple text</h1>
-
-    <pre class="text-xs mt-4">{{ params }}</pre>
-
-    <input v-model="params.text.de" type="text" />
+    <input v-model="paramsLocal.text.de" type="text" />
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { computed } from 'vue'
+import defaultParams from './defaultParams'
 
 export default {
     name: 'ElementTypeSimpleText',
+    props: {
+        params: {
+            type: Object,
+            default: () => ({}),
+        },
+    },
     emits: ['update:params'],
-    setup() {
-        const params = reactive({
-            text: {
-                de: '',
-                en: '',
-                fr: '',
-            },
+    setup(props, { emit }) {
+        const paramsLocal = computed({
+            get: () => props.params || defaultParams.simpleText,
+            set: (val) => emit('update:params', val),
         })
 
         return {
-            params,
+            paramsLocal,
         }
     },
 }

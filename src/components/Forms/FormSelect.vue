@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { watch, ref } from 'vue'
+import { ref } from 'vue'
 import {
     Listbox,
     ListboxButton,
@@ -155,10 +155,6 @@ export default {
         }
 
         const selected = ref(localOptions[0].id)
-
-        watch(selected, (value) => {
-            console.log(value)
-        })
 
         return {
             selected,
