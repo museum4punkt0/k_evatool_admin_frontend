@@ -21,8 +21,8 @@
                         :key="'survey_row_' + survey.id"
                         class="bg-white divide-y divide-gray-200"
                     >
-                        <tr>
-                            <td class="text-lg" @click="setSurvey(survey.id)">
+                        <tr @click="setSurvey(survey.id)">
+                            <td class="text-lg">
                                 {{ survey.id }}
                             </td>
                             <td>
@@ -66,7 +66,9 @@
                                     />-->
                                 <PencilAltIcon
                                     class="mx-1 h-5 w-5"
-                                    @click="handlers.onEdit(survey)"
+                                    @click.prevent.stop="
+                                        handlers.onEdit(survey)
+                                    "
                                 />
                                 <!--                                    <TrashIcon
                                         class="mx-1 h-5 w-5"
@@ -164,6 +166,7 @@ export default {
         }
 
         const setSurvey = (surveyIdSet) => {
+            console.log(surveyIdSet)
             surveyId.value = surveyIdSet
         }
 

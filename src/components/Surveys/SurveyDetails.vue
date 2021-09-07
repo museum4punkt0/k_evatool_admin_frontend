@@ -1,6 +1,7 @@
 <template>
     <h1>New survey</h1>
-    <input v-model="survey.name" type="text" />
+
+    <input v-model="survey.name" class="mt-3" type="text" />
     <button
         class="primary w-full mt-3"
         :disabled="v$.$invalid"
