@@ -25,13 +25,13 @@
             />
         </Inlets>
         <NodeContent>
-            <h2>
+            <h4>
                 {{ data.name }}
-            </h2>
-            <ul>
+            </h4>
+            <!--            <ul>
                 <li>id: {{ data.id }}</li>
                 <li>element id: {{ data.surveyElementId }}</li>
-            </ul>
+            </ul>-->
         </NodeContent>
 
         <Outlets>

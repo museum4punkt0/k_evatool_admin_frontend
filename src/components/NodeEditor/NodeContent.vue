@@ -1,5 +1,7 @@
 <template>
-    <Container class="flex-1 flex-col p-4"><slot></slot></Container>
+    <Container class="flex-1 flex-col p-4">
+        <slot></slot>
+    </Container>
 </template>
 
 <script>

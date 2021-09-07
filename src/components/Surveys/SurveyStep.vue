@@ -29,7 +29,38 @@
             title-key="name"
             value-key="key"
         />
-        {{ v$.$invalid }}
+
+        <div class="mt-3">
+            <element-type-star-rating
+                v-if="survey.elementType === 'starRating'"
+                v-model="survey"
+            />
+            <element-type-emoji
+                v-if="survey.elementType === 'emoji'"
+                v-model="survey"
+            />
+            <element-type-video
+                v-if="survey.elementType === 'video'"
+                v-model="survey"
+            />
+            <element-type-binary-question
+                v-if="survey.elementType === 'binary'"
+                v-model="survey"
+            />
+            <element-type-multiple-choice
+                v-if="survey.elementType === 'multipleChoice'"
+                v-model="survey"
+            />
+            <element-type-simple-text
+                v-if="survey.elementType === 'simpleText'"
+                v-model="survey"
+            />
+            <element-type-yay-nay
+                v-if="survey.elementType === 'yayNay'"
+                v-model="survey"
+            />
+        </div>
+
         <button
             type="button"
             class="primary mt-3"
@@ -52,18 +83,33 @@ import { useStore } from 'vuex'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
 
+// element types
+import ElementTypeStarRating from '../SurveySteps/ElementTypes/ElementTypeStarRating.vue'
+import ElementTypeEmoji from '../SurveySteps/ElementTypes/ElementTypeEmoji.vue'
+import ElementTypeVideo from '../SurveySteps/ElementTypes/ElementTypeVideo.vue'
+import ElementTypeBinaryQuestion from '../SurveySteps/ElementTypes/ElementTypeBinaryQuestion.vue'
+import ElementTypeMultipleChoice from '../SurveySteps/ElementTypes/ElementTypeMultipleChoice.vue'
+import ElementTypeSimpleText from '../SurveySteps/ElementTypes/ElementTypeSimpleText.vue'
+import ElementTypeYayNay from '../SurveySteps/ElementTypes/ElementTypeYayNay.vue'
+
 export default {
     name: 'SurveyStep',
-    components: { FormSelect },
+    components: {
+        ElementTypeYayNay,
+        ElementTypeSimpleText,
+        ElementTypeMultipleChoice,
+        ElementTypeBinaryQuestion,
+        ElementTypeVideo,
+        ElementTypeEmoji,
+        ElementTypeStarRating,
+        FormSelect,
+    },
     setup() {
         const store = useStore()
         let survey = reactive({ name: '' })
         const elementTypes = ref(null)
 
         onMounted(async () => {
-            await store.dispatch(
-                'elementTypes/getAllElementTypesAndUpdateStore',
-            )
             elementTypes.value = store.state.elementTypes
         })
 
