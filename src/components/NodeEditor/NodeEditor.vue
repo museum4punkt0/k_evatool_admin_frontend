@@ -8,15 +8,25 @@
                 <Button
                     @click="
                         () => {
-                            setDeleteConnection(true)
+                            setAddConnection(!addConnectionMode)
+                        }
+                    "
+                >
+                    add mode
+                </Button>
+                <span v-if="addConnectionMode">click outlet and inlet</span>
+            </li>
+            <li>
+                <Button
+                    @click="
+                        () => {
+                            setDeleteConnection(!deleteConnectionMode)
                         }
                     "
                 >
                     delete mode
                 </Button>
-                <span v-if="deleteConnection">
-                    click outlet to remove connection
-                </span>
+                <span v-if="deleteConnectionMode">click outlet</span>
             </li>
         </ul>
         <Node
@@ -42,7 +52,7 @@ import styled from 'vue3-styled-components'
 import Node from './Node.vue'
 import Button from '../Common/Button'
 import { useState } from '../../composables/state'
-import { useReducer } from '../../composables/reducer'
+// import { useReducer } from '../../composables/reducer'
 const Container = styled.div`
     overflow: scroll;
     background-color: CadetBlue;
@@ -74,7 +84,10 @@ export default {
         const connectionElements = ref([])
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
-        const [deleteConnection, setDeleteConnection] = useState(false)
+        const [addConnectionMode, setAddConnection] = useState(false)
+        const [deleteConnectionMode, setDeleteConnection] = useState(false)
+        const [selectedInlet, setSelectedInlet] = useState(null)
+        const [selectedOutlet, setSelectedOutlet] = useState(null)
         const store = useStore()
 
         const createConnections = () => {
@@ -137,7 +150,9 @@ export default {
             connections,
             highlightInlets,
             highlightOutlets,
-            deleteConnection,
+            addConnectionMode,
+            setAddConnection,
+            deleteConnectionMode,
             setDeleteConnection,
             getInletsForNode: (node) => [
                 {
@@ -169,9 +184,37 @@ export default {
             handlers: {
                 onInletClicked: ({ node, inlet }) => {
                     console.log('inlet clicked', node, inlet)
+                    if (addConnectionMode.value) {
+                        setSelectedInlet({ node, inlet })
+                        if (selectedOutlet.value) {
+                            console.log(
+                                'TODO: update connection',
+                                selectedInlet,
+                                selectedOutlet,
+                            )
+                            setSelectedInlet(null)
+                            setSelectedOutlet(null)
+                            setAddConnection(false)
+                        }
+                    }
                 },
                 onOutletClicked: ({ node, outlet }) => {
-                    if (deleteConnection.value && outlet.name === 'next') {
+                    if (addConnectionMode.value) {
+                        setSelectedOutlet({ node, outlet })
+                        if (selectedInlet.value) {
+                            console.log(
+                                'TODO: update connection',
+                                selectedInlet,
+                                selectedOutlet,
+                            )
+                            setSelectedInlet(null)
+                            setSelectedOutlet(null)
+                            setAddConnection(false)
+                        }
+                    } else if (
+                        deleteConnectionMode.value &&
+                        outlet.name === 'next'
+                    ) {
                         store.dispatch(
                             'surveys/updateOneSurveyStepAndAddToSelected',
                             { ...node, nextStepId: null },
