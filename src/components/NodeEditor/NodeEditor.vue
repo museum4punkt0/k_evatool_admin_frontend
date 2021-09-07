@@ -24,7 +24,7 @@ import {
     onBeforeUpdate,
     onUpdated,
     onMounted,
-    onUnmounted,
+    onBeforeUnmount,
 } from 'vue'
 import styled from 'vue3-styled-components'
 import Node from './Node.vue'
@@ -106,7 +106,6 @@ export default {
             () => props.nodes,
             (newNodes) => {
                 console.log('nodes changed', newNodes)
-                createConnections()
             },
         )
         onBeforeUpdate(() => {
@@ -114,12 +113,13 @@ export default {
         })
         onUpdated(() => {
             console.log('updated', nodeRefs)
+            createConnections()
         })
         onMounted(() => {
             createConnections()
             document.addEventListener('scroll', updateConnections)
         })
-        onUnmounted(() => {
+        onBeforeUnmount(() => {
             clearConnections()
             document.removeEventListener('scroll', updateConnections)
         })
