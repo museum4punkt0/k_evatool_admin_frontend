@@ -216,7 +216,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
     Dialog,
     DialogOverlay,
@@ -230,6 +230,7 @@ import {
 import { MenuAlt2Icon, PlusIcon, XIcon } from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
 import MainMenu from './components/MainMenu.vue'
+import { useStore } from 'vuex'
 
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -254,6 +255,14 @@ export default {
     },
     setup() {
         const mobileMenuOpen = ref(false)
+        const store = useStore()
+
+        onMounted(async () => {
+            await store.dispatch('surveyElements/getSurveyElements')
+            await store.dispatch(
+                'elementTypes/getAllElementTypesAndUpdateStore',
+            )
+        })
 
         return {
             userNavigation,

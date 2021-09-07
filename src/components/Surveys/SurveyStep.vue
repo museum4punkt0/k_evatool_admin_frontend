@@ -110,9 +110,6 @@ export default {
         const elementTypes = ref(null)
 
         onMounted(async () => {
-            await store.dispatch(
-                'elementTypes/getAllElementTypesAndUpdateStore',
-            )
             elementTypes.value = store.state.elementTypes
         })
 
