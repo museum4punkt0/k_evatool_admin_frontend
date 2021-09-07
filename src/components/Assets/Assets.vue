@@ -18,8 +18,8 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Filename</th>
-                                <th>Size</th>
+                                <th>{{ $t('filename') }}</th>
+                                <th>{{ $t('filesize') }}</th>
                             </tr>
                         </thead>
                         <tbody>

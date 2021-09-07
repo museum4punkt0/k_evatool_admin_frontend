@@ -3,8 +3,12 @@ export default {
     action_save: 'save',
     assets: 'assets | asset | assets',
     hello: 'hello world!',
+    filename: 'filename',
+    filesize: 'filesize',
     languages: 'languages | language | languages',
     names: 'names | name | names',
+    steps: 'steps | step | steps',
     survey: 'surveys | survey | surveys',
+    titles: 'titles | title | titles',
     types: 'types | type | types',
 }
