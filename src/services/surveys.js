@@ -8,8 +8,10 @@ const urls = {
     updateOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
     deleteOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
     getAllSurveySteps: (id) =>
-        prefix(`evaluation-tool/surveys/${id}/survey-steps`),
+        prefix(`evaluation-tool/surveys/${id}/survey-steps?all`),
     deleteOneSurveyStep: (id, stepId) =>
+        prefix(`evaluation-tool/surveys/${id}/survey-steps/${stepId}`),
+    updateOneSurveyStep: (id, stepId) =>
         prefix(`evaluation-tool/surveys/${id}/survey-steps/${stepId}`),
 }
 
@@ -186,6 +188,31 @@ export default {
                 })
         } else {
             const response = await axios.get(url)
+            return response.data
+        }
+    },
+    async updateOneSurveyStep(data, successCallback, errorCallback) {
+        const url = urls.updateOneSurveyStep(data.surveyId, data.id)
+
+        if (successCallback) {
+            axios
+                .put(url, data)
+                .then((response) => {
+                    if (response.data) {
+                        successCallback(response.data)
+                    } else if (errorCallback) {
+                        errorCallback(response)
+                    } else {
+                        console.error('could not delete one survey step')
+                    }
+                })
+                .catch((error) => {
+                    if (errorCallback) {
+                        errorCallback(error)
+                    }
+                })
+        } else {
+            const response = await axios.put(url)
             return response.data
         }
     },

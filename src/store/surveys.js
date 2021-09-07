@@ -1,5 +1,5 @@
 import surveysService from '../services/surveys'
-import surveyStepsService from '../services/surveySteps'
+// import surveyStepsService from '../services/surveySteps'
 const initialState = {
     surveys: [],
     selectedSurvey: null,
@@ -38,8 +38,10 @@ export default {
             )
         },
         replaceSurveyStepOfSelectedSurvey(state, value) {
-            // state.selectedSurvey.
-            console.log(state, value)
+            console.log('update survey step', value)
+            state.selectedSurvey.steps.map((item) =>
+                item.id === value.id ? value : item,
+            )
         },
     },
     actions: {
@@ -147,15 +149,12 @@ export default {
                 )
             })
         },
-        updateOneSurveyStepAndAddToSelected({ commit }, { id, data }) {
+        updateOneSurveyStepAndAddToSelected({ commit }, { data }) {
             return new Promise((resolve, reject) => {
-                console.log(id, data)
-                surveyStepsService.updateOne(
-                    id,
+                surveysService.updateOneSurveyStep(
                     data,
                     (value) => {
-                        console.log('survey step updated', value)
-                        // commit('delete', value)
+                        commit('replaceSurveyStepOfSelectedSurvey', value)
                         resolve(value)
                     },
                     (error) => {

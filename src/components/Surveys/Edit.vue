@@ -6,13 +6,14 @@
                 :data="selectedSurvey"
                 :title-selector="selectors.title"
                 :on-delete="handlers.onDelete"
+                @scroll="handlers.onScroll"
             >
                 <template #toolbar>
                     <Button @click="handlers.onShowResults(selectedSurvey)">
                         results
                     </Button>
                 </template>
-                <ul>
+                <!-- <ul>
                     <li>
                         <input
                             v-model.lazy="selectedSurvey.name"
@@ -25,8 +26,8 @@
                             @change="update"
                         />
                     </li>
-                </ul>
-                <NodeEditor :nodes="selectedSurvey.steps" />
+                </ul> -->
+                <NodeEditor ref="nodeEditor" :nodes="selectedSurvey.steps" />
             </Record>
         </main>
         <aside
@@ -64,6 +65,7 @@ export default {
     },
     setup() {
         const id = ref()
+        const nodeEditor = ref(null)
         const route = useRoute()
         const router = useRouter()
         const store = useStore()
@@ -81,6 +83,7 @@ export default {
         onBeforeRouteUpdate(async (to, from) => {
             if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
+                console.log('get one survey select and update store')
                 store.dispatch('surveys/getOneSelectAndUpdateStore', id.value)
             }
         })
@@ -103,6 +106,7 @@ export default {
         }
         return {
             id,
+            nodeEditor,
             selectedSurvey,
             selectors: {
                 title: (item) => item.name,
@@ -127,6 +131,9 @@ export default {
                         name: 'survey/results',
                         params: { id: item.id },
                     })
+                },
+                onScroll: () => {
+                    nodeEditor.value.updateConnections()
                 },
             },
             nodeComponent: Node,

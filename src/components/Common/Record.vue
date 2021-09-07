@@ -8,7 +8,7 @@
                 <Button @click="onRefresh">refresh</Button>
             </Toolbar>
         </PageHeader>
-        <ScrollContent>
+        <ScrollContent ref="scrollContent">
             <Meta>
                 <MetaHeader>
                     <SectionTitle>Meta</SectionTitle>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import Toolbar from './Toolbar'
 // import Item from './Item.vue'
 import Button from './Button'
@@ -105,13 +105,28 @@ export default {
         onDelete: { type: Function, required: false },
         onEdit: { type: Function, required: false },
     },
-    setup() {
+    emits: ['scroll'],
+
+    setup(props, { emit }) {
         const showMeta = ref(false)
+        const scrollContent = ref(null)
         const toggleShowMeta = () => {
             showMeta.value = !showMeta.value
         }
+
+        const emitScroll = (event) => {
+            emit('scroll', event)
+        }
+
+        onMounted(() => {
+            scrollContent.value.$el.addEventListener('scroll', emitScroll)
+        })
+        onUnmounted(() => {
+            scrollContent.value.$el.addRemoveListener('scroll', emitScroll)
+        })
         return {
             showMeta,
+            scrollContent,
             toggleShowMeta,
         }
     },

@@ -1,6 +1,6 @@
 <template>
     <Container @scroll="updateConnections">
-        <button @click="drawConnections">test draw connection</button>
+        <button @click="createConnections">test draw connection</button>
         <button @click="updateConnections">test update connection</button>
         <button @click="serializeLayout">layout</button>
         <Node
@@ -53,7 +53,7 @@ export default {
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
 
-        const drawConnections = () => {
+        const createConnections = () => {
             clearConnections()
             props.nodes.forEach((node) => {
                 if (node.nextStepId) {
@@ -65,22 +65,27 @@ export default {
             })
             console.log('connections', connections.value)
             connections.value.forEach((connection) => {
-                const line = new LeaderLine(
-                    // document.getElementById('evtool_node_' + keys[0]),
-                    // document.getElementById('evtool_node_' + keys[1]),
-                    document.getElementById(connection.from),
-                    document.getElementById(connection.to),
-                    { color: 'darkblue', size: 4 },
-                )
-                connectionElements.value.push(line)
+                console.log('creating connection', connection)
+                const start = document.getElementById(connection.from)
+                const end = document.getElementById(connection.to)
+                if (start && end) {
+                    const line = new LeaderLine(start, end, {
+                        color: 'darkblue',
+                        size: 4,
+                    })
+                    connectionElements.value.push(line)
+                } else {
+                    console.error('could not create connection')
+                }
             })
         }
         const clearConnections = () => {
-            // connections.value.clear()
+            console.log('clearing connections')
+            connections.value = []
             connectionElements.value.forEach((connectionElement) => {
                 connectionElement.remove()
             })
-            // connectionElements.value.clear()
+            connectionElements.value = []
         }
 
         const updateConnections = () => {
@@ -101,7 +106,7 @@ export default {
             () => props.nodes,
             (newNodes) => {
                 console.log('nodes changed', newNodes)
-                drawConnections()
+                createConnections()
             },
         )
         onBeforeUpdate(() => {
@@ -111,13 +116,12 @@ export default {
             console.log('updated', nodeRefs)
         })
         onMounted(() => {
-            console.log(nodeRefs)
-            drawConnections()
-            window.addEventListener('scroll', updateConnections)
+            createConnections()
+            document.addEventListener('scroll', updateConnections)
         })
         onUnmounted(() => {
             clearConnections()
-            window.removeEventListener('scroll', updateConnections)
+            document.removeEventListener('scroll', updateConnections)
         })
 
         return {
@@ -147,7 +151,7 @@ export default {
             },
             nodeRefs,
             connectionElements,
-            drawConnections,
+            createConnections,
             updateConnections,
             clearConnections,
             serializeLayout,

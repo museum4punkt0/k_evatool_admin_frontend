@@ -119,12 +119,11 @@ export default {
                 onOutletClick: (clickedNode, outlet) => {
                     return () => {
                         if (outlet.name === 'next' && clickedNode.nextStepId) {
-                            console.log('remove next step id', props.data)
                             store.dispatch(
                                 'surveys/updateOneSurveyStepAndAddToSelected',
                                 {
-                                    id: props.data.id,
-                                    data: { ...props.data, nextStepId: 24 },
+                                    // data: { ...props.data, nextStepId: null },
+                                    data: { ...props.data, nextStepId: 3 },
                                 },
                             )
                         }
