@@ -25,7 +25,7 @@
                 "
             >
                 <span class="block truncate">
-                    {{ selected.title }}
+                    {{ localOptions.find((x) => x.id === selected).title }}
                 </span>
                 <span
                     class="
@@ -73,7 +73,7 @@
                         :key="option.id"
                         v-slot="{ active, selected }"
                         as="template"
-                        :value="option"
+                        :value="option.id"
                     >
                         <li
                             :class="[
@@ -139,8 +139,7 @@ export default {
         valueKey: { type: String, default: 'value' },
         useDefault: { type: Boolean, default: true },
     },
-    emits: ['input'],
-    setup(props, { emit }) {
+    setup(props) {
         const localOptions = [...props.options].map((option) => {
             return {
                 title: option[props.titleKey],
@@ -155,11 +154,10 @@ export default {
             })
         }
 
-        const selected = ref(localOptions[0])
+        const selected = ref(localOptions[0].id)
 
         watch(selected, (value) => {
             console.log(value)
-            emit('input', value.id)
         })
 
         return {

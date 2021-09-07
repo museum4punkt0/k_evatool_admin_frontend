@@ -24,8 +24,8 @@
         <button type="button" class="primary mt-3">
             {{ $t('action_save') }}
         </button>
-        <div class="bg-yellow-100 py-3 px-3 rounded mt-3">
-            {{ survey }}
+        <div class="bg-yellow-100 py-3 px-3 rounded mt-3 text-xs">
+            <pre>{{ survey }}</pre>
         </div>
     </div>
 </template>
