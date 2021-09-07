@@ -149,7 +149,7 @@ export default {
         })
 
         if (props.useDefault) {
-            localOptions.splice(0, 0, {
+            localOptions.unshift({
                 id: null,
                 title: 'none selected',
             })
