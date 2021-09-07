@@ -9,6 +9,7 @@
     >
         {{ $t('action_save') }}
     </button>
+    <data-viewer class="mt-3" :data="survey" />
 </template>
 
 <script>
@@ -17,11 +18,14 @@ import SURVEYS from '../../services/surveys'
 import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
+import DataViewer from '../Common/DataViewer.vue'
 
 export default {
     name: 'SurveyDetails',
+    components: { DataViewer },
     props: {
         surveyId: { type: Number, default: -1 },
+        resetAfterSave: { type: Boolean, default: true },
     },
     emits: ['saved'],
     setup: function (props, { emit }) {
@@ -51,7 +55,9 @@ export default {
             const savedSurvey = await SURVEYS.save(survey.value)
             if (savedSurvey.id) {
                 emit('saved')
-                initSurvey()
+                if (props.resetAfterSave) {
+                    initSurvey()
+                }
             }
         }
 

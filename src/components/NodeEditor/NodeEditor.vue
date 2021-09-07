@@ -1,5 +1,5 @@
 <template>
-    <Container @scroll="updateConnections">
+    <Container @scroll="updateConnections" @click="resetSelectedSurveyStepId">
         <ul>
             <li>mode: {{ mode }}</li>
             <li>
@@ -43,6 +43,7 @@
             :inlets="getInletsForNode(node)"
             :outlets="getOutletsForNode(node)"
             :on-move="updateConnections"
+            @click.prevent.stop="setSelectedSurveyStepId(node.id)"
             @inletClicked="handlers.onInletClicked"
             @outletClicked="handlers.onOutletClicked"
         />
@@ -156,6 +157,14 @@ export default {
             document.removeEventListener('scroll', updateConnections)
         })
 
+        const setSelectedSurveyStepId = (surveyStepId) => {
+            store.dispatch('surveys/setSurveyStepId', surveyStepId)
+        }
+
+        const resetSelectedSurveyStepId = () => {
+            store.dispatch('surveys/setSurveyStepId', -1)
+        }
+
         return {
             connections,
             highlightInlets,
@@ -190,6 +199,8 @@ export default {
             updateConnections,
             clearConnections,
             serializeLayout,
+            setSelectedSurveyStepId,
+            resetSelectedSurveyStepId,
             handlers: {
                 onInletClicked: ({ node, inlet }) => {
                     switch (mode.value) {
