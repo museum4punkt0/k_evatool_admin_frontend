@@ -15,20 +15,13 @@
         @move="onMove"
     >
         <Inlets>
-            <!-- <div
-                ref="outlet"
-                @click="$emit('nodeOutletClick')"
-                @touchstart="$emit('nodeOutletClick')"
-            >
-                Out: {{ data.nextStepId }}
-            </div> -->
             <Inlet
                 v-for="inlet in inlets"
                 :id="inlet.key"
                 :key="inlet.key"
                 :name="inlet.name"
                 :value="inlet.value"
-                :on-click="creators.onInletClick(data, inlet)"
+                @click="emit('inletClicked', { node: data, inlet })"
             />
         </Inlets>
         <NodeContent>
@@ -42,27 +35,19 @@
         </NodeContent>
 
         <Outlets>
-            <!-- <div
-                ref="outlet"
-                @click="$emit('nodeOutletClick')"
-                @touchstart="$emit('nodeOutletClick')"
-            >
-                Out: {{ data.nextStepId }}
-            </div> -->
             <Outlet
                 v-for="outlet in outlets"
                 :id="outlet.key"
                 :key="outlet.key"
                 :name="outlet.name"
                 :value="outlet.value"
-                :on-click="creators.onOutletClick(data, outlet)"
+                @click="emit('outletClicked', { node: data, outlet })"
             />
         </Outlets>
     </div>
 </template>
 
 <script>
-import { toRef } from 'vue'
 import { useStore } from 'vuex'
 import NodeContent from './NodeContent.vue'
 import Inlets from './Inlets.vue'
@@ -104,33 +89,9 @@ export default {
             default: () => [],
         },
     },
-    setup(props) {
-        const store = useStore()
-        // const data = toRef(props, 'data')
-        // let node = ref(null)
-        // defineExpose({ node })
-        return {
-            creators: {
-                onInletClick: (node, inlet) => {
-                    return () => {
-                        console.log('inlet clicked', node, inlet)
-                    }
-                },
-                onOutletClick: (clickedNode, outlet) => {
-                    return () => {
-                        if (outlet.name === 'next' && clickedNode.nextStepId) {
-                            store.dispatch(
-                                'surveys/updateOneSurveyStepAndAddToSelected',
-                                {
-                                    // data: { ...props.data, nextStepId: null },
-                                    data: { ...props.data, nextStepId: 3 },
-                                },
-                            )
-                        }
-                    }
-                },
-            },
-        }
+    emits: ['outletClicked', 'inletClicked'],
+    setup(props, { emit }) {
+        return { emit }
     },
 }
 </script>
