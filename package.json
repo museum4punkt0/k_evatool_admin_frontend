@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.87",
+    "version": "1.0.93",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -13,7 +13,7 @@
         "pre-commit"
     ],
     "dependencies": {
-        "@braks/revue-draggable": "^0.2.9",
+        "@braks/revue-draggable": "^0.3.0",
         "@fortawesome/fontawesome-svg-core": "^1.2.36",
         "@fortawesome/free-brands-svg-icons": "^5.15.4",
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
@@ -55,8 +55,8 @@
         "postcss": "^8.3.6",
         "pre-commit": "^1.2.2",
         "prettier": "^2.3.2",
-        "tailwindcss": "^2.2.9",
-        "vite": "^2.5.3",
+        "tailwindcss": "^2.2.11",
+        "vite": "^2.5.4",
         "vite-plugin-vue-env": "^1.0.5"
     }
 }
