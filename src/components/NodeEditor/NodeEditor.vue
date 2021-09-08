@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { ref, onUpdated, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onUpdated, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useStore } from 'vuex'
 import LeaderLine from 'vue3-leaderline'
 import styled from 'vue3-styled-components'
@@ -171,7 +171,7 @@ export default {
         const updateConnections = () => {
             console.log('update connections')
             connectionElements.value.forEach((connectionElement) => {
-                // connectionElement.position()
+                connectionElement.position()
             })
         }
 
@@ -182,6 +182,9 @@ export default {
         }
 
         onUpdated(() => {
+            console.log('on update')
+            updateConnections()
+            // TODO: only recalculate if nodes changed
             // createConnections()
         })
         onMounted(() => {
@@ -193,12 +196,20 @@ export default {
             clearConnections()
             document.removeEventListener('scroll', updateConnections)
         })
+        watch(
+            () => props.nodes,
+            (nodes) => {
+                console.log('nodes changed', nodes)
+                createConnections()
+            },
+        )
 
         const setSelectedSurveyStepId = (surveyStepId) => {
             store.dispatch('surveys/setSurveyStepId', surveyStepId)
         }
 
         const resetSelectedSurveyStepId = () => {
+            setSelectedNode(null)
             store.dispatch('surveys/setSurveyStepId', -1)
         }
 

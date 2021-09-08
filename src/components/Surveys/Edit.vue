@@ -1,6 +1,6 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-3">
+        <main ref="container" class="flex-1 overflow-y-auto p-3">
             <h1 class="mb-3">
                 {{ $tc('surveys', 1) }}:
                 <strong>{{ selectedSurvey.name }}</strong>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeRouteUpdate } from 'vue-router'
@@ -48,7 +48,15 @@ export default {
         const selectedSurvey = computed(
             () => store.state.surveys.selectedSurvey,
         )
+        const container = ref(null)
 
+        onMounted(() => {
+            console.log('on mounted', container.value)
+            container.value.addEventListener('scroll', onScroll)
+        })
+        onBeforeUnmount(() => {
+            container.value.removeEventListener('scroll', onScroll)
+        })
         const update = () => {
             store.dispatch('surveys/updateOneSelectAndUpdateStore', {
                 id: selectedSurvey.value.id,
@@ -80,6 +88,10 @@ export default {
                 }
             },
         )
+        const onScroll = () => {
+            console.log('on scroll')
+            nodeEditor.value.updateConnections()
+        }
 
         id.value = route.params.id
         if (id.value) {
@@ -89,6 +101,7 @@ export default {
         }
         return {
             id,
+            container,
             nodeEditor,
             selectedSurvey,
             selectors: {
@@ -115,9 +128,7 @@ export default {
                         params: { id: item.id },
                     })
                 },
-                onScroll: () => {
-                    nodeEditor.value.updateConnections()
-                },
+                onScroll,
             },
             nodeComponent: Node,
             update,
