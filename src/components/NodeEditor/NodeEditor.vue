@@ -33,18 +33,20 @@
                 </Button>
                 <span v-if="mode === MODES.DELETE">click outlet</span>
             </li>
+            <li>dragged: {{ draggedNode?.id }}</li>
+            <li>selected: {{ selectedNode?.id }}</li>
         </ul>
         <div
-            class="node-editor relative overflow-scroll bg-green-300"
+            class="node-editor relative overflow-scroll bg-gray-300"
             :style="{
                 width: `${canvasWidth}px`,
                 height: `${canvasHeight}px`,
             }"
             @scroll="updateConnections"
-            @click="resetSelectedSurveyStepId"
-            @mouseup.prevent.stop="handlers.onMouseUp"
+            @mousedown="resetSelectedSurveyStepId"
+            @mouseup.stop="handlers.onMouseUp"
             @mousemove="handlers.onMouseMove"
-            @onmouseleave="handlers.onMouseLeave"
+            @mouseleave="handlers.onMouseLeave"
         >
             <Node
                 v-for="node in nodes"
@@ -55,11 +57,10 @@
                 :inlets="getInletsForNode(node)"
                 :outlets="getOutletsForNode(node)"
                 :on-move="updateConnections"
+                :dragged="node.id === draggedNode?.id"
                 :selected="node.id === selectedNode?.id"
                 :position="positions[node.id]"
-                @click.prevent.stop="handlers.onNodeSelected(node, $event)"
                 @mousedown.prevent.stop="handlers.onMouseDown(node, $event)"
-                @drag.prevent.stop="handlers.onNodeDragged(node)"
                 @inletClicked="handlers.onInletClicked"
                 @outletClicked="handlers.onOutletClicked"
             />
@@ -94,10 +95,6 @@ const MODES = {
     ADD: 'ADD',
     DELETE: 'DELETE',
 }
-
-let currentMousePosition
-let currentElement
-
 export default {
     name: 'NodeEditor',
     components: {
@@ -114,50 +111,53 @@ export default {
     setup(props) {
         const nodeRefs = ref([])
         const connections = ref([])
+        const positions = ref([])
         const connectionElements = ref([])
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
         const [mode, setMode] = useState(null)
-        const [mouseDown, setMouseDown] = useState(false)
         const [selectedInlet, setSelectedInlet] = useState(null)
         const [selectedOutlet, setSelectedOutlet] = useState(null)
-        const [selectedNode, setSelectedNode] = useState(null)
-        const [positions, setPositions] = useState({})
+        const [draggedNode, setDraggedNode] = useState(null) //currently dragged node
+        const [selectedNode, setSelectedNode] = useState(null) // stays selected after being dragged
+        // const [positions, setPositions] = useState({})
         const [canvasWidth, setCanvasWidth] = useState(2000)
         const [canvasHeight, setCanvasHeight] = useState(1000)
         const store = useStore()
 
         const createInitialPositions = () => {
             // TODO: get from admin layout
+            console.log('create initial positions')
             const p = {}
             props.nodes.forEach((node, index) => {
                 p[node.id] = { x: (1 + index) * 400, y: 0 }
             })
-            setPositions(p)
+            // setPositions(p)
+            positions.value = p
         }
         const createConnections = () => {
-            clearConnections()
-            props.nodes.forEach((node) => {
-                if (node.nextStepId) {
-                    connections.value.push({
-                        from: `evtool_node_${node.id}_outlet_next`,
-                        to: `evtool_node_${node.nextStepId}_inlet`,
-                    })
-                }
-            })
-            connections.value.forEach((connection) => {
-                const start = document.getElementById(connection.from)
-                const end = document.getElementById(connection.to)
-                if (start && end) {
-                    const line = new LeaderLine(start, end, {
-                        color: 'darkblue',
-                        size: 1,
-                    })
-                    connectionElements.value.push(line)
-                } else {
-                    console.error('could not create connection')
-                }
-            })
+            // clearConnections()
+            // props.nodes.forEach((node) => {
+            //     if (node.nextStepId) {
+            //         connections.value.push({
+            //             from: `evtool_node_${node.id}_outlet_next`,
+            //             to: `evtool_node_${node.nextStepId}_inlet`,
+            //         })
+            //     }
+            // })
+            // connections.value.forEach((connection) => {
+            //     const start = document.getElementById(connection.from)
+            //     const end = document.getElementById(connection.to)
+            //     if (start && end) {
+            //         const line = new LeaderLine(start, end, {
+            //             color: 'darkblue',
+            //             size: 1,
+            //         })
+            //         connectionElements.value.push(line)
+            //     } else {
+            //         console.error('could not create connection')
+            //     }
+            // })
         }
         const clearConnections = () => {
             connections.value = []
@@ -168,9 +168,9 @@ export default {
         }
 
         const updateConnections = () => {
-            connectionElements.value.forEach((connectionElement) => {
-                connectionElement.position()
-            })
+            // connectionElements.value.forEach((connectionElement) => {
+            //     connectionElement.position()
+            // })
         }
 
         const serializeLayout = () => {
@@ -206,6 +206,7 @@ export default {
         }
 
         const resetSelectedSurveyStepId = () => {
+            setDraggedNode(null)
             setSelectedNode(null)
             if (store.state.surveys.selectedSurveyStepId > 0) {
                 store.dispatch('surveys/setSurveyStepId', -1)
@@ -222,9 +223,8 @@ export default {
             mode,
             setMode,
             MODES,
+            draggedNode,
             selectedNode,
-            setSelectedNode,
-            mouseDown,
             getInletsForNode: (node) => [
                 {
                     key: inletIdCreator(node.id),
@@ -255,63 +255,40 @@ export default {
             setSelectedSurveyStepId,
             resetSelectedSurveyStepId,
             handlers: {
-                onMouseDown: (node, event) => {
-                    currentMousePosition = {
-                        x: event.clientX,
-                        y: event.clientY,
-                    }
-                    currentElement = event.target
-                    setMouseDown(true)
-                    setSelectedNode(node)
-                },
-                onMouseUp: () => {
-                    setMouseDown(false)
-                },
-                onMouseMove: (event) => {
-                    if (!selectedNode?.value) {
-                        return
-                    }
-                    if (!mouseDown.value) {
-                        return
-                    }
-                    const dx = event.clientX - currentMousePosition.x
-                    const dy = event.clientY - currentMousePosition.y
-
-                    const newPositionOfSelectedNode = {
-                        x: currentElement.offsetLeft + dx,
-                        y: currentElement.offsetTop + dy,
-                    }
-                    currentMousePosition = {
-                        x: event.clientX,
-                        y: event.clientY,
-                    }
-                    // console.log(
-                    //     currentElement.offsetLeft,
-                    //     currentMousePosition.x,
-                    // )
-
-                    const newPositions = {}
-                    for (var i in positions) {
-                        newPositions[i] = positions.value[i]
-                    }
-                    newPositions[selectedNode.value.id] =
-                        newPositionOfSelectedNode
-                    // console.log('TODO: calculate correct position', position.x)
-                    setPositions(newPositions)
-                },
-                onMouseLeave: () => {
-                    setMouseDown(false)
-                },
-                onNodeSelected: (node) => {
+                onMouseDown: (node) => {
+                    setDraggedNode(node)
                     setSelectedNode(node)
                     store.dispatch('surveys/setSurveyStepId', node.id)
                 },
-                onNodeDeSelected: () => {
-                    console.log('reset')
-                    setSelectedNode(null)
-                    setMouseDown(false)
+                onMouseUp: () => {
+                    setDraggedNode(null)
                 },
+                onMouseMove: (event) => {
+                    if (!draggedNode?.value) {
+                        return
+                    }
+                    const element = event.target
+                    if (!element.classList.contains('node-editor')) {
+                        return
+                    }
+                    const rect = element.getBoundingClientRect()
+                    const position = {
+                        x: event.pageX - rect.left,
+                        y: event.pageY - rect.top,
+                    }
+                    console.log(
+                        event.clientX,
+                        event.pageX,
+                        event.screenX,
+                        event.offsetX,
+                        position,
+                    )
 
+                    positions.value[draggedNode.value.id] = position
+                },
+                onMouseLeave: () => {
+                    setDraggedNode(null)
+                },
                 onInletClicked: ({ node, inlet }) => {
                     switch (mode.value) {
                         case MODES.ADD: {

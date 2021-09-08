@@ -11,10 +11,15 @@
             flex
             border-gray-500 border-2
         "
-        :class="{ 'border-blue-900': selected, 'border-1': selected }"
+        :class="{
+            'border-blue-900': selected && !dragged,
+            'border-green-500': dragged,
+            'border-1': selected,
+        }"
         :style="{
             left: `${position?.x}px`,
             top: `${position?.y}px`,
+            transform: 'translateX(-50%) translateY(-50%)',
         }"
     >
         <!-- :style="{
@@ -100,6 +105,11 @@ export default {
             default: () => [],
         },
         selected: {
+            type: Boolean,
+            required: false,
+            default: () => false,
+        },
+        dragged: {
             type: Boolean,
             required: false,
             default: () => false,
