@@ -151,7 +151,7 @@ export default {
                 if (start && end) {
                     const line = new LeaderLine(start, end, {
                         color: 'darkblue',
-                        size: 4,
+                        size: 1,
                     })
                     connectionElements.value.push(line)
                 } else {
@@ -207,7 +207,9 @@ export default {
 
         const resetSelectedSurveyStepId = () => {
             setSelectedNode(null)
-            store.dispatch('surveys/setSurveyStepId', -1)
+            if (store.state.surveys.selectedSurveyStepId > 0) {
+                store.dispatch('surveys/setSurveyStepId', -1)
+            }
         }
 
         return {
@@ -259,7 +261,6 @@ export default {
                         y: event.clientY,
                     }
                     currentElement = event.target
-                    console.log(currentMousePosition.x)
                     setMouseDown(true)
                     setSelectedNode(node)
                 },
@@ -284,10 +285,10 @@ export default {
                         x: event.clientX,
                         y: event.clientY,
                     }
-                    console.log(
-                        currentElement.offsetLeft,
-                        currentMousePosition.x,
-                    )
+                    // console.log(
+                    //     currentElement.offsetLeft,
+                    //     currentMousePosition.x,
+                    // )
 
                     const newPositions = {}
                     for (var i in positions) {
