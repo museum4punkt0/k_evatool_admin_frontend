@@ -24,15 +24,31 @@
             {{ $t('action_save') }}
         </button>
 
+        <form-select
+            v-model="surveyStep.surveyElementId"
+            class="mt-3"
+            :options="store.state.surveyElements.data"
+            title-key="name"
+            value-key="id"
+            label="Test"
+        />
+
         <data-viewer class="mt-3" :data="surveyStep" />
 
         <hr class="mt-4 mb-2" />
-        <survey-element />
+        <button
+            v-if="surveyElementId < 0"
+            class="primary"
+            @click="newSurveyElement"
+        >
+            {{ t('action_new_survey_element') }}
+        </button>
+        <survey-element v-else />
     </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 import { useStore } from 'vuex'
 import useVuelidate from '@vuelidate/core'
@@ -43,11 +59,14 @@ import DataViewer from '../Common/DataViewer.vue'
 import FormToggle from '../Forms/FormToggle.vue'
 import SurveyElement from './SurveyElement.vue'
 import FormInput from '../Forms/FormInput.vue'
+import FormSelect from '../Forms/FormSelect.vue'
+
 import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'SurveyStep',
     components: {
+        FormSelect,
         FormInput,
         SurveyElement,
         FormToggle,
@@ -56,10 +75,15 @@ export default {
     setup() {
         const { t } = useI18n()
         const store = useStore()
+        const surveyElementId = ref(-1)
         let surveyStep = reactive({ name: '', params: null, allowSkip: false })
 
         const saveSurveyStep = () => {
             console.log('save')
+        }
+
+        const newSurveyElement = () => {
+            surveyElementId.value = 0
         }
 
         return {
@@ -68,6 +92,8 @@ export default {
             store,
             saveSurveyStep,
             t,
+            surveyElementId,
+            newSurveyElement,
         }
     },
     data() {

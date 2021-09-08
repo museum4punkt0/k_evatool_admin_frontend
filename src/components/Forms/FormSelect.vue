@@ -4,6 +4,7 @@
             {{ label }}
         </ListboxLabel>
         <div class="mt-1 relative">
+            {{ localOptions }}
             <ListboxButton
                 class="
                     bg-white

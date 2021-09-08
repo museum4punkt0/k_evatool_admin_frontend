@@ -10,7 +10,12 @@
                     {{ $t('action_add_survey_step') }}
                 </button>
             </div>
-            <NodeEditor ref="nodeEditor" :nodes="selectedSurvey.steps" />
+
+            <!--            <NodeEditor ref="nodeEditor" :nodes="selectedSurvey.steps" />-->
+            <node-editor-test
+                v-if="selectedSurvey?.steps"
+                :steps="selectedSurvey.steps"
+            />
         </main>
         <aside>
             <survey-step v-if="store.state.surveys.selectedSurveyStepId >= 0" />
@@ -34,9 +39,11 @@ import Record from '../Common/Record.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import SurveyStep from './SurveyStep.vue'
 import SurveyDetails from './SurveyDetails.vue'
+import NodeEditorTest from '../NodeEditor/NodeEditorTest.vue'
 
 export default {
     components: {
+        NodeEditorTest,
         SurveyDetails,
         SurveyStep,
         Button,

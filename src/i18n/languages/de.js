@@ -1,6 +1,7 @@
 export default {
     action_add_survey_step: 'Schritt hinzufügen',
     action_cancel: 'Abbrechen',
+    action_new_survey_element: 'Neues Umfrage-Element',
     action_save: 'Speichern',
     allow_skip: 'Überspringen erlauben',
     assets: 'Medien | Medium | Medien',
