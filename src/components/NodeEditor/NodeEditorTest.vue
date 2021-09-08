@@ -9,8 +9,13 @@
             @mousedown="deselectStep"
         >
             <ul>
-                <li>draggedStep: {{ draggedStep?.id }}</li>
-                <li>selectedStepId: {{ selectedStepId }}</li>
+                <li v-if="draggedStep">draggedStep: {{ draggedStep?.id }}</li>
+                <li v-if="selectedStepId !== -1">
+                    selectedStepId: {{ selectedStepId }}
+                </li>
+                <li v-if="selectedMode === MODES.DELETE">
+                    click outlet to remove connection
+                </li>
             </ul>
             <div
                 v-for="step in adminLayout"
@@ -42,7 +47,9 @@
                 <div class="inlets bg-green-200 flex flow-col">
                     <div
                         class="bg-yellow-200"
-                        @click="onInletClicked({ stepId: step.id })"
+                        @mousedown.prevent.stop="
+                            onInletClicked({ stepId: step.id })
+                        "
                     >
                         in
                     </div>
@@ -54,7 +61,9 @@
                 <div class="outlets bg-green-200">
                     <div
                         class="bg-yellow-200"
-                        @click="onOutletClicked({ stepId: step.id })"
+                        @mousedown.prevent.stop="
+                            onOutletClicked({ stepId: step.id, name: 'next' })
+                        "
                     >
                         next:
                         {{ steps.find((x) => x.id === step.id).nextStepId }}
@@ -70,14 +79,13 @@ import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useState } from '../../composables/state'
 
+import SURVEYS from '../../services/surveys'
+
 const MODES = {
     NONE: 'NONE',
     ADD: 'ADD',
     DELETE: 'DELETE',
 }
-
-import SURVEYS from '../../services/surveys'
-
 export default {
     name: 'NodeEditorTest',
     props: {
@@ -108,7 +116,7 @@ export default {
             }),
         )
         const store = useStore()
-        const [mode, setMode] = useState(MODES.NONE)
+        const [selectedMode, setSelectedMode] = useState(MODES.DELETE)
         const [selectedInlet, setSelectedInlet] = useState(null)
         const [selectedOutlet, setSelectedOutlet] = useState(null)
 
@@ -144,7 +152,7 @@ export default {
 
         const onInletClicked = (inlet) => {
             console.log('inlet clicked', inlet)
-            switch (mode.value) {
+            switch (selectedMode.value) {
                 case MODES.ADD: {
                     setSelectedInlet(inlet)
                     if (selectedOutlet.value) {
@@ -160,14 +168,14 @@ export default {
                         // )
                         setSelectedInlet(null)
                         setSelectedOutlet(null)
-                        setMode(MODES.NONE)
+                        setSelectedMode(MODES.NONE)
                     }
                 }
             }
         }
         const onOutletClicked = (outlet) => {
             console.log('outlet clicked', outlet)
-            switch (mode.value) {
+            switch (selectedMode.value) {
                 case MODES.ADD: {
                     setSelectedOutlet(outlet)
                     if (selectedInlet.value) {
@@ -178,20 +186,21 @@ export default {
                         )
                         setSelectedInlet(null)
                         setSelectedOutlet(null)
-                        setMode(MODES.NONE)
+                        setSelectedMode(MODES.NONE)
                     }
                     break
                 }
                 case MODES.DELETE: {
-                    console.log('TODO: remove connection')
-                    // if (outlet.name === 'next') {
-                    // store.dispatch(
-                    //     'surveys/updateOneSurveyStepAndAddToSelected',
-                    //     { data: { ...node, nextStepId: null } },
-                    // )
-                    setMode(MODES.NONE)
-                    break
-                    // }
+                    if (outlet.name === 'next') {
+                        console.log('TODO: remove next connection')
+                        // store.dispatch(
+                        //     'surveys/updateOneSurveyStepAndAddToSelected',
+                        //     { data: { ...node, nextStepId: null } },
+                        // )
+                        setSelectedMode(MODES.NONE)
+                        break
+                        // }
+                    }
                 }
             }
         }
@@ -200,6 +209,8 @@ export default {
         }
 
         return {
+            MODES,
+            selectedMode,
             draggedStep,
             selectedStepId,
             selectedInlet,
