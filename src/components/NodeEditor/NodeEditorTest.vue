@@ -38,12 +38,18 @@
 <script>
 import { ref } from 'vue'
 
+import SURVEYS from '../../services/surveys'
+
 export default {
     name: 'NodeEditorTest',
     props: {
         steps: {
             type: Array,
             default: () => [],
+        },
+        surveyId: {
+            type: Number,
+            default: -1,
         },
     },
     setup(props) {
@@ -80,8 +86,13 @@ export default {
             }
         }
 
-        const onMouseUp = () => {
+        const onMouseUp = async () => {
             selectedStep.value = null
+            const adminLayoutSaved = await SURVEYS.saveAdminLayout(
+                props.surveyId,
+                adminLayout.value,
+            )
+            console.log(adminLayoutSaved)
         }
 
         return {

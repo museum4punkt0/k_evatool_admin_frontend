@@ -15,6 +15,7 @@
             <node-editor-test
                 v-if="selectedSurvey?.steps"
                 :steps="selectedSurvey.steps"
+                :survey-id="surveyId"
             />
         </main>
         <aside>

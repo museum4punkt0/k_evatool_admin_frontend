@@ -232,4 +232,16 @@ export default {
                 return error
             })
     },
+
+    async saveAdminLayout(surveyId, adminLayout) {
+        const url = 'evaluation-tool/surveys/' + surveyId + '/admin-layout'
+        return axios
+            .put(url, { adminLayout })
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
 }
