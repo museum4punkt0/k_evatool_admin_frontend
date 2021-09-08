@@ -77,10 +77,9 @@ export default {
         }
 
         const onMouseMove = (e) => {
-            const nodeEditor = document.getElementById('nodeEditor')
-            const nodeEditorRect = nodeEditor.getBoundingClientRect()
-
             if (selectedStep.value) {
+                const nodeEditor = document.getElementById('nodeEditor')
+                const nodeEditorRect = nodeEditor.getBoundingClientRect()
                 selectedStep.value.position.x = e.clientX - nodeEditorRect.left
                 selectedStep.value.position.y = e.clientY - nodeEditorRect.top
             }
