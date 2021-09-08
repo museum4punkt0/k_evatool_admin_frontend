@@ -65,12 +65,18 @@ const MODES = {
     DELETE: 'DELETE',
 }
 
+import SURVEYS from '../../services/surveys'
+
 export default {
     name: 'NodeEditorTest',
     props: {
         steps: {
             type: Array,
             default: () => [],
+        },
+        surveyId: {
+            type: Number,
+            default: -1,
         },
     },
     setup(props) {
@@ -103,18 +109,21 @@ export default {
         }
 
         const onMouseMove = (e) => {
-            if (!selectedStep.value) return
-            const nodeEditor = document.getElementById('nodeEditor')
-            const nodeEditorRect = nodeEditor.getBoundingClientRect()
-
-            selectedStep.value.position = {
-                x: e.clientX - nodeEditorRect.left,
-                y: e.clientY - nodeEditorRect.top,
+            if (selectedStep.value) {
+                const nodeEditor = document.getElementById('nodeEditor')
+                const nodeEditorRect = nodeEditor.getBoundingClientRect()
+                selectedStep.value.position.x = e.clientX - nodeEditorRect.left
+                selectedStep.value.position.y = e.clientY - nodeEditorRect.top
             }
         }
 
-        const onMouseUp = () => {
+        const onMouseUp = async () => {
             selectedStep.value = null
+            const adminLayoutSaved = await SURVEYS.saveAdminLayout(
+                props.surveyId,
+                adminLayout.value,
+            )
+            console.log(adminLayoutSaved)
         }
 
         const onInletClicked = (inlet) => {
