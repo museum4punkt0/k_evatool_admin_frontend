@@ -216,4 +216,20 @@ export default {
             return response.data
         }
     },
+    async save(survey) {
+        let url = 'evaluation-tool/surveys'
+        let method = 'post'
+        if (survey.id) {
+            url += '/' + survey.id
+            method = 'put'
+        }
+
+        return axios({ method, url, data: survey })
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
 }

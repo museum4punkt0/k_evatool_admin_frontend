@@ -41,7 +41,7 @@
                 height: `${canvasHeight}px`,
             }"
             @scroll="updateConnections"
-            @click="handlers.onNodeDeSelected"
+            @click="resetSelectedSurveyStepId"
             @mouseup.prevent.stop="handlers.onMouseUp"
             @mousemove="handlers.onMouseMove"
             @onmouseleave="handlers.onMouseLeave"
@@ -169,6 +169,7 @@ export default {
         }
 
         const updateConnections = () => {
+            console.log('update connections')
             connectionElements.value.forEach((connectionElement) => {
                 // connectionElement.position()
             })
@@ -192,6 +193,14 @@ export default {
             clearConnections()
             document.removeEventListener('scroll', updateConnections)
         })
+
+        const setSelectedSurveyStepId = (surveyStepId) => {
+            store.dispatch('surveys/setSurveyStepId', surveyStepId)
+        }
+
+        const resetSelectedSurveyStepId = () => {
+            store.dispatch('surveys/setSurveyStepId', -1)
+        }
 
         return {
             positions,
@@ -233,6 +242,8 @@ export default {
             updateConnections,
             clearConnections,
             serializeLayout,
+            setSelectedSurveyStepId,
+            resetSelectedSurveyStepId,
             handlers: {
                 onMouseDown: (node, event) => {
                     currentMousePosition = {

@@ -50,17 +50,7 @@
                 </div>
             </template>
         </main>
-        <aside
-            class="
-                hidden
-                w-96
-                bg-white
-                border-l border-gray-200
-                overflow-y-auto
-                lg:block
-                p-3
-            "
-        >
+        <aside>
             <h1 class="text-xl">Upload</h1>
             <dashboard class="mt-3" :uppy="uppy" :props="dashboardOptions" />
         </aside>

@@ -2,6 +2,7 @@ import surveysService from '../services/surveys'
 const initialState = {
     surveys: [],
     selectedSurvey: null,
+    selectedSurveyStepId: -1,
 }
 export default {
     namespaced: true,
@@ -48,6 +49,9 @@ export default {
             } else {
                 state.selectedSurvey.steps.push(value)
             }
+        },
+        setSurveyStepId(state, surveyStepId) {
+            state.selectedSurveyStepId = surveyStepId
         },
     },
     actions: {
@@ -169,6 +173,9 @@ export default {
                     },
                 )
             })
+        },
+        setSurveyStepId({ commit }, surveyStepId) {
+            commit('setSurveyStepId', surveyStepId)
         },
     },
     getters: {},
