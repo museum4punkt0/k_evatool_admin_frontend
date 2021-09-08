@@ -6,8 +6,12 @@
             @mousemove="onMouseMove"
             @mouseup="onMouseUp"
             @mouseleave="onMouseUp"
+            @mousedown="deselectStep"
         >
-            {{ selectedStep?.id }}
+            <ul>
+                <li>draggedStep: {{ draggedStep?.id }}</li>
+                <li>selectedStepId: {{ selectedStepId }}</li>
+            </ul>
             <div
                 v-for="step in adminLayout"
                 :key="step.id"
@@ -26,7 +30,14 @@
                     top: step?.position.y + 'px',
                     left: step?.position.x + 'px',
                 }"
-                @mousedown="onMouseDown(step, $event)"
+                :class="{
+                    'border-black':
+                        draggedStep?.id === step.id &&
+                        selectedStepId !== step.id,
+                    'border-blue-900': selectedStepId === step.id,
+                    'border-1': draggedStep,
+                }"
+                @mousedown.prevent.stop="onMouseDown(step, $event)"
             >
                 <div class="inlets bg-green-200 flex flow-col">
                     <div
@@ -55,7 +66,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useState } from '../../composables/state'
 
@@ -80,7 +91,11 @@ export default {
         },
     },
     setup(props) {
-        const selectedStep = ref(null)
+        const draggedStep = ref(null)
+        const selectedStepId = computed(
+            () => store.state.surveys.selectedSurveyStepId,
+        )
+
         const adminLayout = ref(
             props.steps.map((step, index) => {
                 return {
@@ -101,24 +116,25 @@ export default {
             console.log('onmousedown', step, e)
             const nodeEditor = document.getElementById('nodeEditor')
             const nodeEditorRect = nodeEditor.getBoundingClientRect()
-            selectedStep.value = step
-            step.value.position = {
+            draggedStep.value = step
+            draggedStep.value.position = {
                 x: e.clientX - nodeEditorRect.left,
                 y: e.clientY - nodeEditorRect.top,
             }
+            store.dispatch('surveys/setSurveyStepId', step.id)
         }
 
         const onMouseMove = (e) => {
-            if (selectedStep.value) {
+            if (draggedStep.value) {
                 const nodeEditor = document.getElementById('nodeEditor')
                 const nodeEditorRect = nodeEditor.getBoundingClientRect()
-                selectedStep.value.position.x = e.clientX - nodeEditorRect.left
-                selectedStep.value.position.y = e.clientY - nodeEditorRect.top
+                draggedStep.value.position.x = e.clientX - nodeEditorRect.left
+                draggedStep.value.position.y = e.clientY - nodeEditorRect.top
             }
         }
 
         const onMouseUp = async () => {
-            selectedStep.value = null
+            draggedStep.value = null
             const adminLayoutSaved = await SURVEYS.saveAdminLayout(
                 props.surveyId,
                 adminLayout.value,
@@ -179,9 +195,13 @@ export default {
                 }
             }
         }
+        const deselectStep = () => {
+            store.dispatch('surveys/setSurveyStepId', -1)
+        }
 
         return {
-            selectedStep,
+            draggedStep,
+            selectedStepId,
             selectedInlet,
             selectedOutlet,
             onMouseDown,
@@ -190,6 +210,7 @@ export default {
             adminLayout,
             onInletClicked,
             onOutletClicked,
+            deselectStep,
         }
     },
 }
