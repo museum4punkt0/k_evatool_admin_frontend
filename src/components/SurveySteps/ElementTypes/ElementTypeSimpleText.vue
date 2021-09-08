@@ -1,5 +1,5 @@
 <template>
-    <h1>Simple text</h1>
+    <h3>Simple text</h3>
     <input v-model="paramsLocal.text.de" type="text" />
 </template>
 
@@ -13,6 +13,10 @@ export default {
         params: {
             type: Object,
             default: () => ({}),
+        },
+        validation: {
+            type: Object,
+            default: null,
         },
     },
     emits: ['update:params'],

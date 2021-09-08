@@ -1,5 +1,15 @@
 <template>
-    <pre class="text-xs w-full bg-yellow-200 rounded-md p-3">{{ data }}</pre>
+    <pre
+        class="
+            text-xs
+            w-full
+            bg-yellow-100
+            rounded-md
+            p-3
+            border border-yellow-400
+        "
+        >{{ data }}</pre
+    >
 </template>
 
 <script>

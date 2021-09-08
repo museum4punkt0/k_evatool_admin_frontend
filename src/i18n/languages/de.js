@@ -1,9 +1,12 @@
 export default {
+    action_add_survey_step: 'Schritt hinzufügen',
     action_cancel: 'Abbrechen',
     action_save: 'Speichern',
+    allow_skip: 'Überspringen erlauben',
     assets: 'Medien | Medium | Medien',
     edit_survey: 'Umfrage bearbeiten',
     hello: 'Hallo Welt!',
+    elements: 'Elemente | Element | Elemente',
     filename: 'Dateiname',
     filesize: 'Größe',
     languages: 'Sprachen | Sprache | Sprachen',

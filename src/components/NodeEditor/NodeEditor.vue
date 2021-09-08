@@ -162,7 +162,9 @@ export default {
         }
 
         const resetSelectedSurveyStepId = () => {
-            store.dispatch('surveys/setSurveyStepId', -1)
+            if (store.state.surveys.selectedSurveyStepId > 0) {
+                store.dispatch('surveys/setSurveyStepId', -1)
+            }
         }
 
         return {

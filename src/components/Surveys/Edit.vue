@@ -1,14 +1,19 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1 class="mb-3">
-                {{ $tc('surveys', 1) }}:
-                <strong>{{ selectedSurvey.name }}</strong>
-            </h1>
+            <div class="flex mb-3 justify-between items-center">
+                <h1>
+                    {{ $tc('surveys', 1) }}:
+                    <strong>{{ selectedSurvey.name }}</strong>
+                </h1>
+                <button class="primary" @click="newSurveyStep">
+                    {{ $t('action_add_survey_step') }}
+                </button>
+            </div>
             <NodeEditor ref="nodeEditor" :nodes="selectedSurvey.steps" />
         </main>
         <aside>
-            <survey-step v-if="store.state.surveys.selectedSurveyStepId > 0" />
+            <survey-step v-if="store.state.surveys.selectedSurveyStepId >= 0" />
             <survey-details
                 v-else
                 :survey-id="surveyId"
@@ -60,6 +65,10 @@ export default {
             store.dispatch('surveys/getOneSelectAndUpdateStore', {
                 id: surveyId.value,
             })
+        }
+
+        const newSurveyStep = () => {
+            store.dispatch('surveys/setSurveyStepId', 0)
         }
 
         onBeforeRouteUpdate(async (to, from) => {
@@ -124,6 +133,7 @@ export default {
             store,
             surveyId,
             surveySaved,
+            newSurveyStep,
         }
     },
 }
