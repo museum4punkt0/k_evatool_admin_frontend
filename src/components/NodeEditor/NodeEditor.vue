@@ -133,7 +133,6 @@ export default {
             props.nodes.forEach((node, index) => {
                 p[node.id] = { x: (1 + index) * 400, y: 0 }
             })
-            console.log(p)
             setPositions(p)
         }
         const createConnections = () => {
@@ -169,7 +168,6 @@ export default {
         }
 
         const updateConnections = () => {
-            console.log('update connections')
             connectionElements.value.forEach((connectionElement) => {
                 connectionElement.position()
             })
@@ -182,7 +180,6 @@ export default {
         }
 
         onUpdated(() => {
-            console.log('on update')
             updateConnections()
             // TODO: only recalculate if nodes changed
             // createConnections()
@@ -306,7 +303,7 @@ export default {
                 },
                 onNodeSelected: (node) => {
                     setSelectedNode(node)
-                    console.log('TODO: select survey step in store')
+                    store.dispatch('surveys/setSurveyStepId', node.id)
                 },
                 onNodeDeSelected: () => {
                     console.log('reset')

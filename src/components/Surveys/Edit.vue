@@ -51,7 +51,6 @@ export default {
         const container = ref(null)
 
         onMounted(() => {
-            console.log('on mounted', container.value)
             container.value.addEventListener('scroll', onScroll)
         })
         onBeforeUnmount(() => {
