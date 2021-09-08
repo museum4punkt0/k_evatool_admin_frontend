@@ -1,8 +1,8 @@
 <template>
     <div
         ref="node"
-        v-draggable=""
         class="
+            absolute
             h-32
             w-64
             p-2
@@ -11,9 +11,15 @@
             flex
             border-gray-500 border-2
         "
-        :class="{ 'border-blue-900': active, 'border-1': active }"
-        @move="onMove"
+        :class="{ 'border-blue-900': selected, 'border-1': selected }"
+        :style="{
+            left: `${position?.x}px`,
+            top: `${position?.y}px`,
+        }"
     >
+        <!-- :style="{
+            transform: `translateX(${position?.x}px) translateY(${position?.y}px)`,
+        }" -->
         <Inlets>
             <Inlet
                 v-for="inlet in inlets"
@@ -21,7 +27,10 @@
                 :key="inlet.key"
                 :name="inlet.name"
                 :value="inlet.value"
-                @click="emit('inletClicked', { node: data, inlet })"
+                @click.prevent.stop="
+                    emit('inletClicked', { node: data, inlet })
+                "
+                @mousedown.prevent.stop=""
             />
         </Inlets>
         <NodeContent>
@@ -41,14 +50,16 @@
                 :key="outlet.key"
                 :name="outlet.name"
                 :value="outlet.value"
-                @click="emit('outletClicked', { node: data, outlet })"
+                @click.prevent.stop="
+                    emit('outletClicked', { node: data, outlet })
+                "
+                @mousedown.prevent.stop=""
             />
         </Outlets>
     </div>
 </template>
 
 <script>
-import { useStore } from 'vuex'
 import NodeContent from './NodeContent.vue'
 import Inlets from './Inlets.vue'
 import Inlet from './Inlet.vue'
@@ -88,10 +99,14 @@ export default {
             required: false,
             default: () => [],
         },
-        active: {
+        selected: {
             type: Boolean,
             required: false,
             default: () => false,
+        },
+        position: {
+            type: Object,
+            required: true,
         },
     },
     emits: ['outletClicked', 'inletClicked'],

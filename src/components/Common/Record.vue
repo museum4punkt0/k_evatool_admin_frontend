@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout class="record-container">
         <PageHeader :title="titleSelector(data)">
             <Toolbar>
                 <slot name="toolbar"></slot>
@@ -8,7 +8,7 @@
                 <Button @click="onRefresh">refresh</Button>
             </Toolbar>
         </PageHeader>
-        <ScrollContent ref="scrollContent">
+        <ScrollContent ref="scrollContent" class="record-scrollcontent">
             <Meta>
                 <MetaHeader>
                     <SectionTitle>Meta</SectionTitle>

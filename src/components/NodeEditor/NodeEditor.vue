@@ -1,5 +1,5 @@
 <template>
-    <Container @scroll="updateConnections" @click="handlers.onNodeSelected">
+    <div>
         <ul>
             <li>mode: {{ mode }}</li>
             <li>
@@ -34,22 +34,37 @@
                 <span v-if="mode === MODES.DELETE">click outlet</span>
             </li>
         </ul>
-        <Node
-            v-for="node in nodes"
-            :id="'evtool_node_' + node.id"
-            :ref="(el) => (nodeRefs[node.id] = el)"
-            :key="'draggable_node' + node.id"
-            :data="node"
-            :inlets="getInletsForNode(node)"
-            :outlets="getOutletsForNode(node)"
-            :on-move="updateConnections"
-            :active="node.id === selectedNode?.id"
-            @click.prevent.stop="handlers.onNodeSelected(node)"
-            @mousedown.prevent.stop="handlers.onNodeSelected(node)"
-            @inletClicked="handlers.onInletClicked"
-            @outletClicked="handlers.onOutletClicked"
-        />
-    </Container>
+        <div
+            class="node-editor relative overflow-scroll bg-green-300"
+            :style="{
+                width: `${canvasWidth}px`,
+                height: `${canvasHeight}px`,
+            }"
+            @scroll="updateConnections"
+            @click="handlers.onNodeDeSelected"
+            @mouseup.prevent.stop="handlers.onMouseUp"
+            @mousemove="handlers.onMouseMove"
+            @onmouseleave="handlers.onMouseLeave"
+        >
+            <Node
+                v-for="node in nodes"
+                :id="'evtool_node_' + node.id"
+                :ref="(el) => (nodeRefs[node.id] = el)"
+                :key="'draggable_node' + node.id"
+                :data="node"
+                :inlets="getInletsForNode(node)"
+                :outlets="getOutletsForNode(node)"
+                :on-move="updateConnections"
+                :selected="node.id === selectedNode?.id"
+                :position="positions[node.id]"
+                @click.prevent.stop="handlers.onNodeSelected(node, $event)"
+                @mousedown.prevent.stop="handlers.onMouseDown(node, $event)"
+                @drag.prevent.stop="handlers.onNodeDragged(node)"
+                @inletClicked="handlers.onInletClicked"
+                @outletClicked="handlers.onOutletClicked"
+            />
+        </div>
+    </div>
 </template>
 
 <script>
@@ -62,6 +77,7 @@ import Button from '../Common/Button'
 import { useState } from '../../composables/state'
 // import { useReducer } from '../../composables/reducer'
 const Container = styled.div`
+    position: relative;
     overflow: scroll;
     background-color: CadetBlue;
 `
@@ -78,6 +94,9 @@ const MODES = {
     ADD: 'ADD',
     DELETE: 'DELETE',
 }
+
+let currentMousePosition
+let currentElement
 
 export default {
     name: 'NodeEditor',
@@ -99,11 +118,24 @@ export default {
         const highlightInlets = ref(false)
         const highlightOutlets = ref(false)
         const [mode, setMode] = useState(null)
+        const [mouseDown, setMouseDown] = useState(false)
         const [selectedInlet, setSelectedInlet] = useState(null)
         const [selectedOutlet, setSelectedOutlet] = useState(null)
         const [selectedNode, setSelectedNode] = useState(null)
+        const [positions, setPositions] = useState({})
+        const [canvasWidth, setCanvasWidth] = useState(2000)
+        const [canvasHeight, setCanvasHeight] = useState(1000)
         const store = useStore()
 
+        const createInitialPositions = () => {
+            // TODO: get from admin layout
+            const p = {}
+            props.nodes.forEach((node, index) => {
+                p[node.id] = { x: (1 + index) * 400, y: 0 }
+            })
+            console.log(p)
+            setPositions(p)
+        }
         const createConnections = () => {
             clearConnections()
             props.nodes.forEach((node) => {
@@ -138,7 +170,7 @@ export default {
 
         const updateConnections = () => {
             connectionElements.value.forEach((connectionElement) => {
-                connectionElement.position()
+                // connectionElement.position()
             })
         }
 
@@ -149,9 +181,10 @@ export default {
         }
 
         onUpdated(() => {
-            createConnections()
+            // createConnections()
         })
         onMounted(() => {
+            createInitialPositions()
             createConnections()
             document.addEventListener('scroll', updateConnections)
         })
@@ -161,6 +194,9 @@ export default {
         })
 
         return {
+            positions,
+            canvasWidth,
+            canvasHeight,
             connections,
             highlightInlets,
             highlightOutlets,
@@ -169,6 +205,7 @@ export default {
             MODES,
             selectedNode,
             setSelectedNode,
+            mouseDown,
             getInletsForNode: (node) => [
                 {
                     key: inletIdCreator(node.id),
@@ -197,23 +234,69 @@ export default {
             clearConnections,
             serializeLayout,
             handlers: {
+                onMouseDown: (node, event) => {
+                    currentMousePosition = {
+                        x: event.clientX,
+                        y: event.clientY,
+                    }
+                    currentElement = event.target
+                    console.log(currentMousePosition.x)
+                    setMouseDown(true)
+                    setSelectedNode(node)
+                },
+                onMouseUp: () => {
+                    setMouseDown(false)
+                },
+                onMouseMove: (event) => {
+                    if (!selectedNode?.value) {
+                        return
+                    }
+                    if (!mouseDown.value) {
+                        return
+                    }
+                    const dx = event.clientX - currentMousePosition.x
+                    const dy = event.clientY - currentMousePosition.y
+
+                    const newPositionOfSelectedNode = {
+                        x: currentElement.offsetLeft + dx,
+                        y: currentElement.offsetTop + dy,
+                    }
+                    currentMousePosition = {
+                        x: event.clientX,
+                        y: event.clientY,
+                    }
+                    console.log(
+                        currentElement.offsetLeft,
+                        currentMousePosition.x,
+                    )
+
+                    const newPositions = {}
+                    for (var i in positions) {
+                        newPositions[i] = positions.value[i]
+                    }
+                    newPositions[selectedNode.value.id] =
+                        newPositionOfSelectedNode
+                    // console.log('TODO: calculate correct position', position.x)
+                    setPositions(newPositions)
+                },
+                onMouseLeave: () => {
+                    setMouseDown(false)
+                },
                 onNodeSelected: (node) => {
-                    // console.log(event)
-                    // event.preventDefault()
-                    // event.stopPropagation()
                     setSelectedNode(node)
                     console.log('TODO: select survey step in store')
                 },
+                onNodeDeSelected: () => {
+                    console.log('reset')
+                    setSelectedNode(null)
+                    setMouseDown(false)
+                },
+
                 onInletClicked: ({ node, inlet }) => {
                     switch (mode.value) {
                         case MODES.ADD: {
                             setSelectedInlet({ node, inlet })
                             if (selectedOutlet.value) {
-                                // console.log(
-                                //     'TODO: update connection',
-                                //     selectedInlet,
-                                //     selectedOutlet,
-                                // )
                                 store.dispatch(
                                     'surveys/updateOneSurveyStepAndAddToSelected',
                                     {
@@ -261,11 +344,6 @@ export default {
                 },
             },
         }
-    },
-    methods: {
-        nodeOutletClick(node) {
-            console.log(node)
-        },
     },
 }
 </script>

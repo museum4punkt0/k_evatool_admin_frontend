@@ -1,5 +1,4 @@
 import surveysService from '../services/surveys'
-// import surveyStepsService from '../services/surveySteps'
 const initialState = {
     surveys: [],
     selectedSurvey: null,

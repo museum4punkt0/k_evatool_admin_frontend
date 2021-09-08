@@ -1,5 +1,5 @@
 <template>
-    <Container :id="key" @click="onClick">
+    <Container :id="key">
         {{ name }}
     </Container>
 </template>
@@ -31,18 +31,9 @@ export default {
             required: false,
             default: () => '',
         },
-        onClick: {
-            type: Function,
-            required: false,
-            default: () => {
-                return () => {}
-            },
-        },
     },
     setup() {
-        return {
-            selected: false,
-        }
+        return {}
     },
 }
 </script>
