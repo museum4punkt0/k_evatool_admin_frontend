@@ -184,11 +184,16 @@ import { XIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
 const sidebarNavigation = [
-    { name: 'Home', href: '/', icon: HomeIcon, current: false },
-    { name: 'Surveys', href: '/surveys', icon: ViewGridIcon, current: false },
-    { name: 'Assets', href: '/assets', icon: PhotographIcon, current: true },
+    { name: 'Start', href: '/', icon: HomeIcon, current: false },
     {
-        name: 'Languages',
+        name: 'Umfragen',
+        href: '/surveys',
+        icon: ViewGridIcon,
+        current: false,
+    },
+    { name: 'Medien', href: '/assets', icon: PhotographIcon, current: true },
+    {
+        name: 'ssSprachen',
         href: '/languages',
         icon: UserGroupIcon,
         current: false,

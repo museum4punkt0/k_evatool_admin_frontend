@@ -34,27 +34,9 @@
                                 </div>
                             </td>
                             <td>
-                                <span
-                                    :class="
-                                        survey.published
-                                            ? ' bg-green-100 text-green-800'
-                                            : 'bg-red-100 text-red-800'
-                                    "
-                                    class="
-                                        px-2
-                                        inline-flex
-                                        text-xs
-                                        leading-5
-                                        font-semibold
-                                        rounded-full
-                                    "
-                                >
-                                    {{
-                                        survey.published
-                                            ? 'Published'
-                                            : 'Unpublished'
-                                    }}
-                                </span>
+                                <published-state
+                                    :published="survey.published"
+                                />
                             </td>
                             <td>
                                 {{ survey.surveyStepsCount }}
@@ -93,6 +75,7 @@ import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Collection from '../Common/Collection/Collection.vue'
 import SurveyDetails from './SurveyDetails.vue'
 import { ref } from 'vue'
+import PublishedState from '../Common/PublishedState.vue'
 
 const { useState, useActions } = createNamespacedHelpers('surveys')
 const { useActions: useNotificationsActions } =
@@ -101,6 +84,7 @@ const { useActions: useNotificationsActions } =
 export default {
     name: 'SurveysList',
     components: {
+        PublishedState,
         SurveyDetails,
         Collection,
         TrashIcon,

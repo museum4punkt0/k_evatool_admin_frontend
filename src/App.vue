@@ -85,7 +85,7 @@
                                             focus:border-transparent
                                             focus:placeholder-gray-400
                                         "
-                                        placeholder="Search"
+                                        :placeholder="$t('search')"
                                         type="search"
                                     />
                                 </div>

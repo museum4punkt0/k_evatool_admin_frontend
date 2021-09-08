@@ -9,7 +9,7 @@
                             <th>ID</th>
                             <th>Code</th>
                             <th>Subcode</th>
-                            <th>Default</th>
+                            <th>{{ $t('language_default') }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -18,23 +18,21 @@
                             <td>{{ language.id }}</td>
                             <td>{{ language.code }}</td>
                             <td>{{ language.subCode }}</td>
-                            <td>{{ language.default }}</td>
-                            <td>{{ language.published }}</td>
+                            <td class="text-center">
+                                <CheckIcon
+                                    v-if="language.default"
+                                    class="h-5 w-5"
+                                />
+                            </td>
+                            <td>
+                                <published-state
+                                    :published="language.published"
+                                />
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <!--            <Collection
-                :title="$t('language')"
-                :items="languages"
-                :text-filter="textFilter"
-                :item-title-selector="selectors.itemTitle"
-                :on-refresh="handlers.onRefresh"
-                :on-new="handlers.onNew"
-                :on-view="handlers.onView"
-                :on-edit="handlers.onEdit"
-                :on-delete="handlers.onDelete"
-            ></Collection>-->
         </main>
     </div>
 </template>
@@ -43,12 +41,16 @@
 import { useRouter } from 'vue-router'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
 import Collection from '../Common/Collection/Collection.vue'
+import PublishedState from '../Common/PublishedState.vue'
+import { CheckIcon } from '@heroicons/vue/outline'
 
 const { useState, useActions } = createNamespacedHelpers('languages')
 
 export default {
     components: {
+        PublishedState,
         Collection,
+        CheckIcon,
     },
     setup() {
         const router = useRouter()
