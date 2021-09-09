@@ -1,10 +1,20 @@
 <template>
     <div>
         <ul>
-            <li v-if="draggedStep">draggedStep: {{ draggedStep?.id }}</li>
-            <li v-if="selectedStepId !== -1">
-                selectedStepId: {{ selectedStepId }}
-            </li>
+            <button
+                v-if="selectedMode !== MODES.ADD"
+                class="primary"
+                @click="setSelectedMode(MODES.ADD)"
+            >
+                test add mode
+            </button>
+            <button
+                v-if="selectedMode !== MODES.DELETE"
+                class="primary"
+                @click="setSelectedMode(MODES.DELETE)"
+            >
+                test delete
+            </button>
             <li v-if="selectedMode === MODES.DELETE">
                 click outlet to remove connection
             </li>
@@ -87,42 +97,14 @@
                         </div>
                     </div>
                 </div>
-                <Connection
+                <!-- <Connection
                     v-for="connection in connections"
                     :key="`${connection.outletElement}_${connection.inletElement}`"
                     :width="width"
                     :height="height"
-                    :start="{
-                        x: outletElements[
-                            connection.outletElement
-                        ]?.getBoundingClientRect().left,
-                        y: outletElements[
-                            connection.outletElement
-                        ]?.getBoundingClientRect().top,
-                    }"
-                    :end="{
-                        x: inletElements[
-                            connection.inletElement
-                        ]?.getBoundingClientRect().left,
-                        y: inletElements[
-                            connection.inletElement
-                        ]?.getBoundingClientRect().top,
-                    }"
-                />
-                <!-- <div v-for="(connection, index) in connections" :key="index">
-                out:
-                {{
-                    outletElements[
-                        connection.outletElement
-                    ].getBoundingClientRect().left
-                }}
-                - in:
-                {{
-                    inletElements[
-                        connection.inletElement
-                    ].getBoundingClientRect().left
-                }}
-            </div> -->
+                    :end="getInletPosition(connection.inletElement)"
+                    :start="getOutletPosition(connection.outletElement)"
+                /> -->
             </div>
         </div>
     </div>
@@ -293,9 +275,33 @@ export default {
             store.dispatch('surveys/setSurveyStepId', -1)
         }
 
+        const getInletPosition = (inletElement) => {
+            const element = inletElements.value[inletElement]
+            const rect = element?.getBoundingClientRect()
+            const offsetX = element?.offsetLeft - rect?.width / 2
+            const offsetY = element?.offsetTop - rect?.height
+
+            return {
+                x: rect?.left - offsetX,
+                y: rect?.top - offsetY,
+            }
+        }
+        const getOutletPosition = (outletElement) => {
+            const element = outletElements.value[outletElement]
+            const rect = element?.getBoundingClientRect()
+            const offsetX = element?.offsetLeft - rect?.width / 2
+            const offsetY = element?.offsetTop - rect?.height
+
+            return {
+                x: rect?.right - offsetX,
+                y: rect?.top - offsetY,
+            }
+        }
+
         return {
             MODES,
             selectedMode,
+            setSelectedMode,
             draggedStep,
             selectedStepId,
             selectedInlet,
@@ -309,6 +315,8 @@ export default {
             connections,
             inletElements,
             outletElements,
+            getInletPosition,
+            getOutletPosition,
             width,
             height,
         }
