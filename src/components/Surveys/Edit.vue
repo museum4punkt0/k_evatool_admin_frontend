@@ -11,7 +11,7 @@
                 </button>
             </div>
 
-            <node-editor-test
+            <node-editor
                 v-if="selectedSurvey?.steps"
                 :steps="selectedSurvey.steps"
                 :admin-layout="selectedSurvey.adminLayout"
@@ -37,14 +37,12 @@ import { useRoute, useRouter } from 'vue-router'
 import { onBeforeRouteUpdate } from 'vue-router'
 import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
-import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import SurveyStep from './SurveyStep.vue'
 import SurveyDetails from './SurveyDetails.vue'
-import NodeEditorTest from '../NodeEditor/NodeEditorTest.vue'
+import NodeEditor from '../NodeEditor/NodeEditor.vue'
 
 export default {
     components: {
-        NodeEditorTest,
         SurveyDetails,
         SurveyStep,
         Button,
@@ -104,10 +102,7 @@ export default {
                 }
             },
         )
-        const onScroll = () => {
-            console.log('on scroll')
-            nodeEditor.value.updateConnections()
-        }
+        const onScroll = () => {}
 
         id.value = route.params.id
         if (id.value) {
