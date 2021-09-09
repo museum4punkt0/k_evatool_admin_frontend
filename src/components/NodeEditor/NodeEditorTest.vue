@@ -5,8 +5,8 @@
             class="node-editor"
             @mousemove="onMouseMove"
             @mouseup="onMouseUp"
-            @mouseleave="onMouseUp"
             @mousedown="deselectStep"
+            @mouseleave="onMouseUp"
         >
             <ul>
                 <li v-if="draggedStep">draggedStep: {{ draggedStep?.id }}</li>
@@ -15,6 +15,9 @@
                 </li>
                 <li v-if="selectedMode === MODES.DELETE">
                     click outlet to remove connection
+                </li>
+                <li v-if="selectedMode === MODES.ADD">
+                    click outlet and then inlet to add a connection
                 </li>
             </ul>
             <div
@@ -54,6 +57,8 @@
                         in
                     </div>
                 </div>
+                <!-- {{ step.id }} - -->
+                <!-- {{ steps.find((x) => x.id === step.id) ? 'si' : 'no' }} -->
                 <div class="node-content flex-1">
                     {{ steps.find((x) => x.id === step.id).name }}
                     {{ step.id }}
@@ -93,35 +98,53 @@ export default {
             type: Array,
             default: () => [],
         },
+        adminLayout: {
+            type: Array,
+            required: true,
+        },
         surveyId: {
             type: Number,
             default: -1,
         },
     },
     setup(props) {
+        const store = useStore()
         const draggedStep = ref(null)
         const selectedStepId = computed(
             () => store.state.surveys.selectedSurveyStepId,
         )
+        if (!props.adminLayout) {
+            console.log('updating admin layout')
+            store.dispatch(
+                'surveys/updateAdminLayoutOfSelectedSurvey',
+                props.steps.map((step, index) => {
+                    return {
+                        id: step.id,
+                        position: {
+                            x: 100 + index * 240,
+                            y: 100,
+                        },
+                    }
+                }),
+            )
+        }
 
-        const adminLayout = ref(
-            props.steps.map((step, index) => {
-                return {
-                    id: step.id,
-                    position: {
-                        x: 100 + index * 240,
-                        y: 100,
-                    },
-                }
-            }),
-        )
-        const store = useStore()
-        const [selectedMode, setSelectedMode] = useState(MODES.DELETE)
+        // const adminLayout = ref(
+        //     props.steps.map((step, index) => {
+        //         return {
+        //             id: step.id,
+        //             position: {
+        //                 x: 100 + index * 240,
+        //                 y: 100,
+        //             },
+        //         }
+        //     }),
+        // )
+        const [selectedMode, setSelectedMode] = useState(MODES.ADD)
         const [selectedInlet, setSelectedInlet] = useState(null)
         const [selectedOutlet, setSelectedOutlet] = useState(null)
 
         const onMouseDown = (step, e) => {
-            console.log('onmousedown', step, e)
             const nodeEditor = document.getElementById('nodeEditor')
             const nodeEditorRect = nodeEditor.getBoundingClientRect()
             draggedStep.value = step
@@ -143,11 +166,25 @@ export default {
 
         const onMouseUp = async () => {
             draggedStep.value = null
-            const adminLayoutSaved = await SURVEYS.saveAdminLayout(
-                props.surveyId,
-                adminLayout.value,
-            )
-            console.log(adminLayoutSaved)
+            await SURVEYS.saveAdminLayout(props.surveyId, props.adminLayout)
+        }
+
+        const addConnection = (outlet, inlet) => {
+            store
+                .dispatch('surveys/updateOneSurveyStepAndAddToSelected', {
+                    data: {
+                        ...props.steps.find(
+                            (step) => step.id === outlet.stepId,
+                        ),
+                        nextStepId: inlet.stepId,
+                    },
+                })
+                .then((data) => {
+                    console.log('added connection', data)
+                    setSelectedInlet(null)
+                    setSelectedOutlet(null)
+                    setSelectedMode(MODES.NONE)
+                })
         }
 
         const onInletClicked = (inlet) => {
@@ -156,19 +193,7 @@ export default {
                 case MODES.ADD: {
                     setSelectedInlet(inlet)
                     if (selectedOutlet.value) {
-                        // store.dispatch(
-                        //     'surveys/updateOneSurveyStepAndAddToSelected',
-                        //     {
-                        //         data: {
-                        //             ...selectedOutlet.value.node,
-                        //             nextStepId:
-                        //                 selectedInlet.value.node.id,
-                        //         },
-                        //     },
-                        // )
-                        setSelectedInlet(null)
-                        setSelectedOutlet(null)
-                        setSelectedMode(MODES.NONE)
+                        addConnection(selectedOutlet.value, inlet)
                     }
                 }
             }
@@ -179,27 +204,24 @@ export default {
                 case MODES.ADD: {
                     setSelectedOutlet(outlet)
                     if (selectedInlet.value) {
-                        console.log(
-                            'TODO: update connection',
-                            selectedInlet,
-                            selectedOutlet,
-                        )
-                        setSelectedInlet(null)
-                        setSelectedOutlet(null)
-                        setSelectedMode(MODES.NONE)
+                        addConnection(outlet, selectedInlet.value)
                     }
                     break
                 }
                 case MODES.DELETE: {
                     if (outlet.name === 'next') {
-                        console.log('TODO: remove next connection')
-                        // store.dispatch(
-                        //     'surveys/updateOneSurveyStepAndAddToSelected',
-                        //     { data: { ...node, nextStepId: null } },
-                        // )
-                        setSelectedMode(MODES.NONE)
+                        store.dispatch(
+                            'surveys/updateOneSurveyStepAndAddToSelected',
+                            {
+                                data: {
+                                    ...props.steps.find(
+                                        (step) => step.id === outlet.stepId,
+                                    ),
+                                    nextStepId: null,
+                                },
+                            },
+                        )
                         break
-                        // }
                     }
                 }
             }
@@ -218,7 +240,6 @@ export default {
             onMouseDown,
             onMouseMove,
             onMouseUp,
-            adminLayout,
             onInletClicked,
             onOutletClicked,
             deselectStep,

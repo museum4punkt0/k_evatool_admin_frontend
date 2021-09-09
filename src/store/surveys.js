@@ -53,6 +53,9 @@ export default {
         setSurveyStepId(state, surveyStepId) {
             state.selectedSurveyStepId = surveyStepId
         },
+        updateAdminLayoutOfSelectedSurvey(state, adminLayout) {
+            state.selectedSurvey.adminLayout = adminLayout
+        },
     },
     actions: {
         getAllAndUpdateStore({ commit }) {
@@ -176,6 +179,9 @@ export default {
         },
         setSurveyStepId({ commit }, surveyStepId) {
             commit('setSurveyStepId', surveyStepId)
+        },
+        updateAdminLayoutOfSelectedSurvey({ commit }, adminLayout) {
+            commit('updateAdminLayoutOfSelectedSurvey', adminLayout)
         },
     },
     getters: {},

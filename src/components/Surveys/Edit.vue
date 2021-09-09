@@ -4,17 +4,17 @@
             <div class="flex mb-3 justify-between items-center">
                 <h1>
                     {{ $tc('surveys', 1) }}:
-                    <strong>{{ selectedSurvey.name }}</strong>
+                    <strong>{{ selectedSurvey?.name }}</strong>
                 </h1>
                 <button class="primary" @click="newSurveyStep">
                     {{ $t('action_add_survey_step') }}
                 </button>
             </div>
 
-            <!--            <NodeEditor ref="nodeEditor" :nodes="selectedSurvey.steps" />-->
             <node-editor-test
                 v-if="selectedSurvey?.steps"
                 :steps="selectedSurvey.steps"
+                :admin-layout="selectedSurvey.adminLayout"
                 :survey-id="surveyId"
             />
         </main>
