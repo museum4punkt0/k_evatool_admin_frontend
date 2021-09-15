@@ -332,10 +332,10 @@ export default {
     /* width: 2000px;
     height: 2000px; */
 }
-/*.step {
+.step {
     width: 200px;
     height: 100px;
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
-}*/
+}
 </style>
