@@ -1,8 +1,6 @@
 <template>
     <h1>{{ $tc('steps', 1) }}</h1>
 
-    {{ surveyStepId }}
-
     <div v-if="surveyStep">
         <form-input
             v-model:value="surveyStep.name"
@@ -22,7 +20,7 @@
             :options="store.state.surveyElements.data"
             title-key="name"
             value-key="id"
-            default-value="-1"
+            :default-value="-1"
             label="Test"
         />
 
@@ -117,7 +115,11 @@ export default {
 
         const saveSurveyStep = async () => {
             savingSurveyStep.value = true
-            await SURVEY_SERVICE.saveSurveyStep(surveyStep.value, surveyId)
+            const savedSurvey = await SURVEY_SERVICE.saveSurveyStep(
+                surveyStep.value,
+                surveyId,
+            )
+            surveyStepId.value = savedSurvey.id
             await getSurveyStep()
             emit('saved')
             savingSurveyStep.value = false

@@ -142,22 +142,45 @@ export default {
             () => store.state.surveys.selectedSurveyStepId,
         )
 
+        const fixLayoutPosition = (position) => {
+            if (position.x < 0) {
+                position.x = 100
+            }
+            if (position.y < 0) {
+                position.y = 100
+            }
+            return position
+        }
+
         const initAdminLayout = () => {
             console.log('init admin layout')
+            const adminLayoutInit = []
+            console.log(props.adminLayout)
+            props.steps.forEach((step) => {
+                const index = props.adminLayout.findIndex(
+                    (x) => x.id === step.id,
+                )
 
-            store.dispatch(
-                'surveys/updateAdminLayoutOfSelectedSurvey',
-                props.steps.map((step, index) => {
-                    return {
+                if (index < 0) {
+                    adminLayoutInit.push({
                         id: step.id,
                         position: {
-                            x: 100 + index * 240,
+                            x: 100,
                             y: 100,
                         },
-                    }
-                }),
+                    })
+                } else {
+                    let stepFound = props.adminLayout.find(
+                        (x) => x.id === step.id,
+                    )
+                    stepFound.position = fixLayoutPosition(stepFound.position)
+                    adminLayoutInit.push(stepFound)
+                }
+            })
+            store.dispatch(
+                'surveys/updateAdminLayoutOfSelectedSurvey',
+                adminLayoutInit,
             )
-            // }
         }
 
         onMounted(() => {
@@ -324,7 +347,7 @@ export default {
 <style scoped>
 .node-editor-wrap {
     width: 100%;
-    height: 100%;
+    height: 85vh;
     overflow: scroll;
 }
 .node-editor {
