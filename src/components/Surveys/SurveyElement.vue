@@ -8,50 +8,58 @@
             type="text"
             name="name"
             autocomplete="off"
-            :placeholder="$tc('names', 1)"
+            :placeholder="t('names', 1)"
         />
     </div>
+
     <form-select
         v-if="elementTypes?.data"
-        v-model="surveyElement.elementType"
+        v-model:selected="surveyElement.surveyElementType"
         class="mt-3"
         :options="elementTypes.data"
-        :label="$tc('types', 1)"
+        :label="t('types', 1)"
         title-key="name"
         value-key="key"
     />
+
     <div class="mt-3">
         <element-type-star-rating
-            v-if="surveyElement.elementType === 'starRating'"
+            v-if="surveyElement.surveyElementType === 'starRating'"
             v-model="surveyElement.params"
             :validation="v$"
         />
         <element-type-emoji
-            v-if="surveyElement.elementType === 'emoji'"
+            v-if="surveyElement.surveyElementType === 'emoji'"
             v-model="surveyElement.params"
         />
         <element-type-video
-            v-if="surveyElement.elementType === 'video'"
-            v-model="surveyElement.params"
+            v-if="surveyElement.surveyElementType === 'video'"
+            v-model:params="surveyElement.params"
+            :validation="v$"
         />
         <element-type-binary-question
-            v-if="surveyElement.elementType === 'binary'"
+            v-if="surveyElement.surveyElementType === 'binary'"
             v-model="surveyElement.params"
         />
         <element-type-multiple-choice
-            v-if="surveyElement.elementType === 'multipleChoice'"
-            v-model:params="surveyElement.params"
+            v-if="surveyElement.surveyElementType === 'multipleChoice'"
+            v-model="surveyElement.params"
         />
         <element-type-simple-text
-            v-if="surveyElement.elementType === 'simpleText'"
+            v-if="surveyElement.surveyElementType === 'simpleText'"
             v-model:params="surveyElement.params"
             :validation="v$"
         />
         <element-type-yay-nay
-            v-if="surveyElement.elementType === 'yayNay'"
+            v-if="surveyElement.surveyElementType === 'yayNay'"
             v-model="surveyElement.params"
         />
     </div>
+    <action-button
+        :disabled="v$.$invalid"
+        :executing="savingSurveyElement"
+        @execute="saveSurveyElement"
+    />
     <data-viewer class="mt-3" :data="surveyElement" />
 </template>
 
@@ -66,14 +74,21 @@ import ElementTypeSimpleText from '../SurveySteps/ElementTypes/ElementTypeSimple
 import ElementTypeYayNay from '../SurveySteps/ElementTypes/ElementTypeYayNay.vue'
 import FormSelect from '../Forms/FormSelect.vue'
 import DataViewer from '../Common/DataViewer.vue'
+import ActionButton from '../Common/ActionButton.vue'
 
 import { onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import defaultParams from '../SurveySteps/ElementTypes/defaultParams'
 
+import SURVEY_ELEMENT_SERVICE from '../../services/surveyElements'
+import useVuelidate from '@vuelidate/core'
+import { minLength, required } from '@vuelidate/validators'
+import { useI18n } from 'vue-i18n'
+
 export default {
     name: 'SurveyElement',
     components: {
+        ActionButton,
         DataViewer,
         ElementTypeYayNay,
         ElementTypeSimpleText,
@@ -84,26 +99,74 @@ export default {
         ElementTypeStarRating,
         FormSelect,
     },
-    setup() {
+    props: {
+        surveyElementId: {
+            type: Number,
+            default: -1,
+        },
+    },
+    setup(props) {
         const store = useStore()
-        const surveyElement = ref({ name: '', elementType: '' })
+        const { t } = useI18n()
+        const surveyElement = ref({})
         const elementTypes = ref(null)
+        const savingSurveyElement = ref(false)
 
         onMounted(async () => {
             elementTypes.value = store.state.elementTypes
         })
 
+        const getSurveyElement = async (surveyElementId) => {
+            surveyElement.value = await SURVEY_ELEMENT_SERVICE.getSurveyElement(
+                surveyElementId,
+            )
+        }
+
+        const saveSurveyElement = async () => {
+            savingSurveyElement.value = true
+            await SURVEY_ELEMENT_SERVICE.saveSurveyElement(surveyElement.value)
+            savingSurveyElement.value = false
+        }
+
+        onMounted(() => {
+            getSurveyElement(props.surveyElementId)
+        })
+
         watch(
-            () => surveyElement.value.elementType,
+            () => surveyElement.value?.surveyElementType,
             (value) => {
+                // Resets to default value when survey element type is changed
+                // Todo: Ask for user confirmation and reset if denied.
                 surveyElement.value.params = defaultParams[value]
             },
         )
 
+        /* watch(
+            () => props.surveyElementId,
+            (value) => {
+                console.log(value)
+                if (value > 0) {
+                    getSurveyElement(value)
+                }
+            },
+        )*/
+
         return {
+            v$: useVuelidate(),
             surveyElement,
             elementTypes,
+            saveSurveyElement,
+            savingSurveyElement,
+            t,
         }
+    },
+    validations: {
+        surveyElement: {
+            name: {
+                required,
+                minLength: minLength(1),
+            },
+        },
     },
 }
 </script>

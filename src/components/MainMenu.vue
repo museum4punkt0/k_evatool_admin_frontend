@@ -193,7 +193,7 @@ const sidebarNavigation = [
     },
     { name: 'Medien', href: '/assets', icon: PhotographIcon, current: true },
     {
-        name: 'ssSprachen',
+        name: 'Sprachen',
         href: '/languages',
         icon: UserGroupIcon,
         current: false,

@@ -19,7 +19,10 @@
             />
         </main>
         <aside>
-            <survey-step v-if="store.state.surveys.selectedSurveyStepId >= 0" />
+            <survey-step
+                v-if="store.state.surveys.selectedSurveyStepId >= 0"
+                @saved="surveySaved"
+            />
             <survey-details
                 v-else
                 :survey-id="surveyId"
@@ -55,7 +58,7 @@ export default {
         const route = useRoute()
         const router = useRouter()
         const store = useStore()
-        const surveyId = ref(route.params.id)
+        const surveyId = ref(parseInt(route.params.id))
         const selectedSurvey = computed(
             () => store.state.surveys.selectedSurvey,
         )
@@ -67,6 +70,7 @@ export default {
         onBeforeUnmount(() => {
             container.value.removeEventListener('scroll', onScroll)
         })
+
         const update = () => {
             store.dispatch('surveys/updateOneSelectAndUpdateStore', {
                 id: selectedSurvey.value.id,

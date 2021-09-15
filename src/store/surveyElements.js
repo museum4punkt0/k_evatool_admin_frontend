@@ -13,7 +13,7 @@ export default {
     },
     actions: {
         async getSurveyElements({ commit }) {
-            const surveyElements = await SURVEY_ELEMENTS.SURVEY_ELEMENTS_get()
+            const surveyElements = await SURVEY_ELEMENTS.getSurveyElements()
             commit('setSurveyElements', surveyElements.data)
         },
     },

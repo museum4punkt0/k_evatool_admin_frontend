@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ul>
+        <!--        <ul>
             <button
                 v-if="selectedMode !== MODES.ADD"
                 class="primary"
@@ -21,8 +21,8 @@
             <li v-if="selectedMode === MODES.ADD">
                 click outlet and then inlet to add a connection
             </li>
-        </ul>
-        <div class="node-editor-wrap bg-blue-300">
+        </ul>-->
+        <div class="node-editor-wrap bg-blue-300 rounded-lg">
             <div
                 id="nodeEditor"
                 class="node-editor"
@@ -97,21 +97,13 @@
                         </div>
                     </div>
                 </div>
-                <!-- <Connection
-                    v-for="connection in connections"
-                    :key="`${connection.outletElement}_${connection.inletElement}`"
-                    :width="width"
-                    :height="height"
-                    :end="getInletPosition(connection.inletElement)"
-                    :start="getOutletPosition(connection.outletElement)"
-                /> -->
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { ref, computed, onUpdated } from 'vue'
+import { ref, computed, onUpdated, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import Connection from './Connection.vue'
 import { useState } from '../../composables/state'
@@ -123,6 +115,7 @@ const MODES = {
     ADD: 'ADD',
     DELETE: 'DELETE',
 }
+
 export default {
     name: 'NodeEditorTest',
     components: {
@@ -148,8 +141,10 @@ export default {
         const selectedStepId = computed(
             () => store.state.surveys.selectedSurveyStepId,
         )
-        if (!props.adminLayout) {
-            console.log('updating admin layout')
+
+        const initAdminLayout = () => {
+            console.log('init admin layout')
+
             store.dispatch(
                 'surveys/updateAdminLayoutOfSelectedSurvey',
                 props.steps.map((step, index) => {
@@ -162,12 +157,14 @@ export default {
                     }
                 }),
             )
+            // }
         }
 
-        onUpdated(() => {
-            console.log('component updated')
-            // console.log(inletElements.value)
+        onMounted(() => {
+            initAdminLayout()
         })
+
+        onUpdated(() => {})
 
         const [selectedMode, setSelectedMode] = useState(MODES.ADD)
         const [selectedInlet, setSelectedInlet] = useState(null)
@@ -175,8 +172,8 @@ export default {
         const inletElements = ref({})
         const outletElements = ref({})
         const [connections, setConnections] = useState([])
-        const [width, setWidth] = useState(2000)
-        const [height, setHeight] = useState(2000)
+        const [width] = useState(2000)
+        const [height] = useState(2000)
 
         const c = []
         props.steps.forEach((step) => {
@@ -335,10 +332,10 @@ export default {
     /* width: 2000px;
     height: 2000px; */
 }
-.step {
+/*.step {
     width: 200px;
     height: 100px;
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
-}
+}*/
 </style>

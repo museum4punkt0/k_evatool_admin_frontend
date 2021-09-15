@@ -9,4 +9,7 @@ export default {
     multipleChoice: {
         options: [{ de: '' }, { en: '' }, { fr: '' }],
     },
+    video: {
+        videoAssetId: -1,
+    },
 }

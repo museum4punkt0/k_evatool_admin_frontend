@@ -22,4 +22,5 @@ export default {
     surveys: 'Umfragen | Umfrage | Umfragen',
     titles: 'Titel | Titel | Titel',
     types: 'Typen | Typ | Typen',
+    videos: 'Videos | Video | Video',
 }

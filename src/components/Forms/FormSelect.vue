@@ -1,5 +1,5 @@
 <template>
-    <Listbox v-model="selected" as="div">
+    <Listbox v-model="selectedLocal" as="div">
         <ListboxLabel class="block text-sm font-medium text-gray-700">
             {{ label }}
         </ListboxLabel>
@@ -25,7 +25,9 @@
                 "
             >
                 <span class="block truncate">
-                    {{ localOptions.find((x) => x.id === selected).title }}
+                    {{
+                        localOptions.find((x) => x.id === selectedLocal)?.title
+                    }}
                 </span>
                 <span
                     class="
@@ -71,7 +73,7 @@
                     <ListboxOption
                         v-for="option in localOptions"
                         :key="option.id"
-                        v-slot="{ active, selected }"
+                        v-slot="{ active, selectedLocal }"
                         as="template"
                         :value="option.id"
                     >
@@ -85,7 +87,9 @@
                         >
                             <span
                                 :class="[
-                                    selected ? 'font-semibold' : 'font-normal',
+                                    selectedLocal
+                                        ? 'font-semibold'
+                                        : 'font-normal',
                                     'block truncate',
                                 ]"
                             >
@@ -93,7 +97,7 @@
                             </span>
 
                             <span
-                                v-if="selected"
+                                v-if="selectedLocal"
                                 :class="[
                                     active ? 'text-white' : 'text-blue-600',
                                     'absolute inset-y-0 right-0 flex items-center pr-4',
@@ -110,7 +114,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import {
     Listbox,
     ListboxButton,
@@ -137,9 +141,16 @@ export default {
         label: { type: String, default: 'label' },
         titleKey: { type: String, default: 'title' },
         valueKey: { type: String, default: 'value' },
+        defaultValue: { type: [String, Number], default: null },
+        defaultTitle: { type: String, default: 'Nicht ausgewählt' },
         useDefault: { type: Boolean, default: true },
+        selected: {
+            type: [String, Number],
+            default: '',
+        },
     },
-    setup(props) {
+    emits: ['update:selected'],
+    setup(props, { emit }) {
         const localOptions = [...props.options].map((option) => {
             return {
                 title: option[props.titleKey],
@@ -149,15 +160,18 @@ export default {
 
         if (props.useDefault) {
             localOptions.unshift({
-                id: null,
-                title: 'Nicht ausgewählt',
+                id: props.defaultValue,
+                title: props.defaultTitle,
             })
         }
 
-        const selected = ref(localOptions[0].id)
+        const selectedLocal = computed({
+            get: () => props.selected || props.defaultValue,
+            set: (val) => emit('update:selected', val),
+        })
 
         return {
-            selected,
+            selectedLocal,
             localOptions,
         }
     },

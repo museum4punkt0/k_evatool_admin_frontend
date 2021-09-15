@@ -207,7 +207,8 @@
                             lg:order-last
                         "
                     >
-                        <router-view />
+                        <router-view v-if="!loadingApp" />
+                        <div v-else>Loading app ...</div>
                     </section>
                 </main>
             </div>
@@ -256,6 +257,7 @@ export default {
     setup() {
         const mobileMenuOpen = ref(false)
         const store = useStore()
+        const loadingApp = ref(true)
 
         onMounted(async () => {
             await store.dispatch('languages/getAllLanguagesAndUpdateStore')
@@ -263,11 +265,14 @@ export default {
                 'elementTypes/getAllElementTypesAndUpdateStore',
             )
             await store.dispatch('surveyElements/getSurveyElements')
+            await store.dispatch('assets/getAssets')
+            loadingApp.value = false
         })
 
         return {
             userNavigation,
             mobileMenuOpen,
+            loadingApp,
         }
     },
 }

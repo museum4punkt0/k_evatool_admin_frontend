@@ -244,4 +244,36 @@ export default {
                 return error
             })
     },
+
+    async getSurveyStep(surveyId, surveyStepId) {
+        let url =
+            'evaluation-tool/surveys/' +
+            surveyId +
+            '/survey-steps/' +
+            surveyStepId
+        return axios
+            .get(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
+
+    async saveSurveyStep(data, surveyId) {
+        let url = 'evaluation-tool/surveys/' + surveyId + '/survey-steps'
+        let method = 'POST'
+        if (data.id) {
+            method = 'PUT'
+            url += '/' + data.id
+        }
+        return axios({ url, method, data })
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
 }
