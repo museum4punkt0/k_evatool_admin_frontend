@@ -206,6 +206,9 @@ import SURVEYS from '../../services/surveys'
 
 import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
 
+import useVuelidate from '@vuelidate/core'
+import { maxLength, required, minValue } from '@vuelidate/validators'
+
 export default {
     name: 'TimeBasedStepsModal',
     components: {
@@ -288,6 +291,7 @@ export default {
         }
 
         return {
+            v$: useVuelidate(),
             modalIsOpen,
             savingTimeBasedSteps,
             selectedTimeBasedStep,
@@ -300,6 +304,17 @@ export default {
                 modalIsOpen.value = false
             },
         }
+    },
+    validations: {
+        selectedTimeBasedStep: {
+            description: {
+                maxLength: maxLength(100),
+            },
+            stepId: {
+                required,
+                minValue: minValue(1),
+            },
+        },
     },
 }
 </script>

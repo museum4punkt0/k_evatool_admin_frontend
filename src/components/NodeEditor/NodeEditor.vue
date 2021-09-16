@@ -85,8 +85,17 @@
                                     justify-center
                                 "
                             >
-                                {{ steps.find((x) => x.id === step.id).name }}
-                                {{ step.surveyElementType }}
+                                <div class="text-center">
+                                    {{
+                                        steps.find((x) => x.id === step.id).name
+                                    }}
+                                    <p class="w-full text-xs text-gray-500">
+                                        {{
+                                            steps.find((x) => x.id === step.id)
+                                                .surveyElementType
+                                        }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div class="outlets flex-none w-8">

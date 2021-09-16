@@ -12,4 +12,7 @@ export default {
     video: {
         videoAssetId: -1,
     },
+    emoji: {
+        emojis: [],
+    },
 }

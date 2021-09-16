@@ -46,12 +46,6 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        onMounted(() => {
-            if (!paramsLocal.value) {
-                paramsLocal.value = defaultParams.simpleText
-            }
-        })
-
         return { assets, t, paramsLocal, video }
     },
 }

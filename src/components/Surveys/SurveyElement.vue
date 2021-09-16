@@ -30,7 +30,8 @@
         />
         <element-type-emoji
             v-if="surveyElement.surveyElementType === 'emoji'"
-            v-model="surveyElement.params"
+            v-model:params="surveyElement.params"
+            :validation="v$"
         />
         <element-type-video
             v-if="surveyElement.surveyElementType === 'video'"
@@ -129,7 +130,9 @@ export default {
         }
 
         onMounted(() => {
-            getSurveyElement(props.surveyElementId)
+            if (props.surveyElementId > 0) {
+                getSurveyElement(props.surveyElementId)
+            }
         })
 
         watch(
