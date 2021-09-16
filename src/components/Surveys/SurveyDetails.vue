@@ -3,7 +3,7 @@
 
     <input v-model="survey.name" class="mt-3" type="text" />
     <button
-        class="primary w-full mt-3"
+        class="danger w-full mt-3"
         :disabled="v$.$invalid"
         @click="saveSurvey"
     >

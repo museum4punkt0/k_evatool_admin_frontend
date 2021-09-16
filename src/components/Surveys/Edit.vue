@@ -43,9 +43,11 @@ import Record from '../Common/Record.vue'
 import SurveyStep from './SurveyStep.vue'
 import SurveyDetails from './SurveyDetails.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
+import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
 
 export default {
     components: {
+        TimeBasedStepsModal,
         SurveyDetails,
         SurveyStep,
         Button,

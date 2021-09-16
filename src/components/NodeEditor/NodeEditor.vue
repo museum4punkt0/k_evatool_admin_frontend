@@ -37,14 +37,15 @@
                     :key="step.id"
                     class="
                         step
-                        p-2
+                        p-0
+                        m-0
                         rounded-lg
-                        border
+                        border-0
                         bg-white
-                        flex flex-row
-                        justify-center
-                        items-center
                         shadow
+                        w-48
+                        h-24
+                        overflow-hidden
                     "
                     :style="{
                         top: step?.position.y + 'px',
@@ -52,54 +53,120 @@
                         zIndex: draggedStep?.id === step?.id ? 3 : 2,
                     }"
                     :class="{
-                        'border-black':
+                        'shadow-lg':
                             draggedStep?.id === step.id &&
                             selectedStepId !== step.id,
-                        'border-blue-900': selectedStepId === step.id,
+                        'shadow-lg': selectedStepId === step.id,
                         'border-1': draggedStep,
                     }"
-                    @mousedown.prevent.stop="onMouseDown(step, $event)"
                 >
-                    <div class="inlets bg-green-200 flex flow-col">
+                    <div class="w-full flex flex-row h-16">
+                        <div class="inlets flex-none w-8">
+                            <div
+                                :ref="
+                                    (el) =>
+                                        (inletElements[`${step.id}_inlet`] = el)
+                                "
+                                @mousedown.prevent.stop="
+                                    onInletClicked({ stepId: step.id })
+                                "
+                            ></div>
+                        </div>
                         <div
-                            :ref="
-                                (el) => (inletElements[`${step.id}_inlet`] = el)
-                            "
-                            class="bg-yellow-200"
-                            @mousedown.prevent.stop="
-                                onInletClicked({ stepId: step.id })
-                            "
+                            class="node-content flex-auto"
+                            @mousedown.prevent.stop="onMouseDown(step, $event)"
                         >
-                            in
+                            <div
+                                class="
+                                    pointer
+                                    h-full
+                                    flex
+                                    items-center
+                                    justify-center
+                                "
+                            >
+                                {{ steps.find((x) => x.id === step.id).name }}
+                                {{ step.surveyElementType }}
+                            </div>
+                        </div>
+                        <div class="outlets flex-none w-8">
+                            <div
+                                :ref="
+                                    (el) =>
+                                        (outletElements[
+                                            `${step.id}_outlet_next`
+                                        ] = el)
+                                "
+                                class="bg-yellow-300"
+                                @mousedown.prevent.stop="
+                                    onOutletClicked({
+                                        stepId: step.id,
+                                        name: 'next',
+                                    })
+                                "
+                            >
+                                <!--                                {{
+                                    steps.find((x) => x.id === step.id)
+                                        .nextStepId
+                                }}-->
+                            </div>
                         </div>
                     </div>
-                    <div class="node-content flex-1">
-                        {{ steps.find((x) => x.id === step.id).name }}
-                        {{ step.id }}
-                    </div>
-                    <div class="outlets bg-green-200">
-                        <div
-                            :ref="
-                                (el) =>
-                                    (outletElements[`${step.id}_outlet_next`] =
-                                        el)
-                            "
-                            class="bg-yellow-200"
-                            @mousedown.prevent.stop="
-                                onOutletClicked({
-                                    stepId: step.id,
-                                    name: 'next',
-                                })
-                            "
-                        >
-                            next:
-                            {{ steps.find((x) => x.id === step.id).nextStepId }}
+                    <div class="w-full border-t">
+                        <div class="flex flex-row h-10">
+                            <div class="bg-red-200 flex-1 w-8">
+                                <div
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
+                                >
+                                    Prev
+                                </div>
+                            </div>
+                            <div class="bg-red-300 flex-1">
+                                <div
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
+                                >
+                                    Next
+                                </div>
+                            </div>
+                            <div
+                                v-if="
+                                    steps.find((x) => x.id === step.id)
+                                        .surveyElementType === 'video'
+                                "
+                                class="flex-1"
+                                @click="openTimeBasedModal(step.id)"
+                            >
+                                <div
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
+                                >
+                                    <ClockIcon class="h-5 w-5" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <time-based-steps-modal
+        v-model:is-open="timeBasedModalIsOpen"
+        :survey-step-id="timeBasedModalStepId"
+    />
 </template>
 
 <script>
@@ -107,6 +174,10 @@ import { ref, computed, onUpdated, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import Connection from './Connection.vue'
 import { useState } from '../../composables/state'
+
+import { ClockIcon } from '@heroicons/vue/outline'
+
+import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 
 import SURVEYS from '../../services/surveys'
 
@@ -119,7 +190,9 @@ const MODES = {
 export default {
     name: 'NodeEditorTest',
     components: {
+        TimeBasedStepsModal,
         Connection,
+        ClockIcon,
     },
     props: {
         steps: {
@@ -197,6 +270,8 @@ export default {
         const [connections, setConnections] = useState([])
         const [width] = useState(2000)
         const [height] = useState(2000)
+        const timeBasedModalIsOpen = ref(false)
+        const timeBasedModalStepId = ref(-1)
 
         const c = []
         props.steps.forEach((step) => {
@@ -318,6 +393,11 @@ export default {
             }
         }
 
+        const openTimeBasedModal = (stepId) => {
+            timeBasedModalIsOpen.value = true
+            timeBasedModalStepId.value = stepId
+        }
+
         return {
             MODES,
             selectedMode,
@@ -339,6 +419,9 @@ export default {
             getOutletPosition,
             width,
             height,
+            openTimeBasedModal,
+            timeBasedModalIsOpen,
+            timeBasedModalStepId,
         }
     },
 }
