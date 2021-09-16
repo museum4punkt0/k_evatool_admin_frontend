@@ -138,15 +138,15 @@
                                     <ArrowRightIcon class="h-4 w-4" />
                                 </div>
                             </div>
-                            <div
-                                v-if="
+                            <button
+                                class="flex-1 disabled:opacity-50"
+                                :disabled="
                                     steps.find((x) => x.id === step.id)
-                                        .surveyElementType === 'video'
+                                        .surveyElementType !== 'video'
                                 "
-                                class="flex-1"
                                 @click="openTimeBasedModal(step.id)"
                             >
-                                <div
+                                <span
                                     class="
                                         flex
                                         h-full
@@ -155,8 +155,8 @@
                                     "
                                 >
                                     <ClockIcon class="h-5 w-5" />
-                                </div>
-                            </div>
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>
