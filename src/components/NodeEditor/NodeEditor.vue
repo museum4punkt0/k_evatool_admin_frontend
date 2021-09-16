@@ -164,6 +164,7 @@
         </div>
     </div>
     <time-based-steps-modal
+        v-if="timeBasedModalStepId > 0"
         v-model:is-open="timeBasedModalIsOpen"
         :survey-step-id="timeBasedModalStepId"
     />

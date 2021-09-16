@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.111",
+    "version": "1.0.112",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -29,6 +29,7 @@
         "@vuelidate/core": "^2.0.0-alpha.25",
         "@vuelidate/validators": "^2.0.0-alpha.21",
         "axios": "^0.21.4",
+        "lodash": "^4.17.21",
         "vue": "^3.0.5",
         "vue-i18n": "^9.1.7",
         "vue-router": "4",
