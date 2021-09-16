@@ -113,8 +113,8 @@
                         </div>
                     </div>
                     <div class="w-full border-t">
-                        <div class="flex flex-row h-10">
-                            <div class="bg-red-200 flex-1 w-8">
+                        <div class="flex flex-row h-9">
+                            <div class="flex-1 w-8">
                                 <div
                                     class="
                                         flex
@@ -123,10 +123,10 @@
                                         items-center
                                     "
                                 >
-                                    Prev
+                                    <ArrowLeftIcon class="h-4 w-4" />
                                 </div>
                             </div>
-                            <div class="bg-red-300 flex-1">
+                            <div class="flex-1">
                                 <div
                                     class="
                                         flex
@@ -135,7 +135,7 @@
                                         items-center
                                     "
                                 >
-                                    Next
+                                    <ArrowRightIcon class="h-4 w-4" />
                                 </div>
                             </div>
                             <div
@@ -175,7 +175,11 @@ import { useStore } from 'vuex'
 import Connection from './Connection.vue'
 import { useState } from '../../composables/state'
 
-import { ClockIcon } from '@heroicons/vue/outline'
+import {
+    ClockIcon,
+    ArrowLeftIcon,
+    ArrowRightIcon,
+} from '@heroicons/vue/outline'
 
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 
@@ -193,6 +197,8 @@ export default {
         TimeBasedStepsModal,
         Connection,
         ClockIcon,
+        ArrowLeftIcon,
+        ArrowRightIcon,
     },
     props: {
         steps: {
