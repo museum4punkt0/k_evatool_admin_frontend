@@ -25,7 +25,7 @@
     <div class="mt-3">
         <element-type-star-rating
             v-if="surveyElement.surveyElementType === 'starRating'"
-            v-model="surveyElement.params"
+            v-model:params="surveyElement.params"
             :validation="v$"
         />
         <element-type-emoji
@@ -126,6 +126,7 @@ export default {
         const saveSurveyElement = async () => {
             savingSurveyElement.value = true
             await SURVEY_ELEMENT_SERVICE.saveSurveyElement(surveyElement.value)
+            surveyElement.value = {}
             savingSurveyElement.value = false
         }
 

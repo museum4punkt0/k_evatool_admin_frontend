@@ -1,6 +1,12 @@
 <template>
     <h1>Emoji</h1>
-    {{ paramsLocal }}
+
+    <form-input
+        v-for="language in store.state.languages.data"
+        :key="'lang' + language.id"
+        v-model:value="paramsLocal.question[language.code]"
+        :label="'question (' + language.code + ')'"
+    />
 
     <div class="table-wrap">
         <table>
@@ -34,6 +40,7 @@ import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 
 import { TrashIcon } from '@heroicons/vue/outline'
+import { useStore } from 'vuex'
 
 export default {
     name: 'ElementTypeEmoji',
@@ -50,6 +57,7 @@ export default {
     },
     emits: ['update:params'],
     setup(props, { emit }) {
+        const store = useStore()
         const { t } = useI18n()
         const selectedEmoji = ref({
             type: '',
@@ -75,6 +83,7 @@ export default {
         return {
             paramsLocal,
             selectedEmoji,
+            store,
             t,
             addEmoji,
             deleteEmoji,

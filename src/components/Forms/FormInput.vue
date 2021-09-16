@@ -27,7 +27,7 @@ export default {
             default: 'label',
         },
         value: {
-            type: String,
+            type: [Number, String],
             default: 'label',
         },
         placeholder: {

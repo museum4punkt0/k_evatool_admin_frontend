@@ -1,27 +1,28 @@
 <template>
     <div>
+        {{ selectedOutput }} {{ selectedInput }}
         <!--        <ul>
-            <button
-                v-if="selectedMode !== MODES.ADD"
-                class="primary"
-                @click="setSelectedMode(MODES.ADD)"
-            >
-                test add mode
-            </button>
-            <button
-                v-if="selectedMode !== MODES.DELETE"
-                class="primary"
-                @click="setSelectedMode(MODES.DELETE)"
-            >
-                test delete
-            </button>
-            <li v-if="selectedMode === MODES.DELETE">
-                click outlet to remove connection
-            </li>
-            <li v-if="selectedMode === MODES.ADD">
-                click outlet and then inlet to add a connection
-            </li>
-        </ul>-->
+        <button
+            v-if="selectedMode !== MODES.ADD"
+            class="primary"
+            @click="setSelectedMode(MODES.ADD)"
+        >
+            test add mode
+        </button>
+        <button
+            v-if="selectedMode !== MODES.DELETE"
+            class="primary"
+            @click="setSelectedMode(MODES.DELETE)"
+        >
+            test delete
+        </button>
+        <li v-if="selectedMode === MODES.DELETE">
+            click outlet to remove connection
+        </li>
+        <li v-if="selectedMode === MODES.ADD">
+            click outlet and then inlet to add a connection
+        </li>
+    </ul>-->
         <div class="node-editor-wrap bg-blue-300 rounded-lg">
             <div
                 id="nodeEditor"
@@ -115,15 +116,21 @@
                                 "
                             >
                                 <!--                                {{
-                                    steps.find((x) => x.id === step.id)
-                                        .nextStepId
-                                }}-->
+                    steps.find((x) => x.id === step.id)
+                        .nextStepId
+                }}-->
                             </div>
                         </div>
                     </div>
                     <div class="w-full border-t">
                         <div class="flex flex-row h-9">
-                            <div class="flex-1 w-8">
+                            <div
+                                class="flex-1 w-8 pointer"
+                                :class="{
+                                    'bg-blue-200': step.id === selectedInput,
+                                }"
+                                @click="selectInput(step.id)"
+                            >
                                 <div
                                     class="
                                         flex
@@ -135,20 +142,9 @@
                                     <ArrowLeftIcon class="h-4 w-4" />
                                 </div>
                             </div>
-                            <div class="flex-1">
-                                <div
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
-                                >
-                                    <ArrowRightIcon class="h-4 w-4" />
-                                </div>
-                            </div>
+
                             <button
-                                class="flex-1 disabled:opacity-50"
+                                class="flex-1 disabled:opacity-25"
                                 :disabled="
                                     steps.find((x) => x.id === step.id)
                                         .surveyElementType !== 'video'
@@ -166,6 +162,24 @@
                                     <ClockIcon class="h-5 w-5" />
                                 </span>
                             </button>
+                            <div
+                                class="flex-1 pointer"
+                                :class="{
+                                    'bg-blue-200': step.id === selectedOutput,
+                                }"
+                                @click="selectOutput(step.id)"
+                            >
+                                <div
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
+                                >
+                                    <ArrowRightIcon class="h-4 w-4" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -278,6 +292,9 @@ export default {
 
         onUpdated(() => {})
 
+        const selectedInput = ref(-1)
+        const selectedOutput = ref(-1)
+
         const [selectedMode, setSelectedMode] = useState(MODES.ADD)
         const [selectedInlet, setSelectedInlet] = useState(null)
         const [selectedOutlet, setSelectedOutlet] = useState(null)
@@ -386,6 +403,14 @@ export default {
             store.dispatch('surveys/setSurveyStepId', -1)
         }
 
+        const selectInput = (stepId) => {
+            selectedInput.value = stepId
+        }
+
+        const selectOutput = (stepId) => {
+            selectedOutput.value = stepId
+        }
+
         const getInletPosition = (inletElement) => {
             const element = inletElements.value[inletElement]
             const rect = element?.getBoundingClientRect()
@@ -438,6 +463,10 @@ export default {
             openTimeBasedModal,
             timeBasedModalIsOpen,
             timeBasedModalStepId,
+            selectedOutput,
+            selectedInput,
+            selectInput,
+            selectOutput,
         }
     },
 }
@@ -449,11 +478,13 @@ export default {
     height: 85vh;
     overflow: scroll;
 }
+
 .node-editor {
     position: relative;
     /* width: 2000px;
-    height: 2000px; */
+  height: 2000px; */
 }
+
 .step {
     width: 200px;
     height: 100px;

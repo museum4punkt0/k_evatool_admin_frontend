@@ -1,14 +1,22 @@
 <template>
     <h3>Simple text</h3>
-    <input v-if="paramsLocal?.text" v-model="paramsLocal.text.de" type="text" />
+    <form-input
+        v-for="language in store.state.languages.data"
+        :key="'lang' + language.id"
+        v-model:value="paramsLocal.text[language.code]"
+        :label="'question (' + language.code + ')'"
+    />
 </template>
 
 <script>
 import { computed, onMounted } from 'vue'
 import defaultParams from './defaultParams'
+import { useStore } from 'vuex'
+import FormInput from '../../Forms/FormInput.vue'
 
 export default {
     name: 'ElementTypeSimpleText',
+    components: { FormInput },
     props: {
         params: {
             type: Object,
@@ -21,6 +29,7 @@ export default {
     },
     emits: ['update:params'],
     setup(props, { emit }) {
+        const store = useStore()
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
@@ -34,6 +43,7 @@ export default {
 
         return {
             paramsLocal,
+            store,
         }
     },
 }

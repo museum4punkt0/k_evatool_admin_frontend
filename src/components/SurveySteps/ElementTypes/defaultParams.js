@@ -1,9 +1,9 @@
 export default {
     simpleText: {
         text: {
-            de: '',
-            en: '',
-            fr: '',
+            de: 'DE',
+            en: 'EN',
+            fr: 'FR',
         },
     },
     multipleChoice: {
@@ -14,5 +14,14 @@ export default {
     },
     emoji: {
         emojis: [],
+        question: [],
+    },
+    starRating: {
+        numberOfSteps: 5,
+        allowHalfSteps: false,
+        question: {
+            de: 'Question DE',
+            en: 'Question EN',
+        },
     },
 }
