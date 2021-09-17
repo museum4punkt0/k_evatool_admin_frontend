@@ -73,3 +73,7 @@ aside {
 .pointer {
     cursor: pointer;
 }
+
+.node-selected {
+    @apply ring-4 ring-blue-500
+}

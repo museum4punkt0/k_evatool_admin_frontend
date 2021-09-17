@@ -57,7 +57,7 @@
                         'shadow-lg':
                             draggedStep?.id === step.id &&
                             selectedStepId !== step.id,
-                        'shadow-lg': selectedStepId === step.id,
+                        'node-selected': selectedStepId === step.id,
                         'border-1': draggedStep,
                     }"
                 >
@@ -162,6 +162,25 @@
                                     <ClockIcon class="h-5 w-5" />
                                 </span>
                             </button>
+                            <button
+                                class="flex-1 disabled:opacity-25"
+                                :disabled="
+                                    store.state.surveys.selectedSurveyStepId ===
+                                    step.id
+                                "
+                                @click.prevent.stop="selectSurveyStep(step.id)"
+                            >
+                                <span
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
+                                >
+                                    <PencilIcon class="h-5 w-5" />
+                                </span>
+                            </button>
                             <div
                                 class="flex-1 pointer"
                                 :class="{
@@ -203,6 +222,7 @@ import {
     ClockIcon,
     ArrowLeftIcon,
     ArrowRightIcon,
+    PencilIcon,
 } from '@heroicons/vue/outline'
 
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
@@ -223,6 +243,7 @@ export default {
         ClockIcon,
         ArrowLeftIcon,
         ArrowRightIcon,
+        PencilIcon,
     },
     props: {
         steps: {
@@ -325,7 +346,11 @@ export default {
                 x: e.clientX - nodeEditorRect.left,
                 y: e.clientY - nodeEditorRect.top,
             }
-            store.dispatch('surveys/setSurveyStepId', step.id)
+        }
+
+        const selectSurveyStep = (stepId) => {
+            // Todo: Function is called everytime the button is clicked, even if disabled. Needs to be fixed.
+            store.dispatch('surveys/setSurveyStepId', stepId)
         }
 
         const onMouseMove = (e) => {
@@ -467,6 +492,8 @@ export default {
             selectedInput,
             selectInput,
             selectOutput,
+            selectSurveyStep,
+            store,
         }
     },
 }
