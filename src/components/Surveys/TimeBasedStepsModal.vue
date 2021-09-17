@@ -48,30 +48,20 @@
                                 rounded-2xl
                             "
                         >
-                            <!--                            <DialogTitle
+                            <DialogTitle
                                 as="h3"
                                 class="
                                     text-lg
                                     font-medium
                                     leading-6
-                                    text-gray-900
+                                    text-gray-900 text-capitalize
                                 "
                             >
-                                Title
-                            </DialogTitle>-->
+                                {{ t('time_based_steps', 2) }}
+                            </DialogTitle>
                             <div class="mt-2">
-                                <p class="text-sm text-gray-500">
-                                    {{ timeBasedSteps }}
-                                </p>
                                 <div class="table-wrap mb-3">
                                     <table>
-                                        <thead>
-                                            <tr>
-                                                <th colspan="4">
-                                                    {{ t('steps', 2) }}
-                                                </th>
-                                            </tr>
-                                        </thead>
                                         <tbody>
                                             <tr
                                                 v-for="(
@@ -136,12 +126,13 @@
                                         title-key="name"
                                         value-key="id"
                                         :default-value="-1"
-                                        :label="t('videos', 1)"
+                                        :label="t('steps', 1)"
                                     />
                                     <form-input
                                         v-model:value="
                                             selectedTimeBasedStep.timecode
                                         "
+                                        class="mt-3"
                                         :placeholder="t('timestamps', 1)"
                                         :label="t('timestamps', 1)"
                                     />
@@ -149,6 +140,7 @@
                                         v-model:value="
                                             selectedTimeBasedStep.description
                                         "
+                                        class="mt-3"
                                         :placeholder="t('descriptions', 1)"
                                         :label="t('descriptions', 1)"
                                     />
@@ -164,7 +156,7 @@
                                         :disabled="savingTimeBasedSteps"
                                         @click="addTimeBasedStep"
                                     >
-                                        Add step
+                                        {{ t('action_add_time_based_step') }}
                                     </button>
                                 </div>
                             </div>
@@ -204,7 +196,7 @@ import FormSelect from '../Forms/FormSelect.vue'
 
 import SURVEYS from '../../services/surveys'
 
-import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
+import { TrashIcon, StopIcon, PencilIcon } from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
 import { maxLength, required, minValue } from '@vuelidate/validators'
@@ -271,8 +263,11 @@ export default {
         }
 
         const deleteTimeBasedStep = (index) => {
-            timeBasedSteps.value.splice(index, 1)
-            saveSurveyStep()
+            const confirmDelete = confirm(t('confirm_delete_time_based_step'))
+            if (confirmDelete) {
+                timeBasedSteps.value.splice(index, 1)
+                saveSurveyStep()
+            }
         }
 
         const saveSurveyStep = async () => {

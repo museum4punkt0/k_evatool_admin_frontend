@@ -5,10 +5,11 @@
         v-for="language in store.state.languages.data"
         :key="'lang' + language.id"
         v-model:value="paramsLocal.question[language.code]"
+        class="mt-3"
         :label="'question (' + language.code + ')'"
     />
 
-    <div class="table-wrap">
+    <div class="table-wrap mt-3">
         <table>
             <thead>
                 <tr>

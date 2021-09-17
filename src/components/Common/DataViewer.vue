@@ -1,5 +1,6 @@
 <template>
     <pre
+        v-if="store.state.debug"
         class="
             text-xs
             w-full
@@ -13,6 +14,8 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+
 export default {
     name: 'DataViewer',
     props: {
@@ -20,6 +23,10 @@ export default {
             type: [Object, Array, Number, String, Boolean],
             default: () => {},
         },
+    },
+    setup() {
+        const store = useStore()
+        return { store }
     },
 }
 </script>

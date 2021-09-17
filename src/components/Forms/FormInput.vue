@@ -1,14 +1,16 @@
 <template>
-    <label for="name" class="capitalize">{{ label }}</label>
-    <div class="mt-1">
-        <input
-            id="name"
-            v-model="valueLocal"
-            type="text"
-            name="name"
-            autocomplete="off"
-            :placeholder="placeholder"
-        />
+    <div>
+        <label for="name" class="capitalize">{{ label }}</label>
+        <div class="mt-1">
+            <input
+                id="name"
+                v-model="valueLocal"
+                type="text"
+                name="name"
+                autocomplete="off"
+                :placeholder="placeholder"
+            />
+        </div>
     </div>
 </template>
 

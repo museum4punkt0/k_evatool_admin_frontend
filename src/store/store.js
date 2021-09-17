@@ -19,6 +19,8 @@ export default createStore({
         surveys,
         surveySteps,
     },
-    state: {},
+    state: {
+        debug: false,
+    },
     actions: {},
 })

@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{ selectedOutput }} {{ selectedInput }}
         <!--        <ul>
         <button
             v-if="selectedMode !== MODES.ADD"
@@ -502,7 +501,7 @@ export default {
 <style scoped>
 .node-editor-wrap {
     width: 100%;
-    height: 85vh;
+    height: calc(100vh - 150px);
     overflow: scroll;
 }
 
