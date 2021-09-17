@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import { ref, computed, onUpdated, onMounted } from 'vue'
+import { ref, computed, onUpdated, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import Connection from './Connection.vue'
 import { useState } from '../../composables/state'
@@ -336,6 +336,13 @@ export default {
             }
         })
         setConnections(c)
+
+        watch(
+            () => props.steps,
+            () => {
+                initAdminLayout()
+            },
+        )
 
         const onMouseDown = (step, e) => {
             const nodeEditor = document.getElementById('nodeEditor')

@@ -14,6 +14,9 @@ export default {
         setSelected(state, value) {
             state.selectedSurvey = value
         },
+        setSurveySteps(state, steps) {
+            state.selectedSurvey.steps = steps
+        },
         select(state, id) {
             state.selectedSurvey = state.surveys.find((item) => item.id === id)
         },
@@ -184,6 +187,10 @@ export default {
         },
         updateAdminLayoutOfSelectedSurvey({ commit }, adminLayout) {
             commit('updateAdminLayoutOfSelectedSurvey', adminLayout)
+        },
+        async getSurveySteps({ commit }, surveyId) {
+            const surveySteps = await surveysService.getSurveySteps(surveyId)
+            commit('setSurveySteps', surveySteps)
         },
     },
     getters: {},

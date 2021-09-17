@@ -82,7 +82,6 @@ import ActionButton from '../Common/ActionButton.vue'
 import { onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import defaultParams from '../SurveySteps/ElementTypes/defaultParams'
-import validationParams from '../SurveySteps/ElementTypes/validation'
 
 import SURVEY_ELEMENT_SERVICE from '../../services/surveyElements'
 import useVuelidate from '@vuelidate/core'
@@ -163,7 +162,6 @@ export default {
                     required,
                     minLength: minLength(1),
                 },
-                paramsLocal: validationParams[surveyElement.value.type],
             },
         }
 

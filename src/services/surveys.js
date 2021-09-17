@@ -303,4 +303,28 @@ export default {
                 return error
             })
     },
+
+    async getSurvey(surveyId) {
+        let url = 'evaluation-tool/surveys/' + surveyId
+        return axios
+            .get(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
+
+    async getSurveySteps(surveyId) {
+        let url = 'evaluation-tool/surveys/' + surveyId + '/survey-steps'
+        return axios
+            .get(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
 }

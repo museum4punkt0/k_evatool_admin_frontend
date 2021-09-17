@@ -3,11 +3,11 @@
         <main ref="container" class="flex-1 overflow-y-auto p-3">
             <div class="flex mb-3 justify-between items-center">
                 <h1>
-                    {{ $tc('surveys', 1) }}:
+                    {{ t('surveys', 1) }}:
                     <strong>{{ selectedSurvey?.name }}</strong>
                 </h1>
                 <button class="primary" @click="newSurveyStep">
-                    {{ $t('action_add_survey_step') }}
+                    {{ t('action_add_survey_step') }}
                 </button>
             </div>
 
@@ -48,6 +48,7 @@ import SurveyDetails from './SurveyDetails.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
 import SurveyElement from './SurveyElement.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -61,6 +62,7 @@ export default {
     },
     setup() {
         const id = ref()
+        const { t } = useI18n()
         const nodeEditor = ref(null)
         const route = useRoute()
         const router = useRouter()
@@ -85,10 +87,11 @@ export default {
             })
         }
 
-        const surveySaved = () => {
-            store.dispatch('surveys/getOneSelectAndUpdateStore', {
+        const surveySaved = async () => {
+            await store.dispatch('surveys/getOneSelectAndUpdateStore', {
                 id: surveyId.value,
             })
+            await store.dispatch('surveys/getSurveySteps', surveyId.value)
         }
 
         const newSurveyStep = () => {
@@ -99,7 +102,10 @@ export default {
             if (to.params.id !== from.params.id && to.params.id) {
                 id.value = to.params.id
                 console.log('get one survey select and update store')
-                store.dispatch('surveys/getOneSelectAndUpdateStore', id.value)
+                await store.dispatch(
+                    'surveys/getOneSelectAndUpdateStore',
+                    id.value,
+                )
             }
         })
         watch(
@@ -158,6 +164,7 @@ export default {
             surveyId,
             surveySaved,
             newSurveyStep,
+            t,
         }
     },
 }
