@@ -1,11 +1,12 @@
 <template>
     <button
         type="button"
-        class="primary mt-3"
+        class="mt-3"
+        :class="color"
         :disabled="disabled || executing"
         @click="emitExecute"
     >
-        {{ $t('action_save') }}
+        {{ actionText }}
     </button>
 </template>
 
@@ -20,6 +21,14 @@ export default {
         executing: {
             type: Boolean,
             default: false,
+        },
+        color: {
+            type: String,
+            default: 'primary',
+        },
+        actionText: {
+            type: String,
+            default: 'g',
         },
     },
     emits: ['execute'],

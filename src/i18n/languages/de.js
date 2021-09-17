@@ -2,6 +2,7 @@ export default {
     action_add_survey_step: 'Schritt hinzufügen',
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',
+    action_delete: 'Löschen',
     action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
     action_new_survey_element: 'Neues Umfrage-Element',
     action_save: 'Speichern',

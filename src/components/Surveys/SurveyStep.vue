@@ -27,6 +27,16 @@
         <action-button
             :disabled="v$.$invalid"
             :executing="savingSurveyStep"
+            :action-text="t('action_save')"
+            @execute="saveSurveyStep"
+        />
+        <action-button
+            v-if="surveyStep.id"
+            color="danger"
+            class="ml-2"
+            :disabled="v$.$invalid"
+            :executing="savingSurveyStep"
+            :action-text="t('action_delete')"
             @execute="saveSurveyStep"
         />
 
