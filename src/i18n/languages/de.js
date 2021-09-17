@@ -7,6 +7,8 @@ export default {
     action_save: 'Speichern',
     allow_skip: 'Überspringen erlauben',
     assets: 'Medien | Medium | Medien',
+    binary_positive: 'Positiver Systemwert',
+    binary_negative: 'Negativer Systemwert',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     descriptions: 'Beschreibungen | Beschreibung | Beschreibungen',
     edit_survey: 'Umfrage bearbeiten',

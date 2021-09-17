@@ -30,11 +30,11 @@ export default {
         },
         value: {
             type: [Number, String],
-            default: 'label',
+            default: '',
         },
         placeholder: {
             type: String,
-            default: 'placeholder',
+            default: '',
         },
     },
     emits: ['update:value'],

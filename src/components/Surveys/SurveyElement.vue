@@ -40,7 +40,8 @@
         />
         <element-type-binary-question
             v-if="surveyElement.surveyElementType === 'binary'"
-            v-model="surveyElement.params"
+            v-model:params="surveyElement.params"
+            :validation="v$"
         />
         <element-type-multiple-choice
             v-if="surveyElement.surveyElementType === 'multipleChoice'"

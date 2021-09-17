@@ -24,4 +24,12 @@ export default {
             en: 'Question EN',
         },
     },
+    binary: {
+        question: {
+            de: 'Question DE',
+            en: 'Question EN',
+        },
+        trueValue: 'accepted',
+        falseValue: 'declined',
+    },
 }
