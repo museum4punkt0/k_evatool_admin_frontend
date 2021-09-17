@@ -29,9 +29,10 @@ export default {
     steps: 'Schritte | Schritt | Schritte',
     stops_video: 'Stoppt das Video',
     surveys: 'Umfragen | Umfrage | Umfragen',
+    survey_elements: 'Umfrage-Elemente | Umfrage-Element | Umfrage-Elemente',
     timestamps: 'Zeiten | Zeit | Zeiten',
     time_based_steps:
-        'zeitbasierte Schritte | zeitbasierter Schritt | zeitbasierte Schritte',
+        'Zeitbasierte Schritte | Zeitbasierter Schritt | Zeitbasierte Schritte',
     titles: 'Titel | Titel | Titel',
     types: 'Typen | Typ | Typen',
     videos: 'Videos | Video | Video',

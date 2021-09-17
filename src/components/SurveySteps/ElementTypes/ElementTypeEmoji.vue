@@ -1,6 +1,4 @@
 <template>
-    <h1>Emoji</h1>
-
     <form-input
         v-for="language in store.state.languages.data"
         :key="'lang' + language.id"

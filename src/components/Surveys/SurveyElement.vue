@@ -60,6 +60,7 @@
     <action-button
         :disabled="v$.$invalid"
         :executing="savingSurveyElement"
+        :action-text="t('action_save')"
         @execute="saveSurveyElement"
     />
 

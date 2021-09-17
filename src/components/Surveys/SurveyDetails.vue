@@ -2,13 +2,12 @@
     <h1>{{ surveyTitle }}</h1>
 
     <input v-model="survey.name" class="mt-3" type="text" />
-    <button
-        class="primary w-full mt-3"
+    <action-button
         :disabled="v$.$invalid"
+        :action-text="t('action_save')"
         @click="saveSurvey"
-    >
-        {{ $t('action_save') }}
-    </button>
+    />
+
     <data-viewer class="mt-3" :data="survey" />
 </template>
 
@@ -19,10 +18,11 @@ import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
 import DataViewer from '../Common/DataViewer.vue'
+import ActionButton from '../Common/ActionButton.vue'
 
 export default {
     name: 'SurveyDetails',
-    components: { DataViewer },
+    components: { ActionButton, DataViewer },
     props: {
         surveyId: { type: Number, default: -1 },
         resetAfterSave: { type: Boolean, default: true },
@@ -75,6 +75,7 @@ export default {
             v$: useVuelidate(),
             saveSurvey,
             surveyTitle,
+            t,
         }
     },
     validations: {

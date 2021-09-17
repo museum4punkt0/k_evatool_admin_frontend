@@ -20,6 +20,8 @@ import NewLocalization from '../components/Localizations/New.vue'
 import Settings from '../components/Settings.vue'
 import Assets from '../components/Assets/Assets.vue'
 
+import SurveyElements from '../components/SurveyElements/SurveyElements.vue'
+
 const routes = [
     { path: '/', component: Home },
     { name: 'surveys', path: '/surveys', component: ListSurveys },
@@ -40,6 +42,11 @@ const routes = [
         component: EditSurvey,
     },
     { name: 'surveySteps', path: '/survey-steps', component: SurveySteps },
+    {
+        name: 'surveyElements',
+        path: '/survey-elements',
+        component: SurveyElements,
+    },
     {
         name: 'surveySteps/new',
         path: '/survey-steps/new',

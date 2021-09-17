@@ -1,6 +1,4 @@
 <template>
-    <h3>Video</h3>
-
     <form-select
         v-model:selected="paramsLocal.videoAssetId"
         :options="assets"

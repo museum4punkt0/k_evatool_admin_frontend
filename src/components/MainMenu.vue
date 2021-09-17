@@ -178,6 +178,7 @@ import {
     PhotographIcon,
     UserGroupIcon,
     ViewGridIcon,
+    PresentationChartLineIcon,
 } from '@heroicons/vue/outline'
 
 import { XIcon } from '@heroicons/vue/outline'
@@ -188,6 +189,12 @@ const sidebarNavigation = [
     {
         name: 'Umfragen',
         href: '/surveys',
+        icon: PresentationChartLineIcon,
+        current: false,
+    },
+    {
+        name: 'Elemente',
+        href: '/survey-elements',
         icon: ViewGridIcon,
         current: false,
     },
