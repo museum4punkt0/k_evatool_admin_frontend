@@ -41,21 +41,19 @@
                             <td>
                                 {{ survey.surveyStepsCount }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <!--                                    <EyeIcon
-                                        class="mx-1 h-5 w-5"
-                                        @click="handlers.onView(survey)"
-                                    />-->
+                            <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon
                                     class="mx-1 h-5 w-5"
                                     @click.prevent.stop="
                                         handlers.onEdit(survey)
                                     "
                                 />
-                                <!--                                    <TrashIcon
-                                        class="mx-1 h-5 w-5"
-                                        @click="handlers.onDelete(survey)"
-                                    />-->
+                                <TrashIcon
+                                    class="mx-1 h-5 w-5 text-red-500 pointer"
+                                    @click.prevent.stop="
+                                        deleteSurvey(survey.id)
+                                    "
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -81,6 +79,10 @@ const { useState, useActions } = createNamespacedHelpers('surveys')
 const { useActions: useNotificationsActions } =
     createNamespacedHelpers('notifications')
 
+import SURVEYS from '../../services/surveys'
+import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
+
 export default {
     name: 'SurveysList',
     components: {
@@ -93,7 +95,10 @@ export default {
     },
     setup() {
         const router = useRouter()
+        const store = useStore()
         const surveyId = ref(-1)
+        const isBusy = ref(false)
+        const { t } = useI18n()
         const { surveys } = useState(['surveys'])
         const { getAllAndUpdateStore, deleteOneAndUpdateStore } = useActions([
             'getAllAndUpdateStore',
@@ -154,6 +159,18 @@ export default {
             surveyId.value = surveyIdSet
         }
 
+        const deleteSurvey = async (surveyId) => {
+            const confirmSurveyDelete = confirm(t('confirm_delete_survey'))
+            isBusy.value = true
+            if (confirmSurveyDelete) {
+                await SURVEYS.deleteSurvey(surveyId)
+                store.dispatch('surveys/getAllAndUpdateStore', {
+                    trashed: true,
+                })
+            }
+            isBusy.value = false
+        }
+
         getAllAndUpdateStore()
         return {
             surveys,
@@ -177,6 +194,7 @@ export default {
             surveyId,
             surveySaved,
             setSurvey,
+            deleteSurvey,
         }
     },
 }

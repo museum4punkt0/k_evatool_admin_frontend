@@ -20,7 +20,7 @@ export default createStore({
         surveySteps,
     },
     state: {
-        debug: true,
+        debug: false,
     },
     actions: {},
 })

@@ -278,7 +278,7 @@ export default {
         const initAdminLayout = () => {
             console.log('init admin layout')
             const adminLayoutInit = []
-            console.log(props.adminLayout)
+
             props.steps.forEach((step) => {
                 const index = props.adminLayout.findIndex(
                     (x) => x.id === step.id,

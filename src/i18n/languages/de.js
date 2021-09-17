@@ -10,6 +10,7 @@ export default {
     binary_positive: 'Positiver Systemwert',
     binary_negative: 'Negativer Systemwert',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
+    confirm_delete_survey: 'Umfrage wirklich löschen?',
     descriptions: 'Beschreibungen | Beschreibung | Beschreibungen',
     edit_survey: 'Umfrage bearbeiten',
     hello: 'Hallo Welt!',

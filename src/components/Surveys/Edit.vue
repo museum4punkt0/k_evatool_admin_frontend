@@ -23,12 +23,15 @@
                 v-if="store.state.surveys.selectedSurveyStepId >= 0"
                 @saved="surveySaved"
             />
-            <survey-details
-                v-else
-                :survey-id="surveyId"
-                :reset-after-save="false"
-                @saved="surveySaved"
-            />
+            <template v-else>
+                <survey-details
+                    :survey-id="surveyId"
+                    :reset-after-save="false"
+                    @saved="surveySaved"
+                />
+                <hr class="mt-4 mb-3" />
+                <survey-element />
+            </template>
         </aside>
     </div>
 </template>
@@ -44,9 +47,11 @@ import SurveyStep from './SurveyStep.vue'
 import SurveyDetails from './SurveyDetails.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
+import SurveyElement from './SurveyElement.vue'
 
 export default {
     components: {
+        SurveyElement,
         TimeBasedStepsModal,
         SurveyDetails,
         SurveyStep,

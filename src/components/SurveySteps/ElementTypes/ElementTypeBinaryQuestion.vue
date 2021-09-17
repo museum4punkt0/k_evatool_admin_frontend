@@ -1,5 +1,4 @@
 <template>
-    <h1>Binary question</h1>
     <form-input
         v-for="language in store.state.languages.data"
         :key="'lang' + language.id"
@@ -16,7 +15,7 @@
     <form-input
         v-model:value="paramsLocal.falseValue"
         class="mt-3"
-        :label="t('binary_megative')"
+        :label="t('binary_negative')"
     />
 </template>
 
@@ -25,6 +24,8 @@ import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
+import useVuelidate from '@vuelidate/core'
+import { maxLength, minLength, required } from '@vuelidate/validators'
 
 export default {
     name: 'ElementTypeBinaryQuestion',
@@ -34,12 +35,8 @@ export default {
             type: Object,
             default: () => null,
         },
-        validation: {
-            type: Object,
-            default: null,
-        },
     },
-    emits: ['update:params'],
+    emits: ['update:params', 'update:params-valid'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
@@ -48,7 +45,22 @@ export default {
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
-        return { store, paramsLocal, t }
+
+        return { store, paramsLocal, t, v$: useVuelidate() }
+    },
+    validations: {
+        paramsLocal: {
+            trueValue: {
+                required,
+                minLength: minLength(1),
+                maxLength: maxLength(20),
+            },
+            falseValue: {
+                required,
+                minLength: minLength(1),
+                maxLength: maxLength(20),
+            },
+        },
     },
 }
 </script>

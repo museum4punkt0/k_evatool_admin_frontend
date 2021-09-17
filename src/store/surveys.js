@@ -8,7 +8,7 @@ export default {
     namespaced: true,
     state: () => initialState,
     mutations: {
-        set(state, value) {
+        setSurveys(state, value) {
             state.surveys = value
         },
         setSelected(state, value) {
@@ -58,8 +58,10 @@ export default {
         },
     },
     actions: {
-        getAllAndUpdateStore({ commit }) {
-            return new Promise((resolve, reject) => {
+        async getAllAndUpdateStore({ commit }, payload) {
+            const surveys = await surveysService.getSurveys(payload)
+            commit('setSurveys', surveys)
+            /*return new Promise((resolve, reject) => {
                 surveysService.getAll(
                     (value) => {
                         commit('set', value)
@@ -69,7 +71,7 @@ export default {
                         reject(error)
                     },
                 )
-            })
+            })*/
         },
         getOneSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {

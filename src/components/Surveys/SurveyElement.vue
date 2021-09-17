@@ -1,5 +1,6 @@
 <template>
-    <h2>{{ $tc('elements', 1) }}</h2>
+    <h3 v-if="surveyElementId > 0">{{ $tc('elements', 1) }}</h3>
+    <h3 v-else>Neues Element</h3>
     <label for="name" class="capitalize">{{ $tc('names', 1) }}</label>
     <div class="mt-1">
         <input
@@ -41,7 +42,6 @@
         <element-type-binary-question
             v-if="surveyElement.surveyElementType === 'binary'"
             v-model:params="surveyElement.params"
-            :validation="v$"
         />
         <element-type-multiple-choice
             v-if="surveyElement.surveyElementType === 'multipleChoice'"
@@ -62,6 +62,7 @@
         :executing="savingSurveyElement"
         @execute="saveSurveyElement"
     />
+
     <data-viewer class="mt-3" :data="surveyElement" />
 </template>
 
@@ -81,6 +82,7 @@ import ActionButton from '../Common/ActionButton.vue'
 import { onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import defaultParams from '../SurveySteps/ElementTypes/defaultParams'
+import validationParams from '../SurveySteps/ElementTypes/validation'
 
 import SURVEY_ELEMENT_SERVICE from '../../services/surveyElements'
 import useVuelidate from '@vuelidate/core'
@@ -106,6 +108,10 @@ export default {
             type: Number,
             default: -1,
         },
+        clearAfterSave: {
+            type: Boolean,
+            default: true,
+        },
     },
     setup(props) {
         const store = useStore()
@@ -113,6 +119,7 @@ export default {
         const surveyElement = ref({})
         const elementTypes = ref(null)
         const savingSurveyElement = ref(false)
+        const paramsValid = ref(false)
 
         onMounted(async () => {
             elementTypes.value = store.state.elementTypes
@@ -127,7 +134,11 @@ export default {
         const saveSurveyElement = async () => {
             savingSurveyElement.value = true
             await SURVEY_ELEMENT_SERVICE.saveSurveyElement(surveyElement.value)
-            surveyElement.value = {}
+            // reload all survey elements
+            await store.dispatch('surveyElements/getSurveyElements')
+            if (props.clearAfterSave) {
+                surveyElement.value = {}
+            }
             savingSurveyElement.value = false
         }
 
@@ -146,6 +157,16 @@ export default {
             },
         )
 
+        const validations = {
+            surveyElement: {
+                name: {
+                    required,
+                    minLength: minLength(1),
+                },
+                paramsLocal: validationParams[surveyElement.value.type],
+            },
+        }
+
         /* watch(
             () => props.surveyElementId,
             (value) => {
@@ -163,6 +184,8 @@ export default {
             saveSurveyElement,
             savingSurveyElement,
             t,
+            validations,
+            paramsValid,
         }
     },
     validations: {

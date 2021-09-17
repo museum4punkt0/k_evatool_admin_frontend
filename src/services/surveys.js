@@ -276,4 +276,31 @@ export default {
                 return error
             })
     },
+
+    async deleteSurvey(surveyId) {
+        const url = 'evaluation-tool/surveys/' + surveyId
+        return axios
+            .delete(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
+
+    async getSurveys(payload = null) {
+        let url = 'evaluation-tool/surveys'
+        if (payload?.deleted) {
+            url += '?deleted'
+        }
+        return axios
+            .get(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
 }
