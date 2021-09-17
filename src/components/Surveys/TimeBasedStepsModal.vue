@@ -60,7 +60,10 @@
                                 {{ t('time_based_steps', 2) }}
                             </DialogTitle>
                             <div class="mt-2">
-                                <div class="table-wrap mb-3">
+                                <div
+                                    v-if="timeBasedSteps.length > 0"
+                                    class="table-wrap mb-3"
+                                >
                                     <table>
                                         <tbody>
                                             <tr
@@ -109,6 +112,8 @@
                                                         class="h-5 w-5"
                                                     />
                                                 </td>
+                                                <!--Todo: Add edit button and functionality-->
+                                                <!--Todo: Add uuid for each element-->
                                             </tr>
                                         </tbody>
                                     </table>
