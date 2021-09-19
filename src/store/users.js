@@ -4,13 +4,21 @@ export default {
     namespaced: true,
     state: {
         user: null,
+        users: [],
     },
     mutations: {
         setUser(state, user) {
             state.user = user
         },
+        setUsers(state, users) {
+            state.users = users
+        },
     },
     actions: {
+        async getUsers({ commit }) {
+            const users = await USERS.getUsers()
+            commit('setUsers', users)
+        },
         async getUser({ commit }, userId) {
             const user = USERS.getUser(userId)
             commit('setUser', user)

@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 export default {
-    async getUsers(page = 1) {
+    async getUsers() {
         return axios
-            .get('users/perPage=25&page=' + page)
+            .get('users')
             .then((response) => {
                 return response.data
             })
@@ -24,6 +24,21 @@ export default {
     async loginUser(data) {
         return axios
             .post(import.meta.env.VITE_API_BASE_URL_AUTH + '/token', data)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    async saveUser(user) {
+        let method = 'post'
+        let url = 'users'
+        if (user.id) {
+            method = 'put'
+            url += '/' + user.id
+        }
+        return axios({ url, method, data: user })
             .then((response) => {
                 return response.data
             })

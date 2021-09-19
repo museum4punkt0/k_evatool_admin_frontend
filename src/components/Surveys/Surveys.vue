@@ -1,7 +1,7 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1>{{ $tc('surveys', 2) }}</h1>
+            <h1>{{ surveys.length }} {{ t('surveys', surveys.length) }}</h1>
 
             <div class="table-wrap mt-3">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -164,7 +164,7 @@ export default {
             isBusy.value = true
             if (confirmSurveyDelete) {
                 await SURVEYS.deleteSurvey(surveyId)
-                store.dispatch('surveys/getAllAndUpdateStore', {
+                await store.dispatch('surveys/getAllAndUpdateStore', {
                     trashed: true,
                 })
             }
@@ -195,6 +195,7 @@ export default {
             surveySaved,
             setSurvey,
             deleteSurvey,
+            t,
         }
     },
 }

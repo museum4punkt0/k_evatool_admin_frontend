@@ -29,12 +29,7 @@
                 >
                     <component
                         :is="item.icon"
-                        :class="[
-                            item.current
-                                ? 'text-white'
-                                : 'text-blue-300 group-hover:text-white',
-                            'h-6 w-6',
-                        ]"
+                        :class="['h-6 w-6']"
                         aria-hidden="true"
                     />
                     <span class="mt-2">{{ item.name }}</span>
@@ -176,35 +171,34 @@ import {
 import {
     HomeIcon,
     PhotographIcon,
-    UserGroupIcon,
     ViewGridIcon,
     PresentationChartLineIcon,
+    UsersIcon,
+    GlobeAltIcon,
 } from '@heroicons/vue/outline'
 
 import { XIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
 const sidebarNavigation = [
-    { name: 'Start', href: '/', icon: HomeIcon, current: false },
+    { name: 'Start', href: '/', icon: HomeIcon },
     {
         name: 'Umfragen',
         href: '/surveys',
         icon: PresentationChartLineIcon,
-        current: false,
     },
     {
         name: 'Elemente',
         href: '/survey-elements',
         icon: ViewGridIcon,
-        current: false,
     },
-    { name: 'Medien', href: '/assets', icon: PhotographIcon, current: true },
+    { name: 'Medien', href: '/assets', icon: PhotographIcon },
     {
         name: 'Sprachen',
         href: '/languages',
-        icon: UserGroupIcon,
-        current: false,
+        icon: GlobeAltIcon,
     },
+    { name: 'Users', href: '/users', icon: UsersIcon },
 ]
 
 export default {

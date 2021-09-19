@@ -24,6 +24,8 @@ import SurveyElements from '../components/SurveyElements/SurveyElements.vue'
 
 import Login from '../components/Login.vue'
 
+import Users from '../components/Users/Users.vue'
+
 const routes = [
     { path: '/', component: Home },
     { path: '/login', component: Login },
@@ -81,6 +83,7 @@ const routes = [
     { path: '/user/logout', component: Settings },
     { path: '/user/settings', component: Settings },
     { path: '/assets', component: Assets },
+    { name: 'users', path: '/users', component: Users },
     // { path: '*', redirect: '/' },
 ]
 
