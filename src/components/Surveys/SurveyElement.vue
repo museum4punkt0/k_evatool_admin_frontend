@@ -113,7 +113,8 @@ export default {
             default: true,
         },
     },
-    setup(props) {
+    emits: ['saved'],
+    setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
         const surveyElement = ref({})
@@ -136,6 +137,7 @@ export default {
             await SURVEY_ELEMENT_SERVICE.saveSurveyElement(surveyElement.value)
             // reload all survey elements
             await store.dispatch('surveyElements/getSurveyElements')
+            emit('saved')
             if (props.clearAfterSave) {
                 surveyElement.value = {}
             }

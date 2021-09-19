@@ -5,7 +5,7 @@
             <input
                 id="name"
                 v-model="valueLocal"
-                type="text"
+                :type="type"
                 name="name"
                 autocomplete="off"
                 :placeholder="placeholder"
@@ -35,6 +35,10 @@ export default {
         placeholder: {
             type: String,
             default: '',
+        },
+        type: {
+            type: String,
+            default: 'text',
         },
     },
     emits: ['update:value'],

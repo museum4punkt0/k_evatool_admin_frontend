@@ -46,7 +46,7 @@ td {
     @apply bg-blue-800 text-white
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
     @apply shadow-sm focus:ring-blue-500 focus:border-blue-50 block w-full sm:text-sm border-gray-300 rounded-md
 }
 

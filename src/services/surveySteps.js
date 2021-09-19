@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const prefix = (value) => `${import.meta.env.VITE_API_BASE_URL}/${value}`
+const prefix = (value) => `${import.meta.env.VITE_API_BASE_URL_API}/${value}`
 const urls = {
     getAll: () => prefix(`evaluation-tool/survey-steps`),
     getOne: (id) => prefix(`evaluation-tool/survey-steps/${id}`),

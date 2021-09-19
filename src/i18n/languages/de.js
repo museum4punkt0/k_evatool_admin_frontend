@@ -1,10 +1,11 @@
 export default {
     action_add_survey_step: 'Schritt hinzufügen',
+    action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',
     action_delete: 'Löschen',
-    action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
     action_new_survey_element: 'Neues Umfrage-Element',
+    action_reload: 'Neu laden',
     action_save: 'Speichern',
     allow_skip: 'Überspringen erlauben',
     assets: 'Medien | Medium | Medien',
@@ -23,6 +24,7 @@ export default {
     names: 'Namen | Name | Namen',
     new_survey: 'Neue Umfrage',
     none_selected: 'Nicht ausgewählt',
+    passwords: 'Passwörter | Passwort | Passwörter',
     search: 'Suche',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',
@@ -35,5 +37,6 @@ export default {
         'Zeitbasierte Schritte | Zeitbasierter Schritt | Zeitbasierte Schritte',
     titles: 'Titel | Titel | Titel',
     types: 'Typen | Typ | Typen',
+    users: 'Benutzer | Benutzer | Benutzer',
     videos: 'Videos | Video | Video',
 }

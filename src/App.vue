@@ -102,7 +102,7 @@
                         >
                             <!-- Profile dropdown -->
                             <Menu as="div" class="relative flex-shrink-0">
-                                <div>
+                                <!--                                <div>
                                     <MenuButton
                                         class="
                                             bg-white
@@ -118,13 +118,14 @@
                                         <span class="sr-only">
                                             Open user menu
                                         </span>
+
                                         <img
                                             class="h-8 w-8 rounded-full"
                                             src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
                                             alt=""
                                         />
                                     </MenuButton>
-                                </div>
+                                </div>-->
                                 <transition
                                     enter-active-class="transition ease-out duration-100"
                                     enter-from-class="transform opacity-0 scale-95"
@@ -172,7 +173,7 @@
                                 class="
                                     flex
                                     bg-blue-600
-                                    p-1
+                                    p-2
                                     rounded-full
                                     items-center
                                     justify-center
@@ -184,8 +185,8 @@
                                     focus:ring-blue-500
                                 "
                             >
-                                <PlusIcon class="h-6 w-6" aria-hidden="true" />
-                                <span class="sr-only">Add file</span>
+                                <UserIcon class="h-5 w-5" aria-hidden="true" />
+                                <span class="sr-only">{{ t('users', 1) }}</span>
                             </button>
                         </div>
                     </div>
@@ -228,10 +229,11 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue'
-import { MenuAlt2Icon, PlusIcon, XIcon } from '@heroicons/vue/outline'
+import { MenuAlt2Icon, PlusIcon, XIcon, UserIcon } from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
 import MainMenu from './components/MainMenu.vue'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -253,11 +255,13 @@ export default {
         PlusIcon,
         SearchIcon,
         XIcon,
+        UserIcon,
     },
     setup() {
         const mobileMenuOpen = ref(false)
         const store = useStore()
         const loadingApp = ref(true)
+        const { t } = useI18n()
 
         onMounted(async () => {
             await store.dispatch('languages/getAllLanguagesAndUpdateStore')
@@ -273,6 +277,7 @@ export default {
             userNavigation,
             mobileMenuOpen,
             loadingApp,
+            t,
         }
     },
 }

@@ -7,6 +7,7 @@ import surveyElements from './surveyElements'
 import localizations from './surveyLocalizations'
 import notifications from './notifications'
 import assets from './assets'
+import users from './users'
 
 export default createStore({
     modules: {
@@ -18,6 +19,7 @@ export default createStore({
         surveyElements,
         surveys,
         surveySteps,
+        users,
     },
     state: {
         debug: false,

@@ -1,7 +1,16 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1>{{ t('survey_elements', 2) }}</h1>
+            <div class="flex flex-row justify-between">
+                <h1>
+                    {{ surveyElements.length }}
+                    {{ t('survey_elements', surveyElements.length) }}
+                </h1>
+                <button class="primary" @click="getSurveyElements">
+                    <refresh-icon class="h-4 w-4 mr-2" />
+                    {{ t('action_reload') }}
+                </button>
+            </div>
             <div class="table-wrap mt-3">
                 <table>
                     <thead>
@@ -21,8 +30,8 @@
                             <td>
                                 {{ surveyElement.name }}
                                 <!--                                <p class="text-sm text-gray-500">
-                                    {{ surveyElement.description }}
-                                </p>-->
+                    {{ surveyElement.description }}
+                </p>-->
                             </td>
                             <td>{{ surveyElement.surveyElementType }}</td>
                             <td class="text-sm">
@@ -38,7 +47,7 @@
             </div>
         </main>
         <aside>
-            <survey-element />
+            <survey-element @saved="getSurveyElements" />
         </aside>
     </div>
 </template>
@@ -48,19 +57,27 @@ import { useI18n } from 'vue-i18n'
 import SurveyElement from '../Surveys/SurveyElement.vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { RefreshIcon } from '@heroicons/vue/outline'
 
 export default {
     name: 'SurveyElements',
-    components: { SurveyElement },
+    components: { SurveyElement, RefreshIcon },
     setup() {
         const { t } = useI18n()
         const store = useStore()
+
         const surveyElements = computed({
             get: () => store.state.surveyElements.data,
         })
+
+        const getSurveyElements = () => {
+            store.dispatch('surveyElements/getSurveyElements')
+        }
+
         return {
             t,
             surveyElements,
+            getSurveyElements,
         }
     },
 }

@@ -22,8 +22,11 @@ import Assets from '../components/Assets/Assets.vue'
 
 import SurveyElements from '../components/SurveyElements/SurveyElements.vue'
 
+import Login from '../components/Login.vue'
+
 const routes = [
     { path: '/', component: Home },
+    { path: '/login', component: Login },
     { name: 'surveys', path: '/surveys', component: ListSurveys },
     { name: 'surveys/new', path: '/surveys/new', component: NewSurvey },
     {
