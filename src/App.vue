@@ -19,6 +19,7 @@
                     "
                 >
                     <button
+                        v-if="store.state.users.user"
                         type="button"
                         class="
                             border-r border-gray-200
@@ -35,7 +36,10 @@
                         <span class="sr-only">Open sidebar</span>
                         <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
                     </button>
-                    <div class="flex-1 flex justify-between px-4 sm:px-6">
+                    <div
+                        v-if="store.state.users.user"
+                        class="flex-1 flex justify-between px-4 sm:px-6"
+                    >
                         <div class="flex-1 flex">
                             <form
                                 class="w-full flex md:ml-0"
@@ -43,7 +47,7 @@
                                 method="GET"
                             >
                                 <label for="search-field" class="sr-only">
-                                    Search all files
+                                    <!--                                    Search all files-->
                                 </label>
                                 <div
                                     class="
@@ -184,8 +188,12 @@
                                     focus:ring-offset-2
                                     focus:ring-blue-500
                                 "
+                                @click="logoutUser"
                             >
-                                <UserIcon class="h-5 w-5" aria-hidden="true" />
+                                <LogoutIcon
+                                    class="h-5 w-5"
+                                    aria-hidden="true"
+                                />
                                 <span class="sr-only">{{ t('users', 1) }}</span>
                             </button>
                         </div>
@@ -229,11 +237,18 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue'
-import { MenuAlt2Icon, PlusIcon, XIcon, UserIcon } from '@heroicons/vue/outline'
+import {
+    MenuAlt2Icon,
+    PlusIcon,
+    XIcon,
+    UserIcon,
+    LogoutIcon,
+} from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
 import MainMenu from './components/MainMenu.vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -256,14 +271,28 @@ export default {
         SearchIcon,
         XIcon,
         UserIcon,
+        LogoutIcon,
     },
     setup() {
         const mobileMenuOpen = ref(false)
         const store = useStore()
+        const router = useRouter()
         const loadingApp = ref(true)
         const { t } = useI18n()
 
-        onMounted(async () => {
+        store.dispatch('getApp')
+
+        const checkLogin = async () => {
+            await store.dispatch('users/checkLogin')
+            if (store.state.users.user) {
+                await loadApp()
+            } else {
+                await router.push('/login')
+                loadingApp.value = false
+            }
+        }
+
+        const loadApp = async () => {
             await store.dispatch('languages/getAllLanguagesAndUpdateStore')
             await store.dispatch(
                 'elementTypes/getAllElementTypesAndUpdateStore',
@@ -271,6 +300,14 @@ export default {
             await store.dispatch('surveyElements/getSurveyElements')
             await store.dispatch('assets/getAssets')
             loadingApp.value = false
+        }
+
+        const logoutUser = async () => {
+            await store.dispatch('users/logoutUser')
+        }
+
+        onMounted(async () => {
+            await checkLogin()
         })
 
         return {
@@ -278,6 +315,8 @@ export default {
             mobileMenuOpen,
             loadingApp,
             t,
+            store,
+            logoutUser,
         }
     },
 }

@@ -17,6 +17,14 @@
         type="password"
         :label="t('password_confirmation')"
     />
+
+    <form-toggle
+        v-if="store.state.users.user.admin"
+        v-model:enabled="user.admin"
+        class="my-3"
+        :label="'Admin'"
+    />
+
     <button class="primary mt-3" :disabled="savingUser" @click="saveUser">
         {{ t('action_save') }}
     </button>
@@ -31,10 +39,12 @@ import USERS from '../../services/userService'
 
 import useVuelidate from '@vuelidate/core'
 import { email, minLength, required } from '@vuelidate/validators'
+import FormToggle from '../Forms/FormToggle.vue'
+import { useStore } from 'vuex'
 
 export default {
     name: 'User',
-    components: { FormInput },
+    components: { FormToggle, FormInput },
     props: {
         userId: {
             type: Number,
@@ -44,11 +54,13 @@ export default {
     emits: ['saved'],
     setup(props, { emit }) {
         const { t } = useI18n()
+        const store = useStore()
         const user = ref({
             name: '',
             email: '',
             password: '',
             passwordConfirmation: '',
+            admin: false,
         })
         const savingUser = ref(false)
 
@@ -64,6 +76,7 @@ export default {
                 email: '',
                 password: '',
                 passwordConfirmation: '',
+                admin: false,
             }
             emit('saved')
             savingUser.value = false
@@ -82,7 +95,7 @@ export default {
             getUser()
         }
 
-        return { t, user, v$: useVuelidate(), saveUser, savingUser }
+        return { t, user, v$: useVuelidate(), saveUser, savingUser, store }
     },
     validations: {
         user: {

@@ -19,10 +19,12 @@
                             <td>{{ user.email }}</td>
                             <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon
+                                    v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5"
                                     @click="editUser(user.id)"
                                 />
                                 <TrashIcon
+                                    v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
                                     @click="deleteUser(user.id)"
                                 />
@@ -79,6 +81,7 @@ export default {
             getUsers,
             editUser,
             deleteUser,
+            store,
         }
     },
 }

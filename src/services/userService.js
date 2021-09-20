@@ -46,4 +46,14 @@ export default {
                 return error.response
             })
     },
+    async checkLogin() {
+        return axios
+            .get('user')
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }

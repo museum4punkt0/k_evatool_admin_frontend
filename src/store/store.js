@@ -9,6 +9,8 @@ import notifications from './notifications'
 import assets from './assets'
 import users from './users'
 
+import APP from '../services/appService'
+
 export default createStore({
     modules: {
         assets,
@@ -23,6 +25,17 @@ export default createStore({
     },
     state: {
         debug: import.meta.env.VITE_APP_DEBUG === 'true',
+        app: null,
     },
-    actions: {},
+    mutations: {
+        setApp(state, app) {
+            state.app = app
+        },
+    },
+    actions: {
+        async getApp({ commit }) {
+            const app = await APP.getApp()
+            commit('setApp', app)
+        },
+    },
 })

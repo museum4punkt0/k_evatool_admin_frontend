@@ -8,7 +8,10 @@
                     alt="Workflow"
                 />
             </div>
-            <div class="flex-1 mt-6 w-full px-2 space-y-1">
+            <div
+                v-if="store.state.users.user"
+                class="flex-1 mt-6 w-full px-2 space-y-1"
+            >
                 <router-link
                     v-for="item in sidebarNavigation"
                     :key="item.name"
@@ -179,6 +182,7 @@ import {
 
 import { XIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 
 const sidebarNavigation = [
     { name: 'Start', href: '/', icon: HomeIcon },
@@ -215,9 +219,11 @@ export default {
     },
     setup() {
         const mobileMenuOpen = ref(false)
+        const store = useStore()
         return {
             sidebarNavigation,
             mobileMenuOpen,
+            store,
         }
     },
 }

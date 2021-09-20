@@ -1,7 +1,8 @@
 <template>
     <div class="w-full flex justify-center">
-        <div class="w-96">
+        <div class="w-96 mt-5 p-3 border rounded-lg shadow bg-blue-100">
             <h1>Login</h1>
+
             <form-input
                 v-model:value="user.email"
                 class="mt-3"
@@ -32,6 +33,7 @@ import useVuelidate from '@vuelidate/core'
 import { minLength, required, email } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
     name: 'Login',
@@ -39,17 +41,25 @@ export default {
     setup() {
         const { t } = useI18n()
         const store = useStore()
+        const router = useRouter()
+
         const user = reactive({
-            email: 'ms@2av.de',
-            password: 'passwordpassword',
+            email: import.meta.env.VITE_APP_PREFILL_EMAIL || '',
+            password: import.meta.env.VITE_APP_PREFILL_PASSWORD || '',
         })
 
         const login = async () => {
             const userLoggedIn = await store.dispatch('users/loginUser', user)
-            console.log(userLoggedIn)
+            if (userLoggedIn.id) {
+                window.location.reload()
+            }
         }
 
-        return { user, v$: useVuelidate(), t, login }
+        if (store.state.users.user) {
+            router.push('/')
+        }
+
+        return { user, v$: useVuelidate(), t, login, store }
     },
     validations: {
         user: {
