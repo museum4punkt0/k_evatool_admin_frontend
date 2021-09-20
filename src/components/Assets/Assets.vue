@@ -11,15 +11,16 @@
             >
                 <h2 class="text-lg mb-1">
                     {{ store.state.assets?.data.length }}
-                    {{ $tc('assets', store.state.assets?.data.length) }}
+                    {{ t('assets', store.state.assets?.data.length) }}
                 </h2>
                 <div class="table-wrap">
                     <table class="table-fixed">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>{{ $t('filename') }}</th>
-                                <th>{{ $t('filesize') }}</th>
+                                <th>{{ t('filename') }}</th>
+                                <th>{{ t('filetype') }}</th>
+                                <th>{{ t('filesize') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,7 +33,7 @@
                                     }
                                 "
                             >
-                                <td>
+                                <td class="text-lg">
                                     {{ asset.id }}
                                 </td>
                                 <td>
@@ -41,6 +42,10 @@
                                         {{ asset.hash }}
                                     </p>
                                 </td>
+                                <td class="text-sm">
+                                    {{ asset.mime }}
+                                </td>
+
                                 <td>
                                     {{ asset.sizeHuman }}
                                 </td>
@@ -58,7 +63,14 @@
 </template>
 
 <script>
-import { onUpdated, ref, onMounted, onBeforeUpdate, watchEffect } from 'vue'
+import {
+    onUpdated,
+    ref,
+    onMounted,
+    onBeforeUpdate,
+    watchEffect,
+    computed,
+} from 'vue'
 import { useStore } from 'vuex'
 
 import { Dashboard } from '@uppy/vue'
@@ -71,6 +83,7 @@ import Tus from '@uppy/tus'
 
 // language pack
 import German from '@uppy/locales/lib/de_DE'
+import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'Assets',
@@ -80,6 +93,7 @@ export default {
     setup() {
         const assetRefs = ref([])
         const store = useStore()
+        const { t } = useI18n()
 
         onMounted(() => {
             store.dispatch('assets/getAssets')
@@ -90,6 +104,28 @@ export default {
         onBeforeUpdate(() => {})
         onUpdated(() => {})
 
+        const uppy = computed({
+            get: () =>
+                new Uppy({
+                    autoProceed: true,
+                    locale: German,
+                })
+                    .on('upload-success', () => {
+                        // Todo: Remove file from list after upload
+                        // this.uppy.removeFile(file.id)
+                    })
+                    .on('complete', () => {
+                        console.log('complete')
+                        store.dispatch('assets/getAssets')
+                    })
+                    .use(Tus, {
+                        endpoint: import.meta.env.VITE_TUS_URL,
+                        retryDelays: [0, 1000, 3000, 5000],
+                        removeFingerprintOnSuccess: true,
+                        uploadDataDuringCreation: false,
+                    }),
+        })
+
         return {
             dashboardOptions: {
                 theme: 'light',
@@ -99,27 +135,9 @@ export default {
             },
             store,
             assetRefs,
+            t,
+            uppy,
         }
-    },
-    computed: {
-        uppy: () =>
-            new Uppy({
-                autoProceed: true,
-                locale: German,
-            })
-                .on('upload-success', () => {
-                    // Todo: Remove file from list after upload
-                    // this.uppy.removeFile(file.id)
-                })
-                .on('complete', () => {
-                    console.log('complete')
-                })
-                .use(Tus, {
-                    endpoint: import.meta.env.VITE_TUS_URL,
-                    retryDelays: [0, 1000, 3000, 5000],
-                    removeFingerprintOnSuccess: true,
-                    uploadDataDuringCreation: false,
-                }),
     },
 }
 </script>

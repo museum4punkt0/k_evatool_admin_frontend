@@ -21,6 +21,7 @@ export default {
     elements: 'Elemente | Element | Elemente',
     filename: 'Dateiname',
     filesize: 'Größe',
+    filetype: 'Dateityp',
     language_default: 'Standardsprache',
     languages: 'Sprachen | Sprache | Sprachen',
     names: 'Namen | Name | Namen',
