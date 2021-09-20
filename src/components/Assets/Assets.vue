@@ -115,7 +115,7 @@ export default {
                     console.log('complete')
                 })
                 .use(Tus, {
-                    endpoint: 'http://localhost:8085/tus/', // use your tus endpoint here
+                    endpoint: import.meta.env.VITE_TUS_URL,
                     retryDelays: [0, 1000, 3000, 5000],
                     removeFingerprintOnSuccess: true,
                     uploadDataDuringCreation: false,

@@ -44,8 +44,8 @@ export default {
         const router = useRouter()
 
         const user = reactive({
-            email: import.meta.env.VITE_APP_PREFILL_EMAIL || '',
-            password: import.meta.env.VITE_APP_PREFILL_PASSWORD || '',
+            email: import.meta.env.VITE_PREFILL_EMAIL || '',
+            password: import.meta.env.VITE_PREFILL_PASSWORD || '',
         })
 
         const login = async () => {
