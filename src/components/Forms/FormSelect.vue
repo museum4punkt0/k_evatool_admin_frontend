@@ -157,19 +157,32 @@ export default {
     },
     emits: ['update:selected'],
     setup(props, { emit }) {
-        const localOptions = [...props.options].map((option) => {
+        const localOptions = computed({
+            get: () => {
+                const localOptions2 = [...props.options].map((option) => {
+                    return {
+                        title: option[props.titleKey],
+                        id: option[props.valueKey],
+                    }
+                })
+
+                // set default if specified
+                if (props.useDefault) {
+                    localOptions2.unshift({
+                        id: props.defaultValue,
+                        title: props.defaultTitle,
+                    })
+                }
+                return localOptions2
+            },
+        })
+
+        /*const localOptions = [...props.options].map((option) => {
             return {
                 title: option[props.titleKey],
                 id: option[props.valueKey],
             }
-        })
-
-        if (props.useDefault) {
-            localOptions.unshift({
-                id: props.defaultValue,
-                title: props.defaultTitle,
-            })
-        }
+        })*/
 
         const selectedLocal = computed({
             get: () => props.selected || props.defaultValue,

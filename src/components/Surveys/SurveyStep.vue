@@ -1,5 +1,5 @@
 <template>
-    <h1>{{ $tc('steps', 1) }}</h1>
+    <h1>{{ t('steps', 1) }}</h1>
 
     <div v-if="surveyStep">
         <form-input
@@ -17,7 +17,7 @@
 
         <form-select
             v-model:selected="surveyStep.surveyElementId"
-            :options="store.state.surveyElements.data"
+            :options="surveyElements"
             title-key="name"
             value-key="id"
             :default-value="-1"
@@ -25,8 +25,8 @@
         />
 
         <action-button
-            :disabled="v$.$invalid"
             :executing="savingSurveyStep"
+            :disabled="v$.surveyStep.$invalid"
             :action-text="t('action_save')"
             @execute="saveSurveyStep"
         />
@@ -34,7 +34,6 @@
             v-if="surveyStep.id"
             color="danger"
             class="ml-2"
-            :disabled="v$.$invalid"
             :executing="savingSurveyStep"
             :action-text="t('action_delete')"
             @execute="saveSurveyStep"
@@ -55,11 +54,11 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { useStore } from 'vuex'
 import useVuelidate from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
+import { required, minLength, minValue } from '@vuelidate/validators'
 
 // default params
 import DataViewer from '../Common/DataViewer.vue'
@@ -105,6 +104,10 @@ export default {
 
         const surveyElement = ref(null)
 
+        const surveyElements = computed({
+            get: () => store.state.surveyElements.data,
+        })
+
         const getSurveyStep = async () => {
             surveyStep.value = await SURVEY_SERVICE.getSurveyStep(
                 surveyId,
@@ -149,6 +152,7 @@ export default {
             newSurveyElement,
             savingSurveyStep,
             surveyElement,
+            surveyElements,
             surveyElementId,
         }
     },
@@ -165,6 +169,7 @@ export default {
             },
             surveyElementId: {
                 required,
+                minValue: minValue(1),
             },
         },
     },
