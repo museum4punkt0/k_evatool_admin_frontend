@@ -130,10 +130,14 @@ export default {
 
         const saveSurveyElement = async () => {
             savingSurveyElement.value = true
-            await SURVEY_ELEMENT_SERVICE.saveSurveyElement(surveyElement.value)
+            const savedSurveyElement =
+                await SURVEY_ELEMENT_SERVICE.saveSurveyElement(
+                    surveyElement.value,
+                )
+
             // reload all survey elements
             await store.dispatch('surveyElements/getSurveyElements')
-            emit('saved')
+            emit('saved', savedSurveyElement.id)
             if (props.clearAfterSave) {
                 surveyElement.value = {}
             }

@@ -76,6 +76,7 @@ export default {
         onMounted(() => {
             container.value.addEventListener('scroll', onScroll)
         })
+
         onBeforeUnmount(() => {
             container.value.removeEventListener('scroll', onScroll)
         })
