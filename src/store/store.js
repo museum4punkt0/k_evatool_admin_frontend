@@ -22,7 +22,7 @@ export default createStore({
         users,
     },
     state: {
-        debug: false,
+        debug: true,
     },
     actions: {},
 })

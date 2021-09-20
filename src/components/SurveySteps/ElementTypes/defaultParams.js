@@ -7,6 +7,10 @@ export default {
         },
     },
     multipleChoice: {
+        question: {
+            de: 'Question DE',
+            en: 'Question EN',
+        },
         options: [{ de: '' }, { en: '' }, { fr: '' }],
     },
     video: {
@@ -25,6 +29,14 @@ export default {
         },
     },
     binary: {
+        question: {
+            de: 'Question DE',
+            en: 'Question EN',
+        },
+        trueValue: 'accepted',
+        falseValue: 'declined',
+    },
+    yayNay: {
         question: {
             de: 'Question DE',
             en: 'Question EN',

@@ -42,7 +42,7 @@
         />
         <element-type-multiple-choice
             v-if="surveyElement.surveyElementType === 'multipleChoice'"
-            v-model="surveyElement.params"
+            v-model:params="surveyElement.params"
         />
         <element-type-simple-text
             v-if="surveyElement.surveyElementType === 'simpleText'"
@@ -50,7 +50,7 @@
         />
         <element-type-yay-nay
             v-if="surveyElement.surveyElementType === 'yayNay'"
-            v-model="surveyElement.params"
+            v-model:params="surveyElement.params"
         />
     </div>
     <action-button
@@ -151,7 +151,9 @@ export default {
             (value) => {
                 // Resets to default value when survey element type is changed
                 // Todo: Ask for user confirmation and reset if denied.
-                surveyElement.value.params = defaultParams[value]
+                if (!surveyElement.value.params) {
+                    surveyElement.value.params = defaultParams[value]
+                }
             },
         )
 
