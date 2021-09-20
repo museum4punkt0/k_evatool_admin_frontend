@@ -123,6 +123,7 @@ export default {
                         retryDelays: [0, 1000, 3000, 5000],
                         removeFingerprintOnSuccess: true,
                         uploadDataDuringCreation: false,
+                        chunkSize: 1024 * 1024 * 20,
                     }),
         })
 
