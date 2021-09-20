@@ -49,10 +49,6 @@ export default {
             type: Object,
             default: () => null,
         },
-        validation: {
-            type: Object,
-            default: null,
-        },
     },
     emits: ['update:params'],
     setup(props, { emit }) {

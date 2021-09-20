@@ -1,7 +1,6 @@
 <template>
-    <h1>Star Rating</h1>
-
     <form-input v-model:value="paramsLocal.numberOfSteps" />
+
     <form-toggle v-model:enabled="paramsLocal.allowHalfSteps" class="my-3" />
 
     <form-input
@@ -26,10 +25,6 @@ export default {
         params: {
             type: Object,
             default: () => null,
-        },
-        validation: {
-            type: Object,
-            default: null,
         },
     },
     emits: ['update:params'],

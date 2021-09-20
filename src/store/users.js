@@ -33,7 +33,6 @@ export default {
             payload.username = payload.email
             // delete payload.email
 
-            console.log(payload)
             const user = USERS.loginUser(payload)
 
             commit('setUser', user)

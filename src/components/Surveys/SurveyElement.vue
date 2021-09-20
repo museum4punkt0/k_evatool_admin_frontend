@@ -27,17 +27,14 @@
         <element-type-star-rating
             v-if="surveyElement.surveyElementType === 'starRating'"
             v-model:params="surveyElement.params"
-            :validation="v$"
         />
         <element-type-emoji
             v-if="surveyElement.surveyElementType === 'emoji'"
             v-model:params="surveyElement.params"
-            :validation="v$"
         />
         <element-type-video
             v-if="surveyElement.surveyElementType === 'video'"
             v-model:params="surveyElement.params"
-            :validation="v$"
         />
         <element-type-binary-question
             v-if="surveyElement.surveyElementType === 'binary'"
@@ -50,7 +47,6 @@
         <element-type-simple-text
             v-if="surveyElement.surveyElementType === 'simpleText'"
             v-model:params="surveyElement.params"
-            :validation="v$"
         />
         <element-type-yay-nay
             v-if="surveyElement.surveyElementType === 'yayNay'"
