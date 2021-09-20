@@ -151,7 +151,9 @@ export default {
             (value) => {
                 // Resets to default value when survey element type is changed
                 // Todo: Ask for user confirmation and reset if denied.
-                surveyElement.value.params = defaultParams[value]
+                if (!surveyElement.value.params) {
+                    surveyElement.value.params = defaultParams[value]
+                }
             },
         )
 

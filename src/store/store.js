@@ -22,7 +22,7 @@ export default createStore({
         users,
     },
     state: {
-        debug: false,
+        debug: import.meta.env.VITE_APP_DEBUG === 'true',
     },
     actions: {},
 })
