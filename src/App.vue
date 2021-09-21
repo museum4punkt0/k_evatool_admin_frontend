@@ -219,7 +219,9 @@
                         "
                     >
                         <router-view v-if="!loadingApp" />
-                        <div v-else>Loading app ...</div>
+                        <div v-else class="p-3 text-3xl">
+                            {{ t('loading_app') }} ...
+                        </div>
                     </section>
                 </main>
             </div>
