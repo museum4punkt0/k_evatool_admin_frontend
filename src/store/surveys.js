@@ -8,6 +8,7 @@ const initialState = {
     surveyStepId: -1,
     surveyStep: null,
 }
+
 export default {
     namespaced: true,
     state: () => initialState,
@@ -44,10 +45,14 @@ export default {
         },
         async setSurveyId({ commit }, surveyId) {
             commit('setSurveyId', surveyId)
-            const survey = await SURVEY_SERVICE.getSurvey(surveyId)
-            commit('setSurvey', survey)
-            const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
-            commit('setSurveySteps', surveySteps)
+            if (surveyId > 0) {
+                const survey = await SURVEY_SERVICE.getSurvey(surveyId)
+                commit('setSurvey', survey)
+                const surveySteps = await SURVEY_SERVICE.getSurveySteps(
+                    surveyId,
+                )
+                commit('setSurveySteps', surveySteps)
+            }
         },
         async setSurveyStepId({ commit }, { surveyStepId, surveyId }) {
             commit('setSurveyStepId', surveyStepId)
@@ -74,6 +79,19 @@ export default {
         async getSurveySteps({ commit }, surveyId) {
             const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
             commit('setSurveySteps', surveySteps)
+        },
+        async saveSurvey({ commit }, data) {
+            const savedSurvey = await SURVEY_SERVICE.saveSurvey(data)
+            if (savedSurvey.id) {
+                commit('setSurveyId', savedSurvey.id)
+                commit('setSurvey', savedSurvey)
+                this.dispatch('surveys/getSurveySteps', savedSurvey.id)
+                this.dispatch('surveys/getSurveys')
+            }
+        },
+        async deleteSurvey({ dispatch }, surveyId) {
+            await SURVEY_SERVICE.deleteSurvey(surveyId)
+            await dispatch('getSurveys')
         },
     },
     getters: {},

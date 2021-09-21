@@ -19,6 +19,7 @@ import { minLength, required } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
 import DataViewer from '../Common/DataViewer.vue'
 import ActionButton from '../Common/ActionButton.vue'
+import { useStore } from 'vuex'
 
 export default {
     name: 'SurveyDetails',
@@ -30,6 +31,7 @@ export default {
     emits: ['saved'],
     setup: function (props, { emit }) {
         const { t } = useI18n()
+        const store = useStore()
         const survey = ref({
             name: '',
         })
@@ -52,12 +54,10 @@ export default {
         }
 
         const saveSurvey = async () => {
-            const savedSurvey = await SURVEYS.save(survey.value)
-            if (savedSurvey.id) {
-                emit('saved')
-                if (props.resetAfterSave) {
-                    initSurvey()
-                }
+            await store.dispatch('surveys/saveSurvey', survey.value)
+            emit('saved')
+            if (props.resetAfterSave) {
+                initSurvey()
             }
         }
 
@@ -76,6 +76,7 @@ export default {
             saveSurvey,
             surveyTitle,
             t,
+            store,
         }
     },
     validations: {

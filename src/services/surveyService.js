@@ -216,7 +216,7 @@ export default {
             return response.data
         }
     },
-    async save(survey) {
+    async saveSurvey(survey) {
         let url = 'evaluation-tool/surveys'
         let method = 'post'
         if (survey.id) {

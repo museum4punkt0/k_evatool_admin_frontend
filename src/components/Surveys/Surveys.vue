@@ -79,7 +79,6 @@ import SurveyDetails from './SurveyDetails.vue'
 import { computed, ref } from 'vue'
 import PublishedState from '../Common/PublishedState.vue'
 
-import SURVEYS from '../../services/surveyService'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 
@@ -118,8 +117,7 @@ export default {
             const confirmSurveyDelete = confirm(t('confirm_delete_survey'))
             isBusy.value = true
             if (confirmSurveyDelete) {
-                await SURVEYS.deleteSurvey(surveyId)
-                await store.dispatch('surveys/getSurveys')
+                await store.dispatch('surveys/deleteSurvey', surveyId)
             }
             isBusy.value = false
         }
