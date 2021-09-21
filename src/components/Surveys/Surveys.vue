@@ -54,6 +54,12 @@
                                         deleteSurvey(survey.id)
                                     "
                                 />
+                                <EyeIcon
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="
+                                        previewSurvey(survey.id)
+                                    "
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -171,6 +177,18 @@ export default {
             isBusy.value = false
         }
 
+        const previewSurvey = (surveyIdPreview) => {
+            console.log(surveyIdPreview)
+            window
+                .open(
+                    import.meta.env.VITE_PREVIEW_URL +
+                        '/#/?id=' +
+                        surveyIdPreview,
+                    '_blank',
+                )
+                .focus()
+        }
+
         getAllAndUpdateStore()
         return {
             surveys,
@@ -196,6 +214,7 @@ export default {
             setSurvey,
             deleteSurvey,
             t,
+            previewSurvey,
         }
     },
 }

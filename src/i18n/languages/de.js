@@ -26,6 +26,7 @@ export default {
     filetype: 'Dateityp',
     language_default: 'Standardsprache',
     languages: 'Sprachen | Sprache | Sprachen',
+    loading_app: 'App wird geladen',
     names: 'Namen | Name | Namen',
     new_survey: 'Neue Umfrage',
     new_user: 'Neuer Benutzer',

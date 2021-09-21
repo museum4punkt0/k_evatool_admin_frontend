@@ -35,7 +35,11 @@
             </div>
         </main>
         <aside>
-            <user :user-id="userId" @saved="getUsers" />
+            <user
+                v-if="store.state.users.user.admin"
+                :user-id="userId"
+                @saved="getUsers"
+            />
         </aside>
     </div>
 </template>
