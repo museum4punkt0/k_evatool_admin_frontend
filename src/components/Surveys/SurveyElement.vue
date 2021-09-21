@@ -1,8 +1,5 @@
 <template>
-    <!-- <p v-for="error of v$.$errors" :key="error.$uid">
-        {{ error.$message }}
-    </p>
-    <p>invalid: {{ v$.$invalid }}</p> -->
+    <data-viewer class="mt-3" :data="v$" />
     <h3 v-if="surveyElementId > 0">{{ $tc('elements', 1) }}</h3>
     <h3 v-else>Neues Element</h3>
     <label for="name" class="capitalize">{{ $tc('names', 1) }}</label>
@@ -80,9 +77,9 @@ import FormSelect from '../Forms/FormSelect.vue'
 import DataViewer from '../Common/DataViewer.vue'
 import ActionButton from '../Common/ActionButton.vue'
 
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
-import defaultParams from '../SurveySteps/ElementTypes/defaultParams'
+import defaultParamsCreator from '../SurveySteps/ElementTypes/defaultParams'
 
 import SURVEY_ELEMENT_SERVICE from '../../services/surveyElements'
 import useVuelidate from '@vuelidate/core'
@@ -121,6 +118,7 @@ export default {
         const elementTypes = ref(null)
         const savingSurveyElement = ref(false)
         const paramsValid = ref(false)
+        const languages = computed(() => store.state.languages.languages)
 
         onMounted(async () => {
             elementTypes.value = store.state.elementTypes
@@ -160,7 +158,10 @@ export default {
                 // Resets to default value when survey element type is changed
                 // Todo: Ask for user confirmation and reset if denied.
                 if (!surveyElement.value.params) {
-                    surveyElement.value.params = defaultParams[value]
+                    surveyElement.value.params = defaultParamsCreator(
+                        value,
+                        languages.value,
+                    )
                 }
             },
         )
