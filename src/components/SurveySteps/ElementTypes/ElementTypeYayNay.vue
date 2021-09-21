@@ -86,17 +86,7 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        return {
-            store,
-            paramsLocal,
-            t,
-            v$: useVuelidate(),
-            selectedLanguage,
-            setSelectedLanguage,
-        }
-    },
-    validations: {
-        paramsLocal: {
+        const validations = {
             trueValue: {
                 required,
                 minLength: minLength(1),
@@ -107,7 +97,16 @@ export default {
                 minLength: minLength(1),
                 maxLength: maxLength(20),
             },
-        },
+        }
+
+        return {
+            store,
+            paramsLocal,
+            t,
+            v$: useVuelidate(validations, paramsLocal),
+            selectedLanguage,
+            setSelectedLanguage,
+        }
     },
 }
 </script>

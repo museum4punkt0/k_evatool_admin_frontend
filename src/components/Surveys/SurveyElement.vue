@@ -1,4 +1,8 @@
 <template>
+    <p v-for="error of v$.$errors" :key="error.$uid">
+        {{ error.$message }}
+    </p>
+    <p>invalid: {{ v$.$invalid }}</p>
     <h3 v-if="surveyElementId > 0">{{ $tc('elements', 1) }}</h3>
     <h3 v-else>Neues Element</h3>
     <label for="name" class="capitalize">{{ $tc('names', 1) }}</label>

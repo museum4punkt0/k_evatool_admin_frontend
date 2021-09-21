@@ -62,7 +62,7 @@ import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import useVuelidate from '@vuelidate/core'
-import { required, minValue } from '@vuelidate/validators'
+import { required, between } from '@vuelidate/validators'
 import { useState } from '../../../composables/state'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 
@@ -87,6 +87,20 @@ export default {
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
+
+        const validations = {
+            minSelectable: {
+                required,
+                between: between(1, paramsLocal.value.options.length),
+            },
+            maxSelectable: {
+                required,
+                between: between(
+                    paramsLocal.value.minSelectable,
+                    paramsLocal.value.options.length,
+                ),
+            },
+        }
 
         const addOption = () => {
             // TODO: how to mutate computed property
@@ -114,25 +128,12 @@ export default {
             store,
             paramsLocal,
             t,
-            v$: useVuelidate(),
+            v$: useVuelidate(validations, paramsLocal),
             selectedLanguage,
             setSelectedLanguage,
             addOption,
             removeOption,
         }
-    },
-    validations: {
-        paramsLocal: {
-            minSelectable: {
-                required,
-                minValue: minValue(1),
-            },
-            maxSelectable: {
-                required,
-                // TODO: params.options.length
-                // maxValue: maxValue(),
-            },
-        },
     },
 }
 </script>
