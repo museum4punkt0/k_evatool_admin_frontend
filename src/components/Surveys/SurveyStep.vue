@@ -135,6 +135,9 @@ export default {
             () => surveyStepId.value,
             () => {
                 getSurveyStep()
+                console.log(
+                    'TODO: update survey element, after step is fetched',
+                )
             },
         )
         watch(
