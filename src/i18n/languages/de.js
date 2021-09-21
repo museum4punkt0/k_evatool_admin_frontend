@@ -44,6 +44,7 @@ export default {
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     videos: 'Videos | Video | Video',
-    yaynay_positive: 'Positiver Systemwert',
-    yaynayy_negative: 'Negativer Systemwert',
+    welcome: 'Willkommen',
+    yay_nay_positive: 'Positiver Systemwert',
+    yay_nay_negative: 'Negativer Systemwert',
 }

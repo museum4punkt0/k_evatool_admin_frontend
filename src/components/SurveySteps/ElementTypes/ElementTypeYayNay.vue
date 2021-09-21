@@ -10,7 +10,7 @@
     <form-input
         v-model:value="paramsLocal.trueValue"
         class="mt-3"
-        :label="t('yaynay_positive')"
+        :label="t('yay_nay_positive')"
     />
     <form-input
         v-model:value="paramsLocal.falseValue"
