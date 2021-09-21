@@ -16,6 +16,7 @@
                 :steps="selectedSurvey.steps"
                 :admin-layout="selectedSurvey.adminLayout"
                 :survey-id="surveyId"
+                @updated="updatedNodes"
             />
         </main>
         <aside>
@@ -76,6 +77,7 @@ export default {
         onMounted(() => {
             container.value.addEventListener('scroll', onScroll)
         })
+
         onBeforeUnmount(() => {
             container.value.removeEventListener('scroll', onScroll)
         })
@@ -119,6 +121,14 @@ export default {
                 }
             },
         )
+
+        const updatedNodes = async () => {
+            console.log('updated')
+            await store.dispatch('surveys/getOneSelectAndUpdateStore', {
+                id: surveyId.value,
+            })
+        }
+
         const onScroll = () => {}
 
         id.value = route.params.id
@@ -165,6 +175,7 @@ export default {
             surveySaved,
             newSurveyStep,
             t,
+            updatedNodes,
         }
     },
 }

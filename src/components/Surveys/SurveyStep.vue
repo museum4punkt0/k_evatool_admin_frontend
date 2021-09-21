@@ -1,5 +1,10 @@
 <template>
-    <h1>{{ t('steps', 1) }}</h1>
+    <h1>
+        {{ t('steps', 1) }}
+        <span v-if="surveyStep.id" class="text-sm text-gray-500">
+            ID: {{ surveyStep.id }}
+        </span>
+    </h1>
 
     <div v-if="surveyStep">
         <form-input
@@ -49,7 +54,11 @@
         >
             {{ t('action_new_survey_element') }}
         </button>
-        <survey-element v-else :survey-element-id="surveyElementId" />
+        <survey-element
+            v-else
+            :survey-element-id="surveyElementId"
+            @saved="savedSurveyElement($event)"
+        />
     </div>
 </template>
 
@@ -142,6 +151,10 @@ export default {
             surveyElementId.value = 0
         }
 
+        const savedSurveyElement = (surveyElementId) => {
+            surveyStep.value.surveyElementId = surveyElementId
+        }
+
         return {
             v$: useVuelidate(),
             surveyStep,
@@ -154,6 +167,7 @@ export default {
             surveyElement,
             surveyElements,
             surveyElementId,
+            savedSurveyElement,
         }
     },
     data() {

@@ -327,4 +327,40 @@ export default {
                 return error
             })
     },
+
+    async surveyStepSetNextStep(surveyId, surveyStepIdSelf, surveyStepIdNext) {
+        const url =
+            'evaluation-tool/surveys/' +
+            surveyId +
+            '/survey-steps/' +
+            surveyStepIdSelf +
+            '/set-next-step'
+
+        return axios
+            .post(url, { nextStepId: surveyStepIdNext })
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
+
+    async surveyStepRemoveNextStep(surveyId, surveyStepIdSelf) {
+        const url =
+            'evaluation-tool/surveys/' +
+            surveyId +
+            '/survey-steps/' +
+            surveyStepIdSelf +
+            '/remove-next-step'
+
+        return axios
+            .post(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
 }

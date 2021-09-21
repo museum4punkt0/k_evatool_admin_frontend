@@ -178,6 +178,7 @@
                                     flex
                                     bg-blue-600
                                     p-2
+                                    px-4
                                     rounded-full
                                     items-center
                                     justify-center
@@ -190,6 +191,7 @@
                                 "
                                 @click="logoutUser"
                             >
+                                <span class="text-sm mr-2">Logout</span>
                                 <LogoutIcon
                                     class="h-5 w-5"
                                     aria-hidden="true"

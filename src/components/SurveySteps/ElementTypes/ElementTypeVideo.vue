@@ -32,7 +32,8 @@ export default {
         const { t } = useI18n()
 
         const assets = computed({
-            get: () => store.state.assets.data,
+            get: () =>
+                store.state.assets.data.filter((x) => x.mime.includes('video')),
         })
 
         const paramsLocal = computed({

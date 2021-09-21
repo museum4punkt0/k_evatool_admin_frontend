@@ -33,7 +33,7 @@ export default {
 
         return axios({ url, method, data })
             .then((response) => {
-                return response.data
+                return response.data.data
             })
             .catch((error) => {
                 return error.response
