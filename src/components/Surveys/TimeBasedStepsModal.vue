@@ -1,6 +1,7 @@
 <template>
     <TransitionRoot appear :show="isOpen" as="template">
         <Dialog as="div" @close="closeModal">
+            <DialogOverlay class="fixed inset-0 bg-black opacity-50 z-10" />
             <div class="fixed inset-0 z-10 overflow-y-auto">
                 <div class="min-h-screen px-4 text-center">
                     <TransitionChild
@@ -59,7 +60,16 @@
                             >
                                 {{ t('time_based_steps', 2) }}
                             </DialogTitle>
+
                             <div class="mt-2">
+                                <video
+                                    v-if="asset?.urls?.url"
+                                    class="w-full rounded-lg mb-3"
+                                    controls
+                                    muted
+                                >
+                                    <source :src="asset.urls.url" />
+                                </video>
                                 <div
                                     v-if="timeBasedSteps.length > 0"
                                     class="table-wrap mb-3"
@@ -73,7 +83,13 @@
                                                 :key="tIndex"
                                             >
                                                 <td>
-                                                    {{ timeBasedStep.stepId }}
+                                                    {{
+                                                        store.state.surveys.survey.steps.find(
+                                                            (x) =>
+                                                                x.id ===
+                                                                timeBasedStep.stepId,
+                                                        ).name
+                                                    }}
                                                     <p
                                                         class="
                                                             text-xs
@@ -125,8 +141,7 @@
                                             selectedTimeBasedStep.stepId
                                         "
                                         :options="
-                                            store.state.surveys.selectedSurvey
-                                                .steps
+                                            store.state.surveys.survey.steps
                                         "
                                         title-key="name"
                                         value-key="id"
@@ -149,12 +164,27 @@
                                         :placeholder="t('descriptions', 1)"
                                         :label="t('descriptions', 1)"
                                     />
+                                    <form-input
+                                        v-model:value="
+                                            selectedTimeBasedStep.displayTime
+                                        "
+                                        class="mt-3"
+                                        :placeholder="t('display_time')"
+                                        :label="t('display_time')"
+                                    />
                                     <form-toggle
                                         v-model:enabled="
                                             selectedTimeBasedStep.stopsVideo
                                         "
                                         class="my-3"
                                         :label="t('stops_video')"
+                                    />
+                                    <form-toggle
+                                        v-model:enabled="
+                                            selectedTimeBasedStep.allowChangingAnswer
+                                        "
+                                        class="my-3"
+                                        :label="t('allow_changing_answer')"
                                     />
                                     <button
                                         class="primary"
@@ -199,9 +229,12 @@ import { useI18n } from 'vue-i18n'
 import FormInput from '../Forms/FormInput.vue'
 import FormSelect from '../Forms/FormSelect.vue'
 
-import SURVEYS from '../../services/surveys'
+import { v4 as uuidv4 } from 'uuid'
 
-import { TrashIcon, StopIcon, PencilIcon } from '@heroicons/vue/outline'
+import SURVEYS from '../../services/surveyService'
+import ASSETS from '../../services/assetService'
+
+import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
 import { maxLength, required, minValue } from '@vuelidate/validators'
@@ -225,23 +258,35 @@ export default {
             type: Boolean,
             default: false,
         },
-        surveyStepId: {
-            type: Number,
-            default: -1,
-        },
     },
     emits: ['update:is-open'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const surveyStepId = store.state.surveys.surveyStepId
+        const surveyStep = store.state.surveys.surveyStep
         const savingTimeBasedSteps = ref(false)
 
         const initTimeBasedStep = {
+            uuid: uuidv4(),
             stepId: -1,
             timecode: '00:00:00:00',
             stopsVideo: true,
+            displayTime: 5,
             description: '',
+            allowChangingAnswer: false,
         }
+
+        const asset = ref(null)
+
+        const getAsset = async () => {
+            asset.value = await ASSETS.getAsset(
+                store.state.surveys.surveyStep.surveyElement.params
+                    .videoAssetId,
+            )
+        }
+
+        getAsset()
 
         const selectedTimeBasedStep = ref(initTimeBasedStep)
 
@@ -250,20 +295,19 @@ export default {
             set: (val) => emit('update:is-open', val),
         })
 
-        const timeBasedSteps = ref(
-            store.state.surveys.selectedSurvey.steps.find(
-                (x) => x.id === props.surveyStepId,
-            ).timeBasedSteps,
-        )
+        const timeBasedSteps = ref(surveyStep.timeBasedSteps)
 
         const addTimeBasedStep = async () => {
             timeBasedSteps.value.push(selectedTimeBasedStep.value)
             await saveSurveyStep()
             selectedTimeBasedStep.value = {
+                uuid: uuidv4(),
                 stepId: -1,
                 timecode: '00:00:00:00',
+                displayTime: 5,
                 stopsVideo: true,
                 description: '',
+                allowChangingAnswer: false,
             }
         }
 
@@ -277,11 +321,6 @@ export default {
 
         const saveSurveyStep = async () => {
             savingTimeBasedSteps.value = true
-            const surveyStep = {
-                ...store.state.surveys.selectedSurvey.steps.find(
-                    (x) => x.id === props.surveyStepId,
-                ),
-            }
 
             surveyStep.timeBasedSteps = timeBasedSteps.value
 
@@ -303,6 +342,9 @@ export default {
             closeModal() {
                 modalIsOpen.value = false
             },
+            surveyStep,
+            asset,
+            surveyStepId,
         }
     },
     validations: {

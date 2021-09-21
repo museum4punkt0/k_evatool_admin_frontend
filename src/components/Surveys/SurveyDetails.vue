@@ -13,7 +13,7 @@
 
 <script>
 import { ref, watch } from 'vue'
-import SURVEYS from '../../services/surveys'
+import SURVEYS from '../../services/surveyService'
 import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'

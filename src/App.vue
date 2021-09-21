@@ -9,7 +9,7 @@
                 <div
                     class="
                         relative
-                        z-10
+                        z-5
                         flex-shrink-0
                         h-16
                         bg-white

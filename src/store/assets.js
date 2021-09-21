@@ -13,7 +13,7 @@ export default {
     },
     actions: {
         async getAssets({ commit }, page = 1) {
-            const assets = await ASSETS.ASSETS_get(page)
+            const assets = await ASSETS.getAssets(page)
             commit('setAssets', assets.data)
         },
     },

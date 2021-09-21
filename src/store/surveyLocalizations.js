@@ -1,4 +1,4 @@
-import service from '../services/surveyLocalizations'
+import service from '../services/surveyLocalizationService'
 const initialState = {
     localization: [],
     selectedLocalization: null,

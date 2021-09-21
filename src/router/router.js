@@ -1,18 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../components/Home.vue'
 
-import ListSurveys from '../components/Surveys/Surveys.vue'
-import ViewSurvey from '../components/Surveys/View.vue'
-import NewSurvey from '../components/Surveys/New.vue'
-import EditSurvey from '../components/Surveys/Edit.vue'
+import Surveys from '../components/Surveys/Surveys.vue'
+import Survey from '../components/Surveys/Survey.vue'
 
 import SurveySteps from '../components/SurveySteps/SurveySteps.vue'
-import NewSurveyStep from '../components/SurveySteps/New.vue'
 
 import ListLanguages from '../components/Languages/Languages.vue'
 import ViewLanguage from '../components/Languages/View.vue'
-import NewLanguage from '../components/Languages/New.vue'
-import EditLanguage from '../components/Languages/Edit.vue'
 
 import Localizations from '../components/Localizations/Localizations.vue'
 import Localization from '../components/Localizations/Localization.vue'
@@ -29,22 +24,10 @@ import Users from '../components/Users/Users.vue'
 const routes = [
     { path: '/', component: Home },
     { path: '/login', component: Login },
-    { name: 'surveys', path: '/surveys', component: ListSurveys },
-    { name: 'surveys/new', path: '/surveys/new', component: NewSurvey },
+    { name: 'surveys', path: '/surveys', component: Surveys },
     {
-        name: 'survey/view',
-        path: '/surveys/:id(\\d+)',
-        component: ViewSurvey,
-    },
-    {
-        name: 'survey/edit',
-        path: '/surveys/:id/edit',
-        component: EditSurvey,
-    },
-    {
-        name: 'survey/results',
-        path: '/surveys/:id/results',
-        component: EditSurvey,
+        path: '/surveys/:id',
+        component: Survey,
     },
     { name: 'surveySteps', path: '/survey-steps', component: SurveySteps },
     {
@@ -52,19 +35,10 @@ const routes = [
         path: '/survey-elements',
         component: SurveyElements,
     },
-    {
-        name: 'surveySteps/new',
-        path: '/survey-steps/new',
-        component: NewSurveyStep,
-    },
+
     { name: 'languages', path: '/languages', component: ListLanguages },
-    { name: 'languages/new', path: '/languages/new', component: NewLanguage },
+
     { name: 'language/view', path: '/languages/:id', component: ViewLanguage },
-    {
-        name: 'language/edit',
-        path: '/languages/:id/edit',
-        component: EditLanguage,
-    },
 
     { name: 'localizations', path: '/localizations', component: Localizations },
     {

@@ -21,7 +21,7 @@
                         :key="'survey_row_' + survey.id"
                         class="bg-white divide-y divide-gray-200"
                     >
-                        <tr @click="setSurvey(survey.id)">
+                        <tr>
                             <td class="text-lg">
                                 {{ survey.id }}
                             </td>
@@ -44,9 +44,7 @@
                             <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon
                                     class="mx-1 h-5 w-5"
-                                    @click.prevent.stop="
-                                        handlers.onEdit(survey)
-                                    "
+                                    @click.prevent.stop="editSurvey(survey.id)"
                                 />
                                 <TrashIcon
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
@@ -75,17 +73,13 @@
 <script>
 import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/vue/outline'
 import { useRouter } from 'vue-router'
-import { createNamespacedHelpers } from 'vuex-composition-helpers'
+
 import Collection from '../Common/Collection/Collection.vue'
 import SurveyDetails from './SurveyDetails.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import PublishedState from '../Common/PublishedState.vue'
 
-const { useState, useActions } = createNamespacedHelpers('surveys')
-const { useActions: useNotificationsActions } =
-    createNamespacedHelpers('notifications')
-
-import SURVEYS from '../../services/surveys'
+import SURVEYS from '../../services/surveyService'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 
@@ -105,64 +99,19 @@ export default {
         const surveyId = ref(-1)
         const isBusy = ref(false)
         const { t } = useI18n()
-        const { surveys } = useState(['surveys'])
-        const { getAllAndUpdateStore, deleteOneAndUpdateStore } = useActions([
-            'getAllAndUpdateStore',
-            'deleteOneAndUpdateStore',
-        ])
-        const { addError } = useNotificationsActions(['addError'])
-        const onView = (items) => {
-            if (Array.isArray(items)) {
-                items.forEach((item) => {
-                    router.push({
-                        name: 'survey',
-                        params: { id: item.id },
-                    })
-                })
-            } else if (typeof items === 'object') {
-                router.push({
-                    name: 'survey/view',
-                    params: { id: items.id },
-                })
-            }
-        }
-        const onEdit = (items) => {
-            if (Array.isArray(items)) {
-                items.forEach((item) => {
-                    router.push({
-                        name: 'survey/edit',
-                        params: { id: item.id },
-                    })
-                })
-            } else if (typeof items === 'object') {
-                router.push({
-                    name: 'survey/edit',
-                    params: { id: items.id },
-                })
-            }
-        }
-        const onDelete = (items) => {
-            if (Array.isArray(items)) {
-                items.forEach((item) => {
-                    deleteOneAndUpdateStore(item).catch((error) =>
-                        addError({ message: error }),
-                    )
-                })
-            } else if (typeof items === 'object') {
-                deleteOneAndUpdateStore(items).catch((error) =>
-                    addError({ message: error }),
-                )
-            }
-        }
+
+        const surveys = computed({
+            get: () => store.state.surveys.surveys,
+        })
+
+        store.dispatch('surveys/getSurveys')
 
         const surveySaved = () => {
-            getAllAndUpdateStore()
-            surveyId.value = -1
+            store.dispatch('surveys/getSurveys')
         }
 
-        const setSurvey = (surveyIdSet) => {
-            console.log(surveyIdSet)
-            surveyId.value = surveyIdSet
+        const editSurvey = async (surveyId) => {
+            await router.push('/surveys/' + surveyId)
         }
 
         const deleteSurvey = async (surveyId) => {
@@ -170,9 +119,7 @@ export default {
             isBusy.value = true
             if (confirmSurveyDelete) {
                 await SURVEYS.deleteSurvey(surveyId)
-                await store.dispatch('surveys/getAllAndUpdateStore', {
-                    trashed: true,
-                })
+                await store.dispatch('surveys/getSurveys')
             }
             isBusy.value = false
         }
@@ -189,32 +136,14 @@ export default {
                 .focus()
         }
 
-        getAllAndUpdateStore()
         return {
             surveys,
-            textFilter: (item, text) =>
-                item.name.toLowerCase().includes(text.toLowerCase()),
-            selectors: {
-                itemTitle: (item) => item.name,
-            },
-            handlers: {
-                onRefresh: getAllAndUpdateStore,
-                onNew: () => {
-                    console.log('on new')
-                    return router.push({
-                        name: 'surveys/new',
-                    })
-                },
-                onView,
-                onEdit,
-                onDelete,
-            },
             surveyId,
-            surveySaved,
-            setSurvey,
-            deleteSurvey,
             t,
+            deleteSurvey,
+            editSurvey,
             previewSurvey,
+            surveySaved,
         }
     },
 }

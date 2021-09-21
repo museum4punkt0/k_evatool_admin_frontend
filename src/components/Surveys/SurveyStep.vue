@@ -79,10 +79,8 @@ import ActionButton from '../Common/ActionButton.vue'
 
 import { useI18n } from 'vue-i18n'
 
-import SURVEY_SERVICE from '../../services/surveys'
-// import SURVEY_ELEMENT_SERVICE from '../../services/surveyElements'
+import SURVEY_SERVICE from '../../services/surveyService'
 import { useRoute } from 'vue-router'
-// import defaultParams from '../SurveySteps/ElementTypes/defaultParams'
 
 export default {
     name: 'SurveyStep',
@@ -100,7 +98,7 @@ export default {
         const store = useStore()
         const route = useRoute()
         const surveyId = route.params.id
-        const surveyStepId = ref(store.state.surveys.selectedSurveyStepId)
+        const surveyStepId = ref(store.state.surveys.surveyStepId)
         const surveyElementId = ref(-1)
         const savingSurveyStep = ref(false)
 
