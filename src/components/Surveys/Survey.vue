@@ -6,7 +6,11 @@
                     {{ t('surveys', 1) }}:
                     <strong>{{ survey?.name }}</strong>
                 </h1>
-                <button class="primary" @click="newSurveyStep">
+                <button
+                    class="primary"
+                    :disabled="store.state.surveys.surveyStep"
+                    @click="newSurveyStep"
+                >
                     {{ t('action_add_survey_step') }}
                 </button>
             </div>

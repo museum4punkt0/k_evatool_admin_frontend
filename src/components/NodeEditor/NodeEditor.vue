@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{ timeBasedModalIsOpen }}
         <div class="node-editor-wrap bg-blue-300 rounded-lg">
             <div
                 id="nodeEditor"
@@ -300,6 +299,7 @@ export default {
         }
 
         const selectSurveyStep = async (stepId) => {
+            await deselectStep()
             // Todo: Function is called everytime the button is clicked, even if disabled. Needs to be fixed.
             await store.dispatch('surveys/setSurveyStepId', {
                 surveyId: props.surveyId,

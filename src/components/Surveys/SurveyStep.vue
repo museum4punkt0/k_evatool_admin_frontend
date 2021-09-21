@@ -98,10 +98,7 @@ export default {
         const store = useStore()
         const route = useRoute()
         const surveyId = route.params.id
-        // const surveyStepId = ref(store.state.surveys.surveyStepId)
-        const surveyStepId = computed(
-            () => store.state.surveys.selectedSurveyStepId,
-        )
+        const surveyStepId = computed(() => store.state.surveys.surveyStepId)
         const surveyElementId = ref(-1)
         const savingSurveyStep = ref(false)
 
@@ -111,6 +108,10 @@ export default {
             params: null,
             allowSkip: false,
         })
+
+        if (store.state.surveys.surveyStep) {
+            console.log('fas')
+        }
 
         const surveyElement = ref(null)
 
@@ -129,15 +130,6 @@ export default {
             getSurveyStep()
         }
 
-        watch(
-            () => surveyStepId.value,
-            () => {
-                getSurveyStep()
-                console.log(
-                    'TODO: update survey element, after step is fetched',
-                )
-            },
-        )
         watch(
             () => surveyStep.value.surveyElementId,
             (value) => {
