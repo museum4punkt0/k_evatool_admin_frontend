@@ -1,4 +1,4 @@
-import SURVEY_ELEMENTS from '../services/surveyElements.js'
+import SURVEY_ELEMENTS from '../services/surveyElementService.js'
 
 export default {
     namespaced: true,

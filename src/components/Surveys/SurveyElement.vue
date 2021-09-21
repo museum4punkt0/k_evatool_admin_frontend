@@ -81,7 +81,7 @@ import { onMounted, ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import defaultParamsCreator from '../SurveySteps/ElementTypes/defaultParams'
 
-import SURVEY_ELEMENT_SERVICE from '../../services/surveyElements'
+import SURVEY_ELEMENT_SERVICE from '../../services/surveyElementService'
 import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'

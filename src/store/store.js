@@ -1,6 +1,5 @@
 import { createStore } from 'vuex'
 import surveys from './surveys'
-import surveySteps from './surveySteps'
 import languages from './surveyLanguages'
 import elementTypes from './surveyElementTypes'
 import surveyElements from './surveyElements'
@@ -18,7 +17,6 @@ export default createStore({
         notifications,
         surveyElements,
         surveys,
-        surveySteps,
         users,
     },
     state: {

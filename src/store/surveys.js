@@ -1,8 +1,12 @@
-import surveysService from '../services/surveys'
+import SURVEY_SERVICE from '../services/surveyService'
+import SURVEY_ELEMENT_SERVICE from '../services/surveyElementService'
+
 const initialState = {
     surveys: [],
-    selectedSurvey: null,
-    selectedSurveyStepId: -1,
+    surveyId: -1,
+    survey: null,
+    surveyStepId: -1,
+    surveyStep: null,
 }
 export default {
     namespaced: true,
@@ -11,185 +15,64 @@ export default {
         setSurveys(state, value) {
             state.surveys = value
         },
-        setSelected(state, value) {
-            state.selectedSurvey = value
+        setSurvey(state, value) {
+            state.survey = value
+        },
+        setSurveyId(state, value) {
+            state.surveyId = value
         },
         setSurveySteps(state, steps) {
-            state.selectedSurvey.steps = steps
-        },
-        select(state, id) {
-            state.selectedSurvey = state.surveys.find((item) => item.id === id)
-        },
-        add(state, value) {
-            if (Array.isArray(value)) {
-                // state.surveys = [...state.surveys, ...value]
-                value.forEach((item) => {
-                    state.surveys.push(item)
-                })
-            } else {
-                state.surveys.push(value)
-            }
-        },
-        delete(state, value) {
-            state.surveys = state.surveys.filter(
-                (survey) => survey.id !== value.id,
-            )
-        },
-        replace(state, value) {
-            state.surveys = state.surveys.map((item) =>
-                item.id === value.id ? value : item,
-            )
-        },
-        replaceOrAddSurveyStepOfSelectedSurvey(state, value) {
-            if (
-                state.selectedSurvey.steps.find((step) => step.id === value.id)
-            ) {
-                state.selectedSurvey.steps = state.selectedSurvey.steps.map(
-                    (item) => {
-                        return item.id === value.id ? value : item
-                    },
-                )
-            } else {
-                state.selectedSurvey.steps.push(value)
-            }
+            state.survey.steps = steps
         },
         setSurveyStepId(state, surveyStepId) {
-            state.selectedSurveyStepId = surveyStepId
+            state.surveyStepId = surveyStepId
         },
-        updateAdminLayoutOfSelectedSurvey(state, adminLayout) {
-            state.selectedSurvey.adminLayout = adminLayout
+        setSurveyStep(state, surveyStep) {
+            state.surveyStep = surveyStep
+        },
+        setSurveyStepElement(state, surveyElement) {
+            state.surveyStep.surveyElement = surveyElement
+        },
+        setSurveyAdminLayout(state, surveyElement) {
+            state.survey.adminLayout = surveyElement
         },
     },
     actions: {
-        async getAllAndUpdateStore({ commit }, payload) {
-            const surveys = await surveysService.getSurveys(payload)
+        async getSurveys({ commit }) {
+            const surveys = await SURVEY_SERVICE.getSurveys()
             commit('setSurveys', surveys)
-            /*return new Promise((resolve, reject) => {
-                surveysService.getAll(
-                    (value) => {
-                        commit('set', value)
-                        resolve(value)
-                    },
-                    (error) => {
-                        reject(error)
-                    },
-                )
-            })*/
         },
-        getOneSelectAndUpdateStore({ commit }, { id }) {
-            return new Promise((resolve, reject) => {
-                surveysService.getOne(
-                    id,
-                    (value) => {
-                        surveysService.getAllSurveySteps(
-                            id,
-                            (steps) => {
-                                value.steps = steps
-                                commit('setSelected', value)
-                                resolve(value)
-                            },
-                            (error) => reject(error),
-                        )
-                    },
-                    (error) => reject(error),
-                )
-            })
+        async setSurveyId({ commit }, surveyId) {
+            commit('setSurveyId', surveyId)
+            const survey = await SURVEY_SERVICE.getSurvey(surveyId)
+            commit('setSurvey', survey)
+            const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
+            commit('setSurveySteps', surveySteps)
         },
-        createOneAndUpdateStore({ commit }, data) {
-            return new Promise((resolve, reject) => {
-                surveysService.createOne(
-                    data,
-                    (value) => {
-                        commit('add', value)
-                        resolve(value)
-                    },
-                    (error) => reject(error),
-                )
-            })
-        },
-        createOneSelectAndUpdateStore({ commit }, data) {
-            return new Promise((resolve, reject) => {
-                surveysService.createOne(
-                    data,
-                    (value) => {
-                        commit('add', value)
-                        commit('setSelected', value)
-                        resolve(value)
-                    },
-                    (error) => {
-                        reject(error)
-                    },
-                )
-            })
-        },
-        updateOneSelectAndUpdateStore({ commit }, { id, data }) {
-            return new Promise((resolve, reject) => {
-                surveysService.updateOne(
-                    id,
-                    data,
-                    (value) => {
-                        commit('setSelected', value)
-                        commit('replace', value)
-                        resolve(value)
-                    },
-                    (error) => {
-                        reject(error)
-                    },
-                )
-            })
-        },
-        deleteOneSelectAndUpdateStore({ commit }, { id }) {
-            return new Promise((resolve, reject) => {
-                surveysService.deleteOne(
-                    id,
-                    (value) => {
-                        commit('delete', value.id)
-                        commit('setSelected', null)
-                        resolve(value)
-                    },
-                    (error) => {
-                        reject(error)
-                    },
-                )
-            })
-        },
-        deleteOneAndUpdateStore({ commit }, { id }) {
-            return new Promise((resolve, reject) => {
-                surveysService.deleteOne(
-                    id,
-                    (value) => {
-                        commit('delete', value)
-                        resolve(value)
-                    },
-                    (error) => {
-                        reject(error)
-                    },
-                )
-            })
-        },
-        updateOneSurveyStepAndAddToSelected({ commit }, { data }) {
-            return new Promise((resolve, reject) => {
-                surveysService.updateOneSurveyStep(
-                    data,
-                    (value) => {
-                        commit('replaceOrAddSurveyStepOfSelectedSurvey', value)
-                        resolve(value)
-                    },
-                    (error) => {
-                        console.log('cannot update survey steop', error)
-                        reject(error)
-                    },
-                )
-            })
-        },
-        setSurveyStepId({ commit }, surveyStepId) {
+        async setSurveyStepId({ commit }, { surveyStepId, surveyId }) {
             commit('setSurveyStepId', surveyStepId)
+            if (surveyStepId > 0) {
+                const surveyStep = await SURVEY_SERVICE.getSurveyStep(
+                    surveyId,
+                    surveyStepId,
+                )
+                commit('setSurveyStep', surveyStep)
+                const surveyStepElement =
+                    await SURVEY_ELEMENT_SERVICE.getSurveyElement(
+                        surveyStep.surveyElementId,
+                    )
+                commit('setSurveyStepElement', surveyStepElement)
+            }
         },
-        updateAdminLayoutOfSelectedSurvey({ commit }, adminLayout) {
-            commit('updateAdminLayoutOfSelectedSurvey', adminLayout)
+        unsetSurveyStepId({ commit }) {
+            commit('setSurveyStepId', -1)
+            commit('setSurveyStep', null)
+        },
+        setSurveyAdminLayout({ commit }, adminLayout) {
+            commit('setSurveyAdminLayout', adminLayout)
         },
         async getSurveySteps({ commit }, surveyId) {
-            const surveySteps = await surveysService.getSurveySteps(surveyId)
+            const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
             commit('setSurveySteps', surveySteps)
         },
     },

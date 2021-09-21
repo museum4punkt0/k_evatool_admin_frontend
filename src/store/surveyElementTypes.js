@@ -1,4 +1,4 @@
-import surveyElementTypesService from '../services/surveyElementTypes'
+import surveyElementTypesService from '../services/surveyElementTypeService'
 const initialState = {
     elementTypes: [],
     data: null,

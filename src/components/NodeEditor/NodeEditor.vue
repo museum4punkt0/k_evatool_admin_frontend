@@ -1,27 +1,6 @@
 <template>
     <div>
-        <!--        <ul>
-    <button
-        v-if="selectedMode !== MODES.ADD"
-        class="primary"
-        @click="setSelectedMode(MODES.ADD)"
-    >
-        test add mode
-    </button>
-    <button
-        v-if="selectedMode !== MODES.DELETE"
-        class="primary"
-        @click="setSelectedMode(MODES.DELETE)"
-    >
-        test delete
-    </button>
-    <li v-if="selectedMode === MODES.DELETE">
-        click outlet to remove connection
-    </li>
-    <li v-if="selectedMode === MODES.ADD">
-        click outlet and then inlet to add a connection
-    </li>
-</ul>-->
+        {{ timeBasedModalIsOpen }}
         <div class="node-editor-wrap bg-blue-300 rounded-lg">
             <div
                 id="nodeEditor"
@@ -53,22 +32,20 @@
                         zIndex: draggedStep?.id === step?.id ? 3 : 2,
                     }"
                     :class="{
-                        'shadow-lg':
-                            draggedStep?.id === step.id &&
-                            selectedStepId !== step.id,
-                        'node-selected': selectedStepId === step.id,
+                        'shadow-lg': surveyStepId === step.id,
+                        'node-selected': surveyStepId === step.id,
                         'border-1': draggedStep,
                     }"
                 >
                     <div class="w-full flex flex-row h-16">
                         <div class="inlets flex-none w-8">
                             <div
-                                :ref="
-                                    (el) =>
-                                        (inletElements[`${step.id}_inlet`] = el)
-                                "
-                                @mousedown.prevent.stop="
-                                    onInletClicked({ stepId: step.id })
+                                class="
+                                    h-full
+                                    text-xs
+                                    flex
+                                    justify-center
+                                    items-center
                                 "
                             ></div>
                         </div>
@@ -100,12 +77,6 @@
                         </div>
                         <div class="outlets flex-none w-8">
                             <div
-                                :ref="
-                                    (el) =>
-                                        (outletElements[
-                                            `${step.id}_outlet_next`
-                                        ] = el)
-                                "
                                 class="
                                     h-full
                                     text-xs
@@ -149,7 +120,9 @@
                                     steps.find((x) => x.id === step.id)
                                         .surveyElementType !== 'video'
                                 "
-                                @click="openTimeBasedModal(step.id)"
+                                @click.prevent.stop="
+                                    openTimeBasedModal(step.id)
+                                "
                             >
                                 <span
                                     class="
@@ -206,9 +179,8 @@
         </div>
     </div>
     <time-based-steps-modal
-        v-if="timeBasedModalStepId > 0"
+        v-if="timeBasedModalStepId > 0 && timeBasedModalIsOpen"
         v-model:is-open="timeBasedModalIsOpen"
-        :survey-step-id="timeBasedModalStepId"
     />
 </template>
 
@@ -216,7 +188,6 @@
 import { ref, computed, onUpdated, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import Connection from './Connection.vue'
-import { useState } from '../../composables/state'
 
 import {
     ClockIcon,
@@ -227,13 +198,7 @@ import {
 
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 
-import SURVEYS from '../../services/surveys'
-
-const MODES = {
-    NONE: 'NONE',
-    ADD: 'ADD',
-    DELETE: 'DELETE',
-}
+import SURVEYS from '../../services/surveyService'
 
 export default {
     name: 'NodeEditorTest',
@@ -263,9 +228,9 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const draggedStep = ref(null)
-        const selectedStepId = computed(
-            () => store.state.surveys.selectedSurveyStepId,
-        )
+        const surveyStepId = computed(() => store.state.surveys.surveyStepId)
+        const width = 2000
+        const height = 2000
 
         const fixLayoutPosition = (position) => {
             if (position.x < 0) {
@@ -302,10 +267,7 @@ export default {
                     adminLayoutInit.push(stepFound)
                 }
             })
-            store.dispatch(
-                'surveys/updateAdminLayoutOfSelectedSurvey',
-                adminLayoutInit,
-            )
+            store.dispatch('surveys/setSurveyAdminLayout', adminLayoutInit)
         }
 
         onMounted(() => {
@@ -317,27 +279,8 @@ export default {
         const selectedInput = ref(-1)
         const selectedOutput = ref(-1)
 
-        const [selectedMode, setSelectedMode] = useState(MODES.ADD)
-        const [selectedInlet, setSelectedInlet] = useState(null)
-        const [selectedOutlet, setSelectedOutlet] = useState(null)
-        const inletElements = ref({})
-        const outletElements = ref({})
-        const [connections, setConnections] = useState([])
-        const [width] = useState(2000)
-        const [height] = useState(2000)
         const timeBasedModalIsOpen = ref(false)
         const timeBasedModalStepId = ref(-1)
-
-        const c = []
-        props.steps.forEach((step) => {
-            if (step.nextStepId) {
-                c.push({
-                    outletElement: `${step.id}_outlet_next`,
-                    inletElement: `${step.nextStepId}_inlet`,
-                })
-            }
-        })
-        setConnections(c)
 
         watch(
             () => props.steps,
@@ -356,9 +299,12 @@ export default {
             }
         }
 
-        const selectSurveyStep = (stepId) => {
+        const selectSurveyStep = async (stepId) => {
             // Todo: Function is called everytime the button is clicked, even if disabled. Needs to be fixed.
-            store.dispatch('surveys/setSurveyStepId', stepId)
+            await store.dispatch('surveys/setSurveyStepId', {
+                surveyId: props.surveyId,
+                surveyStepId: stepId,
+            })
         }
 
         const onMouseMove = (e) => {
@@ -375,65 +321,8 @@ export default {
             await SURVEYS.saveAdminLayout(props.surveyId, props.adminLayout)
         }
 
-        const addConnection = (outlet, inlet) => {
-            store
-                .dispatch('surveys/updateOneSurveyStepAndAddToSelected', {
-                    data: {
-                        ...props.steps.find(
-                            (step) => step.id === outlet.stepId,
-                        ),
-                        nextStepId: inlet.stepId,
-                    },
-                })
-                .then((data) => {
-                    console.log('added connection', data)
-                    setSelectedInlet(null)
-                    setSelectedOutlet(null)
-                    setSelectedMode(MODES.NONE)
-                })
-        }
-
-        const onInletClicked = (inlet) => {
-            console.log('inlet clicked', inlet)
-            switch (selectedMode.value) {
-                case MODES.ADD: {
-                    setSelectedInlet(inlet)
-                    if (selectedOutlet.value) {
-                        addConnection(selectedOutlet.value, inlet)
-                    }
-                }
-            }
-        }
-        const onOutletClicked = (outlet) => {
-            console.log('outlet clicked', outlet)
-            switch (selectedMode.value) {
-                case MODES.ADD: {
-                    setSelectedOutlet(outlet)
-                    if (selectedInlet.value) {
-                        addConnection(outlet, selectedInlet.value)
-                    }
-                    break
-                }
-                case MODES.DELETE: {
-                    if (outlet.name === 'next') {
-                        store.dispatch(
-                            'surveys/updateOneSurveyStepAndAddToSelected',
-                            {
-                                data: {
-                                    ...props.steps.find(
-                                        (step) => step.id === outlet.stepId,
-                                    ),
-                                    nextStepId: null,
-                                },
-                            },
-                        )
-                        break
-                    }
-                }
-            }
-        }
         const deselectStep = () => {
-            store.dispatch('surveys/setSurveyStepId', -1)
+            store.dispatch('surveys/unsetSurveyStepId')
             selectedOutput.value = -1
             selectedInput.value = -1
         }
@@ -467,55 +356,25 @@ export default {
             emit('updated')
         }
 
-        const getInletPosition = (inletElement) => {
-            const element = inletElements.value[inletElement]
-            const rect = element?.getBoundingClientRect()
-            const offsetX = element?.offsetLeft - rect?.width / 2
-            const offsetY = element?.offsetTop - rect?.height
+        watch(
+            () => timeBasedModalIsOpen.value,
+            (value) => {
+                value.log
+            },
+        )
 
-            return {
-                x: rect?.left - offsetX,
-                y: rect?.top - offsetY,
-            }
-        }
-        const getOutletPosition = (outletElement) => {
-            const element = outletElements.value[outletElement]
-            const rect = element?.getBoundingClientRect()
-            const offsetX = element?.offsetLeft - rect?.width / 2
-            const offsetY = element?.offsetTop - rect?.height
-
-            return {
-                x: rect?.right - offsetX,
-                y: rect?.top - offsetY,
-            }
-        }
-
-        const openTimeBasedModal = (stepId) => {
+        const openTimeBasedModal = async (stepId) => {
+            await selectSurveyStep(stepId)
             timeBasedModalIsOpen.value = true
             timeBasedModalStepId.value = stepId
         }
 
         return {
-            MODES,
-            selectedMode,
-            setSelectedMode,
             draggedStep,
-            selectedStepId,
-            selectedInlet,
-            selectedOutlet,
             onMouseDown,
             onMouseMove,
             onMouseUp,
-            onInletClicked,
-            onOutletClicked,
             deselectStep,
-            connections,
-            inletElements,
-            outletElements,
-            getInletPosition,
-            getOutletPosition,
-            width,
-            height,
             openTimeBasedModal,
             timeBasedModalIsOpen,
             timeBasedModalStepId,
@@ -526,6 +385,9 @@ export default {
             selectSurveyStep,
             store,
             unlinkNextStep,
+            surveyStepId,
+            width,
+            height,
         }
     },
 }

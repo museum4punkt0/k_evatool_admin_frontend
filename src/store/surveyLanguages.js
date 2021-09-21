@@ -1,4 +1,4 @@
-import surveyLanguagesService from '../services/surveyLanguages'
+import surveyLanguagesService from '../services/surveyLanguageService'
 const initialState = {
     languages: [],
     data: null,
