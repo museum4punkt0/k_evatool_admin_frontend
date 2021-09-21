@@ -35,6 +35,16 @@ export default {
         },
         trueValue: 'accepted',
         falseValue: 'declined',
+        trueLabel: {
+            de: 'ja',
+            en: 'yes',
+            fr: 'oui',
+        },
+        falseLabel: {
+            de: 'nein',
+            en: 'no',
+            fr: 'non',
+        },
     },
     yayNay: {
         question: {
@@ -43,5 +53,15 @@ export default {
         },
         trueValue: 'accepted',
         falseValue: 'declined',
+        trueLabel: {
+            de: 'ja',
+            en: 'yes',
+            fr: 'oui',
+        },
+        falseLabel: {
+            de: 'nein',
+            en: 'no',
+            fr: 'non',
+        },
     },
 }

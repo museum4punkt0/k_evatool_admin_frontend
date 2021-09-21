@@ -11,6 +11,8 @@ export default {
     assets: 'Medien | Medium | Medien',
     binary_positive: 'Positiver Systemwert',
     binary_negative: 'Negativer Systemwert',
+    binary_positive_label: 'Positive Beschriftung',
+    binary_negative_label: 'Negative Beschriftung',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     confirm_delete_survey: 'Umfrage wirklich löschen?',
     descriptions: 'Beschreibungen | Beschreibung | Beschreibungen',
@@ -44,5 +46,7 @@ export default {
     users: 'Benutzer | Benutzer | Benutzer',
     videos: 'Videos | Video | Video',
     yaynay_positive: 'Positiver Systemwert',
-    yaynayy_negative: 'Negativer Systemwert',
+    yaynay_negative: 'Negativer Systemwert',
+    yaynay_positive_label: 'Positive Beschriftung',
+    yaynay_negative_label: 'Negative Beschriftung',
 }
