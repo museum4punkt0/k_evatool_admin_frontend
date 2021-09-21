@@ -1,27 +1,27 @@
 <template>
     <div>
         <!--        <ul>
-        <button
-            v-if="selectedMode !== MODES.ADD"
-            class="primary"
-            @click="setSelectedMode(MODES.ADD)"
-        >
-            test add mode
-        </button>
-        <button
-            v-if="selectedMode !== MODES.DELETE"
-            class="primary"
-            @click="setSelectedMode(MODES.DELETE)"
-        >
-            test delete
-        </button>
-        <li v-if="selectedMode === MODES.DELETE">
-            click outlet to remove connection
-        </li>
-        <li v-if="selectedMode === MODES.ADD">
-            click outlet and then inlet to add a connection
-        </li>
-    </ul>-->
+    <button
+        v-if="selectedMode !== MODES.ADD"
+        class="primary"
+        @click="setSelectedMode(MODES.ADD)"
+    >
+        test add mode
+    </button>
+    <button
+        v-if="selectedMode !== MODES.DELETE"
+        class="primary"
+        @click="setSelectedMode(MODES.DELETE)"
+    >
+        test delete
+    </button>
+    <li v-if="selectedMode === MODES.DELETE">
+        click outlet to remove connection
+    </li>
+    <li v-if="selectedMode === MODES.ADD">
+        click outlet and then inlet to add a connection
+    </li>
+</ul>-->
         <div class="node-editor-wrap bg-blue-300 rounded-lg">
             <div
                 id="nodeEditor"
@@ -29,7 +29,7 @@
                 :style="{ width: `${width}px`, height: `${height}px` }"
                 @mousemove="onMouseMove"
                 @mouseup="onMouseUp"
-                @mousedown="deselectStep"
+                @click="deselectStep"
                 @mouseleave="onMouseUp"
             >
                 <div
@@ -106,18 +106,19 @@
                                             `${step.id}_outlet_next`
                                         ] = el)
                                 "
-                                class="bg-yellow-300"
-                                @mousedown.prevent.stop="
-                                    onOutletClicked({
-                                        stepId: step.id,
-                                        name: 'next',
-                                    })
+                                class="
+                                    h-full
+                                    text-xs
+                                    flex
+                                    justify-center
+                                    items-center
                                 "
+                                @click="unlinkNextStep(step.id)"
                             >
-                                <!--                                {{
-                    steps.find((x) => x.id === step.id)
-                        .nextStepId
-                }}-->
+                                {{
+                                    steps.find((x) => x.id === step.id)
+                                        .nextStepId
+                                }}
                             </div>
                         </div>
                     </div>
@@ -128,7 +129,7 @@
                                 :class="{
                                     'bg-blue-200': step.id === selectedInput,
                                 }"
-                                @click="selectInput(step.id)"
+                                @click.prevent.stop="selectInput(step.id)"
                             >
                                 <div
                                     class="
@@ -185,7 +186,7 @@
                                 :class="{
                                     'bg-blue-200': step.id === selectedOutput,
                                 }"
-                                @click="selectOutput(step.id)"
+                                @click.prevent.stop="selectOutput(step.id)"
                             >
                                 <div
                                     class="
@@ -258,7 +259,8 @@ export default {
             default: -1,
         },
     },
-    setup(props) {
+    emits: ['updated'],
+    setup(props, { emit }) {
         const store = useStore()
         const draggedStep = ref(null)
         const selectedStepId = computed(
@@ -432,14 +434,37 @@ export default {
         }
         const deselectStep = () => {
             store.dispatch('surveys/setSurveyStepId', -1)
+            selectedOutput.value = -1
+            selectedInput.value = -1
         }
 
-        const selectInput = (stepId) => {
+        const selectInput = async (stepId) => {
             selectedInput.value = stepId
+            if (selectedOutput.value > 0) {
+                await linkNextStep(selectedOutput.value, selectedInput.value)
+                emit('updated')
+            }
         }
 
-        const selectOutput = (stepId) => {
+        const selectOutput = async (stepId) => {
             selectedOutput.value = stepId
+            if (selectedInput.value > 0) {
+                await linkNextStep(selectedOutput.value, selectedInput.value)
+                emit('updated')
+            }
+        }
+
+        const linkNextStep = async (stepId, nextStepId) => {
+            await SURVEYS.surveyStepSetNextStep(
+                props.surveyId,
+                stepId,
+                nextStepId,
+            )
+        }
+
+        const unlinkNextStep = async (stepId) => {
+            await SURVEYS.surveyStepRemoveNextStep(props.surveyId, stepId)
+            emit('updated')
         }
 
         const getInletPosition = (inletElement) => {
@@ -500,6 +525,7 @@ export default {
             selectOutput,
             selectSurveyStep,
             store,
+            unlinkNextStep,
         }
     },
 }
@@ -515,7 +541,7 @@ export default {
 .node-editor {
     position: relative;
     /* width: 2000px;
-  height: 2000px; */
+height: 2000px; */
 }
 
 .step {

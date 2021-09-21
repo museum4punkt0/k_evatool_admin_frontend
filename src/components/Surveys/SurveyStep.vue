@@ -1,5 +1,10 @@
 <template>
-    <h1>{{ t('steps', 1) }}</h1>
+    <h1>
+        {{ t('steps', 1) }}
+        <span v-if="surveyStep.id" class="text-sm text-gray-500">
+            ID: {{ surveyStep.id }}
+        </span>
+    </h1>
 
     <div v-if="surveyStep">
         <form-input
