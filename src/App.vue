@@ -172,6 +172,9 @@
                                 </transition>
                             </Menu>
 
+                            <span class="text-xs text-gray-500">
+                                {{ version }}
+                            </span>
                             <button
                                 type="button"
                                 class="
@@ -259,6 +262,8 @@ const userNavigation = [
     { name: 'Sign out', href: '#' },
 ]
 
+import { version } from '../package.json'
+
 export default {
     components: {
         MainMenu,
@@ -321,6 +326,7 @@ export default {
             t,
             store,
             logoutUser,
+            version,
         }
     },
 }
