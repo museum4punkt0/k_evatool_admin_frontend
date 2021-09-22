@@ -1,7 +1,7 @@
 <template>
     <TransitionRoot appear :show="isOpen" as="template">
         <Dialog as="div" @close="closeModal">
-            <DialogOverlay class="fixed inset-0 bg-black opacity-50 z-10" />
+            <DialogOverlay class="fixed inset-0 bg-black opacity-70 z-10" />
             <div class="fixed inset-0 z-10 overflow-y-auto">
                 <div class="min-h-screen px-4 text-center">
                     <TransitionChild

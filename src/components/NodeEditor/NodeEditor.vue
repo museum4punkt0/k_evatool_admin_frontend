@@ -396,7 +396,7 @@ export default {
 <style scoped>
 .node-editor-wrap {
     width: 100%;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 138px);
     overflow: scroll;
 }
 
