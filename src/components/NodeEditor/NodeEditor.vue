@@ -281,6 +281,7 @@ export default {
         }
 
         const initConnections = () => {
+            connections.value = []
             props.steps.forEach((step) => {
                 if (step.nextStepId > 0) {
                     connections.value.push({
@@ -368,16 +369,21 @@ export default {
         }
 
         const linkNextStep = async (stepId, nextStepId) => {
-            await SURVEYS.surveyStepSetNextStep(
-                props.surveyId,
+            store.dispatch('surveys/setNextStep', {
+                surveyId: props.surveyId,
                 stepId,
                 nextStepId,
-            )
+            })
+            // TODO: only on success
+            selectedInput.value = -1
+            selectedOutput.value = -1
         }
 
         const unlinkNextStep = async (stepId) => {
-            await SURVEYS.surveyStepRemoveNextStep(props.surveyId, stepId)
-            emit('updated')
+            store.dispatch('surveys/removeNextStep', {
+                surveyId: props.surveyId,
+                stepId,
+            })
         }
 
         const getStepElementPosition = (id) => {

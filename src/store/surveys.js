@@ -37,6 +37,14 @@ export default {
         setSurveyAdminLayout(state, surveyElement) {
             state.survey.adminLayout = surveyElement
         },
+        updateSurveyStep(state, surveyStep) {
+            if (state.surveyStep?.id === surveyStep.id) {
+                state.surveyStep = surveyStep
+            }
+            state.survey.steps = state.survey.steps.map((item) =>
+                item.id === surveyStep.id ? surveyStep : item,
+            )
+        },
     },
     actions: {
         async getSurveys({ commit }) {
@@ -92,6 +100,22 @@ export default {
         async deleteSurvey({ dispatch }, surveyId) {
             await SURVEY_SERVICE.deleteSurvey(surveyId)
             await dispatch('getSurveys')
+        },
+        async setNextStep({ commit }, { surveyId, stepId, nextStepId }) {
+            commit(
+                'updateSurveyStep',
+                await SURVEY_SERVICE.surveyStepSetNextStep(
+                    surveyId,
+                    stepId,
+                    nextStepId,
+                ),
+            )
+        },
+        async removeNextStep({ commit }, { surveyId, stepId }) {
+            commit(
+                'updateSurveyStep',
+                await SURVEY_SERVICE.surveyStepRemoveNextStep(surveyId, stepId),
+            )
         },
     },
     getters: {},
