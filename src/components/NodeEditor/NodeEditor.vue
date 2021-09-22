@@ -10,9 +10,18 @@
                 @click="deselectStep"
                 @mouseleave="onMouseUp"
             >
+                <connection
+                    v-for="connection in connections"
+                    :key="`connection_${connection.start}_${connection.end}`"
+                    :start="getStepElementPosition(connection.start)"
+                    :end="getStepElementPosition(connection.end)"
+                    :height="height"
+                    :width="width"
+                ></connection>
                 <div
                     v-for="step in adminLayout"
                     :key="step.id"
+                    :ref="(el) => (stepElements[step.id] = el)"
                     class="
                         step
                         p-0
@@ -227,6 +236,8 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const draggedStep = ref(null)
+        const connections = ref([])
+        const stepElements = ref({})
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
         const width = 2000
         const height = 2000
@@ -269,8 +280,20 @@ export default {
             store.dispatch('surveys/setSurveyAdminLayout', adminLayoutInit)
         }
 
+        const initConnections = () => {
+            props.steps.forEach((step) => {
+                if (step.nextStepId > 0) {
+                    connections.value.push({
+                        start: step.id,
+                        end: step.nextStepId,
+                    })
+                }
+            })
+        }
+
         onMounted(() => {
             initAdminLayout()
+            initConnections()
         })
 
         onUpdated(() => {})
@@ -285,6 +308,7 @@ export default {
             () => props.steps,
             () => {
                 initAdminLayout()
+                initConnections()
             },
         )
 
@@ -356,6 +380,15 @@ export default {
             emit('updated')
         }
 
+        const getStepElementPosition = (id) => {
+            const element = stepElements.value[id]
+            const position = {
+                x: element?.style.left,
+                y: element?.style.top,
+            }
+            return position
+        }
+
         watch(
             () => timeBasedModalIsOpen.value,
             (value) => {
@@ -388,6 +421,9 @@ export default {
             surveyStepId,
             width,
             height,
+            connections,
+            stepElements,
+            getStepElementPosition,
         }
     },
 }
