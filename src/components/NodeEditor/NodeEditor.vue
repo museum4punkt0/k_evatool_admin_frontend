@@ -13,8 +13,8 @@
                 <connection
                     v-for="connection in connections"
                     :key="`connection_${connection.start}_${connection.end}`"
-                    :start="getStepElementPosition(connection.start)"
-                    :end="getStepElementPosition(connection.end)"
+                    :start="getStepElementPosition(connection.start, 'right')"
+                    :end="getStepElementPosition(connection.end, 'left')"
                     :height="height"
                     :width="width"
                 ></connection>
@@ -386,11 +386,23 @@ export default {
             })
         }
 
-        const getStepElementPosition = (id) => {
+        const getStepElementPosition = (id, anchor) => {
             const element = stepElements.value[id]
+            let offsetX = 0
+            // let offsetY = 0
+            switch (anchor) {
+                case 'left': {
+                    offsetX = -element?.getBoundingClientRect().width / 2 - 10
+                    break
+                }
+                case 'right': {
+                    offsetX = element?.getBoundingClientRect().width / 2 + 10
+                    break
+                }
+            }
             const position = {
-                x: element?.style.left,
-                y: element?.style.top,
+                x: parseInt(element?.style.left, 10) + offsetX,
+                y: parseInt(element?.style.top, 10),
             }
             return position
         }
