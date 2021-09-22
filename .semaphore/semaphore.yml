@@ -18,3 +18,8 @@ blocks:
             - cache delete build
             - yarn build
             - cache store build dist/
+promotions:
+  - name: Staging
+    pipeline_file: staging.yml
+    auto_promote:
+      when: branch = 'develop' AND result = 'passed'
