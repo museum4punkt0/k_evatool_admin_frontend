@@ -26,11 +26,16 @@
         class="grid grid-cols-12 grap-4"
     >
         <form-input
+            v-model:value="paramsLocal.options[index]['value']"
+            class="mt-3 col-span-10"
+            :label="`value ${index}`"
+        />
+        <form-input
             v-for="language in store.state.languages.data.filter(
                 (item) => item.code === selectedLanguage.code,
             )"
             :key="'option_lang' + language.id"
-            v-model:value="paramsLocal.options[index][language.code]"
+            v-model:value="paramsLocal.options[index]['labels'][language.code]"
             class="mt-3 col-span-10"
             :label="`option ${index} ( ${language.code})`"
         />
@@ -108,7 +113,10 @@ export default {
                 ...paramsLocal.value,
                 options: [
                     ...paramsLocal.value.options,
-                    { de: 'test', en: 'test', fr: 'test' },
+                    {
+                        value: '',
+                        labels: { de: 'test', en: 'test', fr: 'test' },
+                    },
                 ],
             }
             emit('update:params', newParams)

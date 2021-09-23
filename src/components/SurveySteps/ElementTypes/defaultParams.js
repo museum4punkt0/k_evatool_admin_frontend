@@ -21,10 +21,12 @@ export default (type, languages) => {
         case TYPES.MULTIPLECHOICE: {
             const question = {}
             const options = []
-            const option = {}
+            const option = { value: 'value', labels: {} }
             languages.forEach((language, index) => {
                 question[language.code] = `question ${language.code}`
-                option[language.code] = `option ${index} (${language.code})`
+                option['labels'][
+                    language.code
+                ] = `option ${index} (${language.code})`
             })
             options.push(option)
             return {
