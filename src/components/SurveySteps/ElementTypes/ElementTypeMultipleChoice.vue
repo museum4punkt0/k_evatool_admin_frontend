@@ -106,9 +106,9 @@ export default {
                 ),
             },
         }
-
         const addOption = () => {
             // TODO: how to mutate computed property
+            // TODO: force rerender to update validation rules
             const newParams = {
                 ...paramsLocal.value,
                 options: [
