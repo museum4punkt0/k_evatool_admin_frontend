@@ -26,8 +26,14 @@
                                 {{ survey.id }}
                             </td>
                             <td>
-                                <div class="text-sm text-gray-900">
+                                <div class="text text-gray-900">
                                     {{ survey.name }}
+                                    <span
+                                        v-if="store.state.users.user.admin"
+                                        class="text-xs ml-1 text-gray-500"
+                                    >
+                                        {{ survey.slug }}
+                                    </span>
                                 </div>
                                 <div class="text-sm text-gray-500">
                                     {{ survey.description }}
@@ -35,7 +41,9 @@
                             </td>
                             <td>
                                 <published-state
+                                    class="pointer"
                                     :published="survey.published"
+                                    @click="publishSurvey(survey.id)"
                                 />
                             </td>
                             <td>
@@ -134,13 +142,19 @@ export default {
                 .focus()
         }
 
+        const publishSurvey = async (surveyId) => {
+            await store.dispatch('surveys/publishSurvey', surveyId)
+        }
+
         return {
+            store,
             surveys,
             surveyId,
             t,
             deleteSurvey,
             editSurvey,
             previewSurvey,
+            publishSurvey,
             surveySaved,
         }
     },
