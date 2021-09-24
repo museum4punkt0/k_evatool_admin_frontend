@@ -8,9 +8,9 @@
                     <thead class="bg-blue-500">
                         <tr>
                             <th>ID</th>
-                            <th>Title</th>
+                            <th>{{ t('names', 1) }}</th>
                             <th>Status</th>
-                            <th>Steps</th>
+                            <th># {{ t('steps', 2) }}</th>
                             <th>
                                 <span class="sr-only">Edit</span>
                             </th>
