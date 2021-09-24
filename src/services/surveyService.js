@@ -261,6 +261,19 @@ export default {
             })
     },
 
+    async publishSurvey(surveyId) {
+        const url = 'evaluation-tool/surveys/' + surveyId + '/publish'
+
+        return axios
+            .post(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
+
     async saveSurveyStep(data, surveyId) {
         let url = 'evaluation-tool/surveys/' + surveyId + '/survey-steps'
         let method = 'POST'

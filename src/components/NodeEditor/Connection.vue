@@ -18,7 +18,7 @@
                 refY="3.5"
                 orient="auto"
             >
-                <polygon points="0 0, 10 3.5, 0 7" />
+                <polygon points="0 0, 11 3.5, 0 7" />
             </marker>
         </defs>
         <line

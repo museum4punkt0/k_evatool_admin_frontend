@@ -36,6 +36,7 @@ export default {
     passwords: 'Passwörter | Passwort | Passwörter',
     password_confirmation: 'Passwortbestätigung',
     search: 'Suche',
+    slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',
     steps: 'Schritte | Schritt | Schritte',
