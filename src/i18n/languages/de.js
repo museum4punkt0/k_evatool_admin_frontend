@@ -37,6 +37,7 @@ export default {
     number_of_stars: 'Anzahl der Sterne',
     passwords: 'Passwörter | Passwort | Passwörter',
     password_confirmation: 'Passwortbestätigung',
+    questions: 'Fragen | Frage | Fragen',
     search: 'Suche',
     slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',
@@ -45,6 +46,7 @@ export default {
     stops_video: 'Stoppt das Video',
     surveys: 'Umfragen | Umfrage | Umfragen',
     survey_elements: 'Umfrage-Elemente | Umfrage-Element | Umfrage-Elemente',
+    system_value: 'Systemwert',
     timestamps: 'Zeiten | Zeit | Zeiten',
     time_based_steps:
         'Zeitbasierte Schritte | Zeitbasierter Schritt | Zeitbasierte Schritte',

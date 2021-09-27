@@ -1,14 +1,8 @@
 <template>
-    <language-switch @select="setSelectedLanguage($event)" />
-    <!--    <button
-      v-for="language in store.state.languages.data"
-      :key="'lang' + language.id"
-      class="primary"
-      :class="{ active: selectedLanguage.code === language.code }"
-      @click="setSelectedLanguage(language)"
-  >
-      {{ language.code }}
-  </button>-->
+    <language-switch
+        :active-language="selectedLanguage"
+        @select="setSelectedLanguage($event)"
+    />
 
     <form-input
         v-for="language in store.state.languages.languages.filter(
@@ -17,7 +11,7 @@
         :key="'question_lang' + language.id"
         v-model:value="paramsLocal.question[language.code]"
         class="mt-3"
-        :label="'question (' + language.code + ')'"
+        :label="t('questions', 1) + ' (' + language.title + ')'"
     />
 
     <ul class="list-disc">
@@ -29,7 +23,7 @@
             <form-input
                 v-model:value="paramsLocal.options[index]['value']"
                 class="mt-3 col-span-9"
-                :label="`value ${index + 1}`"
+                :label="`${t('system_value')} ${index + 1}`"
             />
             <button
                 class="primary col-span-3"
