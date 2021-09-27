@@ -1,7 +1,14 @@
 <template>
-    <form-input v-model:value="paramsLocal.numberOfSteps" />
+    <form-input
+        v-model:value="paramsLocal.numberOfStars"
+        :label="t('number_of_stars')"
+    />
 
-    <form-toggle v-model:enabled="paramsLocal.allowHalfSteps" class="my-3" />
+    <form-toggle
+        v-model:enabled="paramsLocal.allowHalfSteps"
+        :label="t('allow_half_steps')"
+        class="my-3"
+    />
 
     <form-input
         v-for="language in store.state.languages.data"
