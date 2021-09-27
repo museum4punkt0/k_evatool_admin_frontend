@@ -15,10 +15,10 @@
     </div>
 
     <form-select
-        v-if="elementTypes?.data"
+        v-if="elementTypes"
         v-model:selected="surveyElement.surveyElementType"
         class="mt-3"
-        :options="elementTypes.data"
+        :options="elementTypes"
         :label="t('types', 1)"
         title-key="name"
         value-key="key"
@@ -121,7 +121,7 @@ export default {
         const languages = computed(() => store.state.languages.languages)
 
         onMounted(async () => {
-            elementTypes.value = store.state.elementTypes
+            elementTypes.value = store.state.elementTypes.elementTypes
         })
 
         const getSurveyElement = async (surveyElementId) => {

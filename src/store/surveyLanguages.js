@@ -1,8 +1,9 @@
 import surveyLanguagesService from '../services/surveyLanguageService'
 const initialState = {
     languages: [],
-    data: null,
-    selectedLanguage: null,
+    language: null,
+    // data: null,
+    // selectedLanguage: null,
     defaultLanguage: null,
     secondaryLanguages: [],
 }
@@ -40,16 +41,9 @@ export default {
         },
     },
     actions: {
-        getAllLanguagesAndUpdateStore({ commit }) {
-            return new Promise((resolve, reject) => {
-                surveyLanguagesService.getAll(
-                    (value) => {
-                        commit('setLanguages', value)
-                        resolve(value)
-                    },
-                    (error) => reject(error),
-                )
-            })
+        async getAllLanguagesAndUpdateStore({ commit }) {
+            const languages = await surveyLanguagesService.getLanguages()
+            commit('setLanguages', languages)
         },
         getOneLanguageSelectAndUpdateStore({ commit }, { id }) {
             return new Promise((resolve, reject) => {
