@@ -28,7 +28,7 @@
         <form-input
             v-model:value="paramsLocal.options[index]['value']"
             class="mt-3 col-span-10"
-            :label="`value ${index}`"
+            :label="`value ${index + 1}`"
         />
         <form-input
             v-for="language in store.state.languages.data.filter(
@@ -37,7 +37,7 @@
             :key="'option_lang' + language.id"
             v-model:value="paramsLocal.options[index]['labels'][language.code]"
             class="mt-3 col-span-10"
-            :label="`option ${index} ( ${language.code})`"
+            :label="`option ${index + 1} ( ${language.code})`"
         />
         <button class="primary col-span-2" @click="removeOption(option, index)">
             <TrashIcon class="mx-1 h-5 w-5 pointer" />
@@ -92,6 +92,8 @@ export default {
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
+
+        console.log(paramsLocal.value.options)
 
         const validations = {
             minSelectable: {
