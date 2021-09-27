@@ -20,29 +20,36 @@
         :label="'question (' + language.code + ')'"
     />
 
-    <div
-        v-for="(option, index) in paramsLocal.options"
-        :key="`option_${index}`"
-        class="grid grid-cols-12 grap-4"
-    >
-        <form-input
-            v-model:value="paramsLocal.options[index]['value']"
-            class="mt-3 col-span-10"
-            :label="`value ${index + 1}`"
-        />
-        <form-input
-            v-for="language in store.state.languages.data.filter(
-                (item) => item.code === selectedLanguage.code,
-            )"
-            :key="'option_lang' + language.id"
-            v-model:value="paramsLocal.options[index]['labels'][language.code]"
-            class="mt-3 col-span-10"
-            :label="`option ${index + 1} ( ${language.code})`"
-        />
-        <button class="primary col-span-2" @click="removeOption(option, index)">
-            <TrashIcon class="mx-1 h-5 w-5 pointer" />
-        </button>
-    </div>
+    <ul class="list-disc">
+        <li
+            v-for="(option, index) in paramsLocal.options"
+            :key="`option_${index}`"
+            class="grid grid-cols-12 gap-4"
+        >
+            <form-input
+                v-model:value="paramsLocal.options[index]['value']"
+                class="mt-3 col-span-9"
+                :label="`value ${index + 1}`"
+            />
+            <button
+                class="primary col-span-3"
+                @click="removeOption(option, index)"
+            >
+                <TrashIcon class="mx-1 h-5 w-5 pointer" />
+            </button>
+            <form-input
+                v-for="language in store.state.languages.data.filter(
+                    (item) => item.code === selectedLanguage.code,
+                )"
+                :key="'option_lang' + language.id"
+                v-model:value="
+                    paramsLocal.options[index]['labels'][language.code]
+                "
+                class="mt-3 col-span-12"
+                :label="`label option ${index + 1} ( ${language.code})`"
+            />
+        </li>
+    </ul>
     <button class="primary" @click="addOption">
         <PlusIcon class="mx-1 h-5 w-5 pointer" />
     </button>
