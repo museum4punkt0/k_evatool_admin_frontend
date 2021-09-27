@@ -1,7 +1,7 @@
 <template>
     <h3>Simple text</h3>
     <form-input
-        v-for="language in store.state.languages.data"
+        v-for="language in store.state.languages.languages"
         :key="'lang' + language.id"
         v-model:value="paramsLocal.text[language.code]"
         :label="'question (' + language.code + ')'"
