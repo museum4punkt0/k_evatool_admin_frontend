@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.160",
+    "version": "1.0.161",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -37,10 +37,10 @@
     "devDependencies": {
         "@vitejs/plugin-vue": "^1.9.2",
         "@vue/cli-plugin-eslint": "~4.5.13",
-        "@vue/compiler-sfc": "^3.2.18",
+        "@vue/compiler-sfc": "^3.2.19",
         "@vue/eslint-config-prettier": "^6.0.0",
         "@vue/eslint-config-standard": "^6.1.0",
-        "autoprefixer": "^10.3.5",
+        "autoprefixer": "^10.3.6",
         "babel-eslint": "^10.1.0",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
@@ -49,10 +49,10 @@
         "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-promise": "^5.1.0",
         "eslint-plugin-vue": "^7.18.0",
-        "postcss": "^8.3.7",
+        "postcss": "^8.3.8",
         "pre-commit": "^1.2.2",
         "prettier": "^2.4.1",
-        "tailwindcss": "^2.2.15",
+        "tailwindcss": "^2.2.16",
         "vite": "^2.5.10",
         "vite-plugin-vue-env": "^1.0.5"
     }
