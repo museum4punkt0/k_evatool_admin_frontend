@@ -302,10 +302,8 @@ export default {
         }
 
         const loadApp = async () => {
-            await store.dispatch('languages/getAllLanguagesAndUpdateStore')
-            await store.dispatch(
-                'elementTypes/getAllElementTypesAndUpdateStore',
-            )
+            await store.dispatch('languages/getLanguages')
+            await store.dispatch('elementTypes/getElementTypes')
             await store.dispatch('surveyElements/getSurveyElements')
             await store.dispatch('assets/getAssets')
             loadingApp.value = false

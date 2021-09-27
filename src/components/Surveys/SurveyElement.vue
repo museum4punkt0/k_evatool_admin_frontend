@@ -1,8 +1,8 @@
 <template>
     <data-viewer class="mt-3" :data="v$" />
-    <h3 v-if="surveyElementId > 0">{{ $tc('elements', 1) }}</h3>
+    <h3 v-if="surveyElementId > 0">{{ t('elements', 1) }}</h3>
     <h3 v-else>Neues Element</h3>
-    <label for="name" class="capitalize">{{ $tc('names', 1) }}</label>
+    <label for="name" class="capitalize">{{ t('names', 1) }}</label>
     <div class="mt-1">
         <input
             id="name"
@@ -15,10 +15,10 @@
     </div>
 
     <form-select
-        v-if="elementTypes?.data"
+        v-if="elementTypes"
         v-model:selected="surveyElement.surveyElementType"
         class="mt-3"
-        :options="elementTypes.data"
+        :options="elementTypes"
         :label="t('types', 1)"
         title-key="name"
         value-key="key"
@@ -62,6 +62,12 @@
             v-model:params="surveyElement.params"
         />
     </div>
+    <action-button
+        :disabled="v$.$invalid"
+        :executing="savingSurveyElement"
+        :action-text="t('action_save')"
+        @execute="saveSurveyElement"
+    />
     <action-button
         :disabled="v$.$invalid"
         :executing="savingSurveyElement"
@@ -133,7 +139,7 @@ export default {
         const languages = computed(() => store.state.languages.languages)
 
         onMounted(async () => {
-            elementTypes.value = store.state.elementTypes
+            elementTypes.value = store.state.elementTypes.elementTypes
         })
 
         const getSurveyElement = async (surveyElementId) => {
@@ -163,6 +169,13 @@ export default {
                 getSurveyElement(props.surveyElementId)
             }
         })
+
+        watch(
+            () => props.surveyElementId,
+            (value) => {
+                getSurveyElement(value)
+            },
+        )
 
         watch(
             () => surveyElement.value?.surveyElementType,

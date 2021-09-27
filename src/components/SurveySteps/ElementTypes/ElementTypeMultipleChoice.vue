@@ -1,17 +1,17 @@
 <template>
-    {{ selectedLanguage.code }}
-    <button
-        v-for="language in store.state.languages.data"
-        :key="'lang' + language.id"
-        class="primary"
-        :class="{ active: selectedLanguage.code === language.code }"
-        @click="setSelectedLanguage(language)"
-    >
-        {{ language.code }}
-    </button>
+    <language-switch @select="setSelectedLanguage($event)" />
+    <!--    <button
+      v-for="language in store.state.languages.data"
+      :key="'lang' + language.id"
+      class="primary"
+      :class="{ active: selectedLanguage.code === language.code }"
+      @click="setSelectedLanguage(language)"
+  >
+      {{ language.code }}
+  </button>-->
 
     <form-input
-        v-for="language in store.state.languages.data.filter(
+        v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'question_lang' + language.id"
@@ -38,7 +38,7 @@
                 <TrashIcon class="mx-1 h-5 w-5 pointer" />
             </button>
             <form-input
-                v-for="language in store.state.languages.data.filter(
+                v-for="language in store.state.languages.languages.filter(
                     (item) => item.code === selectedLanguage.code,
                 )"
                 :key="'option_lang' + language.id"
@@ -72,15 +72,17 @@
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required, between } from '@vuelidate/validators'
 import { useState } from '../../../composables/state'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 
+import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+
 export default {
     name: 'ElementTypeMultipleChoiceQuestion',
-    components: { FormInput, TrashIcon, PlusIcon },
+    components: { LanguageSwitch, FormInput, TrashIcon, PlusIcon },
     props: {
         params: {
             type: Object,
@@ -91,7 +93,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
-        const [selectedLanguage, setSelectedLanguage] = useState(
+        const selectedLanguage = ref(
             store.state.languages.languages.find((lang) => lang.default),
         )
 
@@ -141,6 +143,11 @@ export default {
                 options,
             }
             emit('update:params', newParams)
+        }
+
+        const setSelectedLanguage = (language) => {
+            console.log(language)
+            selectedLanguage.value = language
         }
 
         return {
