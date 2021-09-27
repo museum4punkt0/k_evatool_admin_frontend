@@ -62,17 +62,20 @@
             v-model:params="surveyElement.params"
         />
     </div>
+
     <action-button
         :disabled="v$.$invalid"
         :executing="savingSurveyElement"
         :action-text="t('action_save')"
         @execute="saveSurveyElement"
     />
+
     <action-button
-        :disabled="v$.$invalid"
-        :executing="savingSurveyElement"
-        :action-text="t('action_save')"
-        @execute="saveSurveyElement"
+        v-if="surveyElementId > 0"
+        color="danger"
+        class="ml-2"
+        :action-text="t('action_cancel')"
+        @execute="cancelEdit"
     />
 
     <data-viewer class="mt-3" :data="surveyElement" />
@@ -128,7 +131,7 @@ export default {
             default: true,
         },
     },
-    emits: ['saved'],
+    emits: ['saved', 'cancel'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
@@ -200,15 +203,9 @@ export default {
             },
         }
 
-        /* watch(
-            () => props.surveyElementId,
-            (value) => {
-                console.log(value)
-                if (value > 0) {
-                    getSurveyElement(value)
-                }
-            },
-        )*/
+        const cancelEdit = () => {
+            emit('cancel')
+        }
 
         return {
             v$: useVuelidate(),
@@ -219,6 +216,7 @@ export default {
             t,
             validations,
             paramsValid,
+            cancelEdit,
         }
     },
     validations: {

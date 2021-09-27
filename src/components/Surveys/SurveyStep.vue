@@ -116,7 +116,7 @@ export default {
         const surveyElement = ref(null)
 
         const surveyElements = computed({
-            get: () => store.state.surveyElements.data,
+            get: () => store.state.surveyElements.surveyElements,
         })
 
         const getSurveyStep = async () => {

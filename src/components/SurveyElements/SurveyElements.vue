@@ -62,6 +62,7 @@
         <aside>
             <survey-element
                 :survey-element-id="surveyElementId"
+                @cancel="resetSurveyElement"
                 @saved="getSurveyElements"
             />
         </aside>
@@ -96,6 +97,10 @@ export default {
             surveyElementId.value = selectedSurveyElementId
         }
 
+        const resetSurveyElement = async () => {
+            surveyElementId.value = -1
+        }
+
         const deleteSurveyElement = async (surveyElementId) => {
             await store.dispatch(
                 'surveyElements/deleteSurveyElement',
@@ -111,6 +116,7 @@ export default {
             deleteSurveyElement,
             store,
             surveyElementId,
+            resetSurveyElement,
         }
     },
 }

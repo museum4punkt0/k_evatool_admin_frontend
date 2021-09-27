@@ -60,7 +60,7 @@ export default {
 
         const setSurvey = async (surveyId) => {
             if (surveyId > 0) {
-                survey.value = await SURVEYS.getOne(surveyId)
+                survey.value = await SURVEYS.getSurvey(surveyId)
                 surveyTitle.value = t('edit_survey')
             } else {
                 initSurvey()
