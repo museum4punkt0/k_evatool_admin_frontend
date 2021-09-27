@@ -42,9 +42,34 @@ export default (type, languages) => {
             }
         }
         case TYPES.EMOJI: {
+            const question = {}
+            languages.forEach((language) => {
+                question[language.code] = `question ${language.code}`
+            })
             return {
-                emojis: [],
-                question: [],
+                emojis: [
+                    {
+                        type: '😍',
+                        meaning: 'volle zustimmung',
+                    },
+                    {
+                        type: '😃',
+                        meaning: 'zustimmung',
+                    },
+                    {
+                        type: '🙂',
+                        meaning: 'neutral',
+                    },
+                    {
+                        type: '😦',
+                        meaning: 'ablehnung',
+                    },
+                    {
+                        type: '😡',
+                        meaning: 'volle ablehnung',
+                    },
+                ],
+                question,
             }
         }
         case TYPES.STARRATING: {
