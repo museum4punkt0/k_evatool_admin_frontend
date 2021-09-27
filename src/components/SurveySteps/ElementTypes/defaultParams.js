@@ -6,6 +6,16 @@ const TYPES = {
     STARRATING: 'starRating',
     BINARY: 'binary',
     YAYNAY: 'yayNay',
+    VOICEINPUT: 'voiceInput',
+    TEXTINPUT: 'textInput',
+}
+
+const createDefaultQuestion = (languages) => {
+    const question = {}
+    languages.forEach((language) => {
+        question[language.code] = `question ${language.code}`
+    })
+    return question
 }
 export default (type, languages) => {
     switch (type) {
@@ -32,7 +42,7 @@ export default (type, languages) => {
             return {
                 question,
                 minSelectable: 1,
-                maxSelectable: 2,
+                maxSelectable: 1,
                 options,
             }
         }
@@ -42,10 +52,6 @@ export default (type, languages) => {
             }
         }
         case TYPES.EMOJI: {
-            const question = {}
-            languages.forEach((language) => {
-                question[language.code] = `question ${language.code}`
-            })
             return {
                 emojis: [
                     {
@@ -69,23 +75,18 @@ export default (type, languages) => {
                         meaning: 'volle ablehnung',
                     },
                 ],
-                question,
+                question: createDefaultQuestion(languages),
             }
         }
         case TYPES.STARRATING: {
-            const question = {}
-            languages.forEach((language) => {
-                question[language.code] = `question ${language.code}`
-            })
             return {
+                question: createDefaultQuestion(languages),
                 numberOfStars: 5,
                 allowHalfSteps: false,
-                question,
             }
         }
         case TYPES.BINARY:
         case TYPES.YAYNAY: {
-            const question = {}
             const trueLabel = {}
             const falseLabel = {}
             const createTrueLabel = (language) => {
@@ -115,16 +116,25 @@ export default (type, languages) => {
                 return 'true'
             }
             languages.forEach((language) => {
-                question[language.code] = `question ${language.code}`
                 trueLabel[language.code] = createTrueLabel(language)
                 falseLabel[language.code] = createFalseLabel(language)
             })
             return {
-                question,
+                question: createDefaultQuestion(languages),
                 trueValue: 'accepted',
                 falseValue: 'declined',
                 trueLabel,
                 falseLabel,
+            }
+        }
+        case TYPES.VOICEINPUT: {
+            return {
+                question: createDefaultQuestion(languages),
+            }
+        }
+        case TYPES.TEXTINPUT: {
+            return {
+                question: createDefaultQuestion(languages),
             }
         }
     }

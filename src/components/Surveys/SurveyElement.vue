@@ -53,6 +53,14 @@
             v-if="surveyElement.surveyElementType === 'yayNay'"
             v-model:params="surveyElement.params"
         />
+        <element-type-text-input
+            v-if="surveyElement.surveyElementType === 'textInput'"
+            v-model:params="surveyElement.params"
+        />
+        <element-type-voice-input
+            v-if="surveyElement.surveyElementType === 'voiceInput'"
+            v-model:params="surveyElement.params"
+        />
     </div>
     <action-button
         :disabled="v$.$invalid"
@@ -73,6 +81,8 @@ import ElementTypeBinaryQuestion from '../SurveySteps/ElementTypes/ElementTypeBi
 import ElementTypeMultipleChoice from '../SurveySteps/ElementTypes/ElementTypeMultipleChoice.vue'
 import ElementTypeSimpleText from '../SurveySteps/ElementTypes/ElementTypeSimpleText.vue'
 import ElementTypeYayNay from '../SurveySteps/ElementTypes/ElementTypeYayNay.vue'
+import ElementTypeTextInput from '../SurveySteps/ElementTypes/ElementTypeTextInput.vue'
+import ElementTypeVoiceInput from '../SurveySteps/ElementTypes/ElementTypeVoiceInput.vue'
 import FormSelect from '../Forms/FormSelect.vue'
 import DataViewer from '../Common/DataViewer.vue'
 import ActionButton from '../Common/ActionButton.vue'
@@ -98,6 +108,8 @@ export default {
         ElementTypeVideo,
         ElementTypeEmoji,
         ElementTypeStarRating,
+        ElementTypeVoiceInput,
+        ElementTypeTextInput,
         FormSelect,
     },
     props: {
