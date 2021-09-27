@@ -7,7 +7,6 @@ import Survey from '../components/Surveys/Survey.vue'
 import SurveySteps from '../components/SurveySteps/SurveySteps.vue'
 
 import ListLanguages from '../components/Languages/Languages.vue'
-import ViewLanguage from '../components/Languages/View.vue'
 
 import Localizations from '../components/Localizations/Localizations.vue'
 import Localization from '../components/Localizations/Localization.vue'
@@ -38,9 +37,8 @@ const routes = [
 
     { name: 'languages', path: '/languages', component: ListLanguages },
 
-    { name: 'language/view', path: '/languages/:id', component: ViewLanguage },
-
     { name: 'localizations', path: '/localizations', component: Localizations },
+
     {
         name: 'localization/new',
         path: '/localizations/new',
