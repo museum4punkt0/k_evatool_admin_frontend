@@ -60,17 +60,21 @@
             </div>
         </main>
         <aside>
-            <survey-element @saved="getSurveyElements" />
+            <survey-element
+                :survey-element-id="surveyElementId"
+                @saved="getSurveyElements"
+            />
         </aside>
     </div>
 </template>
 
 <script>
 import { useI18n } from 'vue-i18n'
-import SurveyElement from '../Surveys/SurveyElement.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { RefreshIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/outline'
+
+import SurveyElement from '../Surveys/SurveyElement.vue'
 
 export default {
     name: 'SurveyElements',
@@ -78,21 +82,25 @@ export default {
     setup() {
         const { t } = useI18n()
         const store = useStore()
+        const surveyElementId = ref(-1)
 
         const surveyElements = computed({
-            get: () => store.state.surveyElements.data,
+            get: () => store.state.surveyElements.surveyElements,
         })
 
         const getSurveyElements = () => {
             store.dispatch('surveyElements/getSurveyElements')
         }
 
-        const editSurveyElement = (surveyElementId) => {
-            console.log(surveyElementId)
+        const editSurveyElement = async (selectedSurveyElementId) => {
+            surveyElementId.value = selectedSurveyElementId
         }
 
-        const deleteSurveyElement = (surveyElementId) => {
-            console.log(surveyElementId)
+        const deleteSurveyElement = async (surveyElementId) => {
+            await store.dispatch(
+                'surveyElements/deleteSurveyElement',
+                surveyElementId,
+            )
         }
 
         return {
@@ -101,6 +109,8 @@ export default {
             getSurveyElements,
             editSurveyElement,
             deleteSurveyElement,
+            store,
+            surveyElementId,
         }
     },
 }

@@ -1,12 +1,11 @@
 <template>
     <div>
-        {{ languages }}
         <button
             v-for="language in languages"
             :key="language.id"
             @click="selectLanguage(language)"
         >
-            {{ language }}
+            {{ language.title }}
         </button>
     </div>
 </template>
@@ -27,7 +26,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const languages = computed({
-            get: store.state.languages.data,
+            get: () => store.state.languages.languages,
         })
         const selectLanguage = (language) => {
             emit('select', language)

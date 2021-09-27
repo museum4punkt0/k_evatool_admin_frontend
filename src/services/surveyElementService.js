@@ -39,4 +39,15 @@ export default {
                 return error.response
             })
     },
+
+    async deleteSurveyElement(surveyElementId) {
+        return axios
+            .delete('evaluation-tool/survey-elements/' + surveyElementId)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }

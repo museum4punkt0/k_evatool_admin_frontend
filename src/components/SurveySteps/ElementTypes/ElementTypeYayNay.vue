@@ -11,7 +11,7 @@
     </button>
 
     <form-input
-        v-for="language in store.state.languages.data.filter(
+        v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
@@ -22,7 +22,7 @@
 
     <div class="grid grid-cols-12 gap-4">
         <form-input
-            v-for="language in store.state.languages.data.filter(
+            v-for="language in store.state.languages.languages.filter(
                 (item) => item.code === selectedLanguage.code,
             )"
             :key="'lang' + language.id"
@@ -31,7 +31,7 @@
             :label="t('yaynay_positive_label') + ' (' + language.code + ')'"
         />
         <form-input
-            v-for="language in store.state.languages.data.filter(
+            v-for="language in store.state.languages.languages.filter(
                 (item) => item.code === selectedLanguage.code,
             )"
             :key="'lang' + language.id"

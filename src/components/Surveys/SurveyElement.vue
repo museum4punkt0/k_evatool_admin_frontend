@@ -1,8 +1,8 @@
 <template>
     <data-viewer class="mt-3" :data="v$" />
-    <h3 v-if="surveyElementId > 0">{{ $tc('elements', 1) }}</h3>
+    <h3 v-if="surveyElementId > 0">{{ t('elements', 1) }}</h3>
     <h3 v-else>Neues Element</h3>
-    <label for="name" class="capitalize">{{ $tc('names', 1) }}</label>
+    <label for="name" class="capitalize">{{ t('names', 1) }}</label>
     <div class="mt-1">
         <input
             id="name"
@@ -54,6 +54,12 @@
             v-model:params="surveyElement.params"
         />
     </div>
+    <action-button
+        :disabled="v$.$invalid"
+        :executing="savingSurveyElement"
+        :action-text="t('action_save')"
+        @execute="saveSurveyElement"
+    />
     <action-button
         :disabled="v$.$invalid"
         :executing="savingSurveyElement"
@@ -151,6 +157,13 @@ export default {
                 getSurveyElement(props.surveyElementId)
             }
         })
+
+        watch(
+            () => props.surveyElementId,
+            (value) => {
+                getSurveyElement(value)
+            },
+        )
 
         watch(
             () => surveyElement.value?.surveyElementType,
