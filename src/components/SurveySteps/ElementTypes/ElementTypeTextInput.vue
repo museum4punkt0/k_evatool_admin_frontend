@@ -1,10 +1,12 @@
 <template>
-    <form-input
-        v-for="language in store.state.languages.data"
-        :key="'lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        :label="'question (' + language.code + ')'"
-    />
+    <div>
+        <form-input
+            v-for="language in store.state.languages.languages"
+            :key="'lang' + language.id"
+            v-model:value="paramsLocal.question[language.code]"
+            :label="'question (' + language.code + ')'"
+        />
+    </div>
 </template>
 
 <script>
