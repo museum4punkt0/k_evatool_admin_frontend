@@ -1,6 +1,6 @@
 <template>
     <pre
-        v-if="store.state.debug"
+        v-if="store.state.debug || force"
         class="
             text-xs
             w-full
@@ -22,6 +22,10 @@ export default {
         data: {
             type: [Object, Array, Number, String, Boolean],
             default: () => {},
+        },
+        force: {
+            type: Boolean,
+            default: false,
         },
     },
     setup() {

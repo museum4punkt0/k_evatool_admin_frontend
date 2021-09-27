@@ -53,7 +53,7 @@ export default (type, languages) => {
                 question[language.code] = `question ${language.code}`
             })
             return {
-                numberOfSteps: 5,
+                numberOfStars: 5,
                 allowHalfSteps: false,
                 question,
             }
