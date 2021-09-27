@@ -92,23 +92,27 @@ export default {
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
+        const validations = computed({
+            get: () => {
+                return {
+                    minSelectable: {
+                        required,
+                        between: between(1, paramsLocal.value.options.length),
+                    },
+                    maxSelectable: {
+                        required,
+                        between: between(
+                            paramsLocal.value.minSelectable,
+                            paramsLocal.value.options.length,
+                        ),
+                    },
+                }
+            },
+            set: (val) => emit('update:params', val),
+        })
 
-        const validations = {
-            minSelectable: {
-                required,
-                between: between(1, paramsLocal.value.options.length),
-            },
-            maxSelectable: {
-                required,
-                between: between(
-                    paramsLocal.value.minSelectable,
-                    paramsLocal.value.options.length,
-                ),
-            },
-        }
         const addOption = () => {
             // TODO: how to mutate computed property
-            // TODO: force rerender to update validation rules
             const newParams = {
                 ...paramsLocal.value,
                 options: [
