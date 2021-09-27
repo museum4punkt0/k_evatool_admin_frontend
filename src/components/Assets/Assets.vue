@@ -1,7 +1,10 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1 class="mb-3">{{ t('assets', 2) }}</h1>
+            <h1 v-if="store.state.assets?.data" class="mb-3">
+                {{ store.state.assets.data.length }}
+                {{ t('assets', store.state.assets.data.length) }}
+            </h1>
 
             <template
                 v-if="

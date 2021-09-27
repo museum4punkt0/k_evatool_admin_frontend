@@ -16,207 +16,7 @@ const urls = {
 }
 
 export default {
-    async getAll(successCallback, errorCallback) {
-        const url = urls.getAll()
-
-        if (successCallback) {
-            axios
-                .get('evaluation-tool/surveys')
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not get all surveys')
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios.get(url)
-            return response.data
-        }
-    },
-    async getOne(id, successCallback, errorCallback) {
-        const url = urls.getOne(id)
-
-        if (successCallback) {
-            axios
-                .get(url)
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not get one survey', id)
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios.get(url)
-            return response.data.data
-        }
-    },
-    async createOne(data, successCallback, errorCallback) {
-        const url = urls.createOne()
-        const method = 'post'
-
-        if (successCallback) {
-            axios({ url, method, data })
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not create one survey', data)
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios({ url, method, data })
-            return response.data.data
-        }
-    },
-    async updateOne(id, data, successCallback, errorCallback) {
-        const url = urls.updateOne(id)
-        const method = 'put'
-
-        if (successCallback) {
-            axios({ url, method, data })
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not update one survey', id, data)
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios({ url, method, data })
-            return response.data.data
-        }
-    },
-    async deleteOne(id, successCallback, errorCallback) {
-        const url = urls.deleteOne(id)
-        const method = 'delete'
-
-        if (successCallback) {
-            axios({ url, method })
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not delete one survey', id)
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios({ url, method })
-            return response.data.data
-        }
-    },
-    async getAllSurveySteps(id, successCallback, errorCallback) {
-        const url = urls.getAllSurveySteps(id)
-
-        if (successCallback) {
-            axios
-                .get(url)
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not get all survey steps')
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios.get(url)
-            return response.data
-        }
-    },
-    async deleteOneSurveyStep(id, stepId, successCallback, errorCallback) {
-        const url = urls.deleteOneSurveyStep(id, stepId)
-
-        if (successCallback) {
-            axios
-                .get(url)
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not delete one survey step')
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios.get(url)
-            return response.data
-        }
-    },
-    async updateOneSurveyStep(data, successCallback, errorCallback) {
-        const url = urls.updateOneSurveyStep(data.surveyId, data.id)
-
-        if (successCallback) {
-            axios
-                .put(url, data)
-                .then((response) => {
-                    if (response.data) {
-                        successCallback(response.data.data)
-                    } else if (errorCallback) {
-                        errorCallback(response)
-                    } else {
-                        console.error('could not delete one survey step')
-                    }
-                })
-                .catch((error) => {
-                    if (errorCallback) {
-                        errorCallback(error)
-                    }
-                })
-        } else {
-            const response = await axios.put(url)
-            return response.data
-        }
-    },
-    async saveSurvey(survey) {
+    saveSurvey(survey) {
         let url = 'evaluation-tool/surveys'
         let method = 'post'
         if (survey.id) {
@@ -233,7 +33,7 @@ export default {
             })
     },
 
-    async saveAdminLayout(surveyId, adminLayout) {
+    saveAdminLayout(surveyId, adminLayout) {
         const url = 'evaluation-tool/surveys/' + surveyId + '/admin-layout'
         return axios
             .put(url, { adminLayout })
@@ -245,7 +45,7 @@ export default {
             })
     },
 
-    async getSurveyStep(surveyId, surveyStepId) {
+    getSurveyStep(surveyId, surveyStepId) {
         let url =
             'evaluation-tool/surveys/' +
             surveyId +
@@ -261,7 +61,7 @@ export default {
             })
     },
 
-    async publishSurvey(surveyId) {
+    publishSurvey(surveyId) {
         const url = 'evaluation-tool/surveys/' + surveyId + '/publish'
 
         return axios
@@ -274,7 +74,7 @@ export default {
             })
     },
 
-    async saveSurveyStep(data, surveyId) {
+    saveSurveyStep(data, surveyId) {
         let url = 'evaluation-tool/surveys/' + surveyId + '/survey-steps'
         let method = 'POST'
         if (data.id) {
@@ -290,7 +90,7 @@ export default {
             })
     },
 
-    async deleteSurvey(surveyId) {
+    deleteSurvey(surveyId) {
         const url = 'evaluation-tool/surveys/' + surveyId
         return axios
             .delete(url)
