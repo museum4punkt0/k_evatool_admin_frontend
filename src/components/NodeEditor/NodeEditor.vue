@@ -93,12 +93,7 @@
                                     items-center
                                 "
                                 @click="unlinkNextStep(step.id)"
-                            >
-                                {{
-                                    steps.find((x) => x.id === step.id)
-                                        .nextStepId
-                                }}
-                            </div>
+                            ></div>
                         </div>
                     </div>
                     <div class="w-full border-t">
@@ -193,14 +188,14 @@
 </template>
 
 <script>
-import { ref, computed, onUpdated, onMounted, watch } from 'vue'
+import { computed, onMounted, onUpdated, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import Connection from './Connection.vue'
 
 import {
-    ClockIcon,
     ArrowLeftIcon,
     ArrowRightIcon,
+    ClockIcon,
     PencilIcon,
 } from '@heroicons/vue/outline'
 
@@ -256,27 +251,31 @@ export default {
             console.log('init admin layout')
             const adminLayoutInit = []
 
-            props.steps.forEach((step) => {
-                const index = props.adminLayout.findIndex(
-                    (x) => x.id === step.id,
-                )
-
-                if (index < 0) {
-                    adminLayoutInit.push({
-                        id: step.id,
-                        position: {
-                            x: 100,
-                            y: 100,
-                        },
-                    })
-                } else {
-                    let stepFound = props.adminLayout.find(
+            props.steps
+                .filter((x) => !x.parentStepId)
+                .forEach((step) => {
+                    const index = props.adminLayout.findIndex(
                         (x) => x.id === step.id,
                     )
-                    stepFound.position = fixLayoutPosition(stepFound.position)
-                    adminLayoutInit.push(stepFound)
-                }
-            })
+
+                    if (index < 0) {
+                        adminLayoutInit.push({
+                            id: step.id,
+                            position: {
+                                x: 100,
+                                y: 100,
+                            },
+                        })
+                    } else {
+                        let stepFound = props.adminLayout.find(
+                            (x) => x.id === step.id,
+                        )
+                        stepFound.position = fixLayoutPosition(
+                            stepFound.position,
+                        )
+                        adminLayoutInit.push(stepFound)
+                    }
+                })
             store.dispatch('surveys/setSurveyAdminLayout', adminLayoutInit)
         }
 
@@ -369,7 +368,7 @@ export default {
         }
 
         const linkNextStep = async (stepId, nextStepId) => {
-            store.dispatch('surveys/setNextStep', {
+            await store.dispatch('surveys/setNextStep', {
                 surveyId: props.surveyId,
                 stepId,
                 nextStepId,
@@ -380,7 +379,7 @@ export default {
         }
 
         const unlinkNextStep = async (stepId) => {
-            store.dispatch('surveys/removeNextStep', {
+            await store.dispatch('surveys/removeNextStep', {
                 surveyId: props.surveyId,
                 stepId,
             })
@@ -400,11 +399,10 @@ export default {
                     break
                 }
             }
-            const position = {
+            return {
                 x: parseInt(element?.style.left, 10) + offsetX,
                 y: parseInt(element?.style.top, 10),
             }
-            return position
         }
 
         watch(

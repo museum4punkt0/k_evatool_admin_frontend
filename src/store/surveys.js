@@ -117,6 +117,10 @@ export default {
                 await SURVEY_SERVICE.surveyStepRemoveNextStep(surveyId, stepId),
             )
         },
+        async publishSurvey({ dispatch }, surveyId) {
+            await SURVEY_SERVICE.publishSurvey(surveyId)
+            await dispatch('getSurveys')
+        },
     },
     getters: {},
 }

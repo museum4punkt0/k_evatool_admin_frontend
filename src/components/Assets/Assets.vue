@@ -1,7 +1,7 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1 class="mb-3">{{ $tc('assets', 2) }}</h1>
+            <h1 class="mb-3">{{ t('assets', 2) }}</h1>
 
             <template
                 v-if="

@@ -1,7 +1,18 @@
 <template>
     <h1>{{ surveyTitle }}</h1>
 
-    <input v-model="survey.name" class="mt-3" type="text" />
+    <form-input
+        v-model:value="survey.name"
+        class="mt-3"
+        type="text"
+        :label="t('names', 1)"
+    />
+    <form-input
+        v-model:value="survey.slug"
+        class="mt-3"
+        type="text"
+        :label="t('slugs', 1)"
+    />
     <action-button
         :disabled="v$.$invalid"
         :action-text="t('action_save')"
@@ -13,17 +24,20 @@
 
 <script>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
+
 import SURVEYS from '../../services/surveyService'
 import useVuelidate from '@vuelidate/core'
-import { minLength, required } from '@vuelidate/validators'
-import { useI18n } from 'vue-i18n'
-import DataViewer from '../Common/DataViewer.vue'
+import { maxLength, minLength, required } from '@vuelidate/validators'
+
 import ActionButton from '../Common/ActionButton.vue'
-import { useStore } from 'vuex'
+import DataViewer from '../Common/DataViewer.vue'
+import FormInput from '../Forms/FormInput.vue'
 
 export default {
     name: 'SurveyDetails',
-    components: { ActionButton, DataViewer },
+    components: { FormInput, ActionButton, DataViewer },
     props: {
         surveyId: { type: Number, default: -1 },
         resetAfterSave: { type: Boolean, default: true },
@@ -84,6 +98,9 @@ export default {
             name: {
                 required,
                 minLength: minLength(1),
+            },
+            slug: {
+                maxLength: maxLength(100),
             },
         },
     },

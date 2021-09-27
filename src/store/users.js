@@ -18,9 +18,7 @@ export default {
         setToken(state, token) {
             state.token = token
             localStorage.setItem('evaToken', token)
-            axios.defaults.headers = {
-                Authorization: `Bearer ${token}`,
-            }
+            axios.defaults.headers.Authorization = `Bearer ${token}`
         },
     },
     actions: {
