@@ -93,8 +93,6 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        console.log(paramsLocal.value.options)
-
         const validations = {
             minSelectable: {
                 required,
