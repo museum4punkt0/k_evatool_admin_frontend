@@ -1,20 +1,5 @@
 import axios from 'axios'
 
-const prefix = (value) => `${import.meta.env.VITE_API_BASE_URL_API}/${value}`
-const urls = {
-    getAll: () => prefix(`evaluation-tool/surveys?all`),
-    getOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
-    createOne: () => prefix(`evaluation-tool/surveys`),
-    updateOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
-    deleteOne: (id) => prefix(`evaluation-tool/surveys/${id}`),
-    getAllSurveySteps: (id) =>
-        prefix(`evaluation-tool/surveys/${id}/survey-steps?all`),
-    deleteOneSurveyStep: (id, stepId) =>
-        prefix(`evaluation-tool/surveys/${id}/survey-steps/${stepId}`),
-    updateOneSurveyStep: (id, stepId) =>
-        prefix(`evaluation-tool/surveys/${id}/survey-steps/${stepId}`),
-}
-
 export default {
     saveSurvey(survey) {
         let url = 'evaluation-tool/surveys'
@@ -47,10 +32,7 @@ export default {
 
     getSurveyStep(surveyId, surveyStepId) {
         let url =
-            'evaluation-tool/surveys/' +
-            surveyId +
-            '/survey-steps/' +
-            surveyStepId
+            'evaluation-tool/surveys/' + surveyId + '/steps/' + surveyStepId
         return axios
             .get(url)
             .then((response) => {
@@ -75,7 +57,7 @@ export default {
     },
 
     saveSurveyStep(data, surveyId) {
-        let url = 'evaluation-tool/surveys/' + surveyId + '/survey-steps'
+        let url = 'evaluation-tool/surveys/' + surveyId + '/steps'
         let method = 'POST'
         if (data.id) {
             method = 'PUT'
@@ -130,7 +112,7 @@ export default {
     },
 
     async getSurveySteps(surveyId) {
-        let url = 'evaluation-tool/surveys/' + surveyId + '/survey-steps'
+        let url = 'evaluation-tool/surveys/' + surveyId + '/steps'
         return axios
             .get(url)
             .then((response) => {
@@ -145,7 +127,7 @@ export default {
         const url =
             'evaluation-tool/surveys/' +
             surveyId +
-            '/survey-steps/' +
+            '/steps/' +
             surveyStepIdSelf +
             '/set-next-step'
 
@@ -163,7 +145,7 @@ export default {
         const url =
             'evaluation-tool/surveys/' +
             surveyId +
-            '/survey-steps/' +
+            '/steps/' +
             surveyStepIdSelf +
             '/remove-next-step'
 
