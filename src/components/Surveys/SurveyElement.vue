@@ -22,6 +22,7 @@
         :label="t('types', 1)"
         title-key="name"
         value-key="key"
+        :disabled-values="['binary']"
     />
 
     <div class="mt-3">

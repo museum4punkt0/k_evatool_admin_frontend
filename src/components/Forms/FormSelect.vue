@@ -78,6 +78,10 @@
                             v-slot="{ active, selectedLocal2 }"
                             as="template"
                             :value="option.id"
+                            :class="{
+                                pointer: !disabledValues.includes(option.id),
+                            }"
+                            :disabled="disabledValues.includes(option.id)"
                         >
                             <li
                                 :class="[
@@ -93,6 +97,12 @@
                                             ? 'font-semibold'
                                             : 'font-normal',
                                         'block truncate',
+                                        {
+                                            'opacity-50':
+                                                disabledValues.includes(
+                                                    option.id,
+                                                ),
+                                        },
                                     ]"
                                 >
                                     {{ option.title }}
@@ -154,6 +164,10 @@ export default {
             type: [String, Number],
             default: '',
         },
+        disabledValues: {
+            type: Array,
+            default: () => [],
+        },
     },
     emits: ['update:selected'],
     setup(props, { emit }) {
@@ -178,11 +192,11 @@ export default {
         })
 
         /*const localOptions = [...props.options].map((option) => {
-            return {
-                title: option[props.titleKey],
-                id: option[props.valueKey],
-            }
-        })*/
+        return {
+            title: option[props.titleKey],
+            id: option[props.valueKey],
+        }
+    })*/
 
         const selectedLocal = computed({
             get: () => props.selected || props.defaultValue,
