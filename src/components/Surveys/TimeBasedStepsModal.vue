@@ -35,8 +35,7 @@
                         <div
                             class="
                                 inline-block
-                                w-full
-                                max-w-md
+                                max-w-2xl
                                 p-6
                                 my-8
                                 overflow-hidden
