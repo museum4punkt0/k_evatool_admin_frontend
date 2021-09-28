@@ -234,7 +234,7 @@ import {
 } from '@heroicons/vue/outline'
 
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
-import ResultBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
+import ResultBasedStepsModal from '../Surveys/resultBasedNextSteps/ResultBasedStepsModal.vue'
 
 import SURVEYS from '../../services/surveyService'
 
