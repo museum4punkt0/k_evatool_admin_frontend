@@ -38,6 +38,8 @@ export default {
     passwords: 'Passwörter | Passwort | Passwörter',
     password_confirmation: 'Passwortbestätigung',
     questions: 'Fragen | Frage | Fragen',
+    result_based_steps:
+        'Antwortabhängige Schritte | Antwortabhängiger Schritt | Antwortabhängige Schritte',
     search: 'Suche',
     slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',

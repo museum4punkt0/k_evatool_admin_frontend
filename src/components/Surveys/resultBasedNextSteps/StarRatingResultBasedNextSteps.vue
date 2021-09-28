@@ -36,7 +36,7 @@
                 label="end"
             />
             <form-select
-                v-model:selected="params.nextStep.id"
+                v-model:selected="params.stepId"
                 :options="surveySteps"
                 title-key="name"
                 value-key="id"
@@ -61,6 +61,7 @@ import useVuelidate from '@vuelidate/core'
 import { required, between } from '@vuelidate/validators'
 import FormInput from '../../Forms/FormInput.vue'
 import FormSelect from '../../Forms/FormSelect.vue'
+
 export default {
     components: { FormInput, FormSelect },
     setup() {
@@ -77,33 +78,36 @@ export default {
         )
 
         const params = ref({
-            startValue: 0,
-            endValue: 0,
-            nextStep: { id: -1 },
+            startValue: 1,
+            endValue: surveyElementParams.value.numberOfStars,
+            stepId: -1,
         })
 
         const addResultBasedStep = () => {
-            // create new step
-            const newStep = {
-                startValue: params.value.startValue,
-                endValue: params.value.endValue,
-                stepId: params.value.nextStep.id,
+            // add to array
+            if (!surveyStep.value.resultBasedNextSteps) {
+                surveyStep.value.resultBasedNextSteps = []
+            }
+            surveyStep.value.resultBasedNextSteps.push(params.value)
+
+            // reset
+            params.value = {
+                startValue: 1,
+                endValue: surveyElementParams.value.numberOfStars,
+                stepId: -1,
             }
 
-            // add to array
-            surveyStep.value.resultBasedNextSteps = surveyStep.value
-                .resultBasedNextSteps
-                ? [...surveyStep.value.resultBasedNextSteps, newStep]
-                : [newStep]
+            store.dispatch('surveys/saveSurveyStep', surveyStep.value)
 
-            // TODO: reset default values
             // TODO: dispatch to store/cms
         }
         const removeResultBasedStep = (index) => {
             const resultBasedSteps = surveyStep.value.resultBasedNextSteps
             resultBasedSteps.splice(index, 1)
             surveyStep.value.resultBasedNextSteps = resultBasedSteps
+
             // TODO: dispatch to store/cms
+            store.dispatch('surveys/saveSurveyStep', surveyStep.value)
         }
 
         // const saveSurveyStep = async () => {
@@ -119,7 +123,7 @@ export default {
                     startValue: {
                         required,
                         between: between(
-                            0,
+                            1,
                             surveyElementParams.value.numberOfStars,
                         ),
                     },

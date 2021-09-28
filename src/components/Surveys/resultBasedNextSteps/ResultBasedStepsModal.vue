@@ -96,7 +96,7 @@
                             <div class="mt-4">
                                 <button
                                     class="primary"
-                                    :disabled="savingTimeBasedSteps"
+                                    :disabled="savingResultBasedSteps"
                                     @click="closeModal"
                                 >
                                     {{ t('action_close') }}
@@ -119,7 +119,7 @@ import {
     DialogTitle,
 } from '@headlessui/vue'
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import FormToggle from '../../Forms/FormToggle.vue'
 import { useI18n } from 'vue-i18n'
@@ -165,6 +165,8 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const savingResultBasedSteps = ref(false)
+
         const surveyStepId = store.state.surveys.surveyStepId
         const surveyStep = store.state.surveys.surveyStep
         const modalIsOpen = computed({
@@ -182,6 +184,7 @@ export default {
             },
             surveyStep,
             surveyStepId,
+            savingResultBasedSteps,
         }
     },
 }
