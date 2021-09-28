@@ -1,5 +1,6 @@
 <template>
     <language-switch
+        class="mt-6"
         :active-language="selectedLanguage"
         @select="setSelectedLanguage($event)"
     />
@@ -11,39 +12,49 @@
         :key="'question_lang' + language.id"
         v-model:value="paramsLocal.question[language.code]"
         class="mt-3"
+        :name="'question' + language.id"
         :label="t('questions', 1) + ' (' + language.title + ')'"
     />
 
-    <ul class="list-disc">
-        <li
+    <div class="grid grid-cols-1 divide-y divide-gray-300">
+        <div
             v-for="(option, index) in paramsLocal.options"
             :key="`option_${index}`"
-            class="grid grid-cols-12 gap-4"
         >
-            <form-input
-                v-model:value="paramsLocal.options[index]['value']"
-                class="mt-3 col-span-9"
-                :label="`${t('system_value')} ${index + 1}`"
-            />
-            <button
-                class="primary col-span-3"
-                @click="removeOption(option, index)"
-            >
-                <TrashIcon class="mx-1 h-5 w-5 pointer" />
-            </button>
-            <form-input
-                v-for="language in store.state.languages.languages.filter(
-                    (item) => item.code === selectedLanguage.code,
-                )"
-                :key="'option_lang' + language.id"
-                v-model:value="
-                    paramsLocal.options[index]['labels'][language.code]
-                "
-                class="mt-3 col-span-12"
-                :label="`label option ${index + 1} ( ${language.code})`"
-            />
-        </li>
-    </ul>
+            <div class="py-3 flex flex-col">
+                <div class="rounded flex flex-row">
+                    <form-input
+                        v-model:value="paramsLocal.options[index]['value']"
+                        :name="'system_value_' + index"
+                        class="flex-auto rounded-tl-none"
+                        :label="`${t('system_value')} ${index + 1}`"
+                    />
+                    <button
+                        class="danger flex-1 mt-6 rounded-tl-none:important"
+                        @click="removeOption(option, index)"
+                    >
+                        <TrashIcon class="mx-1 h-5 w-5 pointer" />
+                    </button>
+                </div>
+                <div>
+                    <form-input
+                        v-for="language in store.state.languages.languages.filter(
+                            (item) => item.code === selectedLanguage.code,
+                        )"
+                        :key="'option_lang' + language.id"
+                        v-model:value="
+                            paramsLocal.options[index]['labels'][language.code]
+                        "
+                        :name="'option_lang_' + index"
+                        class="mt-3"
+                        :label="`${t('display_value')} ${index + 1} (${
+                            language.title
+                        })`"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
     <button class="primary" @click="addOption">
         <PlusIcon class="mx-1 h-5 w-5 pointer" />
     </button>
@@ -52,12 +63,14 @@
         <form-input
             v-model:value="paramsLocal.minSelectable"
             class="mt-3"
-            label="minSelectable"
+            :label="t('min_selectable')"
+            name="minSelectable"
         />
         <form-input
             v-model:value="paramsLocal.maxSelectable"
             class="mt-3"
-            label="maxSelectable"
+            :label="t('max_selectable')"
+            name="maxSelectable"
         />
     </div>
 </template>
@@ -69,7 +82,6 @@ import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required, between } from '@vuelidate/validators'
-import { useState } from '../../../composables/state'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
@@ -122,7 +134,7 @@ export default {
                     ...paramsLocal.value.options,
                     {
                         value: '',
-                        labels: { de: 'test', en: 'test', fr: 'test' },
+                        labels: {},
                     },
                 ],
             }
@@ -140,7 +152,6 @@ export default {
         }
 
         const setSelectedLanguage = (language) => {
-            console.log(language)
             selectedLanguage.value = language
         }
 

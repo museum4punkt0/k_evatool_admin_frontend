@@ -1,18 +1,20 @@
 <template>
-    <div class="rounded overflow-hidden flex flex-row bg-green-700">
-        <button
-            v-for="language in languages"
-            :key="language.id"
-            class="text-white px-2 py-1 text-sm flex-auto pointer"
-            :class="
-                activeLanguage.code === language.code
-                    ? 'bg-blue-500'
-                    : 'bg-blue-700'
-            "
-            @click="selectLanguage(language)"
-        >
-            {{ language.title }}
-        </button>
+    <div>
+        <div class="rounded overflow-hidden flex flex-row bg-green-700">
+            <button
+                v-for="language in languages"
+                :key="language.id"
+                class="text-white px-2 py-1 text-sm flex-auto pointer"
+                :class="
+                    activeLanguage.code === language.code
+                        ? 'bg-blue-500'
+                        : 'bg-blue-700'
+                "
+                @click="selectLanguage(language)"
+            >
+                {{ language.title }}
+            </button>
+        </div>
     </div>
 </template>
 
@@ -24,8 +26,8 @@ export default {
     name: 'LanguageSwitch',
     props: {
         activeLanguage: {
-            type: String,
-            default: '',
+            type: Object,
+            default: null,
         },
     },
     emits: ['select'],

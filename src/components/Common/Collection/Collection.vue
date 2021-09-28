@@ -134,11 +134,6 @@ export default {
             type: Function,
             default: () => true,
         },
-        onRefresh: { type: Function, required: false },
-        onNew: { type: Function, required: false },
-        onView: { type: Function, required: false },
-        onEdit: { type: Function, required: false },
-        onDelete: { type: Function, required: false },
     },
     setup(props) {
         const selected = ref([])

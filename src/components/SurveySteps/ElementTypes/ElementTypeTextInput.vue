@@ -4,6 +4,7 @@
             v-for="language in store.state.languages.languages"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.question[language.code]"
+            :name="'lang' + language.id"
             :label="'question (' + language.code + ')'"
         />
     </div>

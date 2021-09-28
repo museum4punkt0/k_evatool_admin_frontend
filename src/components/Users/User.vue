@@ -1,12 +1,23 @@
 <template>
     <h1 v-if="user.id">{{ t('edit_user') }}</h1>
     <h1 v-else>{{ t('new_user') }}</h1>
-    <form-input v-model:value="user.name" class="mt-3" :label="t('names', 1)" />
-    <form-input v-model:value="user.email" class="mt-3" :label="t('email')" />
+    <form-input
+        v-model:value="user.name"
+        name="name"
+        class="mt-3"
+        :label="t('names', 1)"
+    />
+    <form-input
+        v-model:value="user.email"
+        name="email"
+        class="mt-3"
+        :label="t('email')"
+    />
     <form-input
         v-if="!user.id"
         v-model:value="user.password"
         type="password"
+        name="password"
         class="mt-3"
         :label="t('passwords', 1)"
     />
@@ -15,6 +26,7 @@
         v-model:value="user.passwordConfirmation"
         class="mt-3"
         type="password"
+        name="password"
         :label="t('password_confirmation')"
     />
 

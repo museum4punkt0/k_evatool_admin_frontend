@@ -154,6 +154,7 @@
                                         class="mt-3"
                                         :placeholder="t('timestamps', 1)"
                                         :label="t('timestamps', 1)"
+                                        name="timecode"
                                     />
                                     <form-input
                                         v-model:value="
@@ -162,6 +163,7 @@
                                         class="mt-3"
                                         :placeholder="t('descriptions', 1)"
                                         :label="t('descriptions', 1)"
+                                        name="description"
                                     />
                                     <form-input
                                         v-model:value="
@@ -170,6 +172,7 @@
                                         class="mt-3"
                                         :placeholder="t('display_time')"
                                         :label="t('display_time')"
+                                        name="display-time"
                                     />
                                     <form-toggle
                                         v-model:enabled="

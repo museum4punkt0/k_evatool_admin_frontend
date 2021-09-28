@@ -12,9 +12,8 @@
 <script>
 import FormSelect from '../../Forms/FormSelect.vue'
 import { useStore } from 'vuex'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import defaultParams from './defaultParams'
 
 export default {
     name: 'ElementTypeVideo',

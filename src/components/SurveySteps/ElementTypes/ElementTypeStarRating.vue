@@ -1,6 +1,7 @@
 <template>
     <form-input
         v-model:value="paramsLocal.numberOfStars"
+        name="numberOfStars"
         :label="t('number_of_stars')"
     />
 
@@ -14,6 +15,7 @@
         v-for="language in store.state.languages.data"
         :key="'lang' + language.id"
         v-model:value="paramsLocal.question[language.code]"
+        :name="'lang' + language.id"
         :label="'question (' + language.code + ')'"
     />
 </template>

@@ -29,11 +29,13 @@
                 v-model:value="params.startValue"
                 class="mt-3"
                 label="start"
+                name="start"
             />
             <form-input
                 v-model:value="params.endValue"
                 class="mt-3"
                 label="end"
+                name="end"
             />
             <form-select
                 v-model:selected="params.stepId"

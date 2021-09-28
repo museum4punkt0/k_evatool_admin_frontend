@@ -102,8 +102,6 @@ export default {
             required: true,
         },
         meta: { type: Array, default: () => ['id', 'createdAt', 'updatedAT'] },
-        onDelete: { type: Function, required: false },
-        onEdit: { type: Function, required: false },
     },
     emits: ['scroll'],
 

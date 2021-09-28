@@ -1,12 +1,12 @@
 <template>
     <div>
-        <label for="name" class="capitalize">{{ label }}</label>
+        <label :for="name">{{ label }}</label>
         <div class="mt-1">
             <input
-                id="name"
+                :id="name"
                 v-model="valueLocal"
                 :type="type"
-                name="name"
+                :name="name"
                 autocomplete="off"
                 :placeholder="placeholder"
             />
@@ -23,6 +23,7 @@ export default {
         name: {
             type: String,
             default: 'name',
+            required: true,
         },
         label: {
             type: String,

@@ -4,11 +4,13 @@
     <form-input
         v-model:value="survey.name"
         class="mt-3"
+        name="name"
         type="text"
         :label="t('names', 1)"
     />
     <form-input
         v-model:value="survey.slug"
+        name="slug"
         class="mt-3"
         type="text"
         :label="t('slugs', 1)"

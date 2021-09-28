@@ -5,11 +5,13 @@
 
             <form-input
                 v-model:value="user.email"
+                name="email"
                 class="mt-3"
                 :label="t('email')"
             />
             <form-input
                 v-model:value="user.password"
+                name="password"
                 class="mt-3"
                 type="password"
                 :label="t('passwords', 1)"
@@ -33,7 +35,7 @@ import useVuelidate from '@vuelidate/core'
 import { minLength, required, email } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 export default {
     name: 'Login',

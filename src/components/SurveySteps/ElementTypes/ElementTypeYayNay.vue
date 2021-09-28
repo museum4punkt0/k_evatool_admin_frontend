@@ -16,6 +16,7 @@
         )"
         :key="'lang' + language.id"
         v-model:value="paramsLocal.question[language.code]"
+        :name="'lang' + language.id"
         class="mt-3"
         :label="'question (' + language.code + ')'"
     />
@@ -27,6 +28,7 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.trueLabel[language.code]"
+            :name="'lang' + language.id"
             class="mt-3 col-span-6"
             :label="t('yaynay_positive_label') + ' (' + language.code + ')'"
         />
@@ -36,6 +38,7 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.falseLabel[language.code]"
+            :name="'lang' + language.id"
             class="mt-3 col-span-6"
             :label="t('yaynay_negative_label') + ' (' + language.code + ')'"
         />
@@ -46,11 +49,13 @@
             v-model:value="paramsLocal.trueValue"
             class="mt-3 col-span-6"
             :label="t('yaynay_positive')"
+            name="trueValue"
         />
         <form-input
             v-model:value="paramsLocal.falseValue"
             class="mt-3 col-span-6"
             :label="t('yaynay_negative')"
+            name="falseValue"
         />
     </div>
 </template>

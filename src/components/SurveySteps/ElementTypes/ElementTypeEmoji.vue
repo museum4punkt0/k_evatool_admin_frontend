@@ -5,6 +5,7 @@
         v-model:value="paramsLocal.question[language.code]"
         class="mt-3"
         :label="'question (' + language.code + ')'"
+        :name="'question_' + language.code"
     />
 
     <div class="table-wrap mt-3">
@@ -27,8 +28,16 @@
     </div>
 
     <div class="p-2 bg-blue-200 rounded-lg mt-3">
-        <form-input v-model:value="selectedEmoji.type" label="emoji" />
-        <form-input v-model:value="selectedEmoji.meaning" label="meaning" />
+        <form-input
+            v-model:value="selectedEmoji.type"
+            name="emoji"
+            label="emoji"
+        />
+        <form-input
+            v-model:value="selectedEmoji.meaning"
+            name="meaning"
+            label="meaning"
+        />
         <button class="primary mt-3" @click="addEmoji">Add</button>
     </div>
 </template>

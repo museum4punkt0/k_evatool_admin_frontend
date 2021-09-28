@@ -75,7 +75,7 @@
                         <ListboxOption
                             v-for="option in localOptions"
                             :key="option.id"
-                            v-slot="{ active, selectedLocal }"
+                            v-slot="{ active, selectedLocal2 }"
                             as="template"
                             :value="option.id"
                         >
@@ -89,7 +89,7 @@
                             >
                                 <span
                                     :class="[
-                                        selectedLocal
+                                        selectedLocal2
                                             ? 'font-semibold'
                                             : 'font-normal',
                                         'block truncate',
@@ -99,7 +99,7 @@
                                 </span>
 
                                 <span
-                                    v-if="selectedLocal"
+                                    v-if="selectedLocal2"
                                     :class="[
                                         active ? 'text-white' : 'text-blue-600',
                                         'absolute inset-y-0 right-0 flex items-center pr-4',
