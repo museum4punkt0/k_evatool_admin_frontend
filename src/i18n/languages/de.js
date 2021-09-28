@@ -38,6 +38,7 @@ export default {
     new_user: 'Neuer Benutzer',
     none_selected: 'Nicht ausgewählt',
     number_of_stars: 'Anzahl der Sterne',
+    options: 'Optionen | Option | Optionen',
     passwords: 'Passwörter | Passwort | Passwörter',
     password_confirmation: 'Passwortbestätigung',
     questions: 'Fragen | Frage | Fragen',
