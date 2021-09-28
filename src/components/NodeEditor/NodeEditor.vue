@@ -120,6 +120,35 @@
                             <button
                                 class="flex-1 disabled:opacity-25"
                                 :disabled="
+                                    ![
+                                        'multipleChoice',
+                                        'yayNay',
+                                        'binary',
+                                        'starRating',
+                                        'emoji',
+                                    ].includes(
+                                        steps.find((x) => x.id === step.id)
+                                            ?.surveyElementType,
+                                    )
+                                "
+                                @click.prevent.stop="
+                                    openResultBasedModal(step.id)
+                                "
+                            >
+                                <span
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
+                                >
+                                    <switch-horizontal-icon class="h-5 w-5" />
+                                </span>
+                            </button>
+                            <button
+                                class="flex-1 disabled:opacity-25"
+                                :disabled="
                                     steps.find((x) => x.id === step.id)
                                         .surveyElementType !== 'video'
                                 "
@@ -185,6 +214,10 @@
         v-if="timeBasedModalStepId > 0 && timeBasedModalIsOpen"
         v-model:is-open="timeBasedModalIsOpen"
     />
+    <result-based-steps-modal
+        v-if="resultBasedModalStepId > 0 && resultBasedModalIsOpen"
+        v-model:is-open="resultBasedModalIsOpen"
+    />
 </template>
 
 <script>
@@ -197,9 +230,11 @@ import {
     ArrowRightIcon,
     ClockIcon,
     PencilIcon,
+    SwitchHorizontalIcon,
 } from '@heroicons/vue/outline'
 
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
+import ResultBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 
 import SURVEYS from '../../services/surveyService'
 
@@ -207,11 +242,13 @@ export default {
     name: 'NodeEditorTest',
     components: {
         TimeBasedStepsModal,
+        ResultBasedStepsModal,
         Connection,
         ClockIcon,
         ArrowLeftIcon,
         ArrowRightIcon,
         PencilIcon,
+        SwitchHorizontalIcon,
     },
     props: {
         steps: {
@@ -303,6 +340,9 @@ export default {
 
         const timeBasedModalIsOpen = ref(false)
         const timeBasedModalStepId = ref(-1)
+
+        const resultBasedModalIsOpen = ref(false)
+        const resultBasedModalStepId = ref(-1)
 
         watch(
             () => props.steps,
@@ -418,6 +458,12 @@ export default {
             timeBasedModalStepId.value = stepId
         }
 
+        const openResultBasedModal = async (stepId) => {
+            await selectSurveyStep(stepId)
+            resultBasedModalIsOpen.value = true
+            resultBasedModalStepId.value = stepId
+        }
+
         return {
             draggedStep,
             onMouseDown,
@@ -427,6 +473,9 @@ export default {
             openTimeBasedModal,
             timeBasedModalIsOpen,
             timeBasedModalStepId,
+            openResultBasedModal,
+            resultBasedModalIsOpen,
+            resultBasedModalStepId,
             selectedOutput,
             selectedInput,
             selectInput,
