@@ -1,14 +1,14 @@
 <template>
     <div>
         <form-select
-            v-model:selected="nextSteps.trueNextStep"
+            v-model:selected="nextSteps.trueNextStep.stepId"
             :options="surveySteps"
             title-key="name"
             value-key="id"
             :label="surveyElementParams?.trueValue"
         />
         <form-select
-            v-model:selected="nextSteps.falseNextStep"
+            v-model:selected="nextSteps.falseNextStep.stepId"
             :options="surveySteps"
             title-key="name"
             value-key="id"
@@ -42,15 +42,13 @@ export default {
             //         return element.id === surveyStep.value.id
             //     })?.params,
         )
-        // console.log('params', typeof surveyStep.value.resultBasedNextSteps)
-        // TODO: check what type api returns
 
         const nextSteps = ref(
             surveyStep.value.resultBasedNextSteps
-                ? JSON.parse(surveyStep.value.resultBasedNextSteps)
+                ? surveyStep.value.resultBasedNextSteps
                 : {
-                      trueNextStep: null,
-                      falseNextStep: null,
+                      trueNextStep: { stepId: null },
+                      falseNextStep: { stepId: null },
                   },
         )
 
@@ -63,7 +61,7 @@ export default {
 
         const validations = computed({
             get: () => {
-                return { trueNextStep: {}, falseNextStep: {} }
+                return {}
             },
             set: () => {},
         })

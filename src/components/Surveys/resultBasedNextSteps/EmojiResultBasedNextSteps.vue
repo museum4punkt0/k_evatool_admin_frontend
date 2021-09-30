@@ -9,6 +9,7 @@
                     v-for="(step, index) in surveyStep.resultBasedNextSteps"
                     :key="index"
                 >
+                    <td>{{ index }}</td>
                     <td>{{ step.type }}</td>
                     <td>{{ step.stepId }}</td>
                     <td

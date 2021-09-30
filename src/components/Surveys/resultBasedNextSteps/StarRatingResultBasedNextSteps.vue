@@ -7,13 +7,14 @@
             v-if="surveyStep.resultBasedNextSteps?.length > 0"
             class="table-wrap"
         >
+            {{ typeof surveyStep.resultBasedNextSteps }}
             <table>
                 <tr
                     v-for="(step, index) in surveyStep.resultBasedNextSteps"
                     :key="index"
                 >
-                    <td>{{ step.startValue }}</td>
-                    <td>{{ step.endValue }}</td>
+                    <td>{{ step.start }}</td>
+                    <td>{{ step.end }}</td>
                     <td>{{ step.stepId }}</td>
                     <td
                         class="pointer float-right"
@@ -28,13 +29,13 @@
         <h2>add new result based step</h2>
         <div class="grid grid-cols-4 gap-4">
             <form-input
-                v-model:value="nextStep.startValue"
+                v-model:value="nextStep.start"
                 class="mt-3"
                 label="start"
                 name="start"
             />
             <form-input
-                v-model:value="nextStep.endValue"
+                v-model:value="nextStep.end"
                 class="mt-3"
                 label="end"
                 name="end"
@@ -84,12 +85,13 @@ export default {
         )
 
         const nextStep = ref({
-            startValue: 1,
-            endValue: surveyElementParams.value.numberOfStars,
+            start: 1,
+            end: surveyElementParams.value.numberOfStars,
             stepId: -1,
         })
 
         const addResultBasedStep = () => {
+            console.log(typeof surveyStep.value.resultBasedNextSteps)
             // add to array
             if (!surveyStep.value.resultBasedNextSteps) {
                 surveyStep.value.resultBasedNextSteps = []
@@ -98,8 +100,8 @@ export default {
 
             // reset
             nextStep.value = {
-                startValue: 1,
-                endValue: surveyElementParams.value.numberOfStars,
+                start: 1,
+                end: surveyElementParams.value.numberOfStars,
                 stepId: -1,
             }
 
@@ -123,19 +125,23 @@ export default {
         const validations = computed({
             get: () => {
                 return {
-                    startValue: {
+                    start: {
                         required,
                         between: between(
                             1,
                             surveyElementParams.value.numberOfStars,
                         ),
                     },
-                    endValue: {
+                    end: {
                         required,
                         between: between(
-                            nextStep.value.startValue,
+                            nextStep.value.start,
                             surveyElementParams.value.numberOfStars,
                         ),
+                    },
+                    stepId: {
+                        exists: (value) =>
+                            surveySteps.value.find((step) => step.id === value),
                     },
                 }
             },
