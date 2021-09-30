@@ -129,8 +129,6 @@ export default {
             if (savedSurveyStep.id) {
                 commit('setSurveyStepId', savedSurveyStep.id)
                 commit('setSurveyStep', savedSurveyStep)
-                // this.dispatch('surveys/getSurveySteps', savedSurveyStep.id)
-                // this.dispatch('surveys/getSurveys')
             }
         },
     },

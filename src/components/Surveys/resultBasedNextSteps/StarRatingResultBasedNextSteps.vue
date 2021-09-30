@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h1>star rating next steps</h1>
         <ul>
             <li>number of stars: {{ surveyElementParams.numberOfStars }}</li>
+            <li>TODO: render question and stars</li>
         </ul>
         <div
             v-if="surveyStep.resultBasedNextSteps?.length > 0"
@@ -105,15 +105,12 @@ export default {
             }
 
             store.dispatch('surveys/saveSurveyStep', surveyStep.value)
-
-            // TODO: dispatch to store/cms
         }
         const removeResultBasedStep = (index) => {
             const resultBasedSteps = surveyStep.value.resultBasedNextSteps
             resultBasedSteps.splice(index, 1)
             surveyStep.value.resultBasedNextSteps = resultBasedSteps
 
-            // TODO: dispatch to store/cms
             store.dispatch('surveys/saveSurveyStep', surveyStep.value)
         }
 
