@@ -129,6 +129,11 @@ export default {
             if (savedSurveyStep.id) {
                 commit('setSurveyStepId', savedSurveyStep.id)
                 commit('setSurveyStep', savedSurveyStep)
+                const surveyStepElement =
+                    await SURVEY_ELEMENT_SERVICE.getSurveyElement(
+                        savedSurveyStep.surveyElementId,
+                    )
+                commit('setSurveyStepElement', surveyStepElement)
             }
         },
     },

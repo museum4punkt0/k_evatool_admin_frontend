@@ -61,6 +61,19 @@
                             </DialogTitle>
 
                             <div class="mt-2">
+                                <h4>
+                                    {{ t('result_based_steps_preview', 2) }}
+                                </h4>
+                                {{
+                                    surveyStep.surveyElement.params.question[
+                                        language.code
+                                    ]
+                                }}
+                            </div>
+                            <div class="mt-2">
+                                <h4>
+                                    {{ t('result_based_steps_edit', 2) }}
+                                </h4>
                                 <binary-result-based-next-steps
                                     v-if="
                                         surveyStep.surveyElementType ===
@@ -136,7 +149,7 @@ import StarRatingResultBasedNextSteps from './StarRatingResultBasedNextSteps.vue
 import YayNayResultBasedNextSteps from './YayNayResultBasedNextSteps.vue'
 
 export default {
-    name: 'TimeBasedStepsModal',
+    name: 'ResultBasedStepsModal',
     components: {
         FormSelect,
         FormInput,
@@ -172,6 +185,11 @@ export default {
             get: () => props.isOpen,
             set: (val) => emit('update:is-open', val),
         })
+        const language = store.state.languages.language
+            ? store.state.languages.language
+            : store.state.languages.languages.find(
+                  (language) => language.default,
+              )
 
         return {
             v$: useVuelidate(),
@@ -184,6 +202,7 @@ export default {
             surveyStep,
             surveyStepId,
             savingResultBasedSteps,
+            language,
         }
     },
 }

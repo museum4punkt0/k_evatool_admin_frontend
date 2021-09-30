@@ -2,7 +2,6 @@
     <div>
         <ul>
             <li>number of stars: {{ surveyElementParams.numberOfStars }}</li>
-            <li>TODO: render question and stars</li>
         </ul>
         <div
             v-if="surveyStep.resultBasedNextSteps?.length > 0"
