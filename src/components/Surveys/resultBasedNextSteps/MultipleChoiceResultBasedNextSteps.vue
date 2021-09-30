@@ -72,14 +72,16 @@ export default {
                 surveyStep.value.resultBasedNextSteps = []
             }
             surveyStep.value.resultBasedNextSteps.push({ ...nextStep.value })
-            // Todo: Implement survey step save
+
+            store.dispatch('surveys/saveSurveyStep', surveyStep.value)
         }
 
         const deleteResultBasedStep = (index) => {
             const confirmDelete = confirm(t('confirm_delete_result_based_step'))
             if (confirmDelete) {
                 surveyStep.value.resultBasedNextSteps.splice(index, 1)
-                // Todo: Implement survey step save
+
+                store.dispatch('surveys/saveSurveyStep', surveyStep.value)
             }
         }
 

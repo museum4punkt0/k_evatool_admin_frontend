@@ -39,7 +39,6 @@
                                 max-w-xl
                                 p-6
                                 my-8
-                                overflow-hidden
                                 text-left
                                 align-middle
                                 transition-all

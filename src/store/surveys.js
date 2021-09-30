@@ -121,6 +121,18 @@ export default {
             await SURVEY_SERVICE.publishSurvey(surveyId)
             await dispatch('getSurveys')
         },
+        async saveSurveyStep({ commit, state }, data) {
+            const savedSurveyStep = await SURVEY_SERVICE.saveSurveyStep(
+                data,
+                state.surveyId,
+            )
+            if (savedSurveyStep.id) {
+                commit('setSurveyStepId', savedSurveyStep.id)
+                commit('setSurveyStep', savedSurveyStep)
+                // this.dispatch('surveys/getSurveySteps', savedSurveyStep.id)
+                // this.dispatch('surveys/getSurveys')
+            }
+        },
     },
     getters: {},
 }

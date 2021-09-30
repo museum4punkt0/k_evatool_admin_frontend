@@ -4,41 +4,45 @@
         <ul>
             <li>number of stars: {{ surveyElementParams.numberOfStars }}</li>
         </ul>
-        <ul>
-            <li
-                v-for="(nextStep, index) in surveyStep.resultBasedNextSteps"
-                :key="index"
-            >
-                <div class="grid grid-cols-4 gap-4">
-                    <span>start: {{ nextStep.startValue }}</span>
-                    <span>end: {{ nextStep.endValue }}</span>
-                    <span>id: {{ nextStep.stepId }}</span>
-                    <button
-                        class="primary"
+        <div
+            v-if="surveyStep.resultBasedNextSteps?.length > 0"
+            class="table-wrap"
+        >
+            <table>
+                <tr
+                    v-for="(step, index) in surveyStep.resultBasedNextSteps"
+                    :key="index"
+                >
+                    <td>{{ step.startValue }}</td>
+                    <td>{{ step.endValue }}</td>
+                    <td>{{ step.stepId }}</td>
+                    <td
+                        class="pointer float-right"
                         @click="removeResultBasedStep(index)"
                     >
-                        trash
-                    </button>
-                </div>
-            </li>
-        </ul>
+                        <TrashIcon class="h-5 w-5" />
+                    </td>
+                </tr>
+            </table>
+        </div>
 
         <h2>add new result based step</h2>
         <div class="grid grid-cols-4 gap-4">
             <form-input
-                v-model:value="params.startValue"
+                v-model:value="nextStep.startValue"
                 class="mt-3"
                 label="start"
                 name="start"
             />
             <form-input
-                v-model:value="params.endValue"
+                v-model:value="nextStep.endValue"
                 class="mt-3"
                 label="end"
                 name="end"
             />
             <form-select
-                v-model:selected="params.stepId"
+                v-model:selected="nextStep.stepId"
+                class="mt-3"
                 :options="surveySteps"
                 title-key="name"
                 value-key="id"
@@ -46,11 +50,11 @@
                 label="step"
             />
             <button
-                class="primary"
+                class="primary mt-3"
                 :disabled="v$.$invalid"
                 @click="addResultBasedStep()"
             >
-                add
+                <PlusIcon />
             </button>
         </div>
     </div>
@@ -61,11 +65,12 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { required, between } from '@vuelidate/validators'
+import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import FormInput from '../../Forms/FormInput.vue'
 import FormSelect from '../../Forms/FormSelect.vue'
 
 export default {
-    components: { FormInput, FormSelect },
+    components: { FormInput, FormSelect, TrashIcon, PlusIcon },
     setup() {
         const store = useStore()
         const { t } = useI18n()
@@ -79,7 +84,7 @@ export default {
                 })?.params,
         )
 
-        const params = ref({
+        const nextStep = ref({
             startValue: 1,
             endValue: surveyElementParams.value.numberOfStars,
             stepId: -1,
@@ -90,10 +95,10 @@ export default {
             if (!surveyStep.value.resultBasedNextSteps) {
                 surveyStep.value.resultBasedNextSteps = []
             }
-            surveyStep.value.resultBasedNextSteps.push(params.value)
+            surveyStep.value.resultBasedNextSteps.push(nextStep.value)
 
             // reset
-            params.value = {
+            nextStep.value = {
                 startValue: 1,
                 endValue: surveyElementParams.value.numberOfStars,
                 stepId: -1,
@@ -132,7 +137,7 @@ export default {
                     endValue: {
                         required,
                         between: between(
-                            params.value.startValue,
+                            nextStep.value.startValue,
                             surveyElementParams.value.numberOfStars,
                         ),
                     },
@@ -142,13 +147,13 @@ export default {
         })
 
         return {
-            v$: useVuelidate(validations, params),
+            v$: useVuelidate(validations, nextStep),
             store,
             t,
             surveyStep,
             surveySteps,
             surveyElementParams,
-            params,
+            nextStep,
             addResultBasedStep,
             removeResultBasedStep,
         }
