@@ -151,6 +151,7 @@ export default {
             surveyElement.value = await SURVEY_ELEMENT_SERVICE.getSurveyElement(
                 surveyElementId,
             )
+            revertChanges = true
         }
 
         const saveSurveyElement = async () => {
@@ -165,6 +166,7 @@ export default {
             emit('saved', savedSurveyElement.id)
             if (props.clearAfterSave) {
                 surveyElement.value = {}
+                revertChanges = true
             }
             savingSurveyElement.value = false
         }

@@ -46,7 +46,7 @@ export default {
         },
         isValid: {
             type: Array,
-            default: () => ['de', 'EN'],
+            default: () => ['de', 'en'],
         },
     },
     emits: ['select'],
