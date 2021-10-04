@@ -9,7 +9,7 @@
     <div v-if="surveyStep">
         <form-input
             v-model:value="surveyStep.name"
-            :placeholder="t('names', 1)"
+            :placeholder="t('optional_name')"
             :label="t('names', 1)"
             name="surveyStep"
         />
@@ -133,9 +133,15 @@ export default {
 
         watch(
             () => surveyStep.value.surveyElementId,
-            () => {
+            (surveyElementId) => {
                 // Do not display survey element on update
                 // surveyElementId.value = value
+                if (!surveyStep.value.name) {
+                    surveyStep.value.name =
+                        store.state.surveyElements.surveyElements.find(
+                            (x) => x.id === surveyElementId,
+                        )?.name
+                }
             },
         )
 

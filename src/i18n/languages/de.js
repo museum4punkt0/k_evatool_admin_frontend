@@ -46,6 +46,7 @@ export default {
     none_selected: 'Nicht ausgewählt',
     number_of_stars: 'Anzahl der Sterne',
     options: 'Optionen | Option | Optionen',
+    optional_name: 'Optionaler Name',
     passwords: 'Passwörter | Passwort | Passwörter',
     password_confirmation: 'Passwortbestätigung',
     questions: 'Fragen | Frage | Fragen',

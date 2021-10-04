@@ -16,7 +16,7 @@
         :label="t('slugs', 1)"
     />
     <action-button
-        :disabled="v$.$invalid"
+        :disabled="v$.$invalid || surveySaving"
         :action-text="t('action_save')"
         @click="saveSurvey"
     />
@@ -52,6 +52,7 @@ export default {
             name: '',
         })
         const surveyTitle = ref(t('new_survey'))
+        const surveySaving = ref(false)
 
         watch(
             () => props.surveyId,
@@ -70,11 +71,13 @@ export default {
         }
 
         const saveSurvey = async () => {
+            surveySaving.value = true
             await store.dispatch('surveys/saveSurvey', survey.value)
             emit('saved')
             if (props.resetAfterSave) {
                 initSurvey()
             }
+            surveySaving.value = false
         }
 
         const initSurvey = () => {
@@ -93,6 +96,7 @@ export default {
             surveyTitle,
             t,
             store,
+            surveySaving,
         }
     },
     validations: {
