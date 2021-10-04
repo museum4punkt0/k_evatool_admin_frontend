@@ -5,18 +5,6 @@
         @select="setSelectedLanguage($event)"
     />
     <form-input
-        v-for="language in store.state.languages.data"
-        :key="'lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        :name="'lang' + language.id"
-        :label="'question (' + language.code + ')'"
-    />
-    <form-input
-        v-model:value="paramsLocal.numberOfStars"
-        name="numberOfStars"
-        :label="t('number_of_stars')"
-    />
-    <form-input
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
@@ -27,11 +15,32 @@
         :label="'question (' + language.code + ')'"
     />
 
-    <form-toggle
+    <form-input
+        v-model:value="paramsLocal.numberOfStars"
+        name="numberOfStars"
+        :label="t('number_of_stars')"
+    />
+
+    <div class="grid grid-cols-12 gap-4">
+        <form-input
+            v-model:value="paramsLocal.meaningLowestValue"
+            name="meaningLowestValue"
+            :label="t('meaning_lowest_value')"
+            class="col-span-6"
+        />
+        <form-input
+            v-model:value="paramsLocal.meaningHighestValue"
+            name="meaningHighestValue"
+            :label="t('meaning_highest_value')"
+            class="col-span-6"
+        />
+    </div>
+
+    <!-- <form-toggle
         v-model:enabled="paramsLocal.allowHalfSteps"
         :label="t('allow_half_steps')"
         class="my-3"
-    />
+    /> -->
 </template>
 
 <script>
