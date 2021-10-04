@@ -3,8 +3,8 @@
         <main class="flex-1 overflow-y-auto p-3">
             <div class="flex flex-row justify-between">
                 <h1>
-                    {{ surveyElements.length }}
-                    {{ t('survey_elements', surveyElements.length) }}
+                    {{ surveyElements?.length }}
+                    {{ t('survey_elements', surveyElements?.length) }}
                 </h1>
                 <button class="primary" @click="getSurveyElements">
                     <refresh-icon class="h-4 w-4 mr-2" />
@@ -48,6 +48,17 @@
                                     @click="editSurveyElement(surveyElement.id)"
                                 />
                                 <trash-icon
+                                    v-if="surveyElement.surveyStepsCount > 0"
+                                    class="
+                                        ml-3
+                                        h-5
+                                        w-5
+                                        text-gray-500
+                                        cursor-not-allowed
+                                    "
+                                />
+                                <trash-icon
+                                    v-else
                                     class="ml-3 h-5 w-5 text-red-500 pointer"
                                     @click.prevent.stop="
                                         deleteSurveyElement(surveyElement.id)
@@ -106,6 +117,7 @@ export default {
                 'surveyElements/deleteSurveyElement',
                 surveyElementId,
             )
+            getSurveyElements()
         }
 
         return {
