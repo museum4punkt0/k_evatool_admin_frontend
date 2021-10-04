@@ -13,16 +13,17 @@ const TYPES = {
 const createDefaultQuestion = (languages) => {
     const question = {}
     languages.forEach((language) => {
-        question[language.code] = `question ${language.code}`
+        question[language.code] = ''
     })
     return question
 }
+
 export default (type, languages) => {
     switch (type) {
         case TYPES.SIMPLETEXT: {
             const text = {}
             languages.forEach((language) => {
-                text[language.code] = `text ${language.code}`
+                text[language.code] = ''
             })
             return {
                 text,
@@ -32,11 +33,9 @@ export default (type, languages) => {
             const question = {}
             const options = []
             const option = { value: 'value', labels: {} }
-            languages.forEach((language, index) => {
-                question[language.code] = `question ${language.code}`
-                option['labels'][
-                    language.code
-                ] = `option ${index} (${language.code})`
+            languages.forEach((language) => {
+                question[language.code] = ''
+                option['labels'][language.code] = ''
             })
             options.push(option)
             return {
@@ -68,7 +67,7 @@ export default (type, languages) => {
         case TYPES.YAYNAY: {
             const trueLabel = {}
             const falseLabel = {}
-            const createTrueLabel = (language) => {
+            /*const createTrueLabel = (language) => {
                 switch (language.code) {
                     case 'de':
                         return 'ja'
@@ -80,8 +79,8 @@ export default (type, languages) => {
                         return 'si'
                 }
                 return 'true'
-            }
-            const createFalseLabel = (language) => {
+            }*/
+            /*const createFalseLabel = (language) => {
                 switch (language.code) {
                     case 'de':
                         return 'nein'
@@ -93,10 +92,10 @@ export default (type, languages) => {
                         return 'no'
                 }
                 return 'true'
-            }
+            }*/
             languages.forEach((language) => {
-                trueLabel[language.code] = createTrueLabel(language)
-                falseLabel[language.code] = createFalseLabel(language)
+                trueLabel[language.code] = ''
+                falseLabel[language.code] = ''
             })
             return {
                 question: createDefaultQuestion(languages),

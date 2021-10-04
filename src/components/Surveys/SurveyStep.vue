@@ -26,7 +26,7 @@
             title-key="name"
             value-key="id"
             :default-value="-1"
-            label="Test"
+            :label="t('elements', 1)"
         />
 
         <action-button
@@ -133,8 +133,9 @@ export default {
 
         watch(
             () => surveyStep.value.surveyElementId,
-            (value) => {
-                surveyElementId.value = value
+            () => {
+                // Do not display survey element on update
+                // surveyElementId.value = value
             },
         )
 

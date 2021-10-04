@@ -15,7 +15,7 @@
         :label="t('questions', 1) + ' (' + language.title + ')'"
     />
 
-    <div class="table-wrap mt-3">
+    <div v-if="paramsLocal.emojis.length > 0" class="table-wrap mt-3">
         <table>
             <thead>
                 <tr>
@@ -45,7 +45,13 @@
             name="meaning"
             label="meaning"
         />
-        <button class="primary mt-3" @click="addEmoji">Add</button>
+        <button
+            class="primary mt-3"
+            :disabled="validateEmoji.$invalid"
+            @click="addEmoji"
+        >
+            {{ t('action_add_emoji') }}
+        </button>
     </div>
 </template>
 
@@ -57,6 +63,8 @@ import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
+import { minLength, maxLength, required } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core'
 
 export default {
     name: 'ElementTypeEmoji',
@@ -86,16 +94,79 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
+        const questionValidation = {}
+        store.state.languages.languages.forEach((language) => {
+            questionValidation[language.code] = {
+                required,
+                minLength: minLength(1),
+            }
+        })
+
+        const validations = computed({
+            get: () => {
+                return {
+                    paramsLocal: {
+                        /*emojis: {
+                            required,
+                        },*/
+                        question: questionValidation,
+                    },
+                    selectedEmoji: {
+                        // Todo: Regex for Emoji validation ... https://vuelidate-next.netlify.app/custom_validators.html#regex-based-validator
+                        type: {
+                            required,
+                            minLength: minLength(1),
+                            maxLength: maxLength(1),
+                        },
+                        meaning: {
+                            required,
+                            minLength: minLength(1),
+                            maxLength: maxLength(50),
+                        },
+                    },
+                }
+            },
+            set: (val) => emit('update:params', val),
+        })
+
         const addEmoji = () => {
-            paramsLocal.value.emojis.push(selectedEmoji.value)
-            selectedEmoji.value = {
-                type: '',
-                meaning: '',
+            let execute = true
+
+            if (
+                paramsLocal.value.emojis.findIndex(
+                    (x) =>
+                        x.type.trim() === selectedEmoji.value.type.trim() ||
+                        x.meaning.trim() === selectedEmoji.value.meaning.trim(),
+                ) >= 0
+            ) {
+                execute = false
+                alert(t('error_emoji_already_in_use'))
+            }
+
+            if (execute) {
+                paramsLocal.value.emojis.push({ ...selectedEmoji.value })
+                selectedEmoji.value = {
+                    type: '',
+                    meaning: '',
+                }
             }
         }
 
+        const validateParams = useVuelidate(
+            validations.value.params,
+            paramsLocal.value,
+        )
+
+        const validateEmoji = useVuelidate(
+            validations.value.selectedEmoji,
+            selectedEmoji,
+        )
+
         const deleteEmoji = (index) => {
-            paramsLocal.value.emojis.splice(index, 1)
+            const confirmDelete = confirm(t('confirm_delete_time_based_step'))
+            if (confirmDelete) {
+                paramsLocal.value.emojis.splice(index, 1)
+            }
         }
 
         return {
@@ -107,6 +178,8 @@ export default {
             deleteEmoji,
             selectedLanguage,
             setSelectedLanguage,
+            validateParams,
+            validateEmoji,
         }
     },
 }

@@ -107,6 +107,7 @@ export default {
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
+
         const validations = computed({
             get: () => {
                 return {

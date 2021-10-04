@@ -1,6 +1,7 @@
 export default {
     action_add_survey_step: 'Schritt hinzufügen',
     action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
+    action_add_emoji: 'Emoji hinzufügen',
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',
     action_delete: 'Löschen',
@@ -17,6 +18,7 @@ export default {
     binary_negative_label: 'Negative Beschriftung',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     confirm_delete_survey: 'Umfrage wirklich löschen?',
+    confirm_delete_emoji: 'Emoji wirklich löschen?',
     confirm_reset_survey_element:
         'Sie haben nicht gespeicherte Änderungen, wollen Sie diese zurücksetzen?',
     descriptions: 'Beschreibungen | Beschreibung | Beschreibungen',
@@ -24,6 +26,7 @@ export default {
     display_value: 'Anzeigewert',
     edit_survey: 'Umfrage bearbeiten',
     edit_user: 'Benutzer bearbeiten',
+    error_emoji_already_in_use: 'Emoji oder Bedeutung wird bereits verwendet',
     email: 'E-Mail',
     hello: 'Hallo Welt!',
     elements: 'Elemente | Element | Elemente',
