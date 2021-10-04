@@ -23,10 +23,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(emoji, e) in paramsLocal.emojis" :key="e">
+                <tr v-for="(emoji, index) in paramsLocal.emojis" :key="index">
                     <td>{{ emoji.type }}</td>
                     <td>{{ emoji.meaning }}</td>
-                    <td class="pointer" @click="deleteTimeBasedStep(tIndex)">
+                    <td class="pointer" @click="deleteEmoji(index)">
                         <TrashIcon class="h-5 w-5" />
                     </td>
                 </tr>
