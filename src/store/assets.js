@@ -16,8 +16,9 @@ export default {
             const assets = await ASSETS.getAssets(page)
             commit('setAssets', assets.data)
         },
-        async deleteAsset({}, assetId) {
+        async deleteAsset({ dispatch }, assetId) {
             await ASSETS.deleteAsset(assetId)
+            dispatch('getAssets')
         },
     },
 }

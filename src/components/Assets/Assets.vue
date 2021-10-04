@@ -194,7 +194,6 @@ export default {
             isBusy.value = true
             if (confirmAssetDelete) {
                 await store.dispatch('assets/deleteAsset', assetId)
-                await store.dispatch('assets/getAssets')
             }
             isBusy.value = false
         }
