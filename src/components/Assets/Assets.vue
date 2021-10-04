@@ -12,10 +12,6 @@
                     store.state.assets.data.length > 0
                 "
             >
-                <h2 class="text-lg mb-1">
-                    {{ store.state.assets?.data.length }}
-                    {{ t('assets', store.state.assets?.data.length) }}
-                </h2>
                 <div class="table-wrap">
                     <table class="table-fixed">
                         <thead>
@@ -41,9 +37,11 @@
                                 <td class="text-lg">
                                     {{ asset.id }}
                                 </td>
-                                <td class="w-12 m-0 p-0">
+                                <td class="m-0 p-0">
                                     <img
                                         v-if="asset.urls.thumbnail"
+                                        class="max-h-8 max-w-16"
+                                        :alt="asset.filename"
                                         :src="asset.urls.thumbnail"
                                     />
                                 </td>
