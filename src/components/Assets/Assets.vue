@@ -25,6 +25,7 @@
                                 <th>{{ t('filename') }}</th>
                                 <th>{{ t('filetype') }}</th>
                                 <th>{{ t('filesize') }}</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,9 +56,41 @@
                                 <td class="text-sm">
                                     {{ asset.mime }}
                                 </td>
-
                                 <td>
                                     {{ asset.sizeHuman }}
+                                </td>
+                                <td class="px-6 py-4 flex flex-row">
+                                    <!-- TODO: DISABLE DELETE IF IN USE -->
+                                    <!--
+                                    <trash-icon
+                                        v-if="inUse > 0"
+                                        class="
+                                            mx-1
+                                            h-5
+                                            w-5
+                                            text-gray-500
+                                            cursor-not-allowed
+                                        "
+                                    />
+                                    -->
+                                    <trash-icon
+                                        class="
+                                            mx-1
+                                            h-5
+                                            w-5
+                                            text-red-500
+                                            pointer
+                                        "
+                                        @click.prevent.stop="
+                                            deleteAsset(asset.id)
+                                        "
+                                    />
+                                    <EyeIcon
+                                        class="mx-1 h-5 w-5 pointer"
+                                        @click.prevent.stop="
+                                            openAssetModal(asset.id)
+                                        "
+                                    />
                                 </td>
                             </tr>
                         </tbody>
@@ -70,9 +103,15 @@
             <dashboard class="mt-3" :uppy="uppy" :props="dashboardOptions" />
         </aside>
     </div>
+    <asset-modal
+        v-if="assetModalStepId > 0 && assetModalIsOpen"
+        v-model:is-open="assetModalIsOpen"
+        :asset="store.state.assets?.data.find((x) => x.id === assetModalStepId)"
+    />
 </template>
 
 <script>
+import { TrashIcon, EyeIcon } from '@heroicons/vue/outline'
 import {
     onUpdated,
     ref,
@@ -94,16 +133,24 @@ import Tus from '@uppy/tus'
 // language pack
 import German from '@uppy/locales/lib/de_DE'
 import { useI18n } from 'vue-i18n'
+import AssetModal from './AssetModal.vue'
 
 export default {
     name: 'Assets',
     components: {
+        AssetModal,
         Dashboard,
+        EyeIcon,
+        TrashIcon,
     },
     setup() {
         const assetRefs = ref([])
         const store = useStore()
+        const isBusy = ref(false)
         const { t } = useI18n()
+
+        const assetModalIsOpen = ref(false)
+        const assetModalStepId = ref(-1)
 
         onMounted(() => {
             store.dispatch('assets/getAssets')
@@ -137,7 +184,25 @@ export default {
                     }),
         })
 
+        const openAssetModal = async (assetId) => {
+            assetModalIsOpen.value = true
+            assetModalStepId.value = assetId
+        }
+
+        const deleteAsset = async (assetId) => {
+            const confirmAssetDelete = confirm(t('confirm_delete_asset'))
+            isBusy.value = true
+            if (confirmAssetDelete) {
+                await store.dispatch('assets/deleteAsset', assetId)
+            }
+            isBusy.value = false
+        }
+
         return {
+            assetModalIsOpen,
+            assetModalStepId,
+            deleteAsset,
+            openAssetModal,
             dashboardOptions: {
                 theme: 'light',
                 showProgressDetails: true,

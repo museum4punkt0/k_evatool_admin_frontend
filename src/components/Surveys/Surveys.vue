@@ -1,7 +1,7 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1>{{ surveys.length }} {{ t('surveys', surveys.length) }}</h1>
+            <h1>{{ surveys?.length }} {{ t('surveys', surveys?.length) }}</h1>
 
             <div class="table-wrap mt-3">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -54,7 +54,18 @@
                                     class="mx-1 h-5 w-5"
                                     @click.prevent.stop="editSurvey(survey.id)"
                                 />
-                                <TrashIcon
+                                <trash-icon
+                                    v-if="survey.surveyStepsCount > 0"
+                                    class="
+                                        mx-1
+                                        h-5
+                                        w-5
+                                        text-gray-500
+                                        cursor-not-allowed
+                                    "
+                                />
+                                <trash-icon
+                                    v-else
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
                                     @click.prevent.stop="
                                         deleteSurvey(survey.id)
