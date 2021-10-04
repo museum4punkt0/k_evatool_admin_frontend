@@ -7,19 +7,23 @@
                 class="text-white px-2 py-1 text-sm flex-auto pointer"
                 :class="{
                     'bg-blue-500':
-                        activeLanguage.code === language.code && isValid.code,
+                        activeLanguage.code === language.code &&
+                        isValid.includes(language.code),
                     'bg-red-500':
-                        activeLanguage.code === language.code && !isValid.code,
+                        activeLanguage.code === language.code &&
+                        !isValid.includes(language.code),
                     'bg-blue-700':
-                        activeLanguage.code !== language.code && isValid.code,
+                        activeLanguage.code !== language.code &&
+                        isValid.includes(language.code),
                     'bg-red-700':
-                        activeLanguage.code !== language.code && !isValid.code,
+                        activeLanguage.code !== language.code &&
+                        !isValid.includes(language.code),
                 }"
                 @click="selectLanguage(language)"
             >
                 {{ language.title }}
                 <exclamation-icon
-                    v-if="!isValid"
+                    v-if="!isValid.includes(language.code)"
                     class="float-right ml-3 h-5 w-5"
                 />
             </button>
@@ -41,8 +45,8 @@ export default {
             default: null,
         },
         isValid: {
-            type: Object,
-            default: null,
+            type: Array,
+            default: () => ['de', 'EN'],
         },
     },
     emits: ['select'],
