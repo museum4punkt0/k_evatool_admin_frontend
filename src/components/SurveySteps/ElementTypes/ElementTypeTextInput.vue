@@ -1,27 +1,36 @@
 <template>
     <div>
+        <language-switch
+            class="mt-6"
+            :active-language="selectedLanguage"
+            @select="setSelectedLanguage($event)"
+        />
         <form-input
-            v-for="language in store.state.languages.languages"
-            :key="'lang' + language.id"
+            v-for="language in store.state.languages.languages.filter(
+                (item) => item.code === selectedLanguage.code,
+            )"
+            :key="'question_lang' + language.id"
             v-model:value="paramsLocal.question[language.code]"
-            :name="'lang' + language.id"
-            :label="'question (' + language.code + ')'"
+            class="mt-3"
+            :name="'question' + language.id"
+            :label="t('questions', 1) + ' (' + language.title + ')'"
         />
     </div>
 </template>
 
 <script>
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
 import useVuelidate from '@vuelidate/core'
 // import { required, between } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
+import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
 export default {
     name: 'ElementTypeMultipleChoiceQuestion',
-    components: { FormInput, TrashIcon, PlusIcon },
+    components: { FormInput, TrashIcon, PlusIcon, LanguageSwitch },
     props: {
         params: {
             type: Object,
@@ -37,6 +46,12 @@ export default {
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
+        const selectedLanguage = ref(
+            store.state.languages.languages.find((lang) => lang.default),
+        )
+        const setSelectedLanguage = (language) => {
+            selectedLanguage.value = language
+        }
         const validations = computed({
             get: () => {
                 return {}
@@ -49,6 +64,8 @@ export default {
             paramsLocal,
             t,
             v$: useVuelidate(validations, paramsLocal),
+            selectedLanguage,
+            setSelectedLanguage,
         }
     },
 }
