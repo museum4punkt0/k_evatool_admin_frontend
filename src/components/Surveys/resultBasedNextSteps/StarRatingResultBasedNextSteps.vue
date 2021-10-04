@@ -4,7 +4,7 @@
             <li>number of stars: {{ surveyElementParams?.numberOfStars }}</li>
         </ul>
         <div
-            v-if="surveyStep.resultBasedNextSteps?.length > 0"
+            v-if="surveyStep?.resultBasedNextSteps?.length > 0"
             class="table-wrap"
         >
             <table>
@@ -121,7 +121,6 @@ export default {
         //         savingTimeBasedSteps.value = false
         // }
 
-        console.log(surveyElementParams.value)
         const validations = computed({
             get: () => {
                 return {
