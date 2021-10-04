@@ -35,8 +35,8 @@
     </div>
 
     <div class="p-2 bg-blue-200 rounded-lg mt-3">
-        <form-input
-            v-model:value="selectedEmoji.type"
+        <form-select-emoji
+            v-model:selected="selectedEmoji.type"
             name="emoji"
             :label="t('emojis')"
         />
@@ -62,6 +62,7 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import FormSelectEmoji from '../../Forms/FormSelectEmoji.vue'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
@@ -72,7 +73,7 @@ import useVuelidate from '@vuelidate/core'
 
 export default {
     name: 'ElementTypeEmoji',
-    components: { FormInput, TrashIcon, LanguageSwitch },
+    components: { FormSelectEmoji, FormInput, TrashIcon, LanguageSwitch },
     props: {
         params: {
             type: Object,
