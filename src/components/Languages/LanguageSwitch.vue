@@ -8,22 +8,22 @@
                 :class="{
                     'bg-blue-500':
                         activeLanguage.code === language.code &&
-                        isValid.includes(language.code),
+                        !isInvalid.includes(language.code),
                     'bg-red-500':
                         activeLanguage.code === language.code &&
-                        !isValid.includes(language.code),
+                        isInvalid.includes(language.code),
                     'bg-blue-700':
                         activeLanguage.code !== language.code &&
-                        isValid.includes(language.code),
+                        !isInvalid.includes(language.code),
                     'bg-red-700':
                         activeLanguage.code !== language.code &&
-                        !isValid.includes(language.code),
+                        isInvalid.includes(language.code),
                 }"
                 @click="selectLanguage(language)"
             >
                 {{ language.title }}
                 <exclamation-icon
-                    v-if="!isValid.includes(language.code)"
+                    v-if="isInvalid.includes(language.code)"
                     class="float-right ml-3 h-5 w-5"
                 />
             </button>
@@ -44,9 +44,9 @@ export default {
             type: Object,
             default: null,
         },
-        isValid: {
+        isInvalid: {
             type: Array,
-            default: () => ['de', 'en'],
+            default: () => [],
         },
     },
     emits: ['select'],

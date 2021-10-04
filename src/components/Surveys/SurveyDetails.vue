@@ -9,6 +9,7 @@
         :label="t('names', 1)"
     />
     <form-input
+        v-if="survey.id"
         v-model:value="survey.slug"
         name="slug"
         class="mt-3"
