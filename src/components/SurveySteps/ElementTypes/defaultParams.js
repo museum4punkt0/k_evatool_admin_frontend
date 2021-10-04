@@ -53,28 +53,7 @@ export default (type, languages) => {
         }
         case TYPES.EMOJI: {
             return {
-                emojis: [
-                    {
-                        type: '😍',
-                        meaning: 'volle zustimmung',
-                    },
-                    {
-                        type: '😃',
-                        meaning: 'zustimmung',
-                    },
-                    {
-                        type: '🙂',
-                        meaning: 'neutral',
-                    },
-                    {
-                        type: '😦',
-                        meaning: 'ablehnung',
-                    },
-                    {
-                        type: '😡',
-                        meaning: 'volle ablehnung',
-                    },
-                ],
+                emojis: [],
                 question: createDefaultQuestion(languages),
             }
         }
