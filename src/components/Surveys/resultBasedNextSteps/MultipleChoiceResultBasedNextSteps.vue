@@ -1,5 +1,5 @@
 <template>
-    <div v-if="surveyStep.resultBasedNextSteps?.length > 0" class="table-wrap">
+    <div v-if="surveyStep?.resultBasedNextSteps?.length > 0" class="table-wrap">
         <table>
             <tr v-for="(step, s) in surveyStep.resultBasedNextSteps" :key="s">
                 <td>{{ step.value }}</td>
@@ -14,7 +14,7 @@
         </table>
     </div>
 
-    <div class="grid grid-cols-5 gap-4">
+    <div v-if="surveyStep?.surveyElement" class="grid grid-cols-5 gap-4">
         <form-select
             v-model:selected="nextStep.value"
             class="mt-3 col-span-2"

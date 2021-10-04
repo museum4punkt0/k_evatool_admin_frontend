@@ -1,16 +1,12 @@
 <template>
     <div>
-        <!-- {{ v$ }} -->
-        {{ nextStep }}
-        {{ surveyElementParams }}
         <ul>
-            <li>number of stars: {{ surveyElementParams.numberOfStars }}</li>
+            <li>number of stars: {{ surveyElementParams?.numberOfStars }}</li>
         </ul>
         <div
             v-if="surveyStep.resultBasedNextSteps?.length > 0"
             class="table-wrap"
         >
-            {{ typeof surveyStep.resultBasedNextSteps }}
             <table>
                 <tr
                     v-for="(step, index) in surveyStep.resultBasedNextSteps"
