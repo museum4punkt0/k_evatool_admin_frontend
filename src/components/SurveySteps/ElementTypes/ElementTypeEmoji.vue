@@ -1,11 +1,18 @@
 <template>
+    <language-switch
+        class="mt-6"
+        :active-language="selectedLanguage"
+        @select="setSelectedLanguage($event)"
+    />
     <form-input
-        v-for="language in store.state.languages.data"
-        :key="'lang' + language.id"
+        v-for="language in store.state.languages.languages.filter(
+            (item) => item.code === selectedLanguage.code,
+        )"
+        :key="'question_lang' + language.id"
         v-model:value="paramsLocal.question[language.code]"
         class="mt-3"
-        :label="'question (' + language.code + ')'"
-        :name="'question_' + language.code"
+        :name="'question' + language.id"
+        :label="t('questions', 1) + ' (' + language.title + ')'"
     />
 
     <div class="table-wrap mt-3">
@@ -16,10 +23,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(emoji, e) in paramsLocal.emojis" :key="e">
+                <tr v-for="(emoji, index) in paramsLocal.emojis" :key="index">
                     <td>{{ emoji.type }}</td>
                     <td>{{ emoji.meaning }}</td>
-                    <td class="pointer" @click="deleteTimeBasedStep(tIndex)">
+                    <td class="pointer" @click="deleteEmoji(index)">
                         <TrashIcon class="h-5 w-5" />
                     </td>
                 </tr>
@@ -46,13 +53,14 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
+import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
 
 export default {
     name: 'ElementTypeEmoji',
-    components: { FormInput, TrashIcon },
+    components: { FormInput, TrashIcon, LanguageSwitch },
     props: {
         params: {
             type: Object,
@@ -67,6 +75,12 @@ export default {
             type: '',
             meaning: '',
         })
+        const selectedLanguage = ref(
+            store.state.languages.languages.find((lang) => lang.default),
+        )
+        const setSelectedLanguage = (language) => {
+            selectedLanguage.value = language
+        }
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
@@ -91,6 +105,8 @@ export default {
             t,
             addEmoji,
             deleteEmoji,
+            selectedLanguage,
+            setSelectedLanguage,
         }
     },
 }

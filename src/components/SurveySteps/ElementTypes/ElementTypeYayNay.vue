@@ -1,5 +1,10 @@
 <template>
-    {{ selectedLanguage.code }}
+    <language-switch
+        class="mt-6"
+        :active-language="selectedLanguage"
+        @select="setSelectedLanguage($event)"
+    />
+
     <button
         v-for="language in store.state.languages.data"
         :key="'lang' + language.id"
@@ -69,9 +74,10 @@ import useVuelidate from '@vuelidate/core'
 import { maxLength, minLength, required } from '@vuelidate/validators'
 import { useState } from '../../../composables/state'
 
+import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 export default {
     name: 'ElementTypeYayNayQuestion',
-    components: { FormInput },
+    components: { FormInput, LanguageSwitch },
     props: {
         params: {
             type: Object,
