@@ -1,5 +1,8 @@
 <template>
     <div>
+        <!-- {{ v$ }} -->
+        {{ nextStep }}
+        {{ surveyElementParams }}
         <ul>
             <li>number of stars: {{ surveyElementParams.numberOfStars }}</li>
         </ul>
@@ -122,6 +125,7 @@ export default {
         //         savingTimeBasedSteps.value = false
         // }
 
+        console.log(surveyElementParams.value)
         const validations = computed({
             get: () => {
                 return {

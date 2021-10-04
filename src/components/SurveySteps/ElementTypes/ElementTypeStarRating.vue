@@ -1,5 +1,12 @@
 <template>
     <form-input
+        v-for="language in store.state.languages.data"
+        :key="'lang' + language.id"
+        v-model:value="paramsLocal.question[language.code]"
+        :name="'lang' + language.id"
+        :label="'question (' + language.code + ')'"
+    />
+    <form-input
         v-model:value="paramsLocal.numberOfStars"
         name="numberOfStars"
         :label="t('number_of_stars')"
@@ -9,14 +16,6 @@
         v-model:enabled="paramsLocal.allowHalfSteps"
         :label="t('allow_half_steps')"
         class="my-3"
-    />
-
-    <form-input
-        v-for="language in store.state.languages.data"
-        :key="'lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        :name="'lang' + language.id"
-        :label="'question (' + language.code + ')'"
     />
 </template>
 

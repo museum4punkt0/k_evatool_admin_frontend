@@ -72,12 +72,13 @@
                             >
                                 <div class="text-center">
                                     {{
-                                        steps.find((x) => x.id === step.id).name
+                                        steps?.find((x) => x?.id === step?.id)
+                                            ?.name
                                     }}
                                     <p class="w-full text-xs text-gray-500">
                                         {{
-                                            steps.find((x) => x.id === step.id)
-                                                .surveyElementType
+                                            steps?.find((x) => x.id === step.id)
+                                                ?.surveyElementType
                                         }}
                                     </p>
                                 </div>
@@ -150,7 +151,7 @@
                                 class="flex-1 disabled:opacity-25"
                                 :disabled="
                                     steps.find((x) => x.id === step.id)
-                                        .surveyElementType !== 'video'
+                                        ?.surveyElementType !== 'video'
                                 "
                                 @click.prevent.stop="
                                     openTimeBasedModal(step.id)
@@ -273,6 +274,7 @@ export default {
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
         const width = 2000
         const height = 2000
+        console.log(props.steps)
 
         const fixLayoutPosition = (position) => {
             if (position.x < 0) {
@@ -284,8 +286,11 @@ export default {
             return position
         }
 
+        // console.log(props.steps)
+        // console.log(props.adminLayout)
+
         const initAdminLayout = () => {
-            console.log('init admin layout')
+            // console.log('init admin layout', props.steps)
             const adminLayoutInit = []
 
             props.steps

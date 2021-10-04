@@ -41,7 +41,7 @@
             class="ml-2"
             :executing="savingSurveyStep"
             :action-text="t('action_delete')"
-            @execute="saveSurveyStep"
+            @execute="deleteSurveyStep"
         />
 
         <data-viewer class="mt-3" :data="surveyStep" />
@@ -92,7 +92,7 @@ export default {
         FormToggle,
         DataViewer,
     },
-    emits: ['saved'],
+    emits: ['saved', 'deleted'],
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
@@ -101,6 +101,7 @@ export default {
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
         const surveyElementId = ref(-1)
         const savingSurveyStep = ref(false)
+        const deletingSurveyStep = ref(false)
 
         const surveyStep = ref({
             name: '',
@@ -148,6 +149,15 @@ export default {
             emit('saved')
             savingSurveyStep.value = false
         }
+        const deleteSurveyStep = async () => {
+            deletingSurveyStep.value = true
+            await SURVEY_SERVICE.deleteSurveyStep(surveyStep.value, surveyId)
+            surveyStepId.value = -1
+            // await getSurveyStep()
+            emit('deleted')
+            deletingSurveyStep.value = true
+            store.dispatch('surveys/getSurveys')
+        }
 
         const newSurveyElement = () => {
             surveyElementId.value = 0
@@ -163,9 +173,11 @@ export default {
             surveyStepId,
             store,
             saveSurveyStep,
+            deleteSurveyStep,
             t,
             newSurveyElement,
             savingSurveyStep,
+            deletingSurveyStep,
             surveyElement,
             surveyElements,
             surveyElementId,
