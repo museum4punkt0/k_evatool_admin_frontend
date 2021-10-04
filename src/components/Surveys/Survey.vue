@@ -26,6 +26,7 @@
             <survey-step
                 v-if="store.state.surveys.surveyStepId >= 0"
                 @saved="surveySaved"
+                @deleted="surveyStepDeleted"
             />
             <template v-else>
                 <survey-details
@@ -93,6 +94,12 @@ export default {
             store.dispatch('surveys/getSurveySteps', surveyId.value)
         }
 
+        const surveyStepDeleted = () => {
+            store.dispatch('surveys/getSurvey', surveyId.value)
+            store.dispatch('surveys/getSurveySteps', surveyId.value)
+            store.dispatch('surveys/resetSurveyStep')
+        }
+
         const onScroll = () => {}
 
         return {
@@ -106,6 +113,7 @@ export default {
             newSurveyStep,
             t,
             surveySaved,
+            surveyStepDeleted,
         }
     },
 }

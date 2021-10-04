@@ -71,10 +71,11 @@ export default {
                 return error
             })
     },
-    deleteSurveyStep(data, surveyId) {
-        const url = 'evaluation-tool/surveys/' + surveyId + '/steps/' + data.id
-        const method = 'DELETE'
-        return axios({ url, method, data })
+    deleteSurveyStep(surveyStepId, surveyId) {
+        const url =
+            'evaluation-tool/surveys/' + surveyId + '/steps/' + surveyStepId
+        return axios
+            .delete(url)
             .then((response) => {
                 return response.data.data
             })

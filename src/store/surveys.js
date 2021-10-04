@@ -51,6 +51,10 @@ export default {
             const surveys = await SURVEY_SERVICE.getSurveys()
             commit('setSurveys', surveys)
         },
+        async getSurvey({ commit, state }) {
+            const survey = await SURVEY_SERVICE.getSurvey(state.surveyId)
+            commit('setSurvey', survey)
+        },
         async setSurveyId({ commit }, surveyId) {
             commit('setSurveyId', surveyId)
             if (surveyId > 0) {
@@ -135,6 +139,20 @@ export default {
                     )
                 commit('setSurveyStepElement', surveyStepElement)
             }
+        },
+        async deleteSurveyStep({ dispatch, state }, payload) {
+            const deletedSurveyStep = await SURVEY_SERVICE.deleteSurveyStep(
+                payload.surveyStepId,
+                payload.surveyId,
+            )
+            if (deletedSurveyStep.id) {
+                dispatch('getSurvey')
+                dispatch('getSurveySteps', state.surveyId)
+            }
+        },
+        resetSurveyStep({ commit }) {
+            commit('setSurveyStepId', -1)
+            commit('setSurveyStep', null)
         },
     },
     getters: {},

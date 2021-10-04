@@ -18,6 +18,7 @@ export default {
     binary_negative_label: 'Negative Beschriftung',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     confirm_delete_survey: 'Umfrage wirklich löschen?',
+    cconfirm_delete_survey_step: 'Schritt wirklich löschen?',
     confirm_delete_emoji: 'Emoji wirklich löschen?',
     confirm_reset_survey_element:
         'Sie haben nicht gespeicherte Änderungen, wollen Sie diese zurücksetzen?',

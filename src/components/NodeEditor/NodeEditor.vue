@@ -282,7 +282,6 @@ export default {
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
         const width = 2000
         const height = 2000
-        console.log(props.steps)
 
         const fixLayoutPosition = (position) => {
             if (position.x < 0) {
@@ -298,7 +297,7 @@ export default {
         // console.log(props.adminLayout)
 
         const initAdminLayout = () => {
-            // console.log('init admin layout', props.steps)
+            console.log('init admin layout')
             const adminLayoutInit = []
 
             props.steps

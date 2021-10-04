@@ -39,7 +39,7 @@
             v-if="surveyStep.id"
             color="danger"
             class="ml-2"
-            :executing="savingSurveyStep"
+            :executing="deletingSurveyStep"
             :action-text="t('action_delete')"
             @execute="deleteSurveyStep"
         />
@@ -151,13 +151,17 @@ export default {
             savingSurveyStep.value = false
         }
         const deleteSurveyStep = async () => {
-            deletingSurveyStep.value = true
-            await SURVEY_SERVICE.deleteSurveyStep(surveyStep.value, surveyId)
-            surveyStepId.value = -1
-            // await getSurveyStep()
-            emit('deleted')
-            deletingSurveyStep.value = true
-            store.dispatch('surveys/getSurveys')
+            const confirmDelete = confirm(t('confirm_delete_survey_step'))
+            if (confirmDelete) {
+                deletingSurveyStep.value = true
+                await store.dispatch('surveys/deleteSurveyStep', {
+                    surveyId: surveyId,
+                    surveyStepId: surveyStep.value.id,
+                })
+                surveyStepId.value = -1
+                emit('deleted')
+                deletingSurveyStep.value = false
+            }
         }
 
         const newSurveyElement = () => {
