@@ -11,6 +11,9 @@
                 :placeholder="placeholder"
             />
         </div>
+        <p v-if="helptext" class="text-gray-500 text-xs mt-1 ml-1">
+            {{ helptext }}
+        </p>
     </div>
 </template>
 
@@ -31,6 +34,10 @@ export default {
         },
         value: {
             type: [Number, String],
+            default: '',
+        },
+        helptext: {
+            type: String,
             default: '',
         },
         placeholder: {

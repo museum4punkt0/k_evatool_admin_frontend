@@ -38,12 +38,14 @@
         <form-input
             v-model:value="selectedEmoji.type"
             name="emoji"
-            label="emoji"
+            :label="t('emojis')"
         />
         <form-input
             v-model:value="selectedEmoji.meaning"
+            class="mt-3"
             name="meaning"
-            label="meaning"
+            :label="t('meanings', 1)"
+            :helptext="t('validation_emoji_meaning')"
         />
         <button
             class="primary mt-3"
@@ -63,7 +65,9 @@ import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
-import { minLength, maxLength, required } from '@vuelidate/validators'
+import { minLength, maxLength, required, helpers } from '@vuelidate/validators'
+const meaningValidation = helpers.regex(/^[a-z_]*$/)
+
 import useVuelidate from '@vuelidate/core'
 
 export default {
@@ -122,6 +126,7 @@ export default {
                             required,
                             minLength: minLength(1),
                             maxLength: maxLength(50),
+                            meaningValidation,
                         },
                     },
                 }
