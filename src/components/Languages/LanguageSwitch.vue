@@ -1,18 +1,31 @@
 <template>
     <div>
-        <div class="rounded overflow-hidden flex flex-row bg-green-700">
+        <div class="rounded overflow-hidden flex flex-row">
             <button
                 v-for="language in languages"
                 :key="language.id"
                 class="text-white px-2 py-1 text-sm flex-auto pointer"
-                :class="
-                    activeLanguage.code === language.code
-                        ? 'bg-blue-500'
-                        : 'bg-blue-700'
-                "
+                :class="{
+                    'bg-blue-500':
+                        activeLanguage.code === language.code &&
+                        isValid.includes(language.code),
+                    'bg-red-500':
+                        activeLanguage.code === language.code &&
+                        !isValid.includes(language.code),
+                    'bg-blue-700':
+                        activeLanguage.code !== language.code &&
+                        isValid.includes(language.code),
+                    'bg-red-700':
+                        activeLanguage.code !== language.code &&
+                        !isValid.includes(language.code),
+                }"
                 @click="selectLanguage(language)"
             >
                 {{ language.title }}
+                <exclamation-icon
+                    v-if="!isValid.includes(language.code)"
+                    class="float-right ml-3 h-5 w-5"
+                />
             </button>
         </div>
     </div>
@@ -21,13 +34,19 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { ExclamationIcon } from '@heroicons/vue/outline'
 
 export default {
     name: 'LanguageSwitch',
+    components: { ExclamationIcon },
     props: {
         activeLanguage: {
             type: Object,
             default: null,
+        },
+        isValid: {
+            type: Array,
+            default: () => ['de', 'en'],
         },
     },
     emits: ['select'],
