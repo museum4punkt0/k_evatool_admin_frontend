@@ -22,7 +22,7 @@
         :label="t('types', 1)"
         title-key="name"
         value-key="key"
-        :disabled-values="['binary']"
+        readonly
     />
 
     <div class="mt-3">
@@ -141,6 +141,7 @@ export default {
         const savingSurveyElement = ref(false)
         const paramsValid = ref(false)
         const languages = computed(() => store.state.languages.languages)
+        let revertChanges = false
 
         onMounted(async () => {
             elementTypes.value = store.state.elementTypes.elementTypes
@@ -183,14 +184,44 @@ export default {
 
         watch(
             () => surveyElement.value?.surveyElementType,
-            (value) => {
-                // Resets to default value when survey element type is changed
-                // Todo: Ask for user confirmation and reset if denied.
+            (surveyElementType, oldSurveyElementType) => {
+                if (revertChanges) {
+                    revertChanges = false
+                    return
+                }
+                const defaultParams = defaultParamsCreator(
+                    surveyElementType,
+                    languages.value,
+                )
                 if (!surveyElement.value.params) {
-                    surveyElement.value.params = defaultParamsCreator(
-                        value,
+                    surveyElement.value.params = defaultParams
+                }
+                /** SURVEY ELEMENT TYPE HAS CHANGED **/
+                if (
+                    oldSurveyElementType &&
+                    surveyElementType !== oldSurveyElementType
+                ) {
+                    const oldDefaultParams = defaultParamsCreator(
+                        oldSurveyElementType,
                         languages.value,
                     )
+                    if (
+                        JSON.stringify(oldDefaultParams) ===
+                        JSON.stringify(surveyElement.value.params)
+                    ) {
+                        surveyElement.value.params = defaultParams
+                    } else {
+                        const typeChangeConfirmation = confirm(
+                            t('confirm_reset_survey_element'),
+                        )
+                        if (typeChangeConfirmation) {
+                            surveyElement.value.params = defaultParams
+                        } else {
+                            revertChanges = true
+                            surveyElement.value.surveyElementType =
+                                oldSurveyElementType
+                        }
+                    }
                 }
             },
         )
