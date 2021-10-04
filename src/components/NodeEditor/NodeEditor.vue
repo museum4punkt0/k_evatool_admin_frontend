@@ -12,11 +12,19 @@
             >
                 <connection
                     v-for="connection in connections"
-                    :key="`connection_${connection.start}_${connection.end}`"
-                    :start="getStepElementPosition(connection.start, 'right')"
+                    :key="`connection_${connection.start.id}_${connection.end}`"
+                    :start="
+                        getStepElementPosition(
+                            connection.start.id,
+                            connection.start.outlet === 'next'
+                                ? 'right'
+                                : 'bottom',
+                        )
+                    "
                     :end="getStepElementPosition(connection.end, 'left')"
                     :height="height"
                     :width="width"
+                    :dashed="connection.start.outlet !== 'next'"
                 ></connection>
                 <div
                     v-for="step in adminLayout"
@@ -326,8 +334,17 @@ export default {
             props.steps.forEach((step) => {
                 if (step.nextStepId > 0) {
                     connections.value.push({
-                        start: step.id,
+                        start: { id: step.id, outlet: 'next' },
                         end: step.nextStepId,
+                    })
+                }
+                if (step.resultBasedNextSteps) {
+                    step.resultBasedNextSteps.forEach((nextStep) => {
+                        console.log(nextStep)
+                        connections.value.push({
+                            start: { id: step.id, outlet: 'resultBasedNext' },
+                            end: nextStep.stepId,
+                        })
                     })
                 }
             })
@@ -433,7 +450,7 @@ export default {
         const getStepElementPosition = (id, anchor) => {
             const element = stepElements.value[id]
             let offsetX = 0
-            // let offsetY = 0
+            let offsetY = 0
             switch (anchor) {
                 case 'left': {
                     offsetX = -element?.getBoundingClientRect().width / 2 - 10
@@ -443,10 +460,18 @@ export default {
                     offsetX = element?.getBoundingClientRect().width / 2 + 10
                     break
                 }
+                case 'top': {
+                    offsetY = -element?.getBoundingClientRect().height / 2 - 10
+                    break
+                }
+                case 'bottom': {
+                    offsetY = element?.getBoundingClientRect().height / 2 + 10
+                    break
+                }
             }
             return {
                 x: parseInt(element?.style.left, 10) + offsetX,
-                y: parseInt(element?.style.top, 10),
+                y: parseInt(element?.style.top, 10) + offsetY,
             }
         }
 

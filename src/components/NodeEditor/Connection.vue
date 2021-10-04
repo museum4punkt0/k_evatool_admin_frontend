@@ -29,6 +29,7 @@
             stroke="#000"
             stroke-width="2"
             marker-end="url(#arrowhead)"
+            :stroke-dasharray="dashed ? 2 : 0"
         />
     </svg>
 </template>
@@ -53,6 +54,10 @@ export default {
         height: {
             type: Number,
             required: true,
+        },
+        dashed: {
+            type: Boolean,
+            default: false,
         },
     },
     setup() {
