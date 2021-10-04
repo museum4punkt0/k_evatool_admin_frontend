@@ -21,4 +21,14 @@ export default {
                 return error.response
             })
     },
+    async deleteAsset(assetId) {
+        return axios
+            .delete('evaluation-tool/assets/' + assetId)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }

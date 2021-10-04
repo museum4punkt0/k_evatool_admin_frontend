@@ -16,6 +16,7 @@ export default {
     binary_negative: 'Negativer Systemwert',
     binary_positive_label: 'Positive Beschriftung',
     binary_negative_label: 'Negative Beschriftung',
+    confirm_delete_asset: 'Wollen Sie die Datei wirklich löschen?',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     confirm_delete_survey: 'Umfrage wirklich löschen?',
     confirm_delete_emoji: 'Emoji wirklich löschen?',
