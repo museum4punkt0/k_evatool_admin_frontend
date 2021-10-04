@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.201",
+    "version": "1.0.202",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -16,20 +16,20 @@
         "@braks/revue-draggable": "^0.3.0",
         "@headlessui/vue": "^1.4.1",
         "@heroicons/vue": "^1.0.4",
-        "@tailwindcss/forms": "^0.3.3",
+        "@tailwindcss/forms": "^0.3.4",
         "@uppy/core": "^2.0.3",
         "@uppy/locales": "^2.0.1",
         "@uppy/tus": "^2.0.2",
         "@uppy/vue": "^0.4.1",
         "@vuelidate/core": "^2.0.0-alpha.26",
         "@vuelidate/validators": "^2.0.0-alpha.22",
-        "axios": "^0.21.4",
+        "axios": "^0.22.0",
         "lodash": "^4.17.21",
         "uuid": "^8.3.2",
         "vue": "^3.0.5",
-        "vue-i18n": "^9.1.7",
+        "vue-i18n": "^9.1.8",
         "vue-router": "4",
-        "vue3-leaderline": "^1.1.11",
+        "vue3-leaderline": "^1.2.11",
         "vue3-styled-components": "^1.2.1",
         "vuex": "^4.0.2",
         "vuex-composition-helpers": "^2.0.0"
@@ -53,7 +53,7 @@
         "pre-commit": "^1.2.2",
         "prettier": "^2.4.1",
         "tailwindcss": "^2.2.16",
-        "vite": "^2.5.10",
+        "vite": "^2.6.2",
         "vite-plugin-vue-env": "^1.0.5"
     }
 }
