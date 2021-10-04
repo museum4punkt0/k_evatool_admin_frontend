@@ -1,5 +1,5 @@
 <template>
-    <data-viewer class="mt-3" :data="v$" />
+    <data-viewer class="mt-3" :data="validator" />
     <h3 v-if="surveyElementId > 0">{{ t('elements', 1) }}</h3>
     <h3 v-else>Neues Element</h3>
     <label for="name" class="capitalize">{{ t('names', 1) }}</label>
@@ -33,6 +33,7 @@
         <element-type-emoji
             v-if="surveyElement.surveyElementType === 'emoji'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-video
             v-if="surveyElement.surveyElementType === 'video'"
@@ -65,7 +66,7 @@
     </div>
 
     <action-button
-        :disabled="v$.$invalid"
+        :disabled="validator.$invalid || !paramsValid"
         :executing="savingSurveyElement"
         :action-text="t('action_save')"
         @execute="saveSurveyElement"
@@ -229,11 +230,9 @@ export default {
         )
 
         const validations = {
-            surveyElement: {
-                name: {
-                    required,
-                    minLength: minLength(1),
-                },
+            name: {
+                required,
+                minLength: minLength(1),
             },
         }
 
@@ -241,25 +240,26 @@ export default {
             emit('cancel')
         }
 
+        const setParamsValid = (isValid) => {
+            paramsValid.value = isValid
+        }
+
+        const validator = useVuelidate(validations, surveyElement.value, {
+            $scope: 'surveyElement',
+        })
+
         return {
-            v$: useVuelidate(),
+            validator,
             surveyElement,
             elementTypes,
             saveSurveyElement,
             savingSurveyElement,
             t,
-            validations,
             paramsValid,
             cancelEdit,
+            setParamsValid,
+            validations,
         }
-    },
-    validations: {
-        surveyElement: {
-            name: {
-                required,
-                minLength: minLength(1),
-            },
-        },
     },
 }
 </script>

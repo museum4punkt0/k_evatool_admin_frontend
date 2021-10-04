@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
@@ -79,7 +79,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params'],
+    emits: ['update:params', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
@@ -109,7 +109,7 @@ export default {
         const validations = computed({
             get: () => {
                 return {
-                    paramsLocal: {
+                    params: {
                         /*emojis: {
                             required,
                         },*/
@@ -160,11 +160,20 @@ export default {
         const validateParams = useVuelidate(
             validations.value.params,
             paramsLocal.value,
+            { $scope: 'surveyElement' },
         )
 
         const validateEmoji = useVuelidate(
             validations.value.selectedEmoji,
             selectedEmoji,
+            { $scope: 'emoji' },
+        )
+
+        watch(
+            () => validateParams.value.$invalid,
+            (invalid) => {
+                emit('isValid', !invalid)
+            },
         )
 
         const deleteEmoji = (index) => {
