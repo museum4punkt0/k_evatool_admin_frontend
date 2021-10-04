@@ -21,6 +21,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th></th>
                                 <th>{{ t('filename') }}</th>
                                 <th>{{ t('filetype') }}</th>
                                 <th>{{ t('filesize') }}</th>
@@ -38,6 +39,12 @@
                             >
                                 <td class="text-lg">
                                     {{ asset.id }}
+                                </td>
+                                <td class="w-12 m-0 p-0">
+                                    <img
+                                        v-if="asset.urls.thumbnail"
+                                        :src="asset.urls.thumbnail"
+                                    />
                                 </td>
                                 <td>
                                     {{ asset.filename }}
