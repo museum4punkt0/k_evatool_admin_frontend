@@ -60,7 +60,7 @@ import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
-import { maxLength, minLength, required } from '@vuelidate/validators'
+import { required } from '@vuelidate/validators'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
 export default {

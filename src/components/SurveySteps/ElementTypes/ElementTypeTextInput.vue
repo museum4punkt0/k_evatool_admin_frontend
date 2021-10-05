@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
-// import { required, between } from '@vuelidate/validators'
+import { required } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
@@ -52,18 +52,44 @@ export default {
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
         }
+        const existsInAllLanguages = (value) => {
+            let valid = true
+            Object.entries(value).forEach((entry) => {
+                // TODO: check language key
+                if (!entry[1] || entry[1].length === 0) {
+                    valid = false
+                }
+            })
+            return valid
+        }
         const validations = computed({
             get: () => {
-                return {}
+                return {
+                    question: {
+                        required,
+                        existsInAllLanguages,
+                    },
+                }
             },
             set: (val) => emit('update:params', val),
         })
+
+        const paramsValidation = useVuelidate(validations, paramsLocal, {
+            $scope: 'surveyElement',
+        })
+
+        watch(
+            () => paramsValidation.value.$invalid,
+            (invalid) => {
+                emit('isValid', !invalid)
+            },
+        )
 
         return {
             store,
             paramsLocal,
             t,
-            v$: useVuelidate(validations, paramsLocal),
+            v$: paramsValidation,
             selectedLanguage,
             setSelectedLanguage,
         }
