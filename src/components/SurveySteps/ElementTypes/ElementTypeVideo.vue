@@ -32,7 +32,9 @@ export default {
 
         const assets = computed({
             get: () =>
-                store.state.assets.data.filter((x) => x.mime.includes('video')),
+                store.state.assets.assets.filter((x) =>
+                    x.mime.includes('video'),
+                ),
         })
 
         const paramsLocal = computed({
