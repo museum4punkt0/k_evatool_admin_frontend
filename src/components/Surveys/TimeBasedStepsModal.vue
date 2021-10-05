@@ -70,7 +70,7 @@
                                     <source :src="asset.urls.url" />
                                 </video>
                                 <div
-                                    v-if="timeBasedSteps.length > 0"
+                                    v-if="timeBasedSteps?.length > 0"
                                     class="table-wrap mb-3"
                                 >
                                     <table>
