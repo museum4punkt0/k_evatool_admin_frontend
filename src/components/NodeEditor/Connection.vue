@@ -35,8 +35,14 @@
             marker-end="url(#arrowhead)"
             :stroke-dasharray="dashed ? 2 : 0"
         />
-        <text style="fill: #000" text-anchor="center">
-            <textPath :xlink:href="`#${id}_textpath`">{{ label }}</textPath>
+        <text
+            style="fill: #000"
+            text-anchor="middle"
+            dominant-baseline="text-top"
+        >
+            <textPath :xlink:href="`#${id}_textpath`" startOffset="50%">
+                {{ label }}
+            </textPath>
         </text>
     </svg>
 </template>
