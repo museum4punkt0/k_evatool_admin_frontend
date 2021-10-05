@@ -132,7 +132,6 @@
                                 :disabled="
                                     ![
                                         'multipleChoice',
-                                        'yayNay',
                                         'binary',
                                         'starRating',
                                         'emoji',
@@ -294,11 +293,7 @@ export default {
             return position
         }
 
-        // console.log(props.steps)
-        // console.log(props.adminLayout)
-
         const initAdminLayout = () => {
-            console.log('init admin layout')
             const adminLayoutInit = []
 
             props.steps
@@ -341,14 +336,66 @@ export default {
                     })
                 }
                 if (step.resultBasedNextSteps) {
-                    step.resultBasedNextSteps.forEach((nextStep, index) => {
+                    const type = step.surveyElementType
+                    // if (Array.isArray(step.resultBasedNextSteps)) {
+                    //     step.resultBasedNextSteps.forEach((nextStep) => {
+                    //         connections.value.push({
+                    //             start: {
+                    //                 id: step.id,
+                    //                 outlet: 'resultBasedNext',
+                    //             },
+                    //             end: nextStep.stepId,
+                    //         })
+                    //     })
+                    // }
+                    if (type === 'binary') {
                         connections.value.push({
-                            id: `${step.id}_resultBasedNext_${index}-${step.nextStepId}`,
-                            label: 'resultBasedNext',
-                            start: { id: step.id, outlet: 'resultBasedNext' },
-                            end: nextStep.stepId,
+                            start: {
+                                id: step.id,
+                                outlet: 'resultBasedNext_true',
+                            },
+                            end: step.resultBasedNextSteps.trueNextStep.stepId,
                         })
-                    })
+                        connections.value.push({
+                            start: {
+                                id: step.id,
+                                outlet: 'resultBasedNext_true',
+                            },
+                            end: step.resultBasedNextSteps.falseNextStep.stepId,
+                        })
+                    } else if (type === 'starRating') {
+                        step.resultBasedNextSteps.forEach((nextStep) => {
+                            connections.value.push({
+                                start: {
+                                    id: step.id,
+                                    outlet: `resultBasedNext_${step.start}-${step.end}`,
+                                },
+                                end: nextStep.stepId,
+                            })
+                        })
+                    } else if (type === 'multipleChoice') {
+                        step.resultBasedNextSteps.forEach((nextStep) => {
+                            connections.value.push({
+                                start: {
+                                    id: step.id,
+                                    outlet: `resultBasedNext_${step.value}`,
+                                },
+                                end: nextStep.stepId,
+                            })
+                        })
+                    } else if (type === 'emoji') {
+                        // TODO: add emoji result based next steps
+                        console.log(step.resultBasedNextSteps)
+                        // step.resultBasedNextSteps.forEach((nextStep) => {
+                        //     connections.value.push({
+                        //         start: {
+                        //             id: step.id,
+                        //             outlet: `resultBasedNext_${step.value}`,
+                        //         },
+                        //         end: nextStep.stepId,
+                        //     })
+                        // })
+                    }
                 }
             })
         }

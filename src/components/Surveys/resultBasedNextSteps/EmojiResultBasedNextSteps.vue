@@ -75,7 +75,7 @@ export default {
 
         const nextStep = ref({
             startValue: 1,
-            endValue: surveyElementParams.value.numberOfStars,
+            endValue: 5,
             type: null,
             stepId: -1,
         })

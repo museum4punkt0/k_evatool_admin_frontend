@@ -66,24 +66,19 @@ export default {
         const validations = computed({
             get: () => {
                 return {
-                    params: {
-                        text: textValidation,
-                    },
+                    text: textValidation,
                 }
             },
             set: (val) => emit('update:params', val),
         })
 
-        const validateSimpleText = useVuelidate(
-            validations.value.params,
-            paramsLocal.value,
-            { $scope: 'surveyElement' },
-        )
+        const paramsValidation = useVuelidate(validations, paramsLocal, {
+            $scope: 'surveyElement',
+        })
 
         watch(
-            () => validateSimpleText.value.$invalid,
+            () => paramsValidation.value.$invalid,
             (invalid) => {
-                console.log(invalid)
                 emit('isValid', !invalid)
             },
         )
@@ -93,7 +88,7 @@ export default {
             setSelectedLanguage,
             paramsLocal,
             store,
-            validateSimpleText,
+            v$: paramsValidation,
         }
     },
 }

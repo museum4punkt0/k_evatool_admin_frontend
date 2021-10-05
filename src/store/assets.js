@@ -3,12 +3,11 @@ import ASSETS from '../services/assetService'
 export default {
     namespaced: true,
     state: {
-        data: [],
-        meta: {},
+        assets: [],
     },
     mutations: {
         setAssets(state, assets) {
-            state.data = assets
+            state.assets = assets
         },
     },
     actions: {

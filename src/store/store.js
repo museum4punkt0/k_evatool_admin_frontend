@@ -3,6 +3,7 @@ import surveys from './surveys'
 import languages from './surveyLanguages'
 import elementTypes from './surveyElementTypes'
 import surveyElements from './surveyElements'
+import surveyResults from './surveyResults'
 import notifications from './notifications'
 import assets from './assets'
 import users from './users'
@@ -16,6 +17,7 @@ export default createStore({
         languages,
         notifications,
         surveyElements,
+        surveyResults,
         surveys,
         users,
     },

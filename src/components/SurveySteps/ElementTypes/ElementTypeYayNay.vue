@@ -1,5 +1,4 @@
 <template>
-    {{ paramsLocal }}
     <language-switch
         class="mt-6"
         :active-language="selectedLanguage"
@@ -70,9 +69,9 @@
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
+import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { useState } from '../../../composables/state'
 
@@ -88,7 +87,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params', 'update:params-valid'],
+    emits: ['update:params', 'update:params-valid', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
@@ -111,7 +110,6 @@ export default {
 
         const labelValidation = {}
         store.state.languages.languages.forEach((language) => {
-            console.log(language)
             labelValidation[language.code] = {
                 required,
                 minLength: minLength(1),
@@ -147,6 +145,13 @@ export default {
             validations.value.params,
             paramsLocal.value,
             { $scope: 'surveyElement' },
+        )
+
+        watch(
+            () => validateParams.value.$invalid,
+            (invalid) => {
+                emit('isValid', !invalid)
+            },
         )
 
         return {

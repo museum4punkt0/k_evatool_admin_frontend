@@ -154,6 +154,10 @@ export default {
             commit('setSurveyStepId', -1)
             commit('setSurveyStep', null)
         },
+        async resetSurveyId({ commit }) {
+            commit('setSurveyId', -1)
+            commit('setSurvey', null)
+        },
     },
     getters: {},
 }

@@ -73,6 +73,7 @@
             name="maxSelectable"
         />
     </div>
+    {{ v$.$invalid }}
 </template>
 
 <script>
@@ -108,25 +109,6 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        const validations = computed({
-            get: () => {
-                return {
-                    minSelectable: {
-                        required,
-                        between: between(1, paramsLocal.value.options.length),
-                    },
-                    maxSelectable: {
-                        required,
-                        between: between(
-                            paramsLocal.value.minSelectable,
-                            paramsLocal.value.options.length,
-                        ),
-                    },
-                }
-            },
-            set: (val) => emit('update:params', val),
-        })
-
         const addOption = () => {
             // TODO: how to mutate computed property
             const newParams = {
@@ -155,7 +137,64 @@ export default {
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
         }
-        const paramsValidation = useVuelidate(validations, paramsLocal)
+
+        const validations = computed({
+            get: () => {
+                return {
+                    minSelectable: {
+                        required,
+                        between: between(1, paramsLocal.value.options.length),
+                    },
+                    maxSelectable: {
+                        required,
+                        between: between(
+                            paramsLocal.value.minSelectable,
+                            paramsLocal.value.options.length,
+                        ),
+                    },
+                    options: {
+                        required,
+                        values: (options) => {
+                            let valid = true
+                            options.forEach((option) => {
+                                if (!option['value']) {
+                                    valid = false
+                                }
+                            })
+                            return valid
+                        },
+                        labels: (options) => {
+                            let valid = true
+                            options.forEach((option) => {
+                                if (!option['labels']) {
+                                    return false
+                                }
+                                // TODO: check published
+                                // if (
+                                //     !option['labels'].length !==
+                                //     store.state.languages.languages.length
+                                // ) {
+                                //     return false
+                                // }
+                                Object.entries(option['labels']).forEach(
+                                    (entry) => {
+                                        // TODO: check language key
+                                        if (entry[1].length === 0) {
+                                            valid = false
+                                        }
+                                    },
+                                )
+                            })
+                            return valid
+                        },
+                    },
+                }
+            },
+            set: (val) => emit('update:params', val),
+        })
+        const paramsValidation = useVuelidate(validations, paramsLocal, {
+            $scope: 'surveyElement',
+        })
         watch(
             () => paramsValidation.value.$invalid,
             (invalid) => {
