@@ -300,6 +300,9 @@ export default {
         const timeBasedSteps = ref(surveyStep.timeBasedSteps)
 
         const addTimeBasedStep = async () => {
+            if (!timeBasedSteps.value || !Array.isArray(timeBasedSteps.value)) {
+                timeBasedSteps.value = []
+            }
             timeBasedSteps.value.push(selectedTimeBasedStep.value)
             await saveSurveyStep()
             selectedTimeBasedStep.value = {

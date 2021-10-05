@@ -189,7 +189,7 @@ export default {
                     surveyId: surveyId,
                     surveyStepId: surveyStep.value.id,
                 })
-                surveyStepId.value = -1
+                await store.dispatch('surveys/setSurveyStepId', -1)
                 emit('deleted')
                 deletingSurveyStep.value = false
             }
