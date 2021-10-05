@@ -12,6 +12,7 @@
             >
                 <connection
                     v-for="connection in connections"
+                    :id="connection.id"
                     :key="connection.id"
                     :start="
                         getStepElementPosition(
@@ -350,37 +351,47 @@ export default {
                     // }
                     if (type === 'binary') {
                         connections.value.push({
+                            id: `${step.id}_true`,
                             start: {
                                 id: step.id,
                                 outlet: 'resultBasedNext_true',
                             },
                             end: step.resultBasedNextSteps.trueNextStep.stepId,
+                            // TODO: get true label
+                            label: `option: ${'true'}`,
                         })
                         connections.value.push({
+                            id: `${step.id}_false`,
                             start: {
                                 id: step.id,
-                                outlet: 'resultBasedNext_true',
+                                outlet: 'resultBasedNext_false',
                             },
                             end: step.resultBasedNextSteps.falseNextStep.stepId,
+                            // TODO: get false label
+                            label: `option: ${'false'}`,
                         })
                     } else if (type === 'starRating') {
                         step.resultBasedNextSteps.forEach((nextStep) => {
                             connections.value.push({
+                                id: `${step.id}_${step.start}-${step.end}`,
                                 start: {
                                     id: step.id,
                                     outlet: `resultBasedNext_${step.start}-${step.end}`,
                                 },
                                 end: nextStep.stepId,
+                                label: `rating: ${step.start} - ${step.end}`,
                             })
                         })
                     } else if (type === 'multipleChoice') {
                         step.resultBasedNextSteps.forEach((nextStep) => {
                             connections.value.push({
+                                id: `${step.id}_${step.value}`,
                                 start: {
                                     id: step.id,
                                     outlet: `resultBasedNext_${step.value}`,
                                 },
                                 end: nextStep.stepId,
+                                label: `option: ${step.value}`,
                             })
                         })
                     } else if (type === 'emoji') {

@@ -20,6 +20,10 @@
             >
                 <polygon points="0 0, 11 3.5, 0 7" />
             </marker>
+            <path
+                :id="`${id}_textpath`"
+                :d="`M ${start.x} ${start.y} L ${end.x} ${end.y}`"
+            />
         </defs>
         <line
             :x1="start.x"
@@ -31,12 +35,8 @@
             marker-end="url(#arrowhead)"
             :stroke-dasharray="dashed ? 2 : 0"
         />
-        <path
-            :id="`${key}_textpath`"
-            :d="`M ${start.x} ${start.y} L ${end.x} ${end.y}`"
-        />
         <text style="fill: #000">
-            <textPath xlink:href="`${key}_textpath`">{{ label }}</textPath>
+            <textPath :xlink:href="`${id}_textpath`">{{ label }}</textPath>
         </text>
         <!-- <text
             :x="start.x"
@@ -78,7 +78,7 @@ export default {
             type: String,
             default: '',
         },
-        key: {
+        id: {
             type: String,
             default: '',
         },
