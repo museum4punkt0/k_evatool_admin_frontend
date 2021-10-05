@@ -24,6 +24,27 @@
 
     <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
+            v-model:value="paramsLocal.lowestValueLabel"
+            name="meaningLowestValue"
+            :label="t('meaning_lowest_value')"
+            class="col-span-6"
+        />
+        <form-input
+            v-model:value="paramsLocal.middleValueLabel"
+            name="meaningHighestValue"
+            :label="t('meaning_highest_value')"
+            class="col-span-6"
+        />
+        <form-input
+            v-model:value="paramsLocal.HhighestValueLabel"
+            name="meaningHighestValue"
+            :label="t('meaning_highest_value')"
+            class="col-span-6"
+        />
+    </div>
+
+    <div class="grid grid-cols-12 gap-4 mt-3">
+        <form-input
             v-model:value="paramsLocal.meaningLowestValue"
             name="meaningLowestValue"
             :label="t('meaning_lowest_value')"
