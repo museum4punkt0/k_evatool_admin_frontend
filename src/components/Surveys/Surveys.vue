@@ -147,7 +147,8 @@ export default {
                 .open(
                     import.meta.env.VITE_PREVIEW_URL +
                         '/#/?id=' +
-                        surveyIdPreview,
+                        surveyIdPreview +
+                        '&demo=true',
                     '_blank',
                 )
                 .focus()
