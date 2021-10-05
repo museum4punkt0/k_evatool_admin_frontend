@@ -1,9 +1,7 @@
 <template>
     <div>
         <Listbox v-model="selectedLocal" as="div">
-            <ListboxLabel class="block text-sm font-medium text-gray-700">
-                {{ label }}
-            </ListboxLabel>
+            <label :for="name">{{ label }}</label>
             <div class="mt-1 relative">
                 <ListboxButton
                     class="
@@ -25,8 +23,12 @@
                         sm:text-sm
                     "
                 >
-                    <span class="block truncate">
-                        {{ emojis.find((x) => x === selectedLocal) }}
+                    <span class="text-white">
+                        {{
+                            selectedLocal
+                                ? emojis.find((x) => x === selectedLocal)
+                                : '_'
+                        }}
                     </span>
                     <span
                         class="
@@ -35,6 +37,7 @@
                             right-0
                             flex
                             items-center
+                            py-2
                             pr-2
                             pointer-events-none
                         "
@@ -45,7 +48,6 @@
                         />
                     </span>
                 </ListboxButton>
-
                 <transition
                     leave-active-class="transition ease-in duration-100"
                     leave-from-class="opacity-100"
@@ -61,7 +63,7 @@
                             shadow-lg
                             max-h-60
                             rounded-md
-                            py-1
+                            p-1
                             text-base
                             ring-1 ring-black ring-opacity-5
                             overflow-auto
