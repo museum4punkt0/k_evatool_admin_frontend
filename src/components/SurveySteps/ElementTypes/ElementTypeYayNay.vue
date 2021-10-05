@@ -1,4 +1,5 @@
 <template>
+    {{ paramsLocal }}
     <language-switch
         class="mt-6"
         :active-language="selectedLanguage"
@@ -23,7 +24,7 @@
         v-model:value="paramsLocal.question[language.code]"
         :name="'lang' + language.id"
         class="mt-3"
-        :label="'question (' + language.code + ')'"
+        :label="t('questions', 1) + ' (' + language.title + ')'"
     />
 
     <div class="grid grid-cols-12 gap-4">
@@ -35,7 +36,7 @@
             v-model:value="paramsLocal.trueLabel[language.code]"
             :name="'lang' + language.id"
             class="mt-3 col-span-6"
-            :label="t('yaynay_positive_label') + ' (' + language.code + ')'"
+            :label="t('yaynay_positive_label') + ' (' + language.title + ')'"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -45,7 +46,7 @@
             v-model:value="paramsLocal.falseLabel[language.code]"
             :name="'lang' + language.id"
             class="mt-3 col-span-6"
-            :label="t('yaynay_negative_label') + ' (' + language.code + ')'"
+            :label="t('yaynay_negative_label') + ' (' + language.title + ')'"
         />
     </div>
 
@@ -66,15 +67,18 @@
 </template>
 
 <script>
-import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
+import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+
+import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import useVuelidate from '@vuelidate/core'
-import { maxLength, minLength, required } from '@vuelidate/validators'
 import { useState } from '../../../composables/state'
 
-import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
+const systemValueValidation = helpers.regex(/^[a-z0-9_]*$/)
+
 export default {
     name: 'ElementTypeYayNayQuestion',
     components: { FormInput, LanguageSwitch },
@@ -89,7 +93,7 @@ export default {
         const store = useStore()
         const { t } = useI18n()
         const [selectedLanguage, setSelectedLanguage] = useState(
-            store.state.languages.languages.find((lang) => lang.default),
+            store.state.languages.defaultLanguage,
         )
 
         const paramsLocal = computed({
@@ -97,24 +101,59 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        const validations = {
-            trueValue: {
+        const questionValidation = {}
+        store.state.languages.languages.forEach((language) => {
+            questionValidation[language.code] = {
                 required,
                 minLength: minLength(1),
-                maxLength: maxLength(20),
-            },
-            falseValue: {
+            }
+        })
+
+        const labelValidation = {}
+        store.state.languages.languages.forEach((language) => {
+            console.log(language)
+            labelValidation[language.code] = {
                 required,
                 minLength: minLength(1),
-                maxLength: maxLength(20),
+            }
+        })
+
+        const validations = computed({
+            get: () => {
+                return {
+                    params: {
+                        trueValue: {
+                            required,
+                            minLength: minLength(1),
+                            maxLength: maxLength(20),
+                            systemValueValidation,
+                        },
+                        falseValue: {
+                            required,
+                            minLength: minLength(1),
+                            maxLength: maxLength(20),
+                            systemValueValidation,
+                        },
+                        question: questionValidation,
+                        trueLabel: labelValidation,
+                        falseLabel: labelValidation,
+                    },
+                }
             },
-        }
+            set: (val) => emit('update:params', val),
+        })
+
+        const validateParams = useVuelidate(
+            validations.value.params,
+            paramsLocal.value,
+            { $scope: 'surveyElement' },
+        )
 
         return {
+            validateParams,
             store,
             paramsLocal,
             t,
-            v$: useVuelidate(validations, paramsLocal),
             selectedLanguage,
             setSelectedLanguage,
         }

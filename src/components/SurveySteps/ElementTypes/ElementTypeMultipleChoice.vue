@@ -79,7 +79,7 @@
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required, between } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
@@ -95,7 +95,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params', 'update:params-valid'],
+    emits: ['update:params', 'update:params-valid', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
@@ -155,12 +155,20 @@ export default {
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
         }
+        const paramsValidation = useVuelidate(validations, paramsLocal)
+        watch(
+            () => paramsValidation.value.$invalid,
+            (invalid) => {
+                console.log('emmiting isvalid', !invalid)
+                emit('isValid', !invalid)
+            },
+        )
 
         return {
             store,
             paramsLocal,
             t,
-            v$: useVuelidate(validations, paramsLocal),
+            v$: paramsValidation,
             selectedLanguage,
             setSelectedLanguage,
             addOption,

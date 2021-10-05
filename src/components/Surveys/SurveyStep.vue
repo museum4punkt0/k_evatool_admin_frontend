@@ -133,13 +133,13 @@ export default {
 
         watch(
             () => surveyStep.value.surveyElementId,
-            (surveyElementId) => {
+            (value) => {
                 // Do not display survey element on update
-                // surveyElementId.value = value
+                surveyElementId.value = value
                 if (!surveyStep.value.name) {
                     surveyStep.value.name =
                         store.state.surveyElements.surveyElements.find(
-                            (x) => x.id === surveyElementId,
+                            (x) => x.id === value,
                         )?.name
                 }
             },

@@ -13,7 +13,10 @@ export default {
         setLanguages(state, languages) {
             state.languages = languages
             state.defaultLanguage = state.languages.find((x) => x.default)
-            state.secondaryLanguages = state.languages.filter((x) => !x.default)
+            state.secondaryLanguages = state.languages.filter(
+                (x) => !x.default && x.published,
+            )
+            state.activeLanguages = state.languages.filter((x) => x.published)
         },
         setLanguage(state, language) {
             state.language = language

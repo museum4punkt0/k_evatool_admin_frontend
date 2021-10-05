@@ -67,7 +67,8 @@ import FormSelectEmoji from '../../Forms/FormSelectEmoji.vue'
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
 import { minLength, maxLength, required, helpers } from '@vuelidate/validators'
-const meaningValidation = helpers.regex(/^[a-z_]*$/)
+
+const meaningValidation = helpers.regex(/^[a-z0-9_]*$/)
 
 import useVuelidate from '@vuelidate/core'
 
@@ -107,29 +108,36 @@ export default {
             }
         })
 
+        // Todo: Regex for Emoji validation ... https://vuelidate-next.netlify.app/custom_validators.html#regex-based-validator
+        // Todo: Some emojis appear to not be valid, example ❤️ ... length > 1?
+        const emojiValidation = () => {
+            return {
+                type: {
+                    required,
+                    minLength: minLength(1),
+                    maxLength: maxLength(1),
+                },
+                meaning: {
+                    required,
+                    minLength: minLength(1),
+                    maxLength: maxLength(50),
+                    meaningValidation,
+                },
+            }
+        }
+
         const validations = computed({
             get: () => {
                 return {
                     params: {
-                        /*emojis: {
+                        emojis: {
                             required,
-                        },*/
+                            $each: emojiValidation(),
+                        },
                         question: questionValidation,
                     },
-                    selectedEmoji: {
-                        // Todo: Regex for Emoji validation ... https://vuelidate-next.netlify.app/custom_validators.html#regex-based-validator
-                        type: {
-                            required,
-                            minLength: minLength(1),
-                            maxLength: maxLength(1),
-                        },
-                        meaning: {
-                            required,
-                            minLength: minLength(1),
-                            maxLength: maxLength(50),
-                            meaningValidation,
-                        },
-                    },
+
+                    selectedEmoji: emojiValidation(),
                 }
             },
             set: (val) => emit('update:params', val),
