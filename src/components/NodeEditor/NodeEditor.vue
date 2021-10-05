@@ -373,25 +373,25 @@ export default {
                     } else if (type === 'starRating') {
                         step.resultBasedNextSteps.forEach((nextStep) => {
                             connections.value.push({
-                                id: `${step.id}_${step.start}-${step.end}`,
+                                id: `${step.id}_${nextStep.start}-${nextStep.end}`,
                                 start: {
                                     id: step.id,
-                                    outlet: `resultBasedNext_${step.start}-${step.end}`,
+                                    outlet: `resultBasedNext_${nextStep.start}-${nextStep.end}`,
                                 },
                                 end: nextStep.stepId,
-                                label: `rating: ${step.start} - ${step.end}`,
+                                label: `rating: ${nextStep.start} - ${nextStep.end}`,
                             })
                         })
                     } else if (type === 'multipleChoice') {
                         step.resultBasedNextSteps.forEach((nextStep) => {
                             connections.value.push({
-                                id: `${step.id}_${step.value}`,
+                                id: `${step.id}_${nextStep.value}`,
                                 start: {
                                     id: step.id,
-                                    outlet: `resultBasedNext_${step.value}`,
+                                    outlet: `resultBasedNext_${nextStep.value}`,
                                 },
                                 end: nextStep.stepId,
-                                label: `option: ${step.value}`,
+                                label: `option: ${nextStep.value}`,
                             })
                         })
                     } else if (type === 'emoji') {
