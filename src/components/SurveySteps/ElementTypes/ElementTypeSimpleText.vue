@@ -4,7 +4,6 @@
         :active-language="selectedLanguage"
         @select="setSelectedLanguage($event)"
     />
-    <h3>Simple text</h3>
 
     <form-input
         v-for="language in store.state.languages.languages.filter(
@@ -14,16 +13,18 @@
         v-model:value="paramsLocal.text[language.code]"
         class="mt-3"
         :name="'lang' + language.id"
-        :label="'text (' + language.code + ')'"
+        :label="'Text (' + language.title + ')'"
     />
 </template>
 
 <script>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import defaultParams from './defaultParams'
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import useVuelidate from '@vuelidate/core'
+import { minLength, required } from '@vuelidate/validators'
 
 export default {
     name: 'ElementTypeSimpleText',
@@ -34,7 +35,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params'],
+    emits: ['update:params', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
         const paramsLocal = computed({
@@ -54,11 +55,45 @@ export default {
             }
         })
 
+        const textValidation = {}
+        store.state.languages.languages.forEach((language) => {
+            textValidation[language.code] = {
+                required,
+                minLength: minLength(1),
+            }
+        })
+
+        const validations = computed({
+            get: () => {
+                return {
+                    params: {
+                        text: textValidation,
+                    },
+                }
+            },
+            set: (val) => emit('update:params', val),
+        })
+
+        const validateSimpleText = useVuelidate(
+            validations.value.params,
+            paramsLocal.value,
+            { $scope: 'surveyElement' },
+        )
+
+        watch(
+            () => validateSimpleText.value.$invalid,
+            (invalid) => {
+                console.log(invalid)
+                emit('isValid', !invalid)
+            },
+        )
+
         return {
             selectedLanguage,
             setSelectedLanguage,
             paramsLocal,
             store,
+            validateSimpleText,
         }
     },
 }

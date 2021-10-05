@@ -50,6 +50,7 @@
         <element-type-simple-text
             v-if="surveyElement.surveyElementType === 'simpleText'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-yay-nay
             v-if="surveyElement.surveyElementType === 'yayNay'"
@@ -140,7 +141,7 @@ export default {
         const surveyElement = ref({})
         const elementTypes = ref(null)
         const savingSurveyElement = ref(false)
-        const paramsValid = ref(false)
+        const paramsValid = ref(true)
         const languages = computed(() => store.state.languages.languages)
         let revertChanges = false
 
@@ -241,6 +242,7 @@ export default {
         }
 
         const setParamsValid = (isValid) => {
+            console.log(isValid)
             paramsValid.value = isValid
         }
 
