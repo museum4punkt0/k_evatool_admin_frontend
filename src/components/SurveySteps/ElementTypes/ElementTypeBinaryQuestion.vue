@@ -51,13 +51,14 @@
             name="falseValue"
         />
     </div>
+    {{ v$.$invalid }}
 </template>
 
 <script>
+import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { maxLength, minLength, required } from '@vuelidate/validators'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
@@ -71,7 +72,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params', 'update:params-valid'],
+    emits: ['update:params', 'update:params-valid', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
@@ -84,18 +85,58 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        const validations = {
-            trueValue: {
-                required,
-                minLength: minLength(1),
-                maxLength: maxLength(20),
-            },
-            falseValue: {
-                required,
-                minLength: minLength(1),
-                maxLength: maxLength(20),
-            },
+        const existsInAllLanguages = (value) => {
+            let valid = true
+            Object.entries(value).forEach((entry) => {
+                // TODO: check language key
+                if (!entry[1] || entry[1].length === 0) {
+                    valid = false
+                }
+            })
+            return valid
         }
+        const validations = computed({
+            get: () => {
+                return {
+                    question: (params) => {
+                        let valid = true
+                        Object.entries(params?.question).forEach((entry) => {
+                            // TODO: check language key
+                            if (!entry[1] || entry[1].length === 0) {
+                                valid = false
+                            }
+                        })
+                        return valid
+                    },
+                    trueValue: {
+                        required,
+                    },
+                    falseValue: {
+                        required,
+                    },
+                    // TODO: check if lables are different
+                    trueLabel: {
+                        required,
+                        existsInAllLanguages,
+                    },
+                    falseLabel: {
+                        required,
+                        existsInAllLanguages,
+                    },
+                }
+            },
+            set: (val) => emit('update:params', val),
+        })
+
+        const paramsValidation = useVuelidate(validations, paramsLocal, {
+            $scope: 'surveyElement',
+        })
+        watch(
+            () => paramsValidation.value.$invalid,
+            (invalid) => {
+                emit('isValid', !invalid)
+            },
+        )
 
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
@@ -105,7 +146,7 @@ export default {
             store,
             paramsLocal,
             t,
-            v$: useVuelidate(validations, paramsLocal),
+            v$: paramsValidation,
             selectedLanguage,
             setSelectedLanguage,
         }

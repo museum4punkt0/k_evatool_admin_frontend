@@ -29,6 +29,7 @@
         <element-type-star-rating
             v-if="surveyElement.surveyElementType === 'starRating'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-emoji
             v-if="surveyElement.surveyElementType === 'emoji'"
@@ -38,14 +39,17 @@
         <element-type-video
             v-if="surveyElement.surveyElementType === 'video'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-binary-question
             v-if="surveyElement.surveyElementType === 'binary'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-multiple-choice
             v-if="surveyElement.surveyElementType === 'multipleChoice'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-simple-text
             v-if="surveyElement.surveyElementType === 'simpleText'"
@@ -55,14 +59,17 @@
         <element-type-yay-nay
             v-if="surveyElement.surveyElementType === 'yayNay'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-text-input
             v-if="surveyElement.surveyElementType === 'textInput'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
         <element-type-voice-input
             v-if="surveyElement.surveyElementType === 'voiceInput'"
             v-model:params="surveyElement.params"
+            @is-valid="setParamsValid($event)"
         />
     </div>
 
@@ -241,7 +248,7 @@ export default {
         }
 
         const setParamsValid = (isValid) => {
-            console.log(isValid)
+            console.log('setparamsvalid', isValid)
             paramsValid.value = isValid
         }
 
