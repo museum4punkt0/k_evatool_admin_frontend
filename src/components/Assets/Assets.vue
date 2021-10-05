@@ -98,7 +98,7 @@
         </main>
         <aside>
             <h1 class="text-xl">Upload</h1>
-            {{ selectedAssets }}
+
             <dashboard class="mt-3" :uppy="uppy" :props="dashboardOptions" />
             <asset-selector-modal
                 v-model:selected-assets="selectedAssets"
@@ -158,7 +158,7 @@ export default {
         const selectedAssets = ref(-1)
 
         const assetModalIsOpen = ref(false)
-        const selectorModalIsOpen = ref(true)
+        const selectorModalIsOpen = ref(false)
         const assetModalStepId = ref(-1)
 
         onMounted(() => {

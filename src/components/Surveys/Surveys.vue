@@ -10,7 +10,7 @@
                             <th>ID</th>
                             <th>{{ t('names', 1) }}</th>
                             <th>Status</th>
-                            <th># {{ t('steps', 2) }}</th>
+                            <th>#&nbsp;{{ t('steps', 2) }}</th>
                             <th>
                                 <span class="sr-only">Edit</span>
                             </th>

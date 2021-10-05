@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.242",
+    "version": "1.0.243",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
