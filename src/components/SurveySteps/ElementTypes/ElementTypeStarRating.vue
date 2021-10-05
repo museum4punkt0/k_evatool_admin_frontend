@@ -41,16 +41,25 @@
         :label="t('allow_half_steps')"
         class="my-3"
     /> -->
+    invalid: {{ v$.$invalid }}
+    <!-- <pre>
+        {{ v$ }}
+    </pre>
+    <pre>
+        {{ paramsLocal }}
+    </pre> -->
 </template>
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import FormInput from '../../Forms/FormInput.vue'
 import FormToggle from '../../Forms/FormToggle.vue'
 import { useStore } from 'vuex'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import defaultParams from './defaultParams'
+import useVuelidate from '@vuelidate/core'
+import { required, between } from '@vuelidate/validators'
 
 export default {
     name: 'ElementTypeStarRating',
@@ -61,7 +70,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params'],
+    emits: ['update:params', 'isValid'],
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
@@ -84,12 +93,48 @@ export default {
             }
         })
 
+        const validations = computed({
+            get: () => {
+                return {
+                    question: (params) => {
+                        let valid = true
+                        Object.entries(params?.question).forEach((entry) => {
+                            // TODO: check language key
+                            if (!entry[1] || entry[1].length === 0) {
+                                valid = false
+                            }
+                        })
+                        return valid
+                    },
+                    // TODO: max number
+                    numberOfStars: { required, between: between(1, 10) },
+                    meaningLowestValue: {
+                        required,
+                    },
+                    meaningHighestValue: {
+                        required,
+                    },
+                }
+            },
+            set: (val) => emit('update:params', val),
+        })
+        const paramsValidation = useVuelidate(validations, paramsLocal, {
+            $scope: 'surveyElement',
+        })
+        watch(
+            () => paramsValidation.value.$invalid,
+            (invalid) => {
+                console.log('emmiting isvalid', !invalid)
+                emit('isValid', !invalid)
+            },
+        )
         return {
             selectedLanguage,
             setSelectedLanguage,
             paramsLocal,
             t,
             store,
+            v$: paramsValidation,
         }
     },
 }
