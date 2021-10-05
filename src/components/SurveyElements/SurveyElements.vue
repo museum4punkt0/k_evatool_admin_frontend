@@ -19,6 +19,7 @@
                             <th>{{ t('names', 1) }}</th>
                             <th>{{ t('types', 1) }}</th>
                             <th># {{ t('steps', 2) }}</th>
+                            <th># {{ t('surveys', 2) }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -40,6 +41,11 @@
                                     v-if="surveyElement.surveyStepsCount > 0"
                                 >
                                     {{ surveyElement.surveyStepsCount }}
+                                </template>
+                            </td>
+                            <td class="text-sm">
+                                <template v-if="surveyElement.surveysCount > 0">
+                                    {{ surveyElement.surveysCount }}
                                 </template>
                             </td>
                             <td class="px-6 py-4 flex flex-row justify-end">
