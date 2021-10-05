@@ -1,15 +1,15 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1 v-if="store.state.assets?.data" class="mb-3">
-                {{ store.state.assets.data.length }}
-                {{ t('assets', store.state.assets.data.length) }}
+            <h1 v-if="store.state.assets?.assets" class="mb-3">
+                {{ store.state.assets.assets.length }}
+                {{ t('assets', store.state.assets.assets.length) }}
             </h1>
 
             <template
                 v-if="
-                    store.state.assets?.data &&
-                    store.state.assets.data.length > 0
+                    store.state.assets?.assets &&
+                    store.state.assets.assets.length > 0
                 "
             >
                 <div class="table-wrap">
@@ -26,7 +26,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                v-for="(asset, i) in store.state.assets?.data"
+                                v-for="(asset, i) in store.state.assets?.assets"
                                 :key="asset.id"
                                 :ref="
                                     (el) => {
@@ -98,13 +98,20 @@
         </main>
         <aside>
             <h1 class="text-xl">Upload</h1>
+            {{ selectedAssets }}
             <dashboard class="mt-3" :uppy="uppy" :props="dashboardOptions" />
+            <asset-selector-modal
+                v-model:selected-assets="selectedAssets"
+                v-model:is-open="selectorModalIsOpen"
+            ></asset-selector-modal>
         </aside>
     </div>
     <asset-modal
         v-if="assetModalStepId > 0 && assetModalIsOpen"
         v-model:is-open="assetModalIsOpen"
-        :asset="store.state.assets?.data.find((x) => x.id === assetModalStepId)"
+        :asset="
+            store.state.assets?.assets.find((x) => x.id === assetModalStepId)
+        "
     />
 </template>
 
@@ -132,10 +139,11 @@ import Tus from '@uppy/tus'
 import German from '@uppy/locales/lib/de_DE'
 import { useI18n } from 'vue-i18n'
 import AssetModal from './AssetModal.vue'
-
+import AssetSelectorModal from './AssetSelectorModal.vue'
 export default {
     name: 'Assets',
     components: {
+        AssetSelectorModal,
         AssetModal,
         Dashboard,
         EyeIcon,
@@ -147,7 +155,10 @@ export default {
         const isBusy = ref(false)
         const { t } = useI18n()
 
+        const selectedAssets = ref(-1)
+
         const assetModalIsOpen = ref(false)
+        const selectorModalIsOpen = ref(true)
         const assetModalStepId = ref(-1)
 
         onMounted(() => {
@@ -197,7 +208,9 @@ export default {
         }
 
         return {
+            selectedAssets,
             assetModalIsOpen,
+            selectorModalIsOpen,
             assetModalStepId,
             deleteAsset,
             openAssetModal,
