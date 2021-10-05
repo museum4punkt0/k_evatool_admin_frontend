@@ -18,8 +18,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, watch } from 'vue'
-import defaultParams from './defaultParams'
+import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
@@ -48,12 +47,6 @@ export default {
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
         }
-
-        onMounted(() => {
-            if (!paramsLocal.value) {
-                paramsLocal.value = defaultParams.simpleText
-            }
-        })
 
         const textValidation = {}
         store.state.languages.languages.forEach((language) => {

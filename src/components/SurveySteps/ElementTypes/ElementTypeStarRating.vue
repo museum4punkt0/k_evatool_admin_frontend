@@ -24,22 +24,34 @@
 
     <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
-            v-model:value="paramsLocal.lowestValueLabel"
+            v-for="language in store.state.languages.languages.filter(
+                (item) => item.code === selectedLanguage.code,
+            )"
+            :key="'lang' + language.id"
+            v-model:value="paramsLocal.lowestValueLabel[language.code]"
             name="meaningLowestValue"
             :label="t('meaning_lowest_value')"
-            class="col-span-6"
+            class="col-span-4"
         />
         <form-input
-            v-model:value="paramsLocal.middleValueLabel"
+            v-for="language in store.state.languages.languages.filter(
+                (item) => item.code === selectedLanguage.code,
+            )"
+            :key="'lang' + language.id"
+            v-model:value="paramsLocal.middleValueLabel[language.code]"
             name="meaningHighestValue"
-            :label="t('meaning_highest_value')"
-            class="col-span-6"
+            :label="t('meaning_middle_value')"
+            class="col-span-4"
         />
         <form-input
-            v-model:value="paramsLocal.HhighestValueLabel"
+            v-for="language in store.state.languages.languages.filter(
+                (item) => item.code === selectedLanguage.code,
+            )"
+            :key="'lang' + language.id"
+            v-model:value="paramsLocal.highestValueLabel[language.code]"
             name="meaningHighestValue"
             :label="t('meaning_highest_value')"
-            class="col-span-6"
+            class="col-span-4"
         />
     </div>
 
@@ -59,22 +71,21 @@
     </div>
 
     <!-- <form-toggle
-        v-model:enabled="paramsLocal.allowHalfSteps"
-        :label="t('allow_half_steps')"
-        class="my-3"
-    /> -->
+    v-model:enabled="paramsLocal.allowHalfSteps"
+    :label="t('allow_half_steps')"
+    class="my-3"
+/> -->
 </template>
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import FormInput from '../../Forms/FormInput.vue'
 import FormToggle from '../../Forms/FormToggle.vue'
 import { useStore } from 'vuex'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
-import defaultParams from './defaultParams'
 import useVuelidate from '@vuelidate/core'
-import { required, between } from '@vuelidate/validators'
+import { required, between, minLength, maxLength } from '@vuelidate/validators'
 
 export default {
     name: 'ElementTypeStarRating',
@@ -98,44 +109,59 @@ export default {
         const selectedLanguage = ref(
             store.state.languages.languages.find((lang) => lang.default),
         )
+
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
         }
 
-        onMounted(() => {
-            if (!paramsLocal.value) {
-                paramsLocal.value = defaultParams.simpleText
+        const questionValidation = {}
+        store.state.languages.languages.forEach((language) => {
+            questionValidation[language.code] = {
+                required,
+                minLength: minLength(1),
+                maxLength: maxLength(200),
+            }
+        })
+
+        const labelValidation = {}
+        store.state.languages.languages.forEach((language) => {
+            labelValidation[language.code] = {
+                required,
+                minLength: minLength(1),
+                maxLength: maxLength(20),
             }
         })
 
         const validations = computed({
             get: () => {
                 return {
-                    question: (params) => {
-                        let valid = true
-                        Object.entries(params?.question).forEach((entry) => {
-                            // TODO: check language key
-                            if (!entry[1] || entry[1].length === 0) {
-                                valid = false
-                            }
-                        })
-                        return valid
+                    question: questionValidation,
+                    lowestValueLabel: labelValidation,
+                    middleValueLabel: labelValidation,
+                    highestValueLabel: labelValidation,
+                    numberOfStars: {
+                        required,
+                        between: between(3, 9),
                     },
-                    // TODO: max number
-                    numberOfStars: { required, between: between(1, 10) },
                     meaningLowestValue: {
                         required,
+                        minLength: minLength(1),
+                        maxLength: maxLength(20),
                     },
                     meaningHighestValue: {
                         required,
+                        minLength: minLength(1),
+                        maxLength: maxLength(20),
                     },
                 }
             },
             set: (val) => emit('update:params', val),
         })
+
         const paramsValidation = useVuelidate(validations, paramsLocal, {
             $scope: 'surveyElement',
         })
+
         watch(
             () => paramsValidation.value.$invalid,
             (invalid) => {
@@ -143,6 +169,7 @@ export default {
                 emit('isValid', !invalid)
             },
         )
+
         return {
             selectedLanguage,
             setSelectedLanguage,

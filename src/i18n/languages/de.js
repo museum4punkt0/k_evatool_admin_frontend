@@ -44,6 +44,7 @@ export default {
     max_selectable: 'Max. zu wählen',
     min_selectable: 'Mind. zu wählen',
     meanings: 'Bedeutungen | Bedeutung | Bedeutungen',
+    meaning_middle_value: 'Bedeutung mittlerer Wert',
     meaning_lowest_value: 'Bedeutung kleinster Wert',
     meaning_highest_value: 'Bedeutung größter Wert',
     names: 'Namen | Name | Namen',

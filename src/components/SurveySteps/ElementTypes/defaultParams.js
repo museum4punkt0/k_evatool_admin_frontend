@@ -59,6 +59,9 @@ export default (type, languages) => {
         case TYPES.STARRATING: {
             return {
                 question: createDefaultQuestion(languages),
+                lowestValueLabel: createDefaultQuestion(languages),
+                middleValueLabel: createDefaultQuestion(languages),
+                highestValueLabel: createDefaultQuestion(languages),
                 numberOfStars: 5,
                 allowHalfSteps: false,
             }
