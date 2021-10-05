@@ -69,9 +69,9 @@
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 
+import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { useState } from '../../../composables/state'
 
@@ -146,6 +146,13 @@ export default {
             validations.value.params,
             paramsLocal.value,
             { $scope: 'surveyElement' },
+        )
+
+        watch(
+            () => validateParams.value.$invalid,
+            (invalid) => {
+                emit('isValid', !invalid)
+            },
         )
 
         return {
