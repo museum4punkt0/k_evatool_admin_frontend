@@ -50,10 +50,22 @@
                 v-if="surveyStep.id"
                 color="danger"
                 class="ml-2"
+                :disabled="surveyStep.resultCount > 0"
                 :executing="deletingSurveyStep"
                 :action-text="t('action_delete')"
                 @execute="deleteSurveyStep"
             />
+
+            <p
+                v-if="surveyStep.resultCount > 0"
+                class="text-xs mt-1 text-gray-500"
+            >
+                {{
+                    t('survey_step_has_result', {
+                        resultCount: surveyStep.resultCount,
+                    })
+                }}
+            </p>
 
             <data-viewer class="mt-3" :data="surveyStep" />
 

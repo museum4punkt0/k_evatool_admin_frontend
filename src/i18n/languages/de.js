@@ -66,6 +66,8 @@ export default {
     stops_video: 'Stoppt das Video',
     surveys: 'Umfragen | Umfrage | Umfragen',
     survey_elements: 'Umfrage-Elemente | Umfrage-Element | Umfrage-Elemente',
+    survey_step_has_result:
+        'Dieser Schritt hat bereits {resultCount} Ergebnisse und kann daher nicht mehr gelöscht werden.',
     system_value: 'Systemwert',
     timestamps: 'Zeiten | Zeit | Zeiten',
     time_based_steps:
