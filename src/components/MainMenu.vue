@@ -178,32 +178,13 @@ import {
     PresentationChartLineIcon,
     UsersIcon,
     GlobeAltIcon,
+    ChartBarIcon,
 } from '@heroicons/vue/outline'
 
 import { XIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
-
-const sidebarNavigation = [
-    { name: 'Start', href: '/', icon: HomeIcon },
-    {
-        name: 'Umfragen',
-        href: '/surveys',
-        icon: PresentationChartLineIcon,
-    },
-    {
-        name: 'Elemente',
-        href: '/survey-elements',
-        icon: ViewGridIcon,
-    },
-    { name: 'Medien', href: '/assets', icon: PhotographIcon },
-    {
-        name: 'Sprachen',
-        href: '/languages',
-        icon: GlobeAltIcon,
-    },
-    { name: 'Users', href: '/users', icon: UsersIcon },
-]
+import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'MainMenu',
@@ -216,10 +197,35 @@ export default {
         Menu,
         MenuItem,
         MenuButton,
+        ChartBarIcon,
     },
     setup() {
         const mobileMenuOpen = ref(false)
         const store = useStore()
+        const { t } = useI18n()
+
+        const sidebarNavigation = [
+            { name: t('start'), href: '/', icon: HomeIcon },
+            {
+                name: t('surveys', 2),
+                href: '/surveys',
+                icon: PresentationChartLineIcon,
+            },
+            {
+                name: t('elements', 2),
+                href: '/survey-elements',
+                icon: ViewGridIcon,
+            },
+            { name: t('stats', 1), href: '/stats', icon: ChartBarIcon },
+            { name: t('assets', 2), href: '/assets', icon: PhotographIcon },
+            {
+                name: t('languages', 2),
+                href: '/languages',
+                icon: GlobeAltIcon,
+            },
+            { name: t('users', 2), href: '/users', icon: UsersIcon },
+        ]
+
         return {
             sidebarNavigation,
             mobileMenuOpen,

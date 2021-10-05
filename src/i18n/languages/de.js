@@ -62,10 +62,13 @@ export default {
     slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',
+    stats: 'Auswertungen | Auswertung | Auswertungen',
     steps: 'Schritte | Schritt | Schritte',
     stops_video: 'Stoppt das Video',
     surveys: 'Umfragen | Umfrage | Umfragen',
     survey_elements: 'Umfrage-Elemente | Umfrage-Element | Umfrage-Elemente',
+    survey_step_has_result:
+        'Dieser Schritt hat bereits {resultCount} Ergebnisse und kann daher nicht mehr gelöscht werden.',
     system_value: 'Systemwert',
     timestamps: 'Zeiten | Zeit | Zeiten',
     time_based_steps:
