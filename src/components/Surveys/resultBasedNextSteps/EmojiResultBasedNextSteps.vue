@@ -26,7 +26,7 @@
         <div class="grid grid-cols-3 gap-4">
             <form-select
                 v-model:selected="nextStep.type"
-                :options="surveyElementParams.emojis"
+                :options="surveyElementParams?.emojis"
                 title-key="type"
                 value-key="type"
                 :default-value="-1"
@@ -67,15 +67,14 @@ export default {
         const surveyStep = computed(() => store.state.surveys.surveyStep)
         const surveySteps = computed(() => store.state.surveys.survey.steps)
         const surveyElementParams = computed(
-            () =>
-                store.state.surveyElements.surveyElements.find((element) => {
-                    return element.id === surveyStep.value.id
-                })?.params,
+            () => store.state.surveys.surveyStep.surveyElement?.params,
+            // () =>
+            //     store.state.surveyElements.surveyElements.find((element) => {
+            //         return element.id === surveyStep.value.id
+            //     })?.params,
         )
 
         const nextStep = ref({
-            startValue: 1,
-            endValue: 5,
             type: null,
             stepId: -1,
         })
@@ -89,8 +88,7 @@ export default {
 
             // reset
             nextStep.value = {
-                startValue: 1,
-                endValue: surveyElementParams.value.numberOfStars,
+                type: null,
                 stepId: -1,
             }
 

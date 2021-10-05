@@ -338,17 +338,7 @@ export default {
                 }
                 if (step.resultBasedNextSteps) {
                     const type = step.surveyElementType
-                    // if (Array.isArray(step.resultBasedNextSteps)) {
-                    //     step.resultBasedNextSteps.forEach((nextStep) => {
-                    //         connections.value.push({
-                    //             start: {
-                    //                 id: step.id,
-                    //                 outlet: 'resultBasedNext',
-                    //             },
-                    //             end: nextStep.stepId,
-                    //         })
-                    //     })
-                    // }
+
                     if (type === 'binary') {
                         connections.value.push({
                             id: `${step.id}_true`,
@@ -395,17 +385,17 @@ export default {
                             })
                         })
                     } else if (type === 'emoji') {
-                        // TODO: add emoji result based next steps
-                        console.log(step.resultBasedNextSteps)
-                        // step.resultBasedNextSteps.forEach((nextStep) => {
-                        //     connections.value.push({
-                        //         start: {
-                        //             id: step.id,
-                        //             outlet: `resultBasedNext_${step.value}`,
-                        //         },
-                        //         end: nextStep.stepId,
-                        //     })
-                        // })
+                        step.resultBasedNextSteps.forEach((nextStep) => {
+                            connections.value.push({
+                                id: `${step.id}_${nextStep.type}`,
+                                label: `type: ${nextStep.type}`,
+                                start: {
+                                    id: step.id,
+                                    outlet: `resultBasedNext_${nextStep.type}`,
+                                },
+                                end: nextStep.stepId,
+                            })
+                        })
                     }
                 }
             })
