@@ -21,14 +21,23 @@
                 :label="t('allow_skip')"
             />
 
-            <form-select
-                v-model:selected="surveyStep.surveyElementId"
-                :options="surveyElements"
-                title-key="name"
-                value-key="id"
-                :default-value="-1"
-                :label="t('elements', 1)"
-            />
+            <div class="flex flex-row">
+                <form-select
+                    v-model:selected="surveyStep.surveyElementId"
+                    :options="surveyElements"
+                    title-key="name"
+                    value-key="id"
+                    class="flex-1"
+                    :default-value="-1"
+                    :label="t('elements', 1)"
+                />
+                <action-button
+                    v-if="surveyStep.surveyElementId > 0"
+                    class="mt-6 ml-2"
+                    :action-text="t('action_edit_survey_element')"
+                    @execute="editSurveyElement"
+                />
+            </div>
 
             <action-button
                 :executing="savingSurveyStep"
@@ -36,10 +45,7 @@
                 :action-text="t('action_save')"
                 @execute="saveSurveyStep"
             />
-            <action-button
-                :action-text="t('action_edit_survey_element')"
-                @execute="editSurveyElement"
-            />
+
             <action-button
                 v-if="surveyStep.id"
                 color="danger"
@@ -138,7 +144,7 @@ export default {
             () => surveyStep.value.surveyElementId,
             (value) => {
                 // Do not display survey element on update
-                surveyElementId.value = value
+                // surveyElementId.value = value
                 if (!surveyStep.value.name) {
                     surveyStep.value.name =
                         store.state.surveyElements.surveyElements.find(
@@ -159,6 +165,7 @@ export default {
             emit('saved')
             savingSurveyStep.value = false
         }
+
         const deleteSurveyStep = async () => {
             const confirmDelete = confirm(t('confirm_delete_survey_step'))
             if (confirmDelete) {

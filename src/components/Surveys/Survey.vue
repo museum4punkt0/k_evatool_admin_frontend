@@ -34,8 +34,6 @@
                     :reset-after-save="false"
                     @saved="surveySaved"
                 />
-                <hr class="mt-4 mb-3" />
-                <survey-element />
             </template>
         </aside>
     </div>
