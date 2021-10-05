@@ -236,12 +236,16 @@ export default {
             },
         )
 
-        const validations = {
-            name: {
-                required,
-                minLength: minLength(1),
+        const validations = computed({
+            get: () => {
+                return {
+                    name: {
+                        required,
+                        minLength: minLength(1),
+                    },
+                }
             },
-        }
+        })
 
         const cancelEdit = () => {
             emit('cancel')
@@ -252,7 +256,7 @@ export default {
             paramsValid.value = isValid
         }
 
-        const validator = useVuelidate(validations, surveyElement.value, {
+        const validator = useVuelidate(validations, surveyElement, {
             $scope: 'surveyElement',
         })
 
