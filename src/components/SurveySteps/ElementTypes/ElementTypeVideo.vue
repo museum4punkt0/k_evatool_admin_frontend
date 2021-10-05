@@ -24,7 +24,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params'],
+    emits: ['update:params', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
         const video = ref(null)

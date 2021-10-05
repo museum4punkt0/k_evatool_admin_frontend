@@ -36,7 +36,7 @@ export default {
             default: () => null,
         },
     },
-    emits: ['update:params', 'update:params-valid'],
+    emits: ['update:params', 'update:params-valid', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
