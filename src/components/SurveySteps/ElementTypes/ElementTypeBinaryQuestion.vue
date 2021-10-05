@@ -51,7 +51,6 @@
             name="falseValue"
         />
     </div>
-    {{ v$.$invalid }}
 </template>
 
 <script>

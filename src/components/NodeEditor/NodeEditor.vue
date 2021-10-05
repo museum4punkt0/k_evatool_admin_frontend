@@ -333,18 +333,66 @@ export default {
                     })
                 }
                 if (step.resultBasedNextSteps) {
-                    if (Array.isArray(step.resultBasedNextSteps)) {
+                    const type = step.surveyElementType
+                    // if (Array.isArray(step.resultBasedNextSteps)) {
+                    //     step.resultBasedNextSteps.forEach((nextStep) => {
+                    //         connections.value.push({
+                    //             start: {
+                    //                 id: step.id,
+                    //                 outlet: 'resultBasedNext',
+                    //             },
+                    //             end: nextStep.stepId,
+                    //         })
+                    //     })
+                    // }
+                    if (type === 'binary') {
+                        connections.value.push({
+                            start: {
+                                id: step.id,
+                                outlet: 'resultBasedNext_true',
+                            },
+                            end: step.resultBasedNextSteps.trueNextStep.stepId,
+                        })
+                        connections.value.push({
+                            start: {
+                                id: step.id,
+                                outlet: 'resultBasedNext_true',
+                            },
+                            end: step.resultBasedNextSteps.falseNextStep.stepId,
+                        })
+                    } else if (type === 'starRating') {
                         step.resultBasedNextSteps.forEach((nextStep) => {
                             connections.value.push({
                                 start: {
                                     id: step.id,
-                                    outlet: 'resultBasedNext',
+                                    outlet: `resultBasedNext_${step.start}-${step.end}`,
                                 },
                                 end: nextStep.stepId,
                             })
                         })
+                    } else if (type === 'multipleChoice') {
+                        step.resultBasedNextSteps.forEach((nextStep) => {
+                            connections.value.push({
+                                start: {
+                                    id: step.id,
+                                    outlet: `resultBasedNext_${step.value}`,
+                                },
+                                end: nextStep.stepId,
+                            })
+                        })
+                    } else if (type === 'emoji') {
+                        // TODO: add emoji result based next steps
+                        console.log(step.resultBasedNextSteps)
+                        // step.resultBasedNextSteps.forEach((nextStep) => {
+                        //     connections.value.push({
+                        //         start: {
+                        //             id: step.id,
+                        //             outlet: `resultBasedNext_${step.value}`,
+                        //         },
+                        //         end: nextStep.stepId,
+                        //     })
+                        // })
                     }
-                    // TODO: check type and binary
                 }
             })
         }
