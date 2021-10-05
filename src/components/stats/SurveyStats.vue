@@ -5,6 +5,35 @@
                 {{ t('stats', 1) }}
                 <strong>{{ store.state.surveys.survey.name }}</strong>
             </h1>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="step in store.state.surveys.survey.steps"
+                            :key="step.id"
+                        >
+                            <td>{{ step.name }}</td>
+                            <td>
+                                {{
+                                    store.state.surveyElements.surveyElements.find(
+                                        (x) => x.id === step.surveyElementId,
+                                    ).name
+                                }}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
     </div>
 </template>
