@@ -142,10 +142,12 @@ export default {
         })
 
         const getSurveyStep = async () => {
-            surveyStep.value = await SURVEY_SERVICE.getSurveyStep(
-                surveyId,
-                surveyStepId.value,
-            )
+            if (surveyStepId.value > 0) {
+                surveyStep.value = await SURVEY_SERVICE.getSurveyStep(
+                    surveyId,
+                    surveyStepId.value,
+                )
+            }
         }
 
         if (surveyStepId.value) {
@@ -168,11 +170,12 @@ export default {
 
         const saveSurveyStep = async () => {
             savingSurveyStep.value = true
-            const savedSurvey = await SURVEY_SERVICE.saveSurveyStep(
+            const savedSurveyStep = await SURVEY_SERVICE.saveSurveyStep(
                 surveyStep.value,
                 surveyId,
             )
-            surveyStepId.value = savedSurvey.id
+
+            await store.dispatch('surveys/setSurveyStepId', savedSurveyStep.id)
             await getSurveyStep()
             emit('saved')
             savingSurveyStep.value = false
@@ -200,8 +203,9 @@ export default {
             surveyElementId.value = -1
         }
 
-        const savedSurveyElement = (surveyElementId) => {
-            surveyStep.value.surveyElementId = surveyElementId
+        const savedSurveyElement = (surveyElementIdSaved) => {
+            surveyStep.value.surveyElementId = surveyElementIdSaved
+            surveyElementId.value = -1
         }
 
         const editSurveyElement = () => {

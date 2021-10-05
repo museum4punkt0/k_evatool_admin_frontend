@@ -62,6 +62,7 @@ export default {
     slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',
+    start: 'Start',
     stats: 'Auswertungen | Auswertung | Auswertungen',
     steps: 'Schritte | Schritt | Schritte',
     stops_video: 'Stoppt das Video',

@@ -252,7 +252,6 @@ export default {
         }
 
         const setParamsValid = (isValid) => {
-            console.log('setparamsvalid', isValid)
             paramsValid.value = isValid
         }
 
