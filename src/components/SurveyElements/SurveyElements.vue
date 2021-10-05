@@ -94,6 +94,7 @@ export default {
     setup() {
         const { t } = useI18n()
         const store = useStore()
+        const isBusy = ref(false)
         const surveyElementId = ref(-1)
 
         const surveyElements = computed({
@@ -113,11 +114,18 @@ export default {
         }
 
         const deleteSurveyElement = async (surveyElementId) => {
-            await store.dispatch(
-                'surveyElements/deleteSurveyElement',
-                surveyElementId,
+            const confirmSurveyElementDelete = confirm(
+                t('confirm_delete_survey_element'),
             )
-            getSurveyElements()
+            if (confirmSurveyElementDelete) {
+                isBusy.value = true
+                await store.dispatch(
+                    'surveyElements/deleteSurveyElement',
+                    surveyElementId,
+                )
+                getSurveyElements()
+                isBusy.value = false
+            }
         }
 
         return {
