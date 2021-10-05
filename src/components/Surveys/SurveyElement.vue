@@ -156,9 +156,12 @@ export default {
         })
 
         const getSurveyElement = async (surveyElementId) => {
-            surveyElement.value = await SURVEY_ELEMENT_SERVICE.getSurveyElement(
-                surveyElementId,
-            )
+            if (surveyElementId > 0) {
+                surveyElement.value =
+                    await SURVEY_ELEMENT_SERVICE.getSurveyElement(
+                        surveyElementId,
+                    )
+            }
             revertChanges = true
         }
 

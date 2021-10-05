@@ -80,7 +80,7 @@
             <survey-element
                 :survey-element-id="surveyElementId"
                 @cancel="resetSurveyElement"
-                @saved="getSurveyElements"
+                @saved="savedSurveyElement"
             />
         </aside>
     </div>
@@ -115,6 +115,11 @@ export default {
             surveyElementId.value = selectedSurveyElementId
         }
 
+        const savedSurveyElement = async () => {
+            getSurveyElements()
+            surveyElementId.value = -1
+        }
+
         const resetSurveyElement = async () => {
             surveyElementId.value = -1
         }
@@ -143,6 +148,7 @@ export default {
             store,
             surveyElementId,
             resetSurveyElement,
+            savedSurveyElement,
         }
     },
 }
