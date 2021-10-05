@@ -15,6 +15,8 @@ import Login from '../components/Login.vue'
 
 import Users from '../components/Users/Users.vue'
 
+import SurveyStats from '../components/stats/SurveyStats.vue'
+
 const routes = [
     { path: '/', component: Home },
     { path: '/login', component: Login },
@@ -31,12 +33,15 @@ const routes = [
 
     { name: 'languages', path: '/languages', component: ListLanguages },
 
+    { path: '/stats', component: SurveyStats },
+
+    { path: '/assets', component: Assets },
+
     { path: '/users/register', component: Settings },
     { path: '/users/login', component: Settings },
     { path: '/users/password-reset', component: Settings },
     { path: '/user/logout', component: Settings },
     { path: '/user/settings', component: Settings },
-    { path: '/assets', component: Assets },
     { name: 'users', path: '/users', component: Users },
     // { path: '*', redirect: '/' },
 ]
