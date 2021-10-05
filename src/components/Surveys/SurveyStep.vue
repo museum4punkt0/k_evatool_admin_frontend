@@ -1,65 +1,68 @@
 <template>
-    <h1>
-        {{ t('steps', 1) }}
-        <span v-if="surveyStep.id" class="text-sm text-gray-500">
-            ID: {{ surveyStep.id }}
-        </span>
-    </h1>
+    <template v-if="surveyElementId < 0">
+        <h1>
+            {{ t('steps', 1) }}
+            <span v-if="surveyStep.id" class="text-sm text-gray-500">
+                ID: {{ surveyStep.id }}
+            </span>
+        </h1>
 
-    <div v-if="surveyStep">
-        <form-input
-            v-model:value="surveyStep.name"
-            :placeholder="t('optional_name')"
-            :label="t('names', 1)"
-            name="surveyStep"
-        />
+        <div v-if="surveyStep">
+            <form-input
+                v-model:value="surveyStep.name"
+                :placeholder="t('optional_name')"
+                :label="t('names', 1)"
+                name="surveyStep"
+            />
 
-        <form-toggle
-            v-model:enabled="surveyStep.allowSkip"
-            class="mt-3 mb-3"
-            :label="t('allow_skip')"
-        />
+            <form-toggle
+                v-model:enabled="surveyStep.allowSkip"
+                class="mt-3 mb-3"
+                :label="t('allow_skip')"
+            />
 
-        <form-select
-            v-model:selected="surveyStep.surveyElementId"
-            :options="surveyElements"
-            title-key="name"
-            value-key="id"
-            :default-value="-1"
-            :label="t('elements', 1)"
-        />
+            <form-select
+                v-model:selected="surveyStep.surveyElementId"
+                :options="surveyElements"
+                title-key="name"
+                value-key="id"
+                :default-value="-1"
+                :label="t('elements', 1)"
+            />
 
-        <action-button
-            :executing="savingSurveyStep"
-            :disabled="v$.surveyStep.$invalid"
-            :action-text="t('action_save')"
-            @execute="saveSurveyStep"
-        />
-        <action-button
-            v-if="surveyStep.id"
-            color="danger"
-            class="ml-2"
-            :executing="deletingSurveyStep"
-            :action-text="t('action_delete')"
-            @execute="deleteSurveyStep"
-        />
+            <action-button
+                :executing="savingSurveyStep"
+                :disabled="v$.surveyStep.$invalid"
+                :action-text="t('action_save')"
+                @execute="saveSurveyStep"
+            />
+            <action-button
+                :action-text="t('action_edit_survey_element')"
+                @execute="editSurveyElement"
+            />
+            <action-button
+                v-if="surveyStep.id"
+                color="danger"
+                class="ml-2"
+                :executing="deletingSurveyStep"
+                :action-text="t('action_delete')"
+                @execute="deleteSurveyStep"
+            />
 
-        <data-viewer class="mt-3" :data="surveyStep" />
+            <data-viewer class="mt-3" :data="surveyStep" />
 
-        <hr class="mt-4 mb-2" />
-        <button
-            v-if="surveyElementId < 0"
-            class="primary"
-            @click="newSurveyElement"
-        >
-            {{ t('action_new_survey_element') }}
-        </button>
-        <survey-element
-            v-else
-            :survey-element-id="surveyElementId"
-            @saved="savedSurveyElement($event)"
-        />
-    </div>
+            <hr class="mt-4 mb-2" />
+            <button class="primary" @click="newSurveyElement">
+                {{ t('action_new_survey_element') }}
+            </button>
+        </div>
+    </template>
+    <survey-element
+        v-if="surveyElementId > -1"
+        :survey-element-id="surveyElementId"
+        @saved="savedSurveyElement($event)"
+        @cancel="resetSurveyElement"
+    />
 </template>
 
 <script>
@@ -174,8 +177,18 @@ export default {
             surveyElementId.value = 0
         }
 
+        const resetSurveyElement = () => {
+            surveyElementId.value = -1
+        }
+
         const savedSurveyElement = (surveyElementId) => {
             surveyStep.value.surveyElementId = surveyElementId
+        }
+
+        const editSurveyElement = () => {
+            if (surveyStep.value.surveyElementId) {
+                surveyElementId.value = surveyStep.value.surveyElementId
+            }
         }
 
         return {
@@ -184,9 +197,11 @@ export default {
             surveyStepId,
             store,
             saveSurveyStep,
+            editSurveyElement,
             deleteSurveyStep,
             t,
             newSurveyElement,
+            resetSurveyElement,
             savingSurveyStep,
             deletingSurveyStep,
             surveyElement,

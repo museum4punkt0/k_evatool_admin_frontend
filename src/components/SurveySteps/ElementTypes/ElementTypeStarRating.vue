@@ -12,16 +12,17 @@
         v-model:value="paramsLocal.question[language.code]"
         class="mt-3"
         :name="'lang' + language.id"
-        :label="'question (' + language.code + ')'"
+        :label="t('questions', 1) + ' (' + language.title + ')'"
     />
 
     <form-input
         v-model:value="paramsLocal.numberOfStars"
         name="numberOfStars"
+        class="mt-3"
         :label="t('number_of_stars')"
     />
 
-    <div class="grid grid-cols-12 gap-4">
+    <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
             v-model:value="paramsLocal.meaningLowestValue"
             name="meaningLowestValue"

@@ -74,7 +74,6 @@
     />
 
     <action-button
-        v-if="surveyElementId > 0"
         color="danger"
         class="ml-2"
         :action-text="t('action_cancel')"

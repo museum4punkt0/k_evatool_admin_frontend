@@ -142,7 +142,6 @@ export default {
         }
 
         const previewSurvey = (surveyIdPreview) => {
-            console.log(surveyIdPreview)
             window
                 .open(
                     import.meta.env.VITE_PREVIEW_URL +
