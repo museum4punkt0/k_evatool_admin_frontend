@@ -131,7 +131,6 @@
                                 :disabled="
                                     ![
                                         'multipleChoice',
-                                        'yayNay',
                                         'binary',
                                         'starRating',
                                         'emoji',
@@ -334,12 +333,18 @@ export default {
                     })
                 }
                 if (step.resultBasedNextSteps) {
-                    step.resultBasedNextSteps.forEach((nextStep) => {
-                        connections.value.push({
-                            start: { id: step.id, outlet: 'resultBasedNext' },
-                            end: nextStep.stepId,
+                    if (Array.isArray(step.resultBasedNextSteps)) {
+                        step.resultBasedNextSteps.forEach((nextStep) => {
+                            connections.value.push({
+                                start: {
+                                    id: step.id,
+                                    outlet: 'resultBasedNext',
+                                },
+                                end: nextStep.stepId,
+                            })
                         })
-                    })
+                    }
+                    // TODO: check type and binary
                 }
             })
         }
