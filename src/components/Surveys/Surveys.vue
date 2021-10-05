@@ -77,6 +77,12 @@
                                         previewSurvey(survey.id)
                                     "
                                 />
+                                <ChartBarIcon
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="
+                                        openSurveyStats(survey.id)
+                                    "
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -90,7 +96,12 @@
 </template>
 
 <script>
-import { TrashIcon, PencilAltIcon, EyeIcon } from '@heroicons/vue/outline'
+import {
+    TrashIcon,
+    PencilAltIcon,
+    EyeIcon,
+    ChartBarIcon,
+} from '@heroicons/vue/outline'
 import { useRouter } from 'vue-router'
 
 import Collection from '../Common/Collection/Collection.vue'
@@ -110,6 +121,7 @@ export default {
         TrashIcon,
         EyeIcon,
         PencilAltIcon,
+        ChartBarIcon,
     },
     setup() {
         const router = useRouter()
@@ -157,6 +169,10 @@ export default {
             await store.dispatch('surveys/publishSurvey', surveyId)
         }
 
+        const openSurveyStats = async (surveyId) => {
+            await router.push('/stats/' + surveyId)
+        }
+
         return {
             store,
             surveys,
@@ -165,6 +181,7 @@ export default {
             deleteSurvey,
             editSurvey,
             previewSurvey,
+            openSurveyStats,
             publishSurvey,
             surveySaved,
         }

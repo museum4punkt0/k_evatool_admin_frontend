@@ -178,7 +178,6 @@ import {
     PresentationChartLineIcon,
     UsersIcon,
     GlobeAltIcon,
-    ChartBarIcon,
 } from '@heroicons/vue/outline'
 
 import { XIcon } from '@heroicons/vue/outline'
@@ -197,7 +196,6 @@ export default {
         Menu,
         MenuItem,
         MenuButton,
-        ChartBarIcon,
     },
     setup() {
         const mobileMenuOpen = ref(false)
@@ -216,7 +214,6 @@ export default {
                 href: '/survey-elements',
                 icon: ViewGridIcon,
             },
-            { name: t('stats', 1), href: '/stats', icon: ChartBarIcon },
             { name: t('assets', 2), href: '/assets', icon: PhotographIcon },
             {
                 name: t('languages', 2),

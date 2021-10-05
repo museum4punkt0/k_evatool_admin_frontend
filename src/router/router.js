@@ -33,7 +33,7 @@ const routes = [
 
     { name: 'languages', path: '/languages', component: ListLanguages },
 
-    { path: '/stats', component: SurveyStats },
+    { path: '/stats/:id', component: SurveyStats },
 
     { path: '/assets', component: Assets },
 
