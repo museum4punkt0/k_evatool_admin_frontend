@@ -12,7 +12,7 @@
             >
                 <connection
                     v-for="connection in connections"
-                    :key="`connection_${connection.start.id}_${connection.end}`"
+                    :key="connection.id"
                     :start="
                         getStepElementPosition(
                             connection.start.id,
@@ -25,6 +25,7 @@
                     :height="height"
                     :width="width"
                     :dashed="connection.start.outlet !== 'next'"
+                    :label="connection.label"
                 ></connection>
                 <div
                     v-for="step in adminLayout"
@@ -333,14 +334,17 @@ export default {
             props.steps.forEach((step) => {
                 if (step.nextStepId > 0) {
                     connections.value.push({
+                        id: `${step.id}_next-${step.nextStepId}`,
+                        label: 'next',
                         start: { id: step.id, outlet: 'next' },
                         end: step.nextStepId,
                     })
                 }
                 if (step.resultBasedNextSteps) {
-                    step.resultBasedNextSteps.forEach((nextStep) => {
-                        console.log(nextStep)
+                    step.resultBasedNextSteps.forEach((nextStep, index) => {
                         connections.value.push({
+                            id: `${step.id}_resultBasedNext_${index}-${step.nextStepId}`,
+                            label: 'resultBasedNext',
                             start: { id: step.id, outlet: 'resultBasedNext' },
                             end: nextStep.stepId,
                         })

@@ -31,6 +31,21 @@
             marker-end="url(#arrowhead)"
             :stroke-dasharray="dashed ? 2 : 0"
         />
+        <path
+            :id="`${key}_textpath`"
+            :d="`M ${start.x} ${start.y} L ${end.x} ${end.y}`"
+        />
+        <text style="fill: #000">
+            <textPath xlink:href="`${key}_textpath`">{{ label }}</textPath>
+        </text>
+        <!-- <text
+            :x="start.x"
+            :y="start.y"
+            dominant-baseline="middle"
+            text-anchor="left"
+        >
+            testText
+        </text> -->
     </svg>
 </template>
 
@@ -58,6 +73,14 @@ export default {
         dashed: {
             type: Boolean,
             default: false,
+        },
+        label: {
+            type: String,
+            default: '',
+        },
+        key: {
+            type: String,
+            default: '',
         },
     },
     setup() {
