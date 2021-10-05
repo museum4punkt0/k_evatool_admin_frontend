@@ -1,5 +1,4 @@
 <template>
-    {{ paramsLocal }}
     <language-switch
         class="mt-6"
         :active-language="selectedLanguage"
