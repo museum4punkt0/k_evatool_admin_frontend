@@ -42,13 +42,6 @@
         :label="t('allow_half_steps')"
         class="my-3"
     /> -->
-    invalid: {{ v$.$invalid }}
-    <!-- <pre>
-        {{ v$ }}
-    </pre>
-    <pre>
-        {{ paramsLocal }}
-    </pre> -->
 </template>
 
 <script>

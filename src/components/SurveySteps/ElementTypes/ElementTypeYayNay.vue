@@ -110,7 +110,6 @@ export default {
 
         const labelValidation = {}
         store.state.languages.languages.forEach((language) => {
-            console.log(language)
             labelValidation[language.code] = {
                 required,
                 minLength: minLength(1),

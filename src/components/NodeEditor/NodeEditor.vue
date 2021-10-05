@@ -293,11 +293,7 @@ export default {
             return position
         }
 
-        // console.log(props.steps)
-        // console.log(props.adminLayout)
-
         const initAdminLayout = () => {
-            console.log('init admin layout')
             const adminLayoutInit = []
 
             props.steps
@@ -339,7 +335,6 @@ export default {
                 }
                 if (step.resultBasedNextSteps) {
                     step.resultBasedNextSteps.forEach((nextStep) => {
-                        console.log(nextStep)
                         connections.value.push({
                             start: { id: step.id, outlet: 'resultBasedNext' },
                             end: nextStep.stepId,
