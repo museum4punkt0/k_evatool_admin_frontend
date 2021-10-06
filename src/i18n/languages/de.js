@@ -55,8 +55,10 @@ export default {
     options: 'Optionen | Option | Optionen',
     optional_name: 'Optionaler Name',
     passwords: 'Passwörter | Passwort | Passwörter',
+    parent_elements: 'Elternelemente | Elternelement | Elternelemente',
     password_confirmation: 'Passwortbestätigung',
     questions: 'Fragen | Frage | Fragen',
+    results: 'Ergebnisse | Ergebnis | Ergebnisse',
     result_based_steps:
         'Antwortabhängige Schritte | Antwortabhängiger Schritt | Antwortabhängige Schritte',
     search: 'Suche',

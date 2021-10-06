@@ -3,32 +3,64 @@
         <main class="flex-1 overflow-y-auto p-3">
             <h1>
                 {{ t('stats', 1) }}
-                <strong>{{ store.state.surveys.survey.name }}</strong>
+                <strong>{{ store.state.surveys.survey?.name }}</strong>
             </h1>
-            <div class="table-wrap">
+            <div class="table-wrap mt-3">
                 <table>
                     <thead>
                         <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th>ID</th>
+                            <th>{{ t('steps', 1) }}</th>
+                            <th>{{ t('elements', 1) }}</th>
+                            <th>{{ t('parent_elements', 1) }}</th>
+                            <th># {{ t('results', 2) }}</th>
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-if="store.state.surveys.survey?.steps">
                         <tr
                             v-for="step in store.state.surveys.survey.steps"
                             :key="step.id"
                         >
-                            <td>{{ step.name }}</td>
+                            <td class="text-lg">{{ step.id }}</td>
                             <td>
-                                {{
-                                    store.state.surveyElements.surveyElements.find(
-                                        (x) => x.id === step.surveyElementId,
-                                    ).name
-                                }}
+                                {{ step.name }}
+                                <p class="text-gray-500 text-xs">
+                                    {{
+                                        store.state.surveyElements.surveyElements.find(
+                                            (x) =>
+                                                x.id === step.surveyElementId,
+                                        ).name
+                                    }}
+                                </p>
                             </td>
-                            <td></td>
+                            <td>
+                                <template
+                                    v-if="
+                                        store.state.surveyElements.surveyElements.find(
+                                            (x) =>
+                                                x.id === step.surveyElementId,
+                                        ).params?.question
+                                    "
+                                >
+                                    {{
+                                        store.state.surveyElements.surveyElements.find(
+                                            (x) =>
+                                                x.id === step.surveyElementId,
+                                        ).params?.question[
+                                            store.state.languages
+                                                .defaultLanguage.code
+                                        ]
+                                    }}
+                                </template>
+                            </td>
+                            <td>{{ step.parentStepId }}</td>
+                            <td>
+                                <span v-if="step.resultCount > 0">
+                                    {{ step.resultCount }}
+                                </span>
+                                <span v-else>-</span>
+                            </td>
                             <td></td>
                         </tr>
                     </tbody>
