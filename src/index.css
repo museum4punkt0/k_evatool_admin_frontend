@@ -58,12 +58,16 @@ label {
     @apply block text-sm font-medium text-gray-700
 }
 
-button.primary {
+button.primary, .btn-primary {
     @apply inline-flex items-center justify-center bg-blue-800 px-4 py-2 border rounded-md shadow-sm text-sm text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50
 }
 
-button.danger {
+button.danger, .btn-danger {
     @apply inline-flex items-center justify-center bg-red-800 px-4 py-2 border rounded-lg shadow-sm text-sm text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50
+}
+
+.alert-danger {
+    @apply bg-red-200 text-red-700 px-4 py-2 rounded-lg
 }
 
 aside {

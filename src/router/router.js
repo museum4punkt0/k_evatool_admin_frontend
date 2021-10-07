@@ -1,4 +1,8 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {
+    createRouter,
+    createWebHashHistory,
+    createWebHistory,
+} from 'vue-router'
 import Home from '../components/Home.vue'
 
 import Surveys from '../components/Surveys/Surveys.vue'
@@ -16,6 +20,8 @@ import Login from '../components/Login.vue'
 import Users from '../components/Users/Users.vue'
 
 import SurveyStats from '../components/stats/SurveyStats.vue'
+
+import ConfirmInvitation from '../components/Users/ConfirmInvitation.vue'
 
 const routes = [
     { path: '/', component: Home },
@@ -43,11 +49,12 @@ const routes = [
     { path: '/user/logout', component: Settings },
     { path: '/user/settings', component: Settings },
     { name: 'users', path: '/users', component: Users },
+    { path: '/confirm-invitation', component: ConfirmInvitation },
     // { path: '*', redirect: '/' },
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 })
 

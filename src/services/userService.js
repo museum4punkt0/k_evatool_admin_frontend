@@ -56,4 +56,31 @@ export default {
                 return error.response
             })
     },
+    async inviteUser(userId) {
+        const url = 'users/' + userId + '/invite'
+        const data = {
+            confirm_url: import.meta.env.VITE_BASE_URL + '/confirm-invitation',
+        }
+        return axios
+            .post(url, data)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    async confirmPassword(token, password) {
+        const url = 'users/confirm-password'
+        const data = { token, password }
+
+        return axios
+            .post(url, data)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }
