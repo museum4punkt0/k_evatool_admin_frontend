@@ -56,27 +56,54 @@
                             <TrashIcon class="h-5 w-5" />
                         </td>
                     </tr>
+                    <!-- TODO: fix dropdown not overlapping bug -->
+                    <!-- <tr>
+                        <td>
+                            <form-input
+                                v-model:value="nextStep.start"
+                                label=""
+                            />
+                        </td>
+                        <td>
+                            <form-input v-model:value="nextStep.end" label="" />
+                        </td>
+                        <td>
+                            <form-select
+                                v-model:selected="nextStep.stepId"
+                                :options="surveySteps"
+                                title-key="name"
+                                value-key="id"
+                                :default-value="-1"
+                                label=""
+                            />
+                        </td>
+                        <td>
+                            <action-button
+                                :action-text="t('action_add')"
+                                @execute="addResultBasedStep"
+                            />
+                        </td>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
 
-        <!-- <h2>add new result based step</h2> -->
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-12 gap-4">
             <form-input
                 v-model:value="nextStep.start"
-                class="mt-3"
+                class="mt-3 col-span-2"
                 :label="t('from')"
                 name="start"
             />
             <form-input
                 v-model:value="nextStep.end"
-                class="mt-3"
+                class="mt-3 col-span-2"
                 :label="t('to')"
                 name="end"
             />
             <form-select
                 v-model:selected="nextStep.stepId"
-                class="mt-3"
+                class="mt-3 col-span-5"
                 :options="surveySteps"
                 title-key="name"
                 value-key="id"
@@ -84,7 +111,7 @@
                 :label="t('steps', 1)"
             />
             <action-button
-                class="mt-9"
+                class="mt-9 col-span-3"
                 :action-text="t('action_add')"
                 @execute="addResultBasedStep"
             />
