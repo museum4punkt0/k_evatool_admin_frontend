@@ -48,7 +48,7 @@ export default {
     },
     async checkLogin() {
         return axios
-            .get('user')
+            .get('users/check-login')
             .then((response) => {
                 return response.data
             })

@@ -10,6 +10,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Admin</th>
+                            <th>{{ t('last_login') }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -20,6 +21,14 @@
                             <td>{{ user.email }}</td>
                             <td>
                                 <check-icon v-if="user.admin" class="w-5 h-5" />
+                            </td>
+                            <td>
+                                <span
+                                    v-if="store.state.users.user.admin"
+                                    class="text-xs"
+                                >
+                                    {{ user.last_login }}
+                                </span>
                             </td>
                             <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon

@@ -48,6 +48,7 @@ export default {
     hint_password_requirements: 'Mind. 12 Zeichen',
     language_default: 'Standardsprache',
     languages: 'Sprachen | Sprache | Sprachen',
+    last_login: 'Letzter Login',
     loading_app: 'App wird geladen',
     login: 'Log-In',
     max_selectable: 'Max. zu wählen',
