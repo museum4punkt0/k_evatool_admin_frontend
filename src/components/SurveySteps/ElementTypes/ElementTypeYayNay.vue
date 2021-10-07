@@ -5,16 +5,6 @@
         @select="setSelectedLanguage($event)"
     />
 
-    <button
-        v-for="language in store.state.languages.data"
-        :key="'lang' + language.id"
-        class="primary"
-        :class="{ active: selectedLanguage.code === language.code }"
-        @click="setSelectedLanguage(language)"
-    >
-        {{ language.code }}
-    </button>
-
     <form-input
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
@@ -63,6 +53,23 @@
             name="falseValue"
         />
     </div>
+    <div class="flex">
+        <img
+            v-for="asset in paramsLocal.assets"
+            :key="`asset-${asset}`"
+            class="w-1/12"
+            :src="assets.find((item) => item.id === asset)?.urls.url"
+        />
+    </div>
+    <button class="primary" @click="setAssetSelectorModalOpen(true)">
+        choose assets
+    </button>
+    <asset-selector-modal
+        :is-open="assetSelectorModalOpen"
+        :selected-assets="paramsLocal.assets"
+        @update:is-open="setAssetSelectorModalOpen"
+        @update:selected-assets="onAssetsSelected"
+    ></asset-selector-modal>
 </template>
 
 <script>
@@ -74,13 +81,14 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { useState } from '../../../composables/state'
+import AssetSelectorModal from '../../Assets/AssetSelectorModal.vue'
 
 import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
 const systemValueValidation = helpers.regex(/^[a-z0-9_]*$/)
 
 export default {
     name: 'ElementTypeYayNayQuestion',
-    components: { FormInput, LanguageSwitch },
+    components: { FormInput, LanguageSwitch, AssetSelectorModal },
     props: {
         params: {
             type: Object,
@@ -91,6 +99,8 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const [assetSelectorModalOpen, setAssetSelectorModalOpen] =
+            useState(false)
         const [selectedLanguage, setSelectedLanguage] = useState(
             store.state.languages.defaultLanguage,
         )
@@ -98,6 +108,10 @@ export default {
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
+        })
+
+        const assets = computed({
+            get: () => store.state.assets.assets,
         })
 
         const questionValidation = {}
@@ -154,6 +168,11 @@ export default {
             },
         )
 
+        const onAssetsSelected = (assets) => {
+            paramsLocal.value.assets = assets
+            emit('update:params', paramsLocal.value)
+        }
+
         return {
             validateParams,
             store,
@@ -161,6 +180,10 @@ export default {
             t,
             selectedLanguage,
             setSelectedLanguage,
+            assetSelectorModalOpen,
+            setAssetSelectorModalOpen,
+            onAssetsSelected,
+            assets,
         }
     },
 }
