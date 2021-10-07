@@ -22,7 +22,12 @@
             value-key="id"
             :label="surveyElementParams?.falseLabel[language.code]"
         />
-        <action-button :action-text="t('action_save')" @execute="save" />
+        <action-button :action-text="t('action_delete')" @execute="remove" />
+        <action-button
+            :disabled="v$.$invalid"
+            :action-text="t('action_save')"
+            @execute="save"
+        />
     </div>
 </template>
 <script>
@@ -30,6 +35,7 @@ import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import FormInput from '../../Forms/FormInput.vue'
 import FormSelect from '../../Forms/FormSelect.vue'
@@ -71,10 +77,34 @@ export default {
                 resultBasedNextSteps: nextSteps.value,
             })
         }
+        const remove = () => {
+            store.dispatch('surveys/saveSurveyStep', {
+                ...surveyStep.value,
+                resultBasedNextSteps: null,
+            })
+            // TODO: only on success
+            nextSteps.value = {
+                trueNextStep: { stepId: null },
+                falseNextStep: { stepId: null },
+            }
+        }
 
         const validations = computed({
             get: () => {
-                return {}
+                return {
+                    trueNextStep: {
+                        required,
+                        stepId: {
+                            required,
+                        },
+                    },
+                    falseNextStep: {
+                        required,
+                        stepId: {
+                            required,
+                        },
+                    },
+                }
             },
             set: () => {},
         })
@@ -88,6 +118,7 @@ export default {
             surveyElementParams,
             nextSteps,
             save,
+            remove,
             language,
         }
     },

@@ -340,26 +340,32 @@ export default {
                     const type = step.surveyElementType
 
                     if (type === 'binary') {
-                        connections.value.push({
-                            id: `${step.id}_true`,
-                            start: {
-                                id: step.id,
-                                outlet: 'resultBasedNext_true',
-                            },
-                            end: step.resultBasedNextSteps.trueNextStep.stepId,
-                            // TODO: get true label
-                            label: `option: ${'true'}`,
-                        })
-                        connections.value.push({
-                            id: `${step.id}_false`,
-                            start: {
-                                id: step.id,
-                                outlet: 'resultBasedNext_false',
-                            },
-                            end: step.resultBasedNextSteps.falseNextStep.stepId,
-                            // TODO: get false label
-                            label: `option: ${'false'}`,
-                        })
+                        if (step.resultBasedNextSteps.trueNextStep?.stepId) {
+                            connections.value.push({
+                                id: `${step.id}_true`,
+                                start: {
+                                    id: step.id,
+                                    outlet: 'resultBasedNext_true',
+                                },
+                                end: step.resultBasedNextSteps.trueNextStep
+                                    .stepId,
+                                // TODO: get true label
+                                label: `option: ${'true'}`,
+                            })
+                        }
+                        if (step.resultBasedNextSteps.falseNextStep?.stepId) {
+                            connections.value.push({
+                                id: `${step.id}_false`,
+                                start: {
+                                    id: step.id,
+                                    outlet: 'resultBasedNext_false',
+                                },
+                                end: step.resultBasedNextSteps.falseNextStep
+                                    .stepId,
+                                // TODO: get false label
+                                label: `option: ${'false'}`,
+                            })
+                        }
                     } else if (type === 'starRating') {
                         step.resultBasedNextSteps.forEach((nextStep) => {
                             connections.value.push({
