@@ -131,6 +131,27 @@
                             <button
                                 class="flex-1 disabled:opacity-25"
                                 :disabled="
+                                    steps.find((x) => x.id === step.id)
+                                        ?.surveyElementType !== 'video'
+                                "
+                                @click.prevent.stop="
+                                    openTimeBasedModal(step.id)
+                                "
+                            >
+                                <span
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
+                                >
+                                    <ClockIcon class="h-5 w-5" />
+                                </span>
+                            </button>
+                            <button
+                                class="flex-1 disabled:opacity-25"
+                                :disabled="
                                     ![
                                         'multipleChoice',
                                         'binary',
@@ -154,27 +175,6 @@
                                     "
                                 >
                                     <switch-horizontal-icon class="h-5 w-5" />
-                                </span>
-                            </button>
-                            <button
-                                class="flex-1 disabled:opacity-25"
-                                :disabled="
-                                    steps.find((x) => x.id === step.id)
-                                        ?.surveyElementType !== 'video'
-                                "
-                                @click.prevent.stop="
-                                    openTimeBasedModal(step.id)
-                                "
-                            >
-                                <span
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
-                                >
-                                    <ClockIcon class="h-5 w-5" />
                                 </span>
                             </button>
                             <button
