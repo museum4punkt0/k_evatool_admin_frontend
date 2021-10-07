@@ -67,6 +67,7 @@
     <asset-selector-modal
         :is-open="assetSelectorModalOpen"
         :selected-assets="paramsLocal.assets"
+        mime-type-filter-prefix="image"
         @update:is-open="setAssetSelectorModalOpen"
         @update:selected-assets="onAssetsSelected"
     ></asset-selector-modal>
