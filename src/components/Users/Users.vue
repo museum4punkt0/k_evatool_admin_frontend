@@ -8,7 +8,6 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Email</th>
                             <th>Admin</th>
                             <th>{{ t('last_login') }}</th>
                             <th></th>
@@ -17,8 +16,13 @@
                     <tbody>
                         <tr v-for="user in users" :key="user.id">
                             <td>{{ user.id }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
+                            <td>
+                                {{ user.name }}
+                                <p class="text-gray-500 text-xs">
+                                    {{ user.email }}
+                                </p>
+                            </td>
+
                             <td>
                                 <check-icon v-if="user.admin" class="w-5 h-5" />
                             </td>
