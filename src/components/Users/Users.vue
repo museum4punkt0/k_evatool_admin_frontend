@@ -32,9 +32,9 @@
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
                                     @click="deleteUser(user.id)"
                                 />
-                                <TrashIcon
+                                <MailIcon
                                     v-if="store.state.users.user.admin"
-                                    class="mx-1 h-5 w-5 text-red-500 pointer"
+                                    class="mx-1 h-5 w-5 pointer"
                                     @click="inviteUser(user.id)"
                                 />
                             </td>
@@ -60,13 +60,18 @@ import { useI18n } from 'vue-i18n'
 
 import userService from '../../services/userService'
 
-import { TrashIcon, PencilAltIcon, CheckIcon } from '@heroicons/vue/outline'
+import {
+    TrashIcon,
+    PencilAltIcon,
+    CheckIcon,
+    MailIcon,
+} from '@heroicons/vue/outline'
 
 import User from './User.vue'
 
 export default {
     name: 'Users',
-    components: { User, TrashIcon, PencilAltIcon, CheckIcon },
+    components: { User, TrashIcon, PencilAltIcon, CheckIcon, MailIcon },
     setup() {
         const store = useStore()
         const { t } = useI18n()
@@ -88,8 +93,10 @@ export default {
         }
 
         const inviteUser = async (userId) => {
-            const invitedUser = await userService.inviteUser(userId)
-            console.log(invitedUser)
+            const confirmInviteUser = confirm(t('confirm_send_invitation'))
+            if (confirmInviteUser) {
+                await userService.inviteUser(userId)
+            }
         }
 
         getUsers()
