@@ -61,19 +61,6 @@
                             </DialogTitle>
 
                             <div class="mt-2">
-                                <h4>
-                                    {{ t('result_based_steps_preview', 2) }}
-                                </h4>
-                                {{
-                                    surveyStep.surveyElement.params.question[
-                                        language.code
-                                    ]
-                                }}
-                            </div>
-                            <div class="mt-2">
-                                <h4>
-                                    {{ t('result_based_steps_edit', 2) }}
-                                </h4>
                                 <binary-result-based-next-steps
                                     v-if="
                                         surveyStep.surveyElementType ===

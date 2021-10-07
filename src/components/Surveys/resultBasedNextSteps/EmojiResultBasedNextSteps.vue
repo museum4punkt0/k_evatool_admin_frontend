@@ -1,28 +1,51 @@
 <template>
     <div>
+        <div class="mt-2 mb-6">
+            <ul>
+                <li>
+                    {{ t('questions', 1) }}:
+                    {{
+                        surveyStep.surveyElement.params.question[language.code]
+                    }}
+                </li>
+            </ul>
+        </div>
         <div
             v-if="surveyStep.resultBasedNextSteps?.length > 0"
             class="table-wrap"
         >
             <table>
-                <tr
-                    v-for="(step, index) in surveyStep.resultBasedNextSteps"
-                    :key="index"
-                >
-                    <td>{{ index }}</td>
-                    <td>{{ step.type }}</td>
-                    <td>{{ step.stepId }}</td>
-                    <td
-                        class="pointer float-right"
-                        @click="removeResultBasedStep(index)"
+                <thead class="bg-blue-500">
+                    <tr>
+                        <th>{{ t('emoji', 1) }}</th>
+                        <th>{{ t('steps', 1) }}</th>
+                        <th>{{ t('actions', 2) }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(step, index) in surveyStep.resultBasedNextSteps"
+                        :key="index"
                     >
-                        <TrashIcon class="h-5 w-5" />
-                    </td>
-                </tr>
+                        <td>{{ step.type }}</td>
+                        <td>
+                            {{
+                                surveySteps.find(
+                                    (item) => item.id === step.stepId,
+                                ).name
+                            }}
+                        </td>
+                        <td
+                            class="pointer float-right"
+                            @click="removeResultBasedStep(index)"
+                        >
+                            <TrashIcon class="h-5 w-5" />
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
-        <h2>add new result based step</h2>
         <div class="grid grid-cols-3 gap-4">
             <form-select
                 v-model:selected="nextStep.type"
@@ -30,7 +53,7 @@
                 title-key="type"
                 value-key="type"
                 :default-value="-1"
-                label="type"
+                :label="t('emoji')"
             />
             <form-select
                 v-model:selected="nextStep.stepId"
@@ -38,7 +61,7 @@
                 title-key="name"
                 value-key="id"
                 :default-value="-1"
-                label="step"
+                :label="t('steps', 1)"
             />
             <action-button
                 :action-text="t('action_save')"
@@ -78,6 +101,11 @@ export default {
             type: null,
             stepId: -1,
         })
+        const language = store.state.languages.language
+            ? store.state.languages.language
+            : store.state.languages.languages.find(
+                  (language) => language.default,
+              )
 
         const addResultBasedStep = () => {
             // add to array
@@ -147,6 +175,7 @@ export default {
             nextStep,
             addResultBasedStep,
             removeResultBasedStep,
+            language,
         }
     },
 }

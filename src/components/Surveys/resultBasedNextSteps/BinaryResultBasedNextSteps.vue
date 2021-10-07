@@ -1,18 +1,26 @@
 <template>
     <div>
+        <div class="mt-2 mb-6">
+            <ul>
+                <li>
+                    {{ t('questions', 1) }}:
+                    {{ surveyElementParams?.question[language.code] }}
+                </li>
+            </ul>
+        </div>
         <form-select
             v-model:selected="nextSteps.trueNextStep.stepId"
             :options="surveySteps"
             title-key="name"
             value-key="id"
-            :label="surveyElementParams?.trueValue"
+            :label="surveyElementParams?.trueLabel[language.code]"
         />
         <form-select
             v-model:selected="nextSteps.falseNextStep.stepId"
             :options="surveySteps"
             title-key="name"
             value-key="id"
-            :label="surveyElementParams?.falseValue"
+            :label="surveyElementParams?.falseLabel[language.code]"
         />
         <action-button :action-text="t('action_save')" @execute="save" />
     </div>
@@ -51,6 +59,11 @@ export default {
                       falseNextStep: { stepId: null },
                   },
         )
+        const language = store.state.languages.language
+            ? store.state.languages.language
+            : store.state.languages.languages.find(
+                  (language) => language.default,
+              )
 
         const save = () => {
             store.dispatch('surveys/saveSurveyStep', {
@@ -75,6 +88,7 @@ export default {
             surveyElementParams,
             nextSteps,
             save,
+            language,
         }
     },
 }

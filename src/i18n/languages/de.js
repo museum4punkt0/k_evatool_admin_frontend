@@ -1,4 +1,6 @@
 export default {
+    actions: 'Aktionen | Aktion | Aktionen',
+    action_add: 'Hinzufügen',
     action_add_survey_step: 'Schritt hinzufügen',
     action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
     action_add_emoji: 'Emoji hinzufügen',
@@ -35,9 +37,11 @@ export default {
     email: 'E-Mail',
     hello: 'Hallo Welt!',
     elements: 'Elemente | Element | Elemente',
+    end: 'Ende',
     filename: 'Dateiname',
     filesize: 'Größe',
     filetype: 'Dateityp',
+    from: 'von',
     language_default: 'Standardsprache',
     languages: 'Sprachen | Sprache | Sprachen',
     loading_app: 'App wird geladen',
@@ -81,6 +85,7 @@ export default {
     time_based_steps:
         'Zeitbasierte Schritte | Zeitbasierter Schritt | Zeitbasierte Schritte',
     titles: 'Titel | Titel | Titel',
+    to: 'bis',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',

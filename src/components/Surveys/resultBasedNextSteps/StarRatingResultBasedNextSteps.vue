@@ -1,42 +1,77 @@
 <template>
     <div>
-        <ul>
-            <li>number of stars: {{ surveyElementParams?.numberOfStars }}</li>
-        </ul>
+        <div class="mt-2 mb-6">
+            <ul>
+                <li>
+                    {{ t('questions', 1) }}:
+                    {{
+                        surveyStep.surveyElement.params.question[language.code]
+                    }}
+                </li>
+                <li>
+                    {{ t('number_of_stars') }}:
+                    {{ surveyElementParams?.numberOfStars }}
+                </li>
+                <li>
+                    {{ t('label_lowest_value') }}:
+                    {{ surveyElementParams?.lowestValueLabel[language.code] }}
+                </li>
+                <li>
+                    {{ t('label_highest_value') }}:
+                    {{ surveyElementParams?.highestValueLabel[language.code] }}
+                </li>
+            </ul>
+        </div>
         <div
             v-if="surveyStep?.resultBasedNextSteps?.length > 0"
-            class="table-wrap"
+            class="table-wrap mb-6"
         >
             <table>
-                <tr
-                    v-for="(step, index) in surveyStep.resultBasedNextSteps"
-                    :key="index"
-                >
-                    <td>{{ step.start }}</td>
-                    <td>{{ step.end }}</td>
-                    <td>{{ step.stepId }}</td>
-                    <td
-                        class="pointer float-right"
-                        @click="removeResultBasedStep(index)"
+                <thead class="bg-blue-500">
+                    <tr>
+                        <th>{{ t('from') }}</th>
+                        <th>{{ t('to') }}</th>
+                        <th>{{ t('steps', 1) }}</th>
+                        <th>{{ t('actions', 2) }}</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr
+                        v-for="(step, index) in surveyStep.resultBasedNextSteps"
+                        :key="index"
                     >
-                        <TrashIcon class="h-5 w-5" />
-                    </td>
-                </tr>
+                        <td>{{ step.start }}</td>
+                        <td>{{ step.end }}</td>
+                        <td>
+                            {{
+                                surveySteps.find(
+                                    (item) => item.id === step.stepId,
+                                ).name
+                            }}
+                        </td>
+                        <td
+                            class="pointer float-right"
+                            @click="removeResultBasedStep(index)"
+                        >
+                            <TrashIcon class="h-5 w-5" />
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
-        <h2>add new result based step</h2>
+        <!-- <h2>add new result based step</h2> -->
         <div class="grid grid-cols-4 gap-4">
             <form-input
                 v-model:value="nextStep.start"
                 class="mt-3"
-                label="start"
+                :label="t('from')"
                 name="start"
             />
             <form-input
                 v-model:value="nextStep.end"
                 class="mt-3"
-                label="end"
+                :label="t('to')"
                 name="end"
             />
             <form-select
@@ -46,15 +81,13 @@
                 title-key="name"
                 value-key="id"
                 :default-value="-1"
-                label="step"
+                :label="t('steps', 1)"
             />
-            <button
-                class="primary mt-3"
-                :disabled="v$.$invalid"
-                @click="addResultBasedStep()"
-            >
-                <PlusIcon />
-            </button>
+            <action-button
+                class="mt-9"
+                :action-text="t('action_add')"
+                @execute="addResultBasedStep"
+            />
         </div>
     </div>
 </template>
@@ -67,9 +100,10 @@ import { required, between } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import FormInput from '../../Forms/FormInput.vue'
 import FormSelect from '../../Forms/FormSelect.vue'
+import ActionButton from '../../Common/ActionButton.vue'
 
 export default {
-    components: { FormInput, FormSelect, TrashIcon, PlusIcon },
+    components: { ActionButton, FormInput, FormSelect, TrashIcon, PlusIcon },
     setup() {
         const store = useStore()
         const { t } = useI18n()
@@ -78,7 +112,7 @@ export default {
         const surveyElementParams = computed(
             () =>
                 store.state.surveyElements.surveyElements.find((element) => {
-                    console.log(element.value)
+                    // console.log(element.value)
                     return element.id === surveyStep.value.id
                 })?.params,
         )
@@ -88,6 +122,11 @@ export default {
             end: surveyElementParams.value.numberOfStars,
             stepId: -1,
         })
+        const language = store.state.languages.language
+            ? store.state.languages.language
+            : store.state.languages.languages.find(
+                  (language) => language.default,
+              )
 
         const addResultBasedStep = () => {
             console.log(typeof surveyStep.value.resultBasedNextSteps)
@@ -150,6 +189,7 @@ export default {
         return {
             v$: useVuelidate(validations, nextStep),
             store,
+            language,
             t,
             surveyStep,
             surveySteps,
