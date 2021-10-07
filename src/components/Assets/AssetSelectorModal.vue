@@ -66,10 +66,20 @@
                                     :key="'asset-' + asset.id"
                                     @click="selectAsset(asset.id)"
                                 >
+                                    <input
+                                        type="checkbox"
+                                        :checked="
+                                            selectedAssets.includes(asset.id)
+                                        "
+                                    />
                                     {{ asset.id }} {{ asset.filename }}
                                     {{ asset.urls.url }}
 
-                                    <img :src="asset.urls.url" alt="" />
+                                    <img
+                                        :src="asset.urls.url"
+                                        alt=""
+                                        class="w-1/4"
+                                    />
                                 </div>
                             </div>
                         </div>
