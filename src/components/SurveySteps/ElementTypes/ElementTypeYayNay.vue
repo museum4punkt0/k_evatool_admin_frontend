@@ -53,16 +53,17 @@
             name="falseValue"
         />
     </div>
-    <div class="flex">
+    <div class="grid grid-cols-6 gap-4 my-3">
         <img
             v-for="asset in paramsLocal.assets"
             :key="`asset-${asset}`"
-            class="w-1/12"
+            class="rounded"
             :src="assets.find((item) => item.id === asset)?.urls.url"
+            @click="setAssetSelectorModalOpen(true)"
         />
     </div>
     <button class="primary" @click="setAssetSelectorModalOpen(true)">
-        choose assets
+        {{ t('button_choose_assets') }}
     </button>
     <asset-selector-modal
         :is-open="assetSelectorModalOpen"
