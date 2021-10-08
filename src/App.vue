@@ -328,7 +328,13 @@ export default {
         }
 
         router.beforeEach(() => {
-            if (window.outerWidth < 1024) {
+            console.log(navigator.userAgent)
+            if (
+                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                    navigator.userAgent,
+                ) ||
+                window.outerWidth <= 1024
+            ) {
                 viewportIncompatible.value = true
             } else {
                 viewportIncompatible.value = false
