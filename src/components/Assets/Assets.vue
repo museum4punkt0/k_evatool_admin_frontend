@@ -190,6 +190,10 @@ export default {
                         removeFingerprintOnSuccess: true,
                         uploadDataDuringCreation: false,
                         chunkSize: 1000000,
+                        // Todo: Implement api authorization on TUS server
+                        /*headers: {
+                            Authorization: `Bearer ${store.state.users.token}`
+                        }*/
                     }),
         })
 
