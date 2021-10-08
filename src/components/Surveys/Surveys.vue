@@ -78,6 +78,7 @@
                                     "
                                 />
                                 <ChartBarIcon
+                                    v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 pointer"
                                     @click.prevent.stop="
                                         openSurveyStats(survey.id)

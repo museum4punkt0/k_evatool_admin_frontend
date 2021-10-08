@@ -8,9 +8,11 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Admin</th>
-                            <th>{{ t('last_login') }}</th>
-                            <th></th>
+                            <th v-if="store.state.users.user.admin">Admin</th>
+                            <th v-if="store.state.users.user.admin">
+                                {{ t('last_login') }}
+                            </th>
+                            <th v-if="store.state.users.user.admin"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,10 +25,10 @@
                                 </p>
                             </td>
 
-                            <td>
+                            <td v-if="store.state.users.user.admin">
                                 <check-icon v-if="user.admin" class="w-5 h-5" />
                             </td>
-                            <td>
+                            <td v-if="store.state.users.user.admin">
                                 <span
                                     v-if="store.state.users.user.admin"
                                     class="text-xs"
@@ -34,7 +36,10 @@
                                     {{ user.last_login }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 flex flex-row">
+                            <td
+                                v-if="store.state.users.user.admin"
+                                class="px-6 py-4 flex flex-row"
+                            >
                                 <PencilAltIcon
                                     v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5"
