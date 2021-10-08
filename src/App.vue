@@ -230,6 +230,26 @@
             </div>
         </div>
     </div>
+    <div
+        v-if="viewportIncompatible"
+        class="
+            absolute
+            top-0
+            left-0
+            h-screen
+            w-screen
+            bg-gray-100
+            flex flex-col
+            justify-center
+            items-center
+            p-12
+        "
+    >
+        <exclamation-icon class="m-3 h-20 w-20 text-red-600" />
+        <h1 class="text-red-600 text-center">
+            {{ t('viewport_incompatible') }}
+        </h1>
+    </div>
 </template>
 
 <script>
@@ -250,6 +270,7 @@ import {
     XIcon,
     UserIcon,
     LogoutIcon,
+    ExclamationIcon,
 } from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
 import MainMenu from './components/MainMenu.vue'
@@ -269,6 +290,7 @@ export default {
         MainMenu,
         Dialog,
         DialogOverlay,
+        ExclamationIcon,
         Menu,
         MenuButton,
         MenuItem,
@@ -289,6 +311,7 @@ export default {
         const route = useRoute()
         const loadingApp = ref(true)
         const { t } = useI18n()
+        let viewportIncompatible = ref(false)
 
         const dedicatedRoutes = ['/confirm-invitation']
 
@@ -303,6 +326,14 @@ export default {
                 loadingApp.value = false
             }
         }
+
+        router.beforeEach(() => {
+            if (window.outerWidth < 1024) {
+                viewportIncompatible.value = true
+            } else {
+                viewportIncompatible.value = false
+            }
+        })
 
         const loadApp = async () => {
             await store.dispatch('languages/getLanguages')
@@ -334,6 +365,7 @@ export default {
             store,
             logoutUser,
             version,
+            viewportIncompatible,
         }
     },
 }

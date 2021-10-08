@@ -97,6 +97,8 @@ export default {
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',
     videos: 'Videos | Video | Video',
+    viewport_incompatible:
+        'Bitte benutzen Sie ein Gerät mit einer höheren Auflösung!',
     welcome: 'Willkommen',
     yaynay_positive: 'Positiver Systemwert',
     yaynay_negative: 'Negativer Systemwert',
