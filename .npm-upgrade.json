@@ -1,0 +1,8 @@
+{
+    "ignore": {
+        "eslint": {
+            "versions": ">7",
+            "reason": "Breaking change"
+        }
+    }
+}
