@@ -170,4 +170,16 @@ export default {
                 return error
             })
     },
+
+    duplicateSurvey(surveyId) {
+        const url = 'evaluation-tool/surveys/' + surveyId + '/duplicate'
+        return axios
+            .post(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
 }

@@ -3,7 +3,7 @@
         <main class="flex-1 overflow-y-auto p-3">
             <h1>{{ surveys?.length }} {{ t('surveys', surveys?.length) }}</h1>
 
-            <div class="table-wrap mt-3">
+            <div class="table-wrap mt-3 overflow-x-scroll">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-blue-500">
                         <tr>
@@ -77,6 +77,13 @@
                                         previewSurvey(survey.id)
                                     "
                                 />
+                                <DocumentDuplicateIcon
+                                    v-if="store.state.users.user.admin"
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="
+                                        duplicateSurvey(survey.id)
+                                    "
+                                />
                                 <ChartBarIcon
                                     v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 pointer"
@@ -102,6 +109,7 @@ import {
     PencilAltIcon,
     EyeIcon,
     ChartBarIcon,
+    DocumentDuplicateIcon,
 } from '@heroicons/vue/outline'
 import { useRouter } from 'vue-router'
 
@@ -123,6 +131,7 @@ export default {
         EyeIcon,
         PencilAltIcon,
         ChartBarIcon,
+        DocumentDuplicateIcon,
     },
     setup() {
         const router = useRouter()
@@ -174,6 +183,16 @@ export default {
             await router.push('/stats/' + surveyId)
         }
 
+        const duplicateSurvey = async (surveyId) => {
+            const confirmSurveyDuplicate = confirm(
+                t('confirm_duplicate_survey'),
+            )
+
+            if (confirmSurveyDuplicate) {
+                await store.dispatch('surveys/duplicateSurvey', surveyId)
+            }
+        }
+
         return {
             store,
             surveys,
@@ -183,6 +202,7 @@ export default {
             editSurvey,
             previewSurvey,
             openSurveyStats,
+            duplicateSurvey,
             publishSurvey,
             surveySaved,
         }

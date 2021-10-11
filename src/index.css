@@ -19,7 +19,7 @@ h4 {
 }
 
 .table-wrap {
-    @apply shadow overflow-hidden border-b border-gray-200 sm:rounded-lg
+    @apply shadow overflow-x-scroll border-b border-gray-200 sm:rounded-lg
 }
 
 table {
