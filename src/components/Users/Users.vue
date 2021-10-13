@@ -8,16 +8,38 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th></th>
+                            <th v-if="store.state.users.user.admin">Admin</th>
+                            <th v-if="store.state.users.user.admin">
+                                {{ t('last_login') }}
+                            </th>
+                            <th v-if="store.state.users.user.admin"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="user in users" :key="user.id">
                             <td>{{ user.id }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
-                            <td class="px-6 py-4 flex flex-row">
+                            <td>
+                                {{ user.name }}
+                                <p class="text-gray-500 text-xs">
+                                    {{ user.email }}
+                                </p>
+                            </td>
+
+                            <td v-if="store.state.users.user.admin">
+                                <check-icon v-if="user.admin" class="w-5 h-5" />
+                            </td>
+                            <td v-if="store.state.users.user.admin">
+                                <span
+                                    v-if="store.state.users.user.admin"
+                                    class="text-xs"
+                                >
+                                    {{ user.last_login }}
+                                </span>
+                            </td>
+                            <td
+                                v-if="store.state.users.user.admin"
+                                class="px-6 py-4 flex flex-row"
+                            >
                                 <PencilAltIcon
                                     v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5"
@@ -27,6 +49,11 @@
                                     v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
                                     @click="deleteUser(user.id)"
+                                />
+                                <MailIcon
+                                    v-if="store.state.users.user.admin"
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click="inviteUser(user.id)"
                                 />
                             </td>
                         </tr>
@@ -49,13 +76,20 @@ import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-import { TrashIcon, PencilAltIcon } from '@heroicons/vue/outline'
+import userService from '../../services/userService'
+
+import {
+    TrashIcon,
+    PencilAltIcon,
+    CheckIcon,
+    MailIcon,
+} from '@heroicons/vue/outline'
 
 import User from './User.vue'
 
 export default {
     name: 'Users',
-    components: { User, TrashIcon, PencilAltIcon },
+    components: { User, TrashIcon, PencilAltIcon, CheckIcon, MailIcon },
     setup() {
         const store = useStore()
         const { t } = useI18n()
@@ -76,6 +110,13 @@ export default {
             console.log(userId)
         }
 
+        const inviteUser = async (userId) => {
+            const confirmInviteUser = confirm(t('confirm_send_invitation'))
+            if (confirmInviteUser) {
+                await userService.inviteUser(userId)
+            }
+        }
+
         getUsers()
 
         return {
@@ -85,6 +126,7 @@ export default {
             getUsers,
             editUser,
             deleteUser,
+            inviteUser,
             store,
         }
     },

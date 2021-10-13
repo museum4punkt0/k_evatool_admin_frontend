@@ -125,12 +125,13 @@ export default {
             await SURVEY_SERVICE.publishSurvey(surveyId)
             await dispatch('getSurveys')
         },
-        async saveSurveyStep({ commit, state }, data) {
+        async saveSurveyStep({ commit, state, dispatch }, data) {
             const savedSurveyStep = await SURVEY_SERVICE.saveSurveyStep(
                 data,
                 state.surveyId,
             )
             if (savedSurveyStep.id) {
+                dispatch('getSurveySteps', state.surveyId)
                 commit('setSurveyStepId', savedSurveyStep.id)
                 commit('setSurveyStep', savedSurveyStep)
                 const surveyStepElement =
@@ -157,6 +158,10 @@ export default {
         async resetSurveyId({ commit }) {
             commit('setSurveyId', -1)
             commit('setSurvey', null)
+        },
+        async duplicateSurvey({ dispatch }, surveyId) {
+            await SURVEY_SERVICE.duplicateSurvey(surveyId)
+            await dispatch('getSurveys')
         },
     },
     getters: {},

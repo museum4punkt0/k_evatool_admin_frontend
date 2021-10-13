@@ -53,6 +53,7 @@ export default {
         const login = async () => {
             const userLoggedIn = await store.dispatch('users/loginUser', user)
             if (userLoggedIn.id) {
+                console.log(userLoggedIn)
                 window.location.reload()
             }
         }

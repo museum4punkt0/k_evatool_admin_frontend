@@ -30,7 +30,7 @@
             :key="'lang' + language.id"
             v-model:value="paramsLocal.lowestValueLabel[language.code]"
             name="meaningLowestValue"
-            :label="t('meaning_lowest_value')"
+            :label="t('label_lowest_value')"
             class="col-span-4"
         />
         <form-input
@@ -40,7 +40,7 @@
             :key="'lang' + language.id"
             v-model:value="paramsLocal.middleValueLabel[language.code]"
             name="meaningHighestValue"
-            :label="t('meaning_middle_value')"
+            :label="t('label_middle_value')"
             class="col-span-4"
         />
         <form-input
@@ -50,12 +50,12 @@
             :key="'lang' + language.id"
             v-model:value="paramsLocal.highestValueLabel[language.code]"
             name="meaningHighestValue"
-            :label="t('meaning_highest_value')"
+            :label="t('label_highest_value')"
             class="col-span-4"
         />
     </div>
 
-    <div class="grid grid-cols-12 gap-4 mt-3">
+    <!-- <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
             v-model:value="paramsLocal.meaningLowestValue"
             name="meaningLowestValue"
@@ -68,7 +68,7 @@
             :label="t('meaning_highest_value')"
             class="col-span-6"
         />
-    </div>
+    </div> -->
 
     <!-- <form-toggle
     v-model:enabled="paramsLocal.allowHalfSteps"

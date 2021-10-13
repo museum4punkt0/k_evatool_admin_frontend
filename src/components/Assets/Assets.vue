@@ -98,7 +98,7 @@
         </main>
         <aside>
             <h1 class="text-xl">Upload</h1>
-            {{ selectedAssets }}
+
             <dashboard class="mt-3" :uppy="uppy" :props="dashboardOptions" />
             <asset-selector-modal
                 v-model:selected-assets="selectedAssets"
@@ -190,6 +190,10 @@ export default {
                         removeFingerprintOnSuccess: true,
                         uploadDataDuringCreation: false,
                         chunkSize: 1000000,
+                        // Todo: Implement api authorization on TUS server
+                        /*headers: {
+                            Authorization: `Bearer ${store.state.users.token}`
+                        }*/
                     }),
         })
 

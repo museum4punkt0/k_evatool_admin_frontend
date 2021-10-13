@@ -66,8 +66,7 @@ export default (type, languages) => {
                 allowHalfSteps: false,
             }
         }
-        case TYPES.BINARY:
-        case TYPES.YAYNAY: {
+        case TYPES.BINARY: {
             const trueLabel = {}
             const falseLabel = {}
             /*const createTrueLabel = (language) => {
@@ -106,6 +105,23 @@ export default (type, languages) => {
                 falseValue: 'declined',
                 trueLabel,
                 falseLabel,
+            }
+        }
+        case TYPES.YAYNAY: {
+            const trueLabel = {}
+            const falseLabel = {}
+
+            languages.forEach((language) => {
+                trueLabel[language.code] = ''
+                falseLabel[language.code] = ''
+            })
+            return {
+                question: createDefaultQuestion(languages),
+                trueValue: 'accepted',
+                falseValue: 'declined',
+                trueLabel,
+                falseLabel,
+                assets: [],
             }
         }
         case TYPES.VOICEINPUT: {

@@ -19,4 +19,5 @@ app.use(router)
 app.use(store)
 app.use(i18n)
 app.use(DraggablePlugin)
+
 app.mount('#app')

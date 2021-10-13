@@ -66,6 +66,9 @@
                                     class="w-full rounded-lg mb-3"
                                     controls
                                     muted
+                                    @timeupdate="videoTimeUpdate"
+                                    @play="videoPlay"
+                                    @ended="videoEnded"
                                 >
                                     <source :src="asset.urls.url" />
                                 </video>
@@ -241,6 +244,8 @@ import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
 import useVuelidate from '@vuelidate/core'
 import { maxLength, required, minValue } from '@vuelidate/validators'
 
+import msToTimecode from 'ms-to-timecode'
+
 export default {
     name: 'TimeBasedStepsModal',
     components: {
@@ -334,6 +339,17 @@ export default {
             savingTimeBasedSteps.value = false
         }
 
+        const videoPlay = () => {}
+
+        const videoEnded = () => {}
+
+        const videoTimeUpdate = (event) => {
+            // Todo: Update timecode value
+            const timestamp = parseInt(event.target.currentTime * 1000)
+            const timecode = msToTimecode(timestamp, 25)
+            console.log(timecode)
+        }
+
         return {
             v$: useVuelidate(),
             modalIsOpen,
@@ -350,6 +366,9 @@ export default {
             surveyStep,
             asset,
             surveyStepId,
+            videoTimeUpdate,
+            videoPlay,
+            videoEnded,
         }
     },
     validations: {

@@ -131,10 +131,6 @@ export default {
             allowSkip: false,
         })
 
-        if (store.state.surveys.surveyStep) {
-            console.log('fas')
-        }
-
         const surveyElement = ref(null)
 
         const surveyElements = computed({

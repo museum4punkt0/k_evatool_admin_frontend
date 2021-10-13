@@ -89,7 +89,7 @@
                                             focus:border-transparent
                                             focus:placeholder-gray-400
                                         "
-                                        :placeholder="$t('search')"
+                                        :placeholder="t('search')"
                                         type="search"
                                     />
                                 </div>
@@ -107,29 +107,29 @@
                             <!-- Profile dropdown -->
                             <Menu as="div" class="relative flex-shrink-0">
                                 <!--                                <div>
-                                    <MenuButton
-                                        class="
-                                            bg-white
-                                            rounded-full
-                                            flex
-                                            text-sm
-                                            focus:outline-none
-                                            focus:ring-2
-                                            focus:ring-offset-2
-                                            focus:ring-blue-500
-                                        "
-                                    >
-                                        <span class="sr-only">
-                                            Open user menu
-                                        </span>
+                    <MenuButton
+                        class="
+                            bg-white
+                            rounded-full
+                            flex
+                            text-sm
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-blue-500
+                        "
+                    >
+                        <span class="sr-only">
+                            Open user menu
+                        </span>
 
-                                        <img
-                                            class="h-8 w-8 rounded-full"
-                                            src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
-                                            alt=""
-                                        />
-                                    </MenuButton>
-                                </div>-->
+                        <img
+                            class="h-8 w-8 rounded-full"
+                            src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                            alt=""
+                        />
+                    </MenuButton>
+                </div>-->
                                 <transition
                                     enter-active-class="transition ease-out duration-100"
                                     enter-from-class="transform opacity-0 scale-95"
@@ -230,6 +230,26 @@
             </div>
         </div>
     </div>
+    <div
+        v-if="viewportIncompatible"
+        class="
+            absolute
+            top-0
+            left-0
+            h-screen
+            w-screen
+            bg-gray-100
+            flex flex-col
+            justify-center
+            items-center
+            p-12
+        "
+    >
+        <exclamation-icon class="m-3 h-20 w-20 text-red-600" />
+        <h1 class="text-red-600 text-center">
+            {{ t('viewport_incompatible') }}
+        </h1>
+    </div>
 </template>
 
 <script>
@@ -250,12 +270,13 @@ import {
     XIcon,
     UserIcon,
     LogoutIcon,
+    ExclamationIcon,
 } from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
 import MainMenu from './components/MainMenu.vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -269,6 +290,7 @@ export default {
         MainMenu,
         Dialog,
         DialogOverlay,
+        ExclamationIcon,
         Menu,
         MenuButton,
         MenuItem,
@@ -286,8 +308,12 @@ export default {
         const mobileMenuOpen = ref(false)
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
         const loadingApp = ref(true)
         const { t } = useI18n()
+        let viewportIncompatible = ref(false)
+
+        const dedicatedRoutes = ['/confirm-invitation']
 
         store.dispatch('getApp')
 
@@ -301,6 +327,20 @@ export default {
             }
         }
 
+        router.beforeEach(() => {
+            console.log(navigator.userAgent)
+            if (
+                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                    navigator.userAgent,
+                ) ||
+                window.outerWidth <= 1024
+            ) {
+                viewportIncompatible.value = true
+            } else {
+                viewportIncompatible.value = false
+            }
+        })
+
         const loadApp = async () => {
             await store.dispatch('languages/getLanguages')
             await store.dispatch('elementTypes/getElementTypes')
@@ -313,8 +353,14 @@ export default {
             await store.dispatch('users/logoutUser')
         }
 
-        onMounted(async () => {
-            await checkLogin()
+        onMounted(() => {
+            setTimeout(async () => {
+                if (dedicatedRoutes.includes(route.path)) {
+                    loadingApp.value = false
+                } else {
+                    await checkLogin()
+                }
+            }, 0)
         })
 
         return {
@@ -325,6 +371,7 @@ export default {
             store,
             logoutUser,
             version,
+            viewportIncompatible,
         }
     },
 }

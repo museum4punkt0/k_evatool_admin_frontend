@@ -30,7 +30,7 @@ export default {
             const user = USERS.getUser(userId)
             commit('setUser', user)
         },
-        async loginUser({ commit, rootState }, payload) {
+        async loginUser({ commit, rootState, dispatch }, payload) {
             payload.grant_type = 'password'
             payload.client_id = rootState.app.client.id
             payload.client_secret = rootState.app.client.secret
@@ -43,7 +43,7 @@ export default {
 
             if (loginResponse.access_token) {
                 commit('setToken', loginResponse.access_token)
-                return this.dispatch('users/checkLogin')
+                return await dispatch('checkLogin')
             }
         },
         setToken({ commit }, token) {
