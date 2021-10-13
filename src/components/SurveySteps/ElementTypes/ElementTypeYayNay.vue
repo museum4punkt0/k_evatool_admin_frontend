@@ -63,24 +63,53 @@
             name="falseValue"
         />
     </div>
+    <div class="">
+        <button type="button" class="mt-3 primary" @click="openAssetSelector()">
+            Medien Auswahl
+        </button>
+        Selected: {{ selectedAssets }}
+        <asset-selector-modal
+            v-model:selected-assets="selectedAssets"
+            v-model:is-open="selectorModalIsOpen"
+        ></asset-selector-modal>
+        <table>
+            <tr v-for="(asset, i) in selectedAssetsObject" :key="asset.id">
+                <td class="text-lg">
+                    {{ i }}
+                </td>
+                <td class="text-lg">
+                    {{ asset.id }}
+                </td>
+                <td class="m-0 p-0">
+                    <img
+                        v-if="asset.urls.thumbnail"
+                        class="max-h-8 max-w-16"
+                        :alt="asset.filename"
+                        :src="asset.urls.thumbnail"
+                    />
+                </td>
+            </tr>
+        </table>
+    </div>
 </template>
 
 <script>
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
-
-import { computed, watch } from 'vue'
+import AssetSelectorModal from '../../Assets/AssetSelectorModal.vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { useState } from '../../../composables/state'
 
 import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
+
 const systemValueValidation = helpers.regex(/^[a-z0-9_]*$/)
 
 export default {
     name: 'ElementTypeYayNayQuestion',
-    components: { FormInput, LanguageSwitch },
+    components: { FormInput, LanguageSwitch, AssetSelectorModal },
     props: {
         params: {
             type: Object,
@@ -94,6 +123,10 @@ export default {
         const [selectedLanguage, setSelectedLanguage] = useState(
             store.state.languages.defaultLanguage,
         )
+
+        const selectedAssets = ref()
+        const selectorModalIsOpen = ref(false)
+        const selectedAssetsObject = ref()
 
         const paramsLocal = computed({
             get: () => props.params,
@@ -147,12 +180,40 @@ export default {
             { $scope: 'surveyElement' },
         )
 
+        const openAssetSelector = () => {
+            selectorModalIsOpen.value = true
+        }
+
+        const getSelectedAssets = () => {
+            selectedAssetsObject.value = store.state.assets.assets.filter(
+                (x) => selectedAssets.value.indexOf(x.id) > -1,
+            )
+            console.log(selectedAssetsObject)
+        }
+
+        const test = () => {
+            alert('a')
+        }
+
         watch(
             () => validateParams.value.$invalid,
             (invalid) => {
                 emit('isValid', !invalid)
             },
         )
+
+        watch(
+            () => selectorModalIsOpen.value,
+            (value) => {
+                console.log(value)
+                getSelectedAssets()
+            },
+        )
+
+        onMounted(() => {
+            selectedAssets.value = paramsLocal.value.assets
+            getSelectedAssets()
+        })
 
         return {
             validateParams,
@@ -161,6 +222,12 @@ export default {
             t,
             selectedLanguage,
             setSelectedLanguage,
+            selectedAssets,
+            selectorModalIsOpen,
+            openAssetSelector,
+            getSelectedAssets,
+            test,
+            selectedAssetsObject,
         }
     },
 }

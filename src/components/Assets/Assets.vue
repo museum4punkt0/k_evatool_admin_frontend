@@ -158,7 +158,7 @@ export default {
         const selectedAssets = ref(-1)
 
         const assetModalIsOpen = ref(false)
-        const selectorModalIsOpen = ref(true)
+        const selectorModalIsOpen = ref(false)
         const assetModalStepId = ref(-1)
 
         onMounted(() => {
