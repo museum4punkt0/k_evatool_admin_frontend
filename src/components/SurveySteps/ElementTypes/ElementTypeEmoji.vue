@@ -77,7 +77,7 @@ import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
 import { minLength, maxLength, required, helpers } from '@vuelidate/validators'
 
-const meaningValidation = helpers.regex(/^[a-z0-9_]*$/)
+const meaningValidation = helpers.regex(/^[a-z][a-z0-9_]*$/)
 
 import useVuelidate from '@vuelidate/core'
 
