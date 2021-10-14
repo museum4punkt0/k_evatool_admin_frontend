@@ -143,7 +143,11 @@
                                             selectedTimeBasedStep.stepId
                                         "
                                         :options="
-                                            store.state.surveys.survey.steps
+                                            store.state.surveys.survey.steps.filter(
+                                                (item) =>
+                                                    item.surveyElementType !==
+                                                    'video',
+                                            )
                                         "
                                         title-key="name"
                                         value-key="id"
