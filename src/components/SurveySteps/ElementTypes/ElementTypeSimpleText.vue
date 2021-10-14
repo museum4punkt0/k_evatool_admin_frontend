@@ -11,7 +11,7 @@
         )"
         :key="'lang' + language.id"
         :value="paramsLocal.text[language.code]"
-        @update:value="onUpdate(language, $event)"
+        @update:value="onTipTapUpdate(language, $event)"
     ></tip-tap>
 </template>
 
@@ -75,7 +75,7 @@ export default {
             },
         )
 
-        const onUpdate = (language, value) => {
+        const onTipTapUpdate = (language, value) => {
             paramsLocal.value.text[language.code] = value
             emit('update:params', paramsLocal.value)
         }
@@ -86,7 +86,7 @@ export default {
             paramsLocal,
             store,
             v$: paramsValidation,
-            onUpdate,
+            onTipTapUpdate,
         }
     },
 }

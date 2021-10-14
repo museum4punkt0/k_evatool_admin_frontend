@@ -5,16 +5,14 @@
             :active-language="selectedLanguage"
             @select="setSelectedLanguage($event)"
         />
-        <form-input
+        <tip-tap
             v-for="language in store.state.languages.languages.filter(
                 (item) => item.code === selectedLanguage.code,
             )"
-            :key="'question_lang' + language.id"
-            v-model:value="paramsLocal.question[language.code]"
-            class="mt-3"
-            :name="'question' + language.id"
-            :label="t('questions', 1) + ' (' + language.title + ')'"
-        />
+            :key="'lang' + language.id"
+            :value="paramsLocal.question[language.code]"
+            @update:value="onTipTapUpdate(language, $event)"
+        ></tip-tap>
     </div>
 </template>
 
@@ -27,10 +25,11 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import TipTap from '../../../components/Common/TipTap.vue'
 
 export default {
     name: 'ElementTypeMultipleChoiceQuestion',
-    components: { FormInput, TrashIcon, PlusIcon, LanguageSwitch },
+    components: { FormInput, TrashIcon, PlusIcon, LanguageSwitch, TipTap },
     props: {
         params: {
             type: Object,
@@ -84,6 +83,10 @@ export default {
                 emit('isValid', !invalid)
             },
         )
+        const onTipTapUpdate = (language, value) => {
+            paramsLocal.value.question[language.code] = value
+            emit('update:params', paramsLocal.value)
+        }
 
         return {
             store,
@@ -92,6 +95,7 @@ export default {
             v$: paramsValidation,
             selectedLanguage,
             setSelectedLanguage,
+            onTipTapUpdate,
         }
     },
 }

@@ -5,7 +5,16 @@
         @select="setSelectedLanguage($event)"
     />
 
-    <form-input
+    <tip-tap
+        v-for="language in store.state.languages.languages.filter(
+            (item) => item.code === selectedLanguage.code,
+        )"
+        :key="'lang' + language.id"
+        :value="paramsLocal.question[language.code]"
+        @update:value="onTipTapUpdate(language, $event)"
+    ></tip-tap>
+
+    <!-- <form-input
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
@@ -14,7 +23,7 @@
         :name="'lang' + language.id"
         class="mt-3"
         :label="t('questions', 1) + ' (' + language.title + ')'"
-    />
+    /> -->
     <div class="grid grid-cols-12 gap-4">
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -61,10 +70,11 @@ import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import TipTap from '../../../components/Common/TipTap.vue'
 
 export default {
     name: 'ElementTypeBinaryQuestion',
-    components: { LanguageSwitch, FormInput },
+    components: { LanguageSwitch, FormInput, TipTap },
     props: {
         params: {
             type: Object,
@@ -141,6 +151,11 @@ export default {
             selectedLanguage.value = language
         }
 
+        const onTipTapUpdate = (language, value) => {
+            paramsLocal.value.question[language.code] = value
+            emit('update:params', paramsLocal.value)
+        }
+
         return {
             store,
             paramsLocal,
@@ -148,6 +163,7 @@ export default {
             v$: paramsValidation,
             selectedLanguage,
             setSelectedLanguage,
+            onTipTapUpdate,
         }
     },
 }

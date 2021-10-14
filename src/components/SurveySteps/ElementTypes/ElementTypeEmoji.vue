@@ -4,7 +4,15 @@
         :active-language="selectedLanguage"
         @select="setSelectedLanguage($event)"
     />
-    <form-input
+    <tip-tap
+        v-for="language in store.state.languages.languages.filter(
+            (item) => item.code === selectedLanguage.code,
+        )"
+        :key="'lang' + language.id"
+        :value="paramsLocal.question[language.code]"
+        @update:value="onTipTapUpdate(language, $event)"
+    ></tip-tap>
+    <!-- <form-input
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
@@ -13,7 +21,7 @@
         class="mt-3"
         :name="'question' + language.id"
         :label="t('questions', 1) + ' (' + language.title + ')'"
-    />
+    /> -->
 
     <div v-if="paramsLocal.emojis.length > 0" class="table-wrap mt-3">
         <table>
@@ -63,6 +71,7 @@ import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import FormSelectEmoji from '../../Forms/FormSelectEmoji.vue'
+import TipTap from '../../../components/Common/TipTap.vue'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
@@ -74,7 +83,13 @@ import useVuelidate from '@vuelidate/core'
 
 export default {
     name: 'ElementTypeEmoji',
-    components: { FormSelectEmoji, FormInput, TrashIcon, LanguageSwitch },
+    components: {
+        FormSelectEmoji,
+        FormInput,
+        TrashIcon,
+        LanguageSwitch,
+        TipTap,
+    },
     props: {
         params: {
             type: Object,
@@ -192,6 +207,11 @@ export default {
             }
         }
 
+        const onTipTapUpdate = (language, value) => {
+            paramsLocal.value.question[language.code] = value
+            emit('update:params', paramsLocal.value)
+        }
+
         return {
             paramsLocal,
             selectedEmoji,
@@ -203,6 +223,7 @@ export default {
             setSelectedLanguage,
             validateParams,
             validateEmoji,
+            onTipTapUpdate,
         }
     },
 }

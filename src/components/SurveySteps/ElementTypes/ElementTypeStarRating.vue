@@ -4,16 +4,14 @@
         :active-language="selectedLanguage"
         @select="setSelectedLanguage($event)"
     />
-    <form-input
+    <tip-tap
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        class="mt-3"
-        :name="'lang' + language.id"
-        :label="t('questions', 1) + ' (' + language.title + ')'"
-    />
+        :value="paramsLocal.question[language.code]"
+        @update:value="onTipTapUpdate(language, $event)"
+    ></tip-tap>
 
     <form-input
         v-model:value="paramsLocal.numberOfStars"
@@ -84,12 +82,13 @@ import FormInput from '../../Forms/FormInput.vue'
 import FormToggle from '../../Forms/FormToggle.vue'
 import { useStore } from 'vuex'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import TipTap from '../../../components/Common/TipTap.vue'
 import useVuelidate from '@vuelidate/core'
 import { required, between, minLength, maxLength } from '@vuelidate/validators'
 
 export default {
     name: 'ElementTypeStarRating',
-    components: { FormToggle, FormInput, LanguageSwitch },
+    components: { FormToggle, FormInput, LanguageSwitch, TipTap },
     props: {
         params: {
             type: Object,
@@ -169,6 +168,10 @@ export default {
                 emit('isValid', !invalid)
             },
         )
+        const onTipTapUpdate = (language, value) => {
+            paramsLocal.value.question[language.code] = value
+            emit('update:params', paramsLocal.value)
+        }
 
         return {
             selectedLanguage,
@@ -177,6 +180,7 @@ export default {
             t,
             store,
             v$: paramsValidation,
+            onTipTapUpdate,
         }
     },
 }

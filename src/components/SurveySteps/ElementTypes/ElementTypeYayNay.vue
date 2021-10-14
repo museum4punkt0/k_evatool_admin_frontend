@@ -5,16 +5,14 @@
         @select="setSelectedLanguage($event)"
     />
 
-    <form-input
+    <tip-tap
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        :name="'lang' + language.id"
-        class="mt-3"
-        :label="t('questions', 1) + ' (' + language.title + ')'"
-    />
+        :value="paramsLocal.question[language.code]"
+        @update:value="onTipTapUpdate(language, $event)"
+    ></tip-tap>
 
     <div class="grid grid-cols-12 gap-4">
         <form-input
@@ -77,6 +75,7 @@
 <script>
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import TipTap from '../../../components/Common/TipTap.vue'
 
 import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
@@ -90,7 +89,7 @@ const systemValueValidation = helpers.regex(/^[a-z0-9_]*$/)
 
 export default {
     name: 'ElementTypeYayNayQuestion',
-    components: { FormInput, LanguageSwitch, AssetSelectorModal },
+    components: { FormInput, LanguageSwitch, AssetSelectorModal, TipTap },
     props: {
         params: {
             type: Object,
@@ -175,6 +174,11 @@ export default {
             emit('update:params', paramsLocal.value)
         }
 
+        const onTipTapUpdate = (language, value) => {
+            paramsLocal.value.question[language.code] = value
+            emit('update:params', paramsLocal.value)
+        }
+
         return {
             validateParams,
             store,
@@ -186,6 +190,7 @@ export default {
             setAssetSelectorModalOpen,
             onAssetsSelected,
             assets,
+            onTipTapUpdate,
         }
     },
 }
