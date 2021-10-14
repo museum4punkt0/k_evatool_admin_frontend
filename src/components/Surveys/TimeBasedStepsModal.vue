@@ -143,11 +143,13 @@
                                             selectedTimeBasedStep.stepId
                                         "
                                         :options="
-                                            store.state.surveys.survey.steps.filter(
-                                                (item) =>
-                                                    item.surveyElementType !==
-                                                    'video',
-                                            )
+                                            store.state.surveys.survey.steps
+                                                .filter(
+                                                    (item) =>
+                                                        item.surveyElementType !==
+                                                        'video',
+                                                )
+                                                .map(mapStepsAlreadyInUse)
                                         "
                                         title-key="name"
                                         value-key="id"
@@ -354,6 +356,17 @@ export default {
             console.log(timecode)
         }
 
+        const mapStepsAlreadyInUse = (step) => {
+            if (
+                timeBasedSteps.value
+                    .map((item) => item.stepId)
+                    .includes(step.id)
+            ) {
+                return { ...step, name: `${step.name} (already in use)` }
+            }
+            return step
+        }
+
         return {
             v$: useVuelidate(),
             modalIsOpen,
@@ -373,6 +386,7 @@ export default {
             videoTimeUpdate,
             videoPlay,
             videoEnded,
+            mapStepsAlreadyInUse,
         }
     },
     validations: {
