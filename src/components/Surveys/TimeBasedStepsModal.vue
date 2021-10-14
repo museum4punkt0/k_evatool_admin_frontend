@@ -174,7 +174,15 @@
                                         :label="t('descriptions', 1)"
                                         name="description"
                                     />
+                                    <form-toggle
+                                        v-model:enabled="
+                                            selectedTimeBasedStep.stopsVideo
+                                        "
+                                        class="my-3"
+                                        :label="t('stops_video')"
+                                    />
                                     <form-input
+                                        v-if="!selectedTimeBasedStep.stopsVideo"
                                         v-model:value="
                                             selectedTimeBasedStep.displayTime
                                         "
@@ -182,13 +190,6 @@
                                         :placeholder="t('display_time')"
                                         :label="t('display_time')"
                                         name="display-time"
-                                    />
-                                    <form-toggle
-                                        v-model:enabled="
-                                            selectedTimeBasedStep.stopsVideo
-                                        "
-                                        class="my-3"
-                                        :label="t('stops_video')"
                                     />
                                     <form-toggle
                                         v-model:enabled="
@@ -285,7 +286,7 @@ export default {
             stepId: -1,
             timecode: '00:00:00:00',
             stopsVideo: true,
-            displayTime: 5,
+            displayTime: 0,
             description: '',
             allowChangingAnswer: false,
         }
@@ -350,10 +351,9 @@ export default {
         const videoEnded = () => {}
 
         const videoTimeUpdate = (event) => {
-            // Todo: Update timecode value
             const timestamp = parseInt(event.target.currentTime * 1000)
             const timecode = msToTimecode(timestamp, 25)
-            console.log(timecode)
+            selectedTimeBasedStep.value.timecode = timecode
         }
 
         const mapStepsAlreadyInUse = (step) => {
