@@ -5,16 +5,14 @@
         @select="setSelectedLanguage($event)"
     />
 
-    <form-input
+    <tip-tap
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        v-model:value="paramsLocal.text[language.code]"
-        class="mt-3"
-        :name="'lang' + language.id"
-        :label="'Text (' + language.title + ')'"
-    />
+        :value="paramsLocal.text[language.code]"
+        @update:value="onUpdate(language, $event)"
+    ></tip-tap>
 </template>
 
 <script>
@@ -24,10 +22,11 @@ import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
+import TipTap from '../../../components/Common/TipTap.vue'
 
 export default {
     name: 'ElementTypeSimpleText',
-    components: { FormInput, LanguageSwitch },
+    components: { FormInput, LanguageSwitch, TipTap },
     props: {
         params: {
             type: Object,
@@ -76,12 +75,18 @@ export default {
             },
         )
 
+        const onUpdate = (language, value) => {
+            paramsLocal.value.text[language.code] = value
+            emit('update:params', paramsLocal.value)
+        }
+
         return {
             selectedLanguage,
             setSelectedLanguage,
             paramsLocal,
             store,
             v$: paramsValidation,
+            onUpdate,
         }
     },
 }
