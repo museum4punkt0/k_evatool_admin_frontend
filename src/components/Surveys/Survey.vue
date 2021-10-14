@@ -9,6 +9,14 @@
                 <button
                     class="primary"
                     :disabled="store.state.surveys.surveyStep"
+                    @click.prevent.stop="previewSurvey(survey.id)"
+                >
+                    <EyeIcon class="mx-1 h-5 w-5 pointer" />
+                </button>
+
+                <button
+                    class="primary"
+                    :disabled="store.state.surveys.surveyStep"
                     @click="newSurveyStep"
                 >
                     {{ t('action_add_survey_step') }}
@@ -51,6 +59,7 @@ import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
 import SurveyElement from './SurveyElement.vue'
 import { useI18n } from 'vue-i18n'
+import { EyeIcon } from '@heroicons/vue/outline'
 
 export default {
     components: {
@@ -61,6 +70,7 @@ export default {
         Button,
         Record,
         NodeEditor,
+        EyeIcon,
     },
     setup() {
         const id = ref()
@@ -99,6 +109,17 @@ export default {
         }
 
         const onScroll = () => {}
+        const previewSurvey = (surveyIdPreview) => {
+            window
+                .open(
+                    import.meta.env.VITE_PREVIEW_URL +
+                        '/#/?id=' +
+                        surveyIdPreview +
+                        '&demo=true',
+                    '_blank',
+                )
+                .focus()
+        }
 
         return {
             id,
@@ -112,6 +133,7 @@ export default {
             t,
             surveySaved,
             surveyStepDeleted,
+            previewSurvey,
         }
     },
 }
