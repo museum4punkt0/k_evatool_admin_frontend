@@ -70,7 +70,10 @@
                                     @play="videoPlay"
                                     @ended="videoEnded"
                                 >
-                                    <source :src="asset.urls.url" />
+                                    <source
+                                        :type="asset.mime"
+                                        :src="asset.urls.url"
+                                    />
                                 </video>
                                 <div
                                     v-if="timeBasedSteps?.length > 0"
@@ -143,13 +146,13 @@
                                             selectedTimeBasedStep.stepId
                                         "
                                         :options="
-                                            store.state.surveys.survey.steps
-                                                .filter(
+                                            store.state.surveys?.survey?.steps
+                                                ?.filter(
                                                     (item) =>
                                                         item.surveyElementType !==
                                                         'video',
                                                 )
-                                                .map(mapStepsAlreadyInUse)
+                                                ?.map(mapStepsAlreadyInUse)
                                         "
                                         title-key="name"
                                         value-key="id"
@@ -358,8 +361,8 @@ export default {
 
         const mapStepsAlreadyInUse = (step) => {
             if (
-                timeBasedSteps.value
-                    .map((item) => item.stepId)
+                timeBasedSteps?.value
+                    ?.map((item) => item.stepId)
                     .includes(step.id)
             ) {
                 return { ...step, name: `${step.name} (already in use)` }
