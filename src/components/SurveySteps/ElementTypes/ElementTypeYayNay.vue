@@ -11,6 +11,7 @@
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
+        class="my-3"
     />
 
     <!--    <tip-tap
