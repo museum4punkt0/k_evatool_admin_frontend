@@ -279,6 +279,11 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
+"@tinymce/tinymce-vue@^4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-vue/-/tinymce-vue-4.0.4.tgz#b47934f2d1e106ac9af7fa9ba0316a8c96ed314c"
+  integrity sha512-nLd96QK8P53dCm+oF6j2D5AXoZ9MCZyjybt7B98wXo2csfKd2Ozbjv9dlnRKCdEe/JZBG4KbwBEjXlwsaAGEvg==
+
 "@tiptap/core@^2.0.0-beta.125":
   version "2.0.0-beta.125"
   resolved "https://registry.yarnpkg.com/@tiptap/core/-/core-2.0.0-beta.125.tgz#672a86f21727614bfe8d5bf41544ce83ea4a7c87"

@@ -60,7 +60,7 @@
                                 {{ t('assets', 2) }}
                             </DialogTitle>
 
-                            <div class="mt-2">
+                            <div class="mt-2 grid grid-cols-3 gap-4">
                                 <div
                                     v-for="asset in assets.filter((item) => {
                                         return item.mime.startsWith(
@@ -70,19 +70,42 @@
                                     :key="'asset-' + asset.id"
                                     @click="selectAsset(asset.id)"
                                 >
-                                    <input
-                                        type="checkbox"
-                                        :checked="
-                                            selectedAssets.includes(asset.id)
+                                    <div
+                                        class="
+                                            pointer
+                                            relative
+                                            w-full
+                                            h-40
+                                            rounded-lg
+                                            overflow-hidden
                                         "
-                                    />
-                                    {{ asset.id }} {{ asset.filename }}
-
-                                    <img
-                                        :src="asset.urls.original"
-                                        alt=""
-                                        class="w-1/4"
-                                    />
+                                    >
+                                        <img
+                                            :src="asset.urls.original"
+                                            alt="Avatar"
+                                            class="object-cover w-full h-full"
+                                        />
+                                        <div
+                                            class="
+                                                absolute
+                                                w-full
+                                                py-2.5
+                                                bottom-0
+                                                inset-x-0
+                                                bg-gray-400
+                                                text-white text-xs text-center
+                                                leading-4
+                                            "
+                                            :class="{
+                                                'bg-green-500':
+                                                    selectedAssets.includes(
+                                                        asset.id,
+                                                    ),
+                                            }"
+                                        >
+                                            {{ asset.filename }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

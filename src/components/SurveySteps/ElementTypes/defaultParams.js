@@ -121,7 +121,7 @@ export default (type, languages) => {
                 falseValue: 'declined',
                 trueLabel,
                 falseLabel,
-                assets: [],
+                assetIds: [],
             }
         }
         case TYPES.VOICEINPUT: {

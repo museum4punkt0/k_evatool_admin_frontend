@@ -5,14 +5,22 @@
         @select="setSelectedLanguage($event)"
     />
 
-    <tip-tap
+    <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        :value="paramsLocal.question[language.code]"
-        @update:value="onTipTapUpdate(language, $event)"
-    ></tip-tap>
+        v-model:text="paramsLocal.question[language.code]"
+    />
+
+    <!--    <tip-tap
+      v-for="language in store.state.languages.languages.filter(
+          (item) => item.code === selectedLanguage.code,
+      )"
+      :key="'lang' + language.id"
+      :value="paramsLocal.question[language.code]"
+      @update:value="onTipTapUpdate(language, $event)"
+  ></tip-tap>-->
 
     <div class="grid grid-cols-12 gap-4">
         <form-input
@@ -53,7 +61,7 @@
     </div>
     <div class="grid grid-cols-6 gap-4 my-3">
         <img
-            v-for="asset in paramsLocal.assets"
+            v-for="asset in paramsLocal.assetIds"
             :key="`asset-${asset}`"
             class="rounded"
             :src="assets.find((item) => item.id === asset)?.urls.original"
@@ -65,7 +73,7 @@
     </button>
     <asset-selector-modal
         :is-open="assetSelectorModalOpen"
-        :selected-assets="paramsLocal.assets"
+        :selected-assets="paramsLocal.assetIds"
         mime-type-filter-prefix="image"
         @update:is-open="setAssetSelectorModalOpen"
         @update:selected-assets="onAssetsSelected"
@@ -76,6 +84,7 @@
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import TipTap from '../../../components/Common/TipTap.vue'
+import TinyMce from '../../../components/Common/TinyMce.vue'
 
 import { computed, watch } from 'vue'
 import { useStore } from 'vuex'
@@ -85,11 +94,18 @@ import { useState } from '../../../composables/state'
 import AssetSelectorModal from '../../Assets/AssetSelectorModal.vue'
 
 import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
+
 const systemValueValidation = helpers.regex(/^[a-z0-9_]*$/)
 
 export default {
     name: 'ElementTypeYayNayQuestion',
-    components: { FormInput, LanguageSwitch, AssetSelectorModal, TipTap },
+    components: {
+        TinyMce,
+        FormInput,
+        LanguageSwitch,
+        AssetSelectorModal,
+        TipTap,
+    },
     props: {
         params: {
             type: Object,
@@ -105,6 +121,8 @@ export default {
         const [selectedLanguage, setSelectedLanguage] = useState(
             store.state.languages.defaultLanguage,
         )
+
+        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
 
         const paramsLocal = computed({
             get: () => props.params,
@@ -170,7 +188,7 @@ export default {
         )
 
         const onAssetsSelected = (assets) => {
-            paramsLocal.value.assets = assets
+            paramsLocal.value.assetIds = assets
             emit('update:params', paramsLocal.value)
         }
 
@@ -191,6 +209,7 @@ export default {
             onAssetsSelected,
             assets,
             onTipTapUpdate,
+            tinyMceKey,
         }
     },
 }
