@@ -62,7 +62,7 @@
 
                             <div class="mt-2">
                                 <video
-                                    v-if="asset?.urls?.url"
+                                    v-if="asset?.urls?.original"
                                     class="w-full rounded-lg mb-3"
                                     controls
                                     muted
@@ -70,7 +70,7 @@
                                     @play="videoPlay"
                                     @ended="videoEnded"
                                 >
-                                    <source :src="asset.urls.url" />
+                                    <source :src="asset.urls.original" />
                                 </video>
                                 <div
                                     v-if="timeBasedSteps?.length > 0"

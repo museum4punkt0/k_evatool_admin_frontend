@@ -63,7 +63,7 @@
                             <div class="mt-2">
                                 <video
                                     v-if="asset.mime === 'video/mp4'"
-                                    :src="asset.urls?.url"
+                                    :src="asset.urls?.original"
                                     autoplay
                                     controls
                                 />
@@ -75,7 +75,7 @@
                                             'image/jpeg',
                                         ].includes(asset.mime)
                                     "
-                                    :src="asset.urls?.url"
+                                    :src="asset.urls?.original"
                                 />
                                 <template v-else>
                                     {{ asset }}

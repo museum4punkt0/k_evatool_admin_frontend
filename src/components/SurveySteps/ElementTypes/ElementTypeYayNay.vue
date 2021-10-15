@@ -56,7 +56,7 @@
             v-for="asset in paramsLocal.assets"
             :key="`asset-${asset}`"
             class="rounded"
-            :src="assets.find((item) => item.id === asset)?.urls.url"
+            :src="assets.find((item) => item.id === asset)?.urls.original"
             @click="setAssetSelectorModalOpen(true)"
         />
     </div>

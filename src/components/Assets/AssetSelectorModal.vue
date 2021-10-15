@@ -79,7 +79,7 @@
                                     {{ asset.id }} {{ asset.filename }}
 
                                     <img
-                                        :src="asset.urls.url"
+                                        :src="asset.urls.original"
                                         alt=""
                                         class="w-1/4"
                                     />
