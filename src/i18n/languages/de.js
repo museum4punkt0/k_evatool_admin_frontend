@@ -10,6 +10,7 @@ export default {
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
     action_new_survey_element: 'Neues Umfrage-Element',
+    action_open_preview: 'Preview öffnen',
     action_reload: 'Neu laden',
     action_save: 'Speichern',
     allow_changing_answer: 'Ändern der Antwort erlauben',

@@ -6,21 +6,23 @@
                     {{ t('surveys', 1) }}:
                     <strong>{{ survey?.name }}</strong>
                 </h1>
-                <button
-                    class="primary"
-                    :disabled="store.state.surveys.surveyStep"
-                    @click.prevent.stop="previewSurvey(survey.id)"
-                >
-                    <EyeIcon class="mx-1 h-5 w-5 pointer" />
-                </button>
-
-                <button
-                    class="primary"
-                    :disabled="store.state.surveys.surveyStep"
-                    @click="newSurveyStep"
-                >
-                    {{ t('action_add_survey_step') }}
-                </button>
+                <div class="justify-between items-center flex">
+                    <button
+                        class="primary mr-1"
+                        :disabled="store.state.surveys.surveyStep"
+                        @click.prevent.stop="previewSurvey(survey.id)"
+                    >
+                        <EyeIcon class="h-5 w-5 mr-2 pointer" />
+                        {{ t('action_open_preview') }}
+                    </button>
+                    <button
+                        class="primary"
+                        :disabled="store.state.surveys.surveyStep"
+                        @click="newSurveyStep"
+                    >
+                        {{ t('action_add_survey_step') }}
+                    </button>
+                </div>
             </div>
 
             <node-editor
