@@ -160,7 +160,27 @@
                                     ].includes(
                                         steps.find((x) => x.id === step.id)
                                             ?.surveyElementType,
-                                    )
+                                    ) ||
+                                    /*
+                                    TODO: tooltip
+                                    multiple choice && min===max===1*/
+                                    (steps.find((x) => x.id === step.id)
+                                        ?.surveyElementType ===
+                                        'multipleChoice' &&
+                                        store.state.surveyElements.surveyElements.find(
+                                            (element) =>
+                                                element.id ===
+                                                steps.find(
+                                                    (x) => x.id === step.id,
+                                                )?.surveyElementId,
+                                        ).params.minSelectable === 1 &&
+                                        store.state.surveyElements.surveyElements.find(
+                                            (element) =>
+                                                element.id ===
+                                                steps.find(
+                                                    (x) => x.id === step.id,
+                                                )?.surveyElementId,
+                                        ).params.maxSelectable === 1)
                                 "
                                 @click.prevent.stop="
                                     openResultBasedModal(step.id)
