@@ -42,7 +42,11 @@
             <action-button
                 :executing="savingSurveyStep"
                 :disabled="v$.surveyStep.$invalid"
-                :action-text="t('action_save')"
+                :action-text="
+                    surveySteps.find((step) => step.id === surveyStep.id)
+                        ? t('action_save')
+                        : t('action_add')
+                "
                 @execute="saveSurveyStep"
             />
 
@@ -119,6 +123,7 @@ export default {
         const store = useStore()
         const route = useRoute()
         const surveyId = route.params.id
+        const surveySteps = computed(() => store.state.surveys.survey.steps)
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
         const surveyElementId = ref(-1)
         const savingSurveyStep = ref(false)
@@ -214,6 +219,7 @@ export default {
             v$: useVuelidate(),
             surveyStep,
             surveyStepId,
+            surveySteps,
             store,
             saveSurveyStep,
             editSurveyElement,
