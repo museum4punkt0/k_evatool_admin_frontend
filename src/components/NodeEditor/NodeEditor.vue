@@ -41,6 +41,8 @@
                         bg-white
                         shadow
                         overflow-hidden
+                        h-full
+                        flex flex-col
                     "
                     :style="{
                         top: step?.position.y + 'px',
@@ -53,8 +55,8 @@
                         'border-1': draggedStep,
                     }"
                 >
-                    <div class="w-full flex flex-row h-16">
-                        <div class="inlets flex-none w-8">
+                    <div class="w-full flex flex-row flex-grow">
+                        <!-- <div class="inlets flex-none w-8">
                             <div
                                 class="
                                     h-full
@@ -64,7 +66,7 @@
                                     items-center
                                 "
                             ></div>
-                        </div>
+                        </div> -->
                         <div
                             class="node-content flex-auto"
                             @mousedown.prevent.stop="onMouseDown(step, $event)"
@@ -73,7 +75,7 @@
                                 class="
                                     pointer
                                     h-full
-                                    flex
+                                    flex-col
                                     items-center
                                     justify-center
                                 "
@@ -90,9 +92,50 @@
                                         }}
                                     </p>
                                 </div>
+                                <div class="text-center italic text-xs mt-4">
+                                    <div
+                                        v-if="
+                                            steps?.find((x) => x.id === step.id)
+                                                ?.surveyElementType === 'video'
+                                        "
+                                    >
+                                        TODO: video preview
+                                    </div>
+
+                                    <div
+                                        v-else-if="
+                                            steps?.find((x) => x.id === step.id)
+                                                ?.surveyElementType ===
+                                            'simpleText'
+                                        "
+                                    >
+                                        {{
+                                            store.state.surveyElements.surveyElements.find(
+                                                (element) =>
+                                                    element.id ===
+                                                    steps.find(
+                                                        (x) => x.id === step.id,
+                                                    )?.surveyElementId,
+                                            )?.params.text[defaultLanguage.code]
+                                        }}
+                                    </div>
+                                    <div v-else>
+                                        {{
+                                            store.state.surveyElements.surveyElements.find(
+                                                (element) =>
+                                                    element.id ===
+                                                    steps.find(
+                                                        (x) => x.id === step.id,
+                                                    )?.surveyElementId,
+                                            )?.params.question[
+                                                defaultLanguage.code
+                                            ]
+                                        }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="outlets flex-none w-8">
+                        <!-- <div class="outlets flex-none w-8">
                             <div
                                 class="
                                     h-full
@@ -103,7 +146,7 @@
                                 "
                                 @click="unlinkNextStep(step.id)"
                             ></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="w-full border-t">
                         <div class="flex flex-row h-9">
@@ -299,6 +342,9 @@ export default {
         const connections = ref([])
         const stepElements = ref({})
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
+        const defaultLanguage = computed(
+            () => store.state.languages.defaultLanguage,
+        )
         const width = 2000
         const height = 2000
 
@@ -577,6 +623,7 @@ export default {
         }
 
         return {
+            defaultLanguage,
             draggedStep,
             onMouseDown,
             onMouseMove,
@@ -621,7 +668,7 @@ height: 2000px; */
 
 .step {
     width: 200px;
-    height: 100px;
+    height: 150px;
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
 }
