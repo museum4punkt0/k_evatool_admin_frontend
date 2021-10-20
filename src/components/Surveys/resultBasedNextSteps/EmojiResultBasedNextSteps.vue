@@ -130,13 +130,6 @@ export default {
             store.dispatch('surveys/saveSurveyStep', surveyStep.value)
         }
 
-        // const saveSurveyStep = async () => {
-        //         savingTimeBasedSteps.value = true
-        //         surveyStep.value.timeBasedSteps = timeBasedSteps.value
-        //         await SURVEYS.saveSurveyStep(surveyStep, surveyStep.value.surveyId)
-        //         savingTimeBasedSteps.value = false
-        // }
-
         const validations = computed({
             get: () => {
                 return {

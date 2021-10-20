@@ -40,8 +40,6 @@
                         border-0
                         bg-white
                         shadow
-                        w-48
-                        h-24
                         overflow-hidden
                     "
                     :style="{
