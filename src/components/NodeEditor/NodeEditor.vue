@@ -497,10 +497,17 @@ export default {
         }
 
         const selectOutput = async (stepId) => {
-            selectedOutput.value = stepId
-            if (selectedInput.value > 0) {
-                await linkNextStep(selectedOutput.value, selectedInput.value)
-                emit('updated')
+            if (props.steps.find((step) => step.id === stepId).nextStepId) {
+                unlinkNextStep(stepId)
+            } else {
+                selectedOutput.value = stepId
+                if (selectedInput.value > 0) {
+                    await linkNextStep(
+                        selectedOutput.value,
+                        selectedInput.value,
+                    )
+                    emit('updated')
+                }
             }
         }
 
