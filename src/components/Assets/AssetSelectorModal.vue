@@ -66,6 +66,8 @@
                                 :props="dashboardOptions"
                             />
 
+                            {{ selectedAssets }}
+
                             <div class="mt-2 grid grid-cols-3 gap-4">
                                 <div
                                     v-for="asset in assets.filter((item) => {
@@ -87,10 +89,23 @@
                                         "
                                     >
                                         <img
+                                            v-if="
+                                                asset.mime.startsWith('image')
+                                            "
                                             :src="asset.urls.original"
                                             alt="Avatar"
                                             class="object-cover w-full h-full"
                                         />
+                                        <div
+                                            v-if="
+                                                asset.mime.startsWith('video')
+                                            "
+                                            alt="Avatar"
+                                            class="object-cover w-full h-full"
+                                        >
+                                            TODO: preview
+                                            {{ asset.urls.original }}
+                                        </div>
                                         <div
                                             class="
                                                 absolute
