@@ -1,20 +1,18 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main ref="container" class="flex-1 overflow-y-auto p-3">
-            <div class="flex mb-3 justify-between items-center">
+            <div class="flex mb-3 items-center">
                 <h1>
                     {{ t('surveys', 1) }}:
                     <strong>
                         {{ survey?.name }}
                     </strong>
                 </h1>
-                <div class="justify-between items-center flex">
-                    <PencilIcon
-                        class="h-5 w-5 mr-1"
-                        @click="
-                            setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
-                        "
-                    />
+                <PencilIcon
+                    class="h-5 w-5 ml-5"
+                    @click="setShowSurveyDetailsEdit(!showSurveyDetailsEdit)"
+                />
+                <div class="flex-grow items-center flex flex-row-reverse">
                     <button class="primary mr-1">show results</button>
                     <button
                         class="primary mr-1"
@@ -60,8 +58,10 @@
             ></survey-element>
             <survey-step
                 v-else-if="store.state.surveys.surveyStepId >= 0"
+                set-show
                 @saved="surveySaved"
                 @deleted="surveyStepDeleted"
+                @cancel="store.dispatch('surveys/unsetSurveyStepId')"
             />
             <node-browser v-else></node-browser>
         </aside>
@@ -127,6 +127,7 @@ export default {
 
         const surveySaved = () => {
             store.dispatch('surveys/getSurveySteps', surveyId.value)
+            setShowSurveyDetailsEdit(false)
         }
 
         const surveyStepDeleted = () => {

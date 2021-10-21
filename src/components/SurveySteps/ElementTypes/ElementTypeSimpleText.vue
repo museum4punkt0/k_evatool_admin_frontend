@@ -19,6 +19,7 @@
 <script>
 import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import useVuelidate from '@vuelidate/core'
@@ -37,6 +38,7 @@ export default {
     emits: ['update:params', 'isValid'],
     setup(props, { emit }) {
         const store = useStore()
+        const { t } = useI18n()
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
@@ -86,6 +88,7 @@ export default {
             setSelectedLanguage,
             paramsLocal,
             store,
+            t,
             v$: paramsValidation,
             onTipTapUpdate,
         }

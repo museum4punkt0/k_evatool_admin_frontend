@@ -40,6 +40,11 @@
             </div>
 
             <action-button
+                :executing="false"
+                :action-text="t('action_cancel')"
+                @execute="cancel"
+            />
+            <action-button
                 :executing="savingSurveyStep"
                 :disabled="v$.surveyStep.$invalid"
                 :action-text="
@@ -117,7 +122,7 @@ export default {
         FormToggle,
         DataViewer,
     },
-    emits: ['saved', 'deleted'],
+    emits: ['saved', 'deleted', 'cancel'],
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
@@ -233,6 +238,9 @@ export default {
             surveyElements,
             surveyElementId,
             savedSurveyElement,
+            cancel: () => {
+                emit('cancel')
+            },
         }
     },
     data() {

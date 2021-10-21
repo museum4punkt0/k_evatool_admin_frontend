@@ -94,7 +94,9 @@
                                 class="flex h-full justify-center items-center"
                             >
                                 <PencilIcon class="h-5 w-5" />
-                                (!)
+                                <span v-if="element.surveyStepsCount > 1">
+                                    (!)
+                                </span>
                             </span>
                         </action-button>
                     </div>
