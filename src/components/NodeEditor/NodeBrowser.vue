@@ -48,7 +48,7 @@
                 <div class="w-full border-t">
                     <div class="flex flex-row">
                         <action-button
-                            class="p-1 m-2"
+                            class="p-1 m-2 flex-grow"
                             color="bg-gray-200"
                             :action-text="'add to survey'"
                             @execute="addElementToSurvey(element)"
@@ -65,6 +65,18 @@
                                 <span v-if="element.surveyStepsCount > 1">
                                     (!)
                                 </span>
+                            </span>
+                        </action-button>
+                        <action-button
+                            class="p-1 m-2 disabled:opacity-25"
+                            color="bg-gray-200"
+                            :disabled="element.surveyStepsCount > 0"
+                            @execute="deleteElement(element)"
+                        >
+                            <span
+                                class="flex h-full justify-center items-center"
+                            >
+                                <TrashIcon class="h-5 w-5" />
                             </span>
                         </action-button>
                     </div>
@@ -84,7 +96,7 @@ import SurveyElement from '../Surveys/SurveyElement.vue'
 import ElementContent from './ElementContent.vue'
 import SURVEY_SERVICE from '../../services/surveyService'
 import ActionButton from '../Common/ActionButton.vue'
-import { PencilIcon } from '@heroicons/vue/outline'
+import { PencilIcon, TrashIcon } from '@heroicons/vue/outline'
 
 export default {
     name: 'NodeBrowser',
@@ -94,6 +106,7 @@ export default {
         SurveyElement,
         ElementContent,
         PencilIcon,
+        TrashIcon,
     },
     props: {},
     setup() {
@@ -146,6 +159,12 @@ export default {
         const editElement = async (element) => {
             await store.dispatch('surveyElements/setSurveyElement', element)
         }
+        const deleteElement = async (element) => {
+            await store.dispatch(
+                'surveyElements/deleteSurveyElement',
+                element.id,
+            )
+        }
 
         const [showSurveyElementForm, setShowSurveyElementForm] =
             useState(false)
@@ -189,6 +208,7 @@ export default {
             onElementCreated,
             addElementToSurvey,
             editElement,
+            deleteElement,
             showSurveyElementForm,
             setShowSurveyElementForm,
             filter,

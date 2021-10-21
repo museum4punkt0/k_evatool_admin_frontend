@@ -29,9 +29,8 @@ export default {
             }
         },
         async deleteSurveyElement({ commit }, surveyElementId) {
-            const surveyElements = await SURVEY_ELEMENTS.deleteSurveyElement(
-                surveyElementId,
-            )
+            await SURVEY_ELEMENTS.deleteSurveyElement(surveyElementId)
+            const surveyElements = await SURVEY_ELEMENTS.getSurveyElements()
             commit('setSurveyElements', surveyElements.data)
         },
         async setSurveyElement({ commit }, surveyElement) {

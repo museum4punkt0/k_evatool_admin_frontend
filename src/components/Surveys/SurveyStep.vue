@@ -33,37 +33,42 @@
                 />
                 <action-button
                     v-if="surveyStep.surveyElementId > 0"
-                    class="mt-6 ml-2"
-                    :action-text="t('action_edit_survey_element')"
+                    class="mt-6 ml-6"
+                    :color="'bg-gray-200'"
                     @execute="editSurveyElement"
-                />
+                >
+                    <PencilIcon class="h-5 w-5" />
+                </action-button>
             </div>
 
-            <action-button
-                :executing="false"
-                :action-text="t('action_cancel')"
-                @execute="cancel"
-            />
-            <action-button
-                :executing="savingSurveyStep"
-                :disabled="v$.surveyStep.$invalid"
-                :action-text="
-                    surveySteps.find((step) => step.id === surveyStep.id)
-                        ? t('action_save')
-                        : t('action_add')
-                "
-                @execute="saveSurveyStep"
-            />
+            <div class="flex flex-row">
+                <action-button
+                    class="flex-grow mr-2"
+                    :color="'bg-gray-200'"
+                    :executing="false"
+                    :action-text="t('action_cancel')"
+                    @execute="cancel"
+                />
+                <action-button
+                    :executing="savingSurveyStep"
+                    :disabled="v$.surveyStep.$invalid"
+                    :action-text="t('action_save')"
+                    class="mr-2"
+                    @execute="saveSurveyStep"
+                >
+                    <!-- <SaveIcon class="h-5 w-5" /> -->
+                </action-button>
 
-            <action-button
-                v-if="surveyStep.id"
-                color="danger"
-                class="ml-2"
-                :disabled="surveyStep.resultCount > 0"
-                :executing="deletingSurveyStep"
-                :action-text="t('action_delete')"
-                @execute="deleteSurveyStep"
-            />
+                <action-button
+                    v-if="surveyStep.id"
+                    color="danger"
+                    :disabled="surveyStep.resultCount > 0"
+                    :executing="deletingSurveyStep"
+                    @execute="deleteSurveyStep"
+                >
+                    <TrashIcon class="h-5 w-5" />
+                </action-button>
+            </div>
 
             <p
                 v-if="surveyStep.resultCount > 0"
@@ -111,6 +116,7 @@ import { useI18n } from 'vue-i18n'
 
 import SURVEY_SERVICE from '../../services/surveyService'
 import { useRoute } from 'vue-router'
+import { PencilIcon, TrashIcon, SaveIcon } from '@heroicons/vue/outline'
 
 export default {
     name: 'SurveyStep',
@@ -121,6 +127,9 @@ export default {
         SurveyElement,
         FormToggle,
         DataViewer,
+        PencilIcon,
+        TrashIcon,
+        SaveIcon,
     },
     emits: ['saved', 'deleted', 'cancel'],
     setup(props, { emit }) {

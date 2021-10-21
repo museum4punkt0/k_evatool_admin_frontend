@@ -73,19 +73,21 @@
         />
     </div>
 
-    <action-button
-        :disabled="validator.$invalid || !paramsValid"
-        :executing="savingSurveyElement"
-        :action-text="t('action_save')"
-        @execute="saveSurveyElement"
-    />
-
-    <action-button
-        color="danger"
-        class="ml-2"
-        :action-text="t('action_cancel')"
-        @execute="cancelEdit"
-    />
+    <div class="flex flex-row">
+        <action-button
+            :color="'bg-gray-200'"
+            class="mr-2 p-2"
+            :action-text="t('action_cancel')"
+            @execute="cancelEdit"
+        />
+        <action-button
+            class="flex-grow p-2"
+            :disabled="validator.$invalid || !paramsValid"
+            :executing="savingSurveyElement"
+            :action-text="t('action_save')"
+            @execute="saveSurveyElement"
+        />
+    </div>
 
     <data-viewer class="mt-3" :data="surveyElement" />
 </template>
