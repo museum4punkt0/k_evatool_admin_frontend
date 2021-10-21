@@ -27,39 +27,7 @@
             />
             <div
                 v-for="element in surveyElements
-                    .filter((item) => {
-                        /*
-                        const questionEntries = item.params.question
-                            ? Object.entries(item.params.question)
-                            : []
-                        const textEntries = item.params.text
-                            ? Object.entries(item.params.text)
-                            : []
-                        let includedInQuestionOrText = false
-                        const allEntries = [...questionEntries, ...textEntries]
-                        allEntries.forEach((entry) => {
-                            if (
-                                entry[1]
-                                    .toLowerCase()
-                                    .includes(elementSearchQuery.toLowerCase())
-                            )
-                                ª
-                            includedInQuestionOrText = true
-                        })
-                            includedInQuestionOrText ||
-                            */
-                        return (
-                            item.name
-                                .toLowerCase()
-                                .includes(elementSearchQuery.toLowerCase()) ||
-                            item.description
-                                .toLowerCase()
-                                .includes(elementSearchQuery.toLowerCase()) ||
-                            item.surveyElementType
-                                .toLowerCase()
-                                .includes(elementSearchQuery.toLowerCase())
-                        )
-                    })
+                    .filter(filter)
                     .sort((a, b) => b.createdAt - a.createdAt)"
                 :key="element.id"
                 class="
@@ -181,6 +149,37 @@ export default {
 
         const [showSurveyElementForm, setShowSurveyElementForm] =
             useState(false)
+
+        const filter = (item) => {
+            const questionEntries = item.params.question
+                ? Object.entries(item.params.question)
+                : []
+            const textEntries = item.params.text
+                ? Object.entries(item.params.text)
+                : []
+            let includedInQuestionOrText = false
+            const allEntries = [...questionEntries, ...textEntries]
+            allEntries.forEach((entry) => {
+                if (
+                    entry[1]
+                        .toLowerCase()
+                        .includes(elementSearchQuery.value.toLowerCase())
+                )
+                    includedInQuestionOrText = true
+            })
+            return (
+                includedInQuestionOrText ||
+                item.name
+                    .toLowerCase()
+                    .includes(elementSearchQuery.value.toLowerCase()) ||
+                item.description
+                    .toLowerCase()
+                    .includes(elementSearchQuery.value.toLowerCase()) ||
+                item.surveyElementType
+                    .toLowerCase()
+                    .includes(elementSearchQuery.value.toLowerCase())
+            )
+        }
         return {
             store,
             t,
@@ -192,6 +191,7 @@ export default {
             editElement,
             showSurveyElementForm,
             setShowSurveyElementForm,
+            filter,
         }
     },
 }
