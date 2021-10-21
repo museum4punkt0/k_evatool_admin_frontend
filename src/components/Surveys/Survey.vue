@@ -9,7 +9,12 @@
                     </strong>
                 </h1>
                 <div class="justify-between items-center flex">
-                    <PencilIcon class="h-5 w-5 mr-1" />
+                    <PencilIcon
+                        class="h-5 w-5 mr-1"
+                        @click="
+                            setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
+                        "
+                    />
                     <button class="primary mr-1">show results</button>
                     <button
                         class="primary mr-1"
@@ -37,8 +42,14 @@
             />
         </main>
         <aside>
+            <survey-details
+                v-if="showSurveyDetailsEdit"
+                :survey-id="surveyId"
+                :reset-after-save="false"
+                @saved="surveySaved"
+            />
             <survey-element
-                v-if="store.state.surveyElements.surveyElement"
+                v-else-if="store.state.surveyElements.surveyElement"
                 :survey-element-id="
                     store.state.surveyElements.surveyElement?.id
                 "
@@ -53,12 +64,6 @@
                 @deleted="surveyStepDeleted"
             />
             <node-browser v-else></node-browser>
-
-            <!-- <survey-details
-                :survey-id="surveyId"
-                :reset-after-save="false"
-                @saved="surveySaved"
-            /> -->
         </aside>
     </div>
 </template>
@@ -67,6 +72,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import { useState } from '../../composables/state'
 import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
 import SurveyElement from './SurveyElement.vue'
@@ -97,6 +103,8 @@ export default {
         const nodeEditor = ref(null)
         const route = useRoute()
         const store = useStore()
+        const [showSurveyDetailsEdit, setShowSurveyDetailsEdit] =
+            useState(false)
         const surveyId = ref(parseInt(route.params.id))
         const survey = computed(() => store.state.surveys.survey)
         const container = ref(null)
@@ -153,6 +161,8 @@ export default {
             surveySaved,
             surveyStepDeleted,
             previewSurvey,
+            showSurveyDetailsEdit,
+            setShowSurveyDetailsEdit,
         }
     },
 }

@@ -11,10 +11,15 @@
                 TODO: video preview
             </div>
 
-            <div v-else-if="element.surveyElementType === 'simpleText'">
+            <div
+                v-else-if="
+                    element.surveyElementType === 'simpleText' &&
+                    element?.params?.text
+                "
+            >
                 {{ element.params.text[defaultLanguage.code] }}
             </div>
-            <div v-else>
+            <div v-else-if="element.params?.question !== null">
                 {{ element.params.question[defaultLanguage.code] }}
             </div>
         </div>
