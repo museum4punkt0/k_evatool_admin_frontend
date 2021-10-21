@@ -5,6 +5,7 @@
         @select="setSelectedLanguage($event)"
     />
 
+    <label>{{ t('texts', 1) }}</label>
     <tip-tap
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,

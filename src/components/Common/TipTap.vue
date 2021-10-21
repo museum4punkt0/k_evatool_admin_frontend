@@ -1,31 +1,13 @@
 <template>
-    <div class="tiptap">
+    <div class="tiptap border-gray-800 border mt-2 mb-2">
         <div v-if="editor" class="toolbar bg-gray-200">
             <button
-                class="
-                    text-black
-                    px-2
-                    py-1
-                    text-sm
-                    flex-auto
-                    pointer
-                    bg-gray-500
-                "
                 :class="{ 'is-active': editor.isActive('bold') }"
                 @click="editor.chain().focus().toggleBold().run()"
             >
                 bold
             </button>
             <button
-                class="
-                    text-black
-                    px-2
-                    py-1
-                    text-sm
-                    flex-auto
-                    pointer
-                    bg-gray-500
-                "
                 :class="{ 'is-active': editor.isActive('italic') }"
                 @click="editor.chain().focus().toggleItalic().run()"
             >
@@ -116,30 +98,12 @@
                 h6
             </button> -->
             <button
-                class="
-                    text-black
-                    px-2
-                    py-1
-                    text-sm
-                    flex-auto
-                    pointer
-                    bg-gray-500
-                "
                 :class="{ 'is-active': editor.isActive('bulletList') }"
                 @click="editor.chain().focus().toggleBulletList().run()"
             >
                 bullet list
             </button>
             <button
-                class="
-                    text-black
-                    px-2
-                    py-1
-                    text-sm
-                    flex-auto
-                    pointer
-                    bg-gray-500
-                "
                 :class="{ 'is-active': editor.isActive('orderedList') }"
                 @click="editor.chain().focus().toggleOrderedList().run()"
             >
@@ -163,25 +127,12 @@
             <button @click="editor.chain().focus().setHardBreak().run()">
                 hard break
             </button> -->
-            <button
-                class="
-                    text-black
-                    px-2
-                    py-1
-                    text-sm
-                    flex-auto
-                    pointer
-                    bg-gray-500
-                "
-                @click="editor.chain().focus().undo().run()"
-            >
-                undo
-            </button>
+            <!-- <button @click="editor.chain().focus().undo().run()">undo</button> -->
             <!-- <button @click="editor.chain().focus().redo().run()">redo</button> -->
         </div>
         <editor-content
             :editor="editor"
-            class="bg-gray-50 border-black border"
+            class="editor bg-gray-50 m-2"
         ></editor-content>
     </div>
 </template>
@@ -205,7 +156,6 @@ export default {
             extensions: [StarterKit],
             onUpdate({ editor }) {
                 emit('update:value', editor.getHTML())
-                console.log(editor.getHTML())
             },
         })
         return {
@@ -217,5 +167,14 @@ export default {
 <style scoped>
 button {
     margin: 5px;
+    border-radius: 0.5rem;
+    --tw-bg-opacity: 1;
+    background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
+    padding: 4px;
+}
+button.is-active {
+    --tw-bg-opacity: 1;
+    border-width: 2px;
+    border-color: rgba(30, 64, 175, var(--tw-bg-opacity));
 }
 </style>
