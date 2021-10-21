@@ -29,9 +29,15 @@
                 v-for="element in surveyElements
                     .filter(
                         (item) =>
-                            item.name.includes(elementSearchQuery) ||
-                            item.description.includes(elementSearchQuery) ||
-                            item.surveyElementType.includes(elementSearchQuery),
+                            item.name
+                                .toLowerCase()
+                                .includes(elementSearchQuery.toLowerCase()) ||
+                            item.description
+                                .toLowerCase()
+                                .includes(elementSearchQuery.toLowerCase()) ||
+                            item.surveyElementType
+                                .toLowerCase()
+                                .includes(elementSearchQuery.toLowerCase()),
                     )
                     .sort((a, b) => b.createdAt - a.createdAt)"
                 :key="element.id"
@@ -118,6 +124,10 @@ export default {
                     (item) => item.id === event,
                 )?.name
             setShowSurveyElementForm(false)
+            store.dispatch('notifications/addSuccess', {
+                message:
+                    'successfully created survey element. it can be added to the survey now.',
+            })
         }
         const addElementToSurvey = async (element) => {
             savingSurveyStep.value = true
@@ -137,6 +147,10 @@ export default {
             // await getSurveyStep()
             // emit('saved')
             savingSurveyStep.value = false
+            store.dispatch('notifications/addSuccess', {
+                message:
+                    'successfully added survey step. it can be patched now.',
+            })
         }
         const editElement = async (element) => {
             await store.dispatch('surveyElements/setSurveyElement', element)

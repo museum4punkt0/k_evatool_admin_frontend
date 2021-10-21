@@ -1,59 +1,49 @@
 <template>
-    <Container v-if="notifications.length > 0">
-        <Item v-for="notification in notifications" :key="notification.id">
-            <Message>
-                {{ notification.type }}:
+    <ul v-if="notifications.length > 0" class="notifications">
+        <li
+            v-for="notification in notifications"
+            :key="notification.id"
+            class="flex text-black p-4 border border-black"
+            :class="{
+                'bg-white': notification.type === TYPES.INFO,
+                'bg-green-400': notification.type === TYPES.SUCCESS,
+                'bg-yellow-400': notification.type === TYPES.WARNING,
+                'bg-red-400': notification.type === TYPES.ERROR,
+            }"
+        >
+            <div class="flex-grow">
+                <!-- {{ notification.type }}: -->
                 {{ notification.message }}
-            </Message>
-            <Actions>
-                <Button @click="handlers.onRemove(notification)">
-                    <font-awesome-icon :icon="['fas', 'times']" />
-                </Button>
-            </Actions>
-        </Item>
-    </Container>
+            </div>
+            <div>
+                <TrashIcon
+                    class="h-5 w-5"
+                    @click="handlers.onRemove(notification)"
+                />
+            </div>
+        </li>
+    </ul>
 </template>
 
 <script>
+import { TrashIcon } from '@heroicons/vue/outline'
 import { createNamespacedHelpers } from 'vuex-composition-helpers'
-import styled from 'vue3-styled-components'
-import Button from '../Common/Button'
+import { TYPES } from '../../store/notifications'
 const { useState, useActions } = createNamespacedHelpers('notifications')
-
-const Container = styled.ul`
-    position: absolute;
-    bottom: 48px;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.9);
-    padding: 24px;
-    color: white;
-    width: 50vw;
-`
-const Item = styled.li`
-    display: flex;
-`
-const Message = styled.div`
-    flex-grow: 1;
-`
-const Actions = styled.div``
 
 export default {
     components: {
-        Container,
-        Item,
-        Message,
-        Actions,
-        Button,
+        TrashIcon,
     },
     setup() {
         const { notifications } = useState(['notifications'])
-        const { remove, addWarning } = useActions(['remove', 'addWarning'])
+        const { remove } = useActions(['remove'])
 
         const onRemove = (notification) => {
             remove({ notification })
         }
-        addWarning({ message: 'testmessage' })
         return {
+            TYPES,
             notifications,
             handlers: {
                 onRemove,
@@ -63,4 +53,12 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.notifications {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 50vw;
+    z-index: 10001;
+}
+</style>

@@ -1,17 +1,19 @@
-const initialState = {
-    notifications: [],
-}
-const types = {
+const TYPES = {
     INFO: 'INFO',
+    SUCCESS: 'SUCCESS',
     WARNING: 'WARNING',
     ERROR: 'ERROR',
 }
 const durations = {
-    INFO: 10000,
-    WARNING: 10000,
+    INFO: 5000,
+    SUCCESS: 5000,
+    WARNING: 5000,
     ERROR: 20000,
 }
 let idCounter = 1
+const initialState = {
+    notifications: [],
+}
 export default {
     namespaced: true,
     state: () => initialState,
@@ -39,7 +41,7 @@ export default {
             })
         },
         addInfo({ commit }, { message }) {
-            const notification = { id: idCounter++, type: types.INFO, message }
+            const notification = { id: idCounter++, type: TYPES.INFO, message }
             return new Promise((resolve) => {
                 commit('add', notification)
                 setTimeout(() => {
@@ -48,10 +50,26 @@ export default {
                 resolve(notification)
             })
         },
+
+        addSuccess({ commit }, { message }) {
+            const notification = {
+                id: idCounter++,
+                type: TYPES.SUCCESS,
+                message,
+            }
+            return new Promise((resolve) => {
+                commit('add', notification)
+                setTimeout(() => {
+                    commit('remove', notification)
+                }, durations.SUCCESS)
+                resolve(notification)
+            })
+        },
+
         addWarning({ commit }, { message }) {
             const notification = {
                 id: idCounter++,
-                type: types.WARNING,
+                type: TYPES.WARNING,
                 message,
             }
             return new Promise((resolve) => {
@@ -65,7 +83,7 @@ export default {
         addError({ commit }, { message }) {
             const notification = {
                 id: idCounter++,
-                type: types.ERROR,
+                type: TYPES.ERROR,
                 message,
             }
             return new Promise((resolve) => {
@@ -85,3 +103,4 @@ export default {
     },
     getters: {},
 }
+export { TYPES }

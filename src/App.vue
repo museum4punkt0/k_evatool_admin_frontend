@@ -230,6 +230,7 @@
             </div>
         </div>
     </div>
+    <notifications></notifications>
     <div
         v-if="viewportIncompatible"
         class="
@@ -274,6 +275,7 @@ import {
 } from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
 import MainMenu from './components/MainMenu.vue'
+import Notifications from './components/Notifications/Notifications.vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -303,6 +305,7 @@ export default {
         XIcon,
         UserIcon,
         LogoutIcon,
+        Notifications,
     },
     setup() {
         const mobileMenuOpen = ref(false)
