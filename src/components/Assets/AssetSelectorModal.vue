@@ -66,8 +66,6 @@
                                 :props="dashboardOptions"
                             />
 
-                            {{ selectedAssets }}
-
                             <div class="mt-2 grid grid-cols-3 gap-4">
                                 <div
                                     v-for="asset in assets.filter((item) => {
@@ -96,16 +94,19 @@
                                             alt="Avatar"
                                             class="object-cover w-full h-full"
                                         />
-                                        <div
+
+                                        <video
                                             v-if="
                                                 asset.mime.startsWith('video')
                                             "
-                                            alt="Avatar"
-                                            class="object-cover w-full h-full"
+                                            class="rounded"
+                                            controls
                                         >
-                                            TODO: preview
-                                            {{ asset.urls.original }}
-                                        </div>
+                                            <source
+                                                :src="asset.urls.original"
+                                                type="video/mp4"
+                                            />
+                                        </video>
                                         <div
                                             class="
                                                 absolute
