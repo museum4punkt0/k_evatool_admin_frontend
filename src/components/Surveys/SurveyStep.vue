@@ -43,30 +43,31 @@
 
             <div class="flex flex-row">
                 <action-button
-                    class="flex-grow mr-2"
+                    class="mr-2"
                     :color="'bg-gray-200'"
                     :executing="false"
                     :action-text="t('action_cancel')"
                     @execute="cancel"
                 />
-                <action-button
-                    :executing="savingSurveyStep"
-                    :disabled="v$.surveyStep.$invalid"
-                    :action-text="t('action_save')"
-                    class="mr-2"
-                    @execute="saveSurveyStep"
-                >
-                    <!-- <SaveIcon class="h-5 w-5" /> -->
-                </action-button>
 
                 <action-button
                     v-if="surveyStep.id"
                     color="danger"
                     :disabled="surveyStep.resultCount > 0"
                     :executing="deletingSurveyStep"
+                    class="mr-2"
                     @execute="deleteSurveyStep"
                 >
                     <TrashIcon class="h-5 w-5" />
+                </action-button>
+                <action-button
+                    :executing="savingSurveyStep"
+                    :disabled="v$.surveyStep.$invalid"
+                    :action-text="t('action_save')"
+                    class="flex-grow"
+                    @execute="saveSurveyStep"
+                >
+                    <!-- <SaveIcon class="h-5 w-5" /> -->
                 </action-button>
             </div>
 

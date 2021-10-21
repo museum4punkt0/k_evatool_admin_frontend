@@ -16,11 +16,21 @@
         type="text"
         :label="t('slugs', 1)"
     />
-    <action-button
-        :disabled="v$.$invalid || surveySaving"
-        :action-text="t('action_save')"
-        @click="saveSurvey"
-    />
+    <div class="flex flex-row">
+        <action-button
+            :action-text="t('action_cancel')"
+            class="mr-2"
+            :color="'bg-gray-200'"
+            :executing="false"
+            @click="saveSurvey"
+        />
+        <action-button
+            class="flex-grow"
+            :disabled="v$.$invalid || surveySaving"
+            :action-text="t('action_save')"
+            @click="store.dispatch('surveyElements/setSurveyElement', null)"
+        />
+    </div>
 
     <data-viewer class="mt-3" :data="survey" />
 </template>
@@ -45,7 +55,7 @@ export default {
         surveyId: { type: Number, default: -1 },
         resetAfterSave: { type: Boolean, default: true },
     },
-    emits: ['saved'],
+    emits: ['saved', 'cancel'],
     setup: function (props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
