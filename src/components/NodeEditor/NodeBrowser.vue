@@ -27,8 +27,28 @@
             />
             <div
                 v-for="element in surveyElements
-                    .filter(
-                        (item) =>
+                    .filter((item) => {
+                        /*
+                        const questionEntries = item.params.question
+                            ? Object.entries(item.params.question)
+                            : []
+                        const textEntries = item.params.text
+                            ? Object.entries(item.params.text)
+                            : []
+                        let includedInQuestionOrText = false
+                        const allEntries = [...questionEntries, ...textEntries]
+                        allEntries.forEach((entry) => {
+                            if (
+                                entry[1]
+                                    .toLowerCase()
+                                    .includes(elementSearchQuery.toLowerCase())
+                            )
+                                ª
+                            includedInQuestionOrText = true
+                        })
+                            includedInQuestionOrText ||
+                            */
+                        return (
                             item.name
                                 .toLowerCase()
                                 .includes(elementSearchQuery.toLowerCase()) ||
@@ -37,8 +57,9 @@
                                 .includes(elementSearchQuery.toLowerCase()) ||
                             item.surveyElementType
                                 .toLowerCase()
-                                .includes(elementSearchQuery.toLowerCase()),
-                    )
+                                .includes(elementSearchQuery.toLowerCase())
+                        )
+                    })
                     .sort((a, b) => b.createdAt - a.createdAt)"
                 :key="element.id"
                 class="

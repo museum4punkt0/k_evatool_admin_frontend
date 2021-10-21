@@ -6,8 +6,7 @@
                 class="node-editor"
                 :style="{ width: `${width}px`, height: `${height}px` }"
                 @mousemove="onMouseMove"
-                @mouseup="onMouseUp"
-                @click="deselectStep"
+                @mouseup.prevent.stop="onMouseUp"
                 @mouseleave="onMouseUp"
             >
                 <connection
@@ -27,6 +26,7 @@
                     :width="width"
                     :dashed="connection.start.outlet !== 'next'"
                     :label="connection.label"
+                    @click.prevent.stop="deselectStep"
                 ></connection>
                 <div
                     v-for="step in adminLayout"
@@ -176,7 +176,7 @@
                                     <switch-horizontal-icon class="h-5 w-5" />
                                 </span>
                             </button>
-                            <button
+                            <!-- <button
                                 class="flex-1 disabled:opacity-25"
                                 :disabled="
                                     store.state.surveys.selectedSurveyStepId ===
@@ -194,7 +194,29 @@
                                 >
                                     <PencilIcon class="h-5 w-5" />
                                 </span>
-                            </button>
+                            </button> -->
+                            <!-- <button
+                                class="flex-1 disabled:opacity-25"
+                                @click.prevent.stop="
+                                    toggleSkippableStep(step.id)
+                                "
+                            > -->
+                            <span
+                                class="flex h-full justify-center items-center"
+                            >
+                                <FastForwardIcon
+                                    class="h-5 w-5"
+                                    :class="{
+                                        'text-blue-800':
+                                            store.state.surveys.survey.steps.find(
+                                                (item) => item.id === step.id,
+                                            )?.allowSkip,
+                                    }"
+                                />
+                            </span>
+                            <!-- </button> -->
+
+                            <!-- :label="t('allow_skip')" -->
                             <div
                                 class="flex-1 pointer"
                                 :class="{
@@ -232,6 +254,7 @@
 <script>
 import { computed, onMounted, onUpdated, ref, watch } from 'vue'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 import Connection from './Connection.vue'
 
 import {
@@ -239,6 +262,7 @@ import {
     ArrowRightIcon,
     ClockIcon,
     PencilIcon,
+    FastForwardIcon,
     SwitchHorizontalIcon,
 } from '@heroicons/vue/outline'
 
@@ -258,6 +282,7 @@ export default {
         ArrowLeftIcon,
         ArrowRightIcon,
         PencilIcon,
+        FastForwardIcon,
         SwitchHorizontalIcon,
         ElementContent,
     },
@@ -278,6 +303,7 @@ export default {
     emits: ['updated'],
     setup(props, { emit }) {
         const store = useStore()
+        const { t } = useI18n()
         const draggedStep = ref(null)
         const connections = ref([])
         const stepElements = ref({})
@@ -443,6 +469,7 @@ export default {
                 x: e.clientX - nodeEditorRect.left,
                 y: e.clientY - nodeEditorRect.top,
             }
+            selectSurveyStep(step.id)
         }
 
         const selectSurveyStep = async (stepId) => {
@@ -562,7 +589,12 @@ export default {
             resultBasedModalStepId.value = stepId
         }
 
+        const toggleSkippableStep = async (stepId) => {
+            console.log('toggle skippable', stepId)
+        }
+
         return {
+            t,
             defaultLanguage,
             draggedStep,
             onMouseDown,
@@ -588,6 +620,7 @@ export default {
             connections,
             stepElements,
             getStepElementPosition,
+            toggleSkippableStep,
         }
     },
 }
