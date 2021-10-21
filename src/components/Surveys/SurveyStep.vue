@@ -73,10 +73,10 @@
 
             <data-viewer class="mt-3" :data="surveyStep" />
 
-            <hr class="mt-4 mb-2" />
+            <!-- <hr class="mt-4 mb-2" />
             <button class="primary" @click="newSurveyElement">
                 {{ t('action_new_survey_element') }}
-            </button>
+            </button> -->
         </div>
     </template>
     <survey-element

@@ -7,6 +7,7 @@
         @click="emitExecute"
     >
         {{ actionText }}
+        <slot v-if="!actionText"></slot>
     </button>
 </template>
 
@@ -28,7 +29,7 @@ export default {
         },
         actionText: {
             type: String,
-            default: 'g',
+            default: '',
         },
     },
     emits: ['execute'],

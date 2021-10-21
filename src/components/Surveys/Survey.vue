@@ -4,9 +4,13 @@
             <div class="flex mb-3 justify-between items-center">
                 <h1>
                     {{ t('surveys', 1) }}:
-                    <strong>{{ survey?.name }}</strong>
+                    <strong>
+                        {{ survey?.name }}
+                    </strong>
                 </h1>
                 <div class="justify-between items-center flex">
+                    <PencilIcon class="h-5 w-5 mr-1" />
+                    <button class="primary mr-1">show results</button>
                     <button
                         class="primary mr-1"
                         :disabled="store.state.surveys.surveyStep"
@@ -15,13 +19,13 @@
                         <EyeIcon class="h-5 w-5 mr-2 pointer" />
                         {{ t('action_open_preview') }}
                     </button>
-                    <button
+                    <!-- <button
                         class="primary"
                         :disabled="store.state.surveys.surveyStep"
                         @click="newSurveyStep"
                     >
                         {{ t('action_add_survey_step') }}
-                    </button>
+                    </button> -->
                 </div>
             </div>
 
@@ -33,18 +37,28 @@
             />
         </main>
         <aside>
+            <survey-element
+                v-if="store.state.surveyElements.surveyElement"
+                :survey-element-id="
+                    store.state.surveyElements.surveyElement?.id
+                "
+                @saved="store.dispatch('surveyElements/setSurveyElement', null)"
+                @cancel="
+                    store.dispatch('surveyElements/setSurveyElement', null)
+                "
+            ></survey-element>
             <survey-step
-                v-if="store.state.surveys.surveyStepId >= 0"
+                v-else-if="store.state.surveys.surveyStepId >= 0"
                 @saved="surveySaved"
                 @deleted="surveyStepDeleted"
             />
-            <template v-else>
-                <survey-details
-                    :survey-id="surveyId"
-                    :reset-after-save="false"
-                    @saved="surveySaved"
-                />
-            </template>
+            <node-browser v-else></node-browser>
+
+            <!-- <survey-details
+                :survey-id="surveyId"
+                :reset-after-save="false"
+                @saved="surveySaved"
+            /> -->
         </aside>
     </div>
 </template>
@@ -55,13 +69,14 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import Button from '../Common/Button.js'
 import Record from '../Common/Record.vue'
+import SurveyElement from './SurveyElement.vue'
 import SurveyStep from './SurveyStep.vue'
 import SurveyDetails from './SurveyDetails.vue'
 import NodeEditor from '../NodeEditor/NodeEditor.vue'
+import NodeBrowser from '../NodeEditor/NodeBrowser.vue'
 import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
-import SurveyElement from './SurveyElement.vue'
 import { useI18n } from 'vue-i18n'
-import { EyeIcon } from '@heroicons/vue/outline'
+import { EyeIcon, PencilIcon } from '@heroicons/vue/outline'
 
 export default {
     components: {
@@ -72,7 +87,9 @@ export default {
         Button,
         Record,
         NodeEditor,
+        NodeBrowser,
         EyeIcon,
+        PencilIcon,
     },
     setup() {
         const id = ref()

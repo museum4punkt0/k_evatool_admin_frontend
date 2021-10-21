@@ -179,7 +179,10 @@
             </button>
             <!-- <button @click="editor.chain().focus().redo().run()">redo</button> -->
         </div>
-        <editor-content :editor="editor" class="bg-gray-50"></editor-content>
+        <editor-content
+            :editor="editor"
+            class="bg-gray-50 border-black border"
+        ></editor-content>
     </div>
 </template>
 <script>

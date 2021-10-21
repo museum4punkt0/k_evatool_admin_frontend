@@ -55,98 +55,36 @@
                         'border-1': draggedStep,
                     }"
                 >
-                    <div class="w-full flex flex-row flex-grow">
-                        <!-- <div class="inlets flex-none w-8">
-                            <div
-                                class="
-                                    h-full
-                                    text-xs
-                                    flex
-                                    justify-center
-                                    items-center
-                                "
-                            ></div>
-                        </div> -->
+                    <div
+                        class="node-content flex-grow overflow-y-scroll"
+                        @mousedown.prevent.stop="onMouseDown(step, $event)"
+                    >
                         <div
-                            class="node-content flex-auto"
-                            @mousedown.prevent.stop="onMouseDown(step, $event)"
+                            class="
+                                pointer
+                                h-full
+                                flex-col
+                                items-center
+                                justify-center
+                            "
                         >
-                            <div
-                                class="
-                                    pointer
-                                    h-full
-                                    flex-col
-                                    items-center
-                                    justify-center
-                                "
-                            >
-                                <div class="text-center">
-                                    {{
-                                        steps?.find((x) => x?.id === step?.id)
-                                            ?.name
-                                    }}
-                                    <p class="w-full text-xs text-gray-500">
-                                        {{
-                                            steps?.find((x) => x.id === step.id)
-                                                ?.surveyElementType
-                                        }}
-                                    </p>
-                                </div>
-                                <div class="text-center italic text-xs mt-4">
-                                    <div
-                                        v-if="
-                                            steps?.find((x) => x.id === step.id)
-                                                ?.surveyElementType === 'video'
-                                        "
-                                    >
-                                        TODO: video preview
-                                    </div>
-
-                                    <div
-                                        v-else-if="
-                                            steps?.find((x) => x.id === step.id)
-                                                ?.surveyElementType ===
-                                            'simpleText'
-                                        "
-                                    >
-                                        {{
-                                            store.state.surveyElements.surveyElements.find(
-                                                (element) =>
-                                                    element.id ===
-                                                    steps.find(
-                                                        (x) => x.id === step.id,
-                                                    )?.surveyElementId,
-                                            )?.params.text[defaultLanguage.code]
-                                        }}
-                                    </div>
-                                    <div v-else>
-                                        {{
-                                            store.state.surveyElements.surveyElements.find(
-                                                (element) =>
-                                                    element.id ===
-                                                    steps.find(
-                                                        (x) => x.id === step.id,
-                                                    )?.surveyElementId,
-                                            )?.params.question[
-                                                defaultLanguage.code
-                                            ]
-                                        }}
-                                    </div>
-                                </div>
+                            <div class="font-bold">
+                                {{
+                                    steps?.find((x) => x?.id === step?.id)?.name
+                                }}
                             </div>
-                        </div>
-                        <!-- <div class="outlets flex-none w-8">
-                            <div
-                                class="
-                                    h-full
-                                    text-xs
-                                    flex
-                                    justify-center
-                                    items-center
+                            <element-content
+                                :element="
+                                    store.state.surveyElements.surveyElements.find(
+                                        (element) =>
+                                            element.id ===
+                                            steps.find((x) => x.id === step.id)
+                                                ?.surveyElementId,
+                                    )
                                 "
-                                @click="unlinkNextStep(step.id)"
-                            ></div>
-                        </div> -->
+                                class="m-2"
+                            ></element-content>
+                        </div>
                     </div>
                     <div class="w-full border-t">
                         <div class="flex flex-row h-9">
@@ -306,6 +244,7 @@ import {
 
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 import ResultBasedStepsModal from '../Surveys/resultBasedNextSteps/ResultBasedStepsModal.vue'
+import ElementContent from './ElementContent.vue'
 
 import SURVEYS from '../../services/surveyService'
 
@@ -320,6 +259,7 @@ export default {
         ArrowRightIcon,
         PencilIcon,
         SwitchHorizontalIcon,
+        ElementContent,
     },
     props: {
         steps: {

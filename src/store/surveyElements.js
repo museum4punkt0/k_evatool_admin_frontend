@@ -34,5 +34,8 @@ export default {
             )
             commit('setSurveyElements', surveyElements.data)
         },
+        async setSurveyElement({ commit }, surveyElement) {
+            commit('setSurveyElement', surveyElement)
+        },
     },
 }
