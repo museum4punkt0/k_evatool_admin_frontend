@@ -60,6 +60,12 @@
                                 {{ t('assets', 2) }}
                             </DialogTitle>
 
+                            <dashboard
+                                class="mt-3"
+                                :uppy="uppy"
+                                :props="dashboardOptions"
+                            />
+
                             <div class="mt-2 grid grid-cols-3 gap-4">
                                 <div
                                     v-for="asset in assets.filter((item) => {
@@ -134,6 +140,15 @@ import FormSelect from '../Forms/FormSelect.vue'
 
 import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
 
+import { Dashboard } from '@uppy/vue'
+
+import German from '@uppy/locales/lib/de_DE'
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
+
+import Uppy from '@uppy/core'
+import Tus from '@uppy/tus'
+
 export default {
     name: 'AssetSelectorModal',
     components: {
@@ -147,6 +162,7 @@ export default {
         DialogTitle,
         TrashIcon,
         StopIcon,
+        Dashboard,
     },
     props: {
         isOpen: {
@@ -208,6 +224,35 @@ export default {
             }
         }
 
+        const uppy = computed({
+            get: () =>
+                new Uppy({
+                    autoProceed: true,
+                    locale: German,
+                })
+                    .on('upload-success', () => {
+                        // Todo: Remove file from list after upload
+                        // this.uppy.removeFile(file.id)
+                        console.log('success')
+                        store.dispatch('assets/getAssets')
+                    })
+                    .on('complete', () => {
+                        console.log('complete')
+                        store.dispatch('assets/getAssets')
+                    })
+                    .use(Tus, {
+                        endpoint: import.meta.env.VITE_TUS_URL,
+                        retryDelays: [0, 1000, 3000, 5000],
+                        removeFingerprintOnSuccess: true,
+                        uploadDataDuringCreation: false,
+                        chunkSize: 1000000,
+                        // Todo: Implement api authorization on TUS server
+                        /*headers: {
+                            Authorization: `Bearer ${store.state.users.token}`
+                        }*/
+                    }),
+        })
+
         return {
             assets,
             selectAsset,
@@ -218,6 +263,14 @@ export default {
             closeModal() {
                 modalIsOpen.value = false
             },
+
+            dashboardOptions: {
+                theme: 'light',
+                showProgressDetails: true,
+                height: '100%',
+                width: '100%',
+            },
+            uppy,
         }
     },
 }
