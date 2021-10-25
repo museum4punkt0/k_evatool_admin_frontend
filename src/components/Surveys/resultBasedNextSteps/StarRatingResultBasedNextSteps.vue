@@ -5,7 +5,7 @@
                 <li>
                     {{ t('questions', 1) }}:
                     {{
-                        surveyStep.surveyElement.params.question[language.code]
+                        surveyStep.surveyElement?.params.question[language.code]
                     }}
                 </li>
                 <li>

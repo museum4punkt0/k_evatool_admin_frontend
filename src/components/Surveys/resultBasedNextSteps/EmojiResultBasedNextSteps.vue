@@ -64,7 +64,7 @@
                 :label="t('steps', 1)"
             />
             <action-button
-                :action-text="t('action_save')"
+                :action-text="t('action_add')"
                 :disabled="v$.$invalid"
                 @execute="addResultBasedStep"
             />

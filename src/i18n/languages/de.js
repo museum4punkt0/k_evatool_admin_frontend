@@ -9,6 +9,7 @@ export default {
     action_confirm: 'Bestätigen',
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
+    action_select: 'Auswählen',
     action_new_survey_element: 'Neues Umfrage-Element',
     action_open_preview: 'Preview öffnen',
     action_reload: 'Neu laden',

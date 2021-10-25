@@ -292,4 +292,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+video {
+    pointer-events: none;
+}
+</style>

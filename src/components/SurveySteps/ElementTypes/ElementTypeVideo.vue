@@ -15,7 +15,7 @@
         />
     </video>
     <button class="primary" @click="setAssetSelectorModalOpen(true)">
-        {{ t('button_choose_video') }}
+        {{ t('action_select') }}
     </button>
     <asset-selector-modal
         :is-open="assetSelectorModalOpen"
