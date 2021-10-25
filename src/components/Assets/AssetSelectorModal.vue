@@ -104,7 +104,7 @@
                                         >
                                             <source
                                                 :src="asset.urls.original"
-                                                type="video/mp4"
+                                                :type="asset.mime"
                                             />
                                         </video>
                                         <div

@@ -11,7 +11,7 @@
                 <connection
                     v-for="connection in connections"
                     :id="connection.id"
-                    :key="connection.id"
+                    :key="'connection_' + connection.id"
                     :start="
                         getStepElementPosition(
                             connection.start.id,
@@ -29,7 +29,7 @@
                 />
                 <div
                     v-for="step in adminLayout"
-                    :key="step.id"
+                    :key="'step_element_' + step.id"
                     :ref="(el) => (stepElements[step.id] = el)"
                     class="
                         step
@@ -436,18 +436,19 @@ export default {
         }
 
         const selectSurveyStep = async (stepId) => {
-            await deselectStep()
-            // Todo: Function is called everytime the button is clicked, even if disabled. Needs to be fixed.
-            await store.dispatch('surveys/setSurveyStepId', {
-                surveyId: props.surveyId,
-                surveyStepId: stepId,
-            })
+            if (stepId !== store.state.surveys.surveyStepId) {
+                await deselectStep()
+                // Todo: Function is called everytime the button is clicked, even if disabled. Needs to be fixed.
+                await store.dispatch('surveys/setSurveyStepId', {
+                    surveyId: props.surveyId,
+                    surveyStepId: stepId,
+                })
+            }
         }
 
         /** MOUSEHANDLER **/
         const onMouseDown = (step) => {
             draggedStep.value = step
-            // selectSurveyStep(step.id)
         }
         const onMouseMove = (e) => {
             if (draggedStep.value) {

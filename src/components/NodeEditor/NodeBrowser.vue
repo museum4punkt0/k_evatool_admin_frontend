@@ -8,7 +8,7 @@
                     class="primary"
                     @click="setShowSurveyElementForm(true)"
                 >
-                    new element
+                    {{ t('action_new_survey_element') }}
                 </button>
             </div>
         </div>
