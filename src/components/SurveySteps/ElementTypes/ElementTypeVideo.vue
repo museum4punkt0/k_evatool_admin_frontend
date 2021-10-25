@@ -1,6 +1,11 @@
 <template>
     <div v-if="paramsLocal.videoAssetId === -1">video not yet selected</div>
-    <video v-else class="rounded" controls>
+    <video
+        v-else
+        :key="`videopreview_${paramsLocal.videoAssetId}`"
+        class="rounded"
+        controls
+    >
         <source
             :src="
                 assets.find((item) => item.id === paramsLocal.videoAssetId)
