@@ -164,21 +164,29 @@
                                     /*
                                     TODO: tooltip
                                     is time based next step
+
+                                        item.timeBasedSteps?.forEach(
+                                            (timeBasedStep) => {
+                                                if (false) {
+                                                    found = true
+                                                }
+                                            },
+                                        )
                                     */
-                                    steps.find((step) => {
+                                    steps.find((item) => {
                                         let found = false
-                                        step.timeBasedSteps?.forEach(
+                                        item.timeBasedSteps?.forEach(
                                             (timeBasedStep) => {
                                                 if (
                                                     timeBasedStep.stepId ===
-                                                    stepId
+                                                    step.id
                                                 ) {
                                                     found = true
                                                 }
                                             },
                                         )
                                         return found
-                                    }) !== null
+                                    }) != null
                                 "
                                 @click.prevent.stop="
                                     openResultBasedModal(step.id)
