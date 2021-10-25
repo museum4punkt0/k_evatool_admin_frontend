@@ -39,23 +39,22 @@
                     overflow-hidden
                     h-full
                     flex flex-col
-                    overflow-y-scroll
+                    overflow-y-auto
                     mt-4
                 "
             >
                 <element-content :element="element"></element-content>
-
                 <div class="w-full border-t">
                     <div class="flex flex-row">
                         <action-button
                             class="p-1 m-2 flex-grow"
-                            color="bg-gray-200"
-                            :action-text="'add to survey'"
+                            color="secondary"
+                            :action-text="t('action_add_to_survey')"
                             @execute="addElementToSurvey(element)"
-                        ></action-button>
+                        />
                         <action-button
                             class="p-1 m-2"
-                            color="bg-gray-200"
+                            color="secondary"
                             @execute="editElement(element)"
                         >
                             <span
@@ -69,7 +68,7 @@
                         </action-button>
                         <action-button
                             class="p-1 m-2 disabled:opacity-25"
-                            color="bg-gray-200"
+                            color="danger"
                             :disabled="element.surveyStepsCount > 0"
                             @execute="deleteElement(element)"
                         >

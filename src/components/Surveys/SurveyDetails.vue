@@ -20,7 +20,7 @@
         <action-button
             :action-text="t('action_cancel')"
             class="mr-2"
-            :color="'bg-gray-200'"
+            color="secondary"
             :executing="false"
             @click="store.dispatch('surveyElements/setSurveyElement', null)"
         />

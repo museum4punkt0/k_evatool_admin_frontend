@@ -75,7 +75,7 @@
 
     <div class="flex flex-row">
         <action-button
-            :color="'bg-gray-200'"
+            color="secondary"
             class="mr-2 p-2"
             :action-text="t('action_cancel')"
             @execute="cancelEdit"

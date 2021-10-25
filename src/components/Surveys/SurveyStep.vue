@@ -34,7 +34,7 @@
                 <action-button
                     v-if="surveyStep.surveyElementId > 0"
                     class="mt-6 ml-6"
-                    :color="'bg-gray-200'"
+                    color="secondary"
                     @execute="editSurveyElement"
                 >
                     <PencilIcon class="h-5 w-5" />
@@ -44,7 +44,7 @@
             <div class="flex flex-row">
                 <action-button
                     class="mr-2"
-                    :color="'bg-gray-200'"
+                    color="secondary"
                     :executing="false"
                     :action-text="t('action_cancel')"
                     @execute="cancel"

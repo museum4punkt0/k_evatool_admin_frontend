@@ -3,6 +3,7 @@ export default {
     action_add: 'Hinzufügen',
     action_add_survey_step: 'Schritt hinzufügen',
     action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
+    action_add_to_survey: 'Zu Umfrage hinzufügen',
     action_add_emoji: 'Emoji hinzufügen',
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',

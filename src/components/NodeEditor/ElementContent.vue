@@ -1,16 +1,25 @@
 <template>
     <div v-if="element" class="bg-gray-100">
-        <div class="text-center text-sm">
+        <div class="text-center text-sm py-1">
             {{ element.name }}
             <p class="w-full text-xs text-gray-500">
                 {{ element.surveyElementType }}
             </p>
         </div>
         <div class="text-center italic text-sm">
-            <div v-if="element.surveyElementType === 'video'">
-                TODO: video preview
+            <div
+                v-if="element.surveyElementType === 'video' && assets"
+                class="p-2"
+            >
+                <video class="rounded" controls>
+                    <source
+                        :src="
+                            asset(element?.params?.videoAssetId).urls.original
+                        "
+                        :type="asset(element?.params?.videoAssetId).mime"
+                    />
+                </video>
             </div>
-
             <div
                 v-else-if="
                     element.surveyElementType === 'simpleText' &&
@@ -46,7 +55,17 @@ export default {
         )
         const { t } = useI18n()
 
+        const assets = computed({
+            get: () => store.state.assets.assets,
+        })
+
+        const asset = (assetId) => {
+            return assets.value.filter((x) => x.id === assetId)[0]
+        }
+
         return {
+            asset,
+            assets,
             store,
             t,
             surveyElements,
