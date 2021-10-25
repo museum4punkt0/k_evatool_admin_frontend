@@ -2,8 +2,7 @@
     <div>
         <div class="node-editor-wrap bg-blue-300 rounded-lg">
             <div
-                id="nodeEditor"
-                class="node-editor"
+                class="relative"
                 :style="{ width: `${width}px`, height: `${height}px` }"
                 @mousemove="onMouseMove"
                 @mouseup.prevent.stop="onMouseUp"
@@ -27,7 +26,7 @@
                     :dashed="connection.start.outlet !== 'next'"
                     :label="connection.label"
                     @click.prevent.stop="deselectStep"
-                ></connection>
+                />
                 <div
                     v-for="step in adminLayout"
                     :key="step.id"
@@ -56,8 +55,9 @@
                     }"
                 >
                     <div
-                        class="node-content flex-grow overflow-y-scroll"
+                        class="node-content flex-grow"
                         @mousedown.prevent.stop="onMouseDown(step, $event)"
+                        @click.prevent.stop="selectSurveyStep(step.id)"
                     >
                         <div
                             class="
@@ -68,7 +68,7 @@
                                 justify-center
                             "
                         >
-                            <div class="font-bold">
+                            <div class="font-bold text-center p-2 break-words">
                                 {{
                                     steps?.find((x) => x?.id === step?.id)?.name
                                 }}
@@ -176,15 +176,13 @@
                                     <switch-horizontal-icon class="h-5 w-5" />
                                 </span>
                             </button>
-                            <!-- <button
-                                class="flex-1 disabled:opacity-25"
-                                :disabled="
-                                    store.state.surveys.selectedSurveyStepId ===
-                                    step.id
+                            <div
+                                class="flex-1 pointer"
+                                @click.prevent.stop="
+                                    toggleSkippableStep(step.id)
                                 "
-                                @click.prevent.stop="selectSurveyStep(step.id)"
                             >
-                                <span
+                                <div
                                     class="
                                         flex
                                         h-full
@@ -192,31 +190,18 @@
                                         items-center
                                     "
                                 >
-                                    <PencilIcon class="h-5 w-5" />
-                                </span>
-                            </button> -->
-                            <!-- <button
-                                class="flex-1 disabled:opacity-25"
-                                @click.prevent.stop="
-                                    toggleSkippableStep(step.id)
-                                "
-                            > -->
-                            <span
-                                class="flex h-full justify-center items-center"
-                            >
-                                <FastForwardIcon
-                                    class="h-5 w-5"
-                                    :class="{
-                                        'text-blue-800':
-                                            store.state.surveys.survey.steps.find(
-                                                (item) => item.id === step.id,
-                                            )?.allowSkip,
-                                    }"
-                                />
-                            </span>
-                            <!-- </button> -->
-
-                            <!-- :label="t('allow_skip')" -->
+                                    <FastForwardIcon
+                                        class="h-5 w-5"
+                                        :class="{
+                                            'text-blue-800':
+                                                store.state.surveys.survey.steps.find(
+                                                    (item) =>
+                                                        item.id === step.id,
+                                                )?.allowSkip,
+                                        }"
+                                    />
+                                </div>
+                            </div>
                             <div
                                 class="flex-1 pointer"
                                 :class="{
@@ -252,7 +237,7 @@
 </template>
 
 <script>
-import { computed, onMounted, onUpdated, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import Connection from './Connection.vue'
@@ -302,18 +287,38 @@ export default {
     },
     emits: ['updated'],
     setup(props, { emit }) {
+        /** NEEDED IMPORTS **/
         const store = useStore()
         const { t } = useI18n()
+
+        /** CONST VARS **/
+        const width = 2000
+        const height = 2000
+
+        /** REFERENCES **/
         const draggedStep = ref(null)
         const connections = ref([])
         const stepElements = ref({})
+        const selectedInput = ref(-1)
+        const selectedOutput = ref(-1)
+        const timeBasedModalIsOpen = ref(false)
+        const timeBasedModalStepId = ref(-1)
+        const resultBasedModalIsOpen = ref(false)
+        const resultBasedModalStepId = ref(-1)
+
+        /** COMPUTED PROPERTIES **/
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
         const defaultLanguage = computed(
             () => store.state.languages.defaultLanguage,
         )
-        const width = 2000
-        const height = 2000
 
+        /** ONMOUNTED **/
+        onMounted(() => {
+            initAdminLayout()
+            initConnections()
+        })
+
+        /** METHODS **/
         const fixLayoutPosition = (position) => {
             if (position.x < 0) {
                 position.x = 100
@@ -457,41 +462,6 @@ export default {
             console.log(connections)
         }
 
-        onMounted(() => {
-            initAdminLayout()
-            initConnections()
-        })
-
-        onUpdated(() => {})
-
-        const selectedInput = ref(-1)
-        const selectedOutput = ref(-1)
-
-        const timeBasedModalIsOpen = ref(false)
-        const timeBasedModalStepId = ref(-1)
-
-        const resultBasedModalIsOpen = ref(false)
-        const resultBasedModalStepId = ref(-1)
-
-        watch(
-            () => props.steps,
-            () => {
-                initAdminLayout()
-                initConnections()
-            },
-        )
-
-        const onMouseDown = (step, e) => {
-            const nodeEditor = document.getElementById('nodeEditor')
-            const nodeEditorRect = nodeEditor.getBoundingClientRect()
-            draggedStep.value = step
-            draggedStep.value.position = {
-                x: e.clientX - nodeEditorRect.left,
-                y: e.clientY - nodeEditorRect.top,
-            }
-            selectSurveyStep(step.id)
-        }
-
         const selectSurveyStep = async (stepId) => {
             await deselectStep()
             // Todo: Function is called everytime the button is clicked, even if disabled. Needs to be fixed.
@@ -501,15 +471,19 @@ export default {
             })
         }
 
+        /** MOUSEHANDLER **/
+        const onMouseDown = (step) => {
+            draggedStep.value = step
+            // selectSurveyStep(step.id)
+        }
         const onMouseMove = (e) => {
             if (draggedStep.value) {
-                const nodeEditor = document.getElementById('nodeEditor')
-                const nodeEditorRect = nodeEditor.getBoundingClientRect()
-                draggedStep.value.position.x = e.clientX - nodeEditorRect.left
-                draggedStep.value.position.y = e.clientY - nodeEditorRect.top
+                draggedStep.value.position.x =
+                    draggedStep.value.position.x + e.movementX
+                draggedStep.value.position.y =
+                    draggedStep.value.position.y + e.movementY
             }
         }
-
         const onMouseUp = async () => {
             draggedStep.value = null
             await SURVEYS.saveAdminLayout(props.surveyId, props.adminLayout)
@@ -590,13 +564,6 @@ export default {
             }
         }
 
-        watch(
-            () => timeBasedModalIsOpen.value,
-            (value) => {
-                value.log
-            },
-        )
-
         const openTimeBasedModal = async (stepId) => {
             await selectSurveyStep(stepId)
             timeBasedModalIsOpen.value = true
@@ -613,18 +580,31 @@ export default {
             console.log('toggle skippable', stepId)
         }
 
+        /** WATCHER **/
+        watch(
+            () => timeBasedModalIsOpen.value,
+            (value) => {
+                value.log
+            },
+            () => props.steps,
+            () => {
+                initAdminLayout()
+                initConnections()
+            },
+        )
+
         return {
-            t,
+            connections,
             defaultLanguage,
+            deselectStep,
             draggedStep,
+            getStepElementPosition,
+            height,
             onMouseDown,
             onMouseMove,
             onMouseUp,
-            deselectStep,
-            openTimeBasedModal,
-            timeBasedModalIsOpen,
-            timeBasedModalStepId,
             openResultBasedModal,
+            openTimeBasedModal,
             resultBasedModalIsOpen,
             resultBasedModalStepId,
             selectedOutput,
@@ -633,14 +613,14 @@ export default {
             selectOutput,
             selectSurveyStep,
             store,
-            unlinkNextStep,
             surveyStepId,
-            width,
-            height,
-            connections,
             stepElements,
-            getStepElementPosition,
+            t,
+            timeBasedModalIsOpen,
+            timeBasedModalStepId,
             toggleSkippableStep,
+            unlinkNextStep,
+            width,
         }
     },
 }
@@ -650,19 +630,13 @@ export default {
 .node-editor-wrap {
     width: 100%;
     height: calc(100vh - 138px);
-    overflow: scroll;
+    overflow: auto;
 }
-
-.node-editor {
-    position: relative;
-    /* width: 2000px;
-height: 2000px; */
-}
-
 .step {
     width: 200px;
-    height: 150px;
+    height: fit-content;
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
+    hyphens: auto;
 }
 </style>
