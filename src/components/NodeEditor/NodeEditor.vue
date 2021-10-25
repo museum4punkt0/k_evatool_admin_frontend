@@ -142,7 +142,8 @@
                                     ) ||
                                     /*
                                     TODO: tooltip
-                                    multiple choice && min===max===1*/
+                                    multiple choice && min===max===1
+                                    */
                                     (steps.find((x) => x.id === step.id)
                                         ?.surveyElementType ===
                                         'multipleChoice' &&
@@ -159,7 +160,25 @@
                                                 steps.find(
                                                     (x) => x.id === step.id,
                                                 )?.surveyElementId,
-                                        ).params.maxSelectable === 1)
+                                        ).params.maxSelectable === 1) ||
+                                    /*
+                                    TODO: tooltip
+                                    is time based next step
+                                    */
+                                    steps.find((step) => {
+                                        let found = false
+                                        step.timeBasedSteps?.forEach(
+                                            (timeBasedStep) => {
+                                                if (
+                                                    timeBasedStep.stepId ===
+                                                    stepId
+                                                ) {
+                                                    found = true
+                                                }
+                                            },
+                                        )
+                                        return found
+                                    }) !== null
                                 "
                                 @click.prevent.stop="
                                     openResultBasedModal(step.id)
