@@ -13,7 +13,9 @@
                     @click="setShowSurveyDetailsEdit(!showSurveyDetailsEdit)"
                 />
                 <div class="flex-grow items-center flex flex-row-reverse">
-                    <button class="primary mr-1">show results</button>
+                    <button class="primary mr-1">
+                        {{ t('action_show_results') }}
+                    </button>
                     <button
                         class="primary mr-1"
                         :disabled="store.state.surveys.surveyStep"
@@ -58,7 +60,6 @@
             ></survey-element>
             <survey-step
                 v-else-if="store.state.surveys.surveyStepId >= 0"
-                set-show
                 @saved="surveySaved"
                 @deleted="surveyStepDeleted"
                 @cancel="store.dispatch('surveys/unsetSurveyStepId')"

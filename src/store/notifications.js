@@ -29,7 +29,6 @@ export default {
     },
     actions: {
         add({ commit }, { type, message }) {
-            console.log(DURATIONS[type])
             const notification = { id: idCounter++, type, message }
             return new Promise((resolve) => {
                 commit('add', notification)

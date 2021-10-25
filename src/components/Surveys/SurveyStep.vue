@@ -133,7 +133,7 @@ export default {
         SaveIcon,
     },
     emits: ['saved', 'deleted', 'cancel'],
-    setup(props, { emit }) {
+    setup({ emit }) {
         const { t } = useI18n()
         const store = useStore()
         const route = useRoute()

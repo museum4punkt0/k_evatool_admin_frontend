@@ -10,10 +10,11 @@ export default {
     action_confirm: 'Bestätigen',
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
-    action_select: 'Auswählen',
     action_new_survey_element: 'Neues Umfrage-Element',
-    action_open_preview: 'Preview öffnen',
+    action_open_preview: 'Vorschau öffnen',
     action_reload: 'Neu laden',
+    action_select: 'Auswählen',
+    action_show_results: 'Resultate anzeigen',
     action_save: 'Speichern',
     allow_changing_answer: 'Ändern der Antwort erlauben',
     allow_half_steps: 'Halbe Schritte erlauben (z.B. 3,5)',
@@ -74,7 +75,7 @@ export default {
     notification_success_survey_element_added:
         'Neues Umfrage-Element erstellt.<br> Es kann nun hinzugefügt werden.',
     notification_success_survey_step_added:
-        'Neuer Umfrage-Schritt erstellt.<br> Er kann nun verknüpft werden.',
+        'Neuer Umfrage-Schritt eingefügt.<br> Er kann nun verknüpft werden.',
     notification_warning_headline: 'Achtung',
     number_of_stars: 'Anzahl der Sterne',
     options: 'Optionen | Option | Optionen',
