@@ -581,7 +581,7 @@ export default {
                     store.state.surveyElements.surveyElements.find(
                         (element) =>
                             element.id ===
-                            steps.find((x) => x.id === step.id)
+                            props.steps.find((x) => x.id === step.id)
                                 ?.surveyElementId,
                     ).params.minSelectable === 1 &&
                     store.state.surveyElements.surveyElements.find(
