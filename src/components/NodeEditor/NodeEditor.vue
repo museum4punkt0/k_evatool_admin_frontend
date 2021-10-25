@@ -375,7 +375,6 @@ export default {
                     const type = step.surveyElementType
                     if (type === 'video') {
                         step.timeBasedSteps.forEach((timeBasedStep, index) => {
-                            console.log(timeBasedStep)
                             connections.value.push({
                                 id: `${step.id}_time_${index}`,
                                 start: {
