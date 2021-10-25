@@ -23,7 +23,7 @@
                 v-model:value="elementSearchQuery"
                 name="name"
                 type="text"
-                :label="t('suche', 1)"
+                :label="t('search', 1)"
             />
             <div
                 v-for="element in surveyElements
