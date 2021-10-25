@@ -3,7 +3,11 @@
         <div class="text-center text-sm py-1">
             {{ element.name }}
             <p class="w-full text-xs text-gray-500">
-                {{ element.surveyElementType }}
+                {{
+                    surveyElementTypes.find(
+                        (x) => x.key === element.surveyElementType,
+                    ).descriptions.title.de
+                }}
             </p>
         </div>
         <div class="text-center italic text-sm">
@@ -50,6 +54,9 @@ export default {
         const surveyElements = computed(
             () => store.state.surveyElements.surveyElements,
         )
+        const surveyElementTypes = computed(
+            () => store.state.elementTypes.elementTypes,
+        )
         const defaultLanguage = computed(
             () => store.state.languages.defaultLanguage,
         )
@@ -70,6 +77,7 @@ export default {
             t,
             surveyElements,
             defaultLanguage,
+            surveyElementTypes,
         }
     },
 }
