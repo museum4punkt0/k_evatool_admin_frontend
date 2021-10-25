@@ -371,6 +371,23 @@ export default {
                         end: step.nextStepId,
                     })
                 }
+                if (step.timeBasedSteps) {
+                    const type = step.surveyElementType
+                    if (type === 'video') {
+                        step.timeBasedSteps.forEach((timeBasedStep, index) => {
+                            connections.value.push({
+                                id: `${step.id}_time_${index}`,
+                                start: {
+                                    id: step.id,
+                                    outlet: `timeBasedStep_${index}`,
+                                },
+                                end: timeBasedStep.stepId,
+                                // TODO: get time
+                                label: `time: ${index}`,
+                            })
+                        })
+                    }
+                }
                 if (step.resultBasedNextSteps) {
                     const type = step.surveyElementType
 
@@ -440,6 +457,8 @@ export default {
                     }
                 }
             })
+
+            console.log(connections)
         }
 
         const selectSurveyStep = async (stepId) => {

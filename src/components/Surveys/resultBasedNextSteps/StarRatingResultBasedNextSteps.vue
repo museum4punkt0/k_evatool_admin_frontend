@@ -139,8 +139,7 @@ export default {
         const surveyElementParams = computed(
             () =>
                 store.state.surveyElements.surveyElements.find((element) => {
-                    // console.log(element.value)
-                    return element.id === surveyStep.value.id
+                    return element.id === surveyStep.value.surveyElementId
                 })?.params,
         )
 
