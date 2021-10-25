@@ -1,7 +1,7 @@
 <template>
     <div>
         <Listbox v-model="selectedLocal" as="div">
-            <label :for="name">{{ label }}</label>
+            <label v-if="label">{{ label }}</label>
             <div class="mt-1 relative">
                 <ListboxButton
                     class="
@@ -17,7 +17,7 @@
                         text-left
                         cursor-default
                         focus:outline-none
-                        focus:ring-1
+                        focus:ring-2
                         focus:ring-blue-500
                         focus:border-blue-500
                         sm:text-sm
@@ -203,7 +203,6 @@ export default {
         const selectedLocal = computed({
             get: () => props.selected,
             set: (val) => {
-                console.log(val)
                 emit('update:selected', val)
             },
         })

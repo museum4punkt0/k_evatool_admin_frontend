@@ -6,25 +6,13 @@
     />
 
     <label>{{ t('questions', 1) }}</label>
-    <tip-tap
+    <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        :value="paramsLocal.question[language.code]"
-        @update:value="onTipTapUpdate(language, $event)"
-    ></tip-tap>
-
-    <!-- <form-input
-        v-for="language in store.state.languages.languages.filter(
-            (item) => item.code === selectedLanguage.code,
-        )"
-        :key="'lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        :name="'lang' + language.id"
-        class="mt-3"
-        :label="t('questions', 1) + ' (' + language.title + ')'"
-    /> -->
+        v-model:text="paramsLocal.question[language.code]"
+    />
     <div class="grid grid-cols-12 gap-4">
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -71,11 +59,11 @@ import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
-import TipTap from '../../../components/Common/TipTap.vue'
+import TinyMce from '../../Common/TinyMce.vue'
 
 export default {
     name: 'ElementTypeBinaryQuestion',
-    components: { LanguageSwitch, FormInput, TipTap },
+    components: { TinyMce, LanguageSwitch, FormInput },
     props: {
         params: {
             type: Object,
@@ -86,6 +74,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const selectedLanguage = ref(
             store.state.languages.languages.find((lang) => lang.default),
         )
@@ -152,11 +141,6 @@ export default {
             selectedLanguage.value = language
         }
 
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.question[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
-
         return {
             store,
             paramsLocal,
@@ -164,7 +148,7 @@ export default {
             v$: paramsValidation,
             selectedLanguage,
             setSelectedLanguage,
-            onTipTapUpdate,
+            tinyMceKey,
         }
     },
 }

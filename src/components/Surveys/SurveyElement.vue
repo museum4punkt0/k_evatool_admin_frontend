@@ -200,6 +200,7 @@ export default {
         watch(
             () => surveyElement.value?.surveyElementType,
             (surveyElementType, oldSurveyElementType) => {
+                console.log(revertChanges)
                 if (revertChanges) {
                     revertChanges = false
                     return

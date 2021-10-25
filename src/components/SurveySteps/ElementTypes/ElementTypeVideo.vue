@@ -11,7 +11,10 @@
                 assets.find((item) => item.id === paramsLocal.videoAssetId)
                     ?.urls.original
             "
-            type="video/mp4"
+            :type="
+                assets.find((item) => item.id === paramsLocal.videoAssetId)
+                    ?.mime
+            "
         />
     </video>
     <button class="primary" @click="setAssetSelectorModalOpen(true)">
@@ -26,14 +29,6 @@
         @update:is-open="setAssetSelectorModalOpen"
         @update:selected-assets="onAssetsSelected"
     ></asset-selector-modal>
-    <!-- <form-select
-        v-model:selected="paramsLocal.videoAssetId"
-        :options="assets"
-        title-key="filename"
-        value-key="id"
-        :default-value="-1"
-        :label="t('videos', 1)"
-    /> -->
 </template>
 
 <script>

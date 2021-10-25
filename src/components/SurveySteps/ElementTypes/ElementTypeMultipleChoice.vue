@@ -5,25 +5,14 @@
         @select="setSelectedLanguage($event)"
     />
     <label>{{ t('questions', 1) }}</label>
-    <tip-tap
+
+    <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        :value="paramsLocal.question[language.code]"
-        @update:value="onTipTapUpdate(language, $event)"
-    ></tip-tap>
-
-    <!-- <form-input
-        v-for="language in store.state.languages.languages.filter(
-            (item) => item.code === selectedLanguage.code,
-        )"
-        :key="'question_lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        class="mt-3"
-        :name="'question' + language.id"
-        :label="t('questions', 1) + ' (' + language.title + ')'"
-    /> -->
+        v-model:text="paramsLocal.question[language.code]"
+    />
 
     <div class="grid grid-cols-1 divide-y divide-gray-300">
         <div
@@ -88,7 +77,6 @@
 <script>
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
-import TipTap from '../../../components/Common/TipTap.vue'
 import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import useVuelidate from '@vuelidate/core'
@@ -96,10 +84,11 @@ import { required, between } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
+import TinyMce from '../../Common/TinyMce.vue'
 
 export default {
     name: 'ElementTypeMultipleChoiceQuestion',
-    components: { LanguageSwitch, FormInput, TrashIcon, PlusIcon, TipTap },
+    components: { TinyMce, LanguageSwitch, FormInput, TrashIcon, PlusIcon },
     props: {
         params: {
             type: Object,
@@ -110,6 +99,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const selectedLanguage = ref(
             store.state.languages.languages.find((lang) => lang.default),
         )
@@ -228,6 +218,7 @@ export default {
             addOption,
             removeOption,
             onTipTapUpdate,
+            tinyMceKey,
         }
     },
 }

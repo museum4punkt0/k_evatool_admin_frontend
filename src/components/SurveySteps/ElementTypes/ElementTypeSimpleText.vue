@@ -6,14 +6,13 @@
     />
 
     <label>{{ t('texts', 1) }}</label>
-    <tip-tap
+    <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        :value="paramsLocal.text[language.code]"
-        @update:value="onTipTapUpdate(language, $event)"
-    ></tip-tap>
+        v-model:text="paramsLocal.text[language.code]"
+    />
 </template>
 
 <script>
@@ -24,11 +23,11 @@ import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
-import TipTap from '../../../components/Common/TipTap.vue'
+import TinyMce from '../../Common/TinyMce.vue'
 
 export default {
     name: 'ElementTypeSimpleText',
-    components: { FormInput, LanguageSwitch, TipTap },
+    components: { TinyMce, FormInput, LanguageSwitch },
     props: {
         params: {
             type: Object,
@@ -39,6 +38,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
@@ -78,11 +78,6 @@ export default {
             },
         )
 
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.text[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
-
         return {
             selectedLanguage,
             setSelectedLanguage,
@@ -90,7 +85,7 @@ export default {
             store,
             t,
             v$: paramsValidation,
-            onTipTapUpdate,
+            tinyMceKey,
         }
     },
 }

@@ -6,14 +6,13 @@
     />
 
     <label>{{ t('questions', 1) }}</label>
-    <tip-tap
+    <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        :value="paramsLocal.question[language.code]"
-        @update:value="onTipTapUpdate(language, $event)"
-    ></tip-tap>
+        v-model:text="paramsLocal.question[language.code]"
+    />
 </template>
 
 <script>
@@ -25,11 +24,11 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
-import TipTap from '../../../components/Common/TipTap.vue'
+import TinyMce from '../../Common/TinyMce.vue'
 
 export default {
     name: 'ElementTypeMultipleChoiceQuestion',
-    components: { FormInput, TrashIcon, PlusIcon, LanguageSwitch, TipTap },
+    components: { TinyMce, FormInput, TrashIcon, PlusIcon, LanguageSwitch },
     props: {
         params: {
             type: Object,
@@ -40,7 +39,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
-
+        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const selectedLanguage = ref(
             store.state.languages.languages.find((lang) => lang.default),
         )
@@ -84,10 +83,6 @@ export default {
                 emit('isValid', !invalid)
             },
         )
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.question[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
 
         return {
             store,
@@ -96,7 +91,7 @@ export default {
             setSelectedLanguage,
             t,
             v$: paramsValidation,
-            onTipTapUpdate,
+            tinyMceKey,
         }
     },
 }

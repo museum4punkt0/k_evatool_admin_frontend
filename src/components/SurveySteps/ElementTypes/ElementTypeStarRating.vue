@@ -5,14 +5,14 @@
         @select="setSelectedLanguage($event)"
     />
     <label>{{ t('questions', 1) }}</label>
-    <tip-tap
+
+    <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        :value="paramsLocal.question[language.code]"
-        @update:value="onTipTapUpdate(language, $event)"
-    ></tip-tap>
+        v-model:text="paramsLocal.question[language.code]"
+    />
 
     <form-input
         v-model:value="paramsLocal.numberOfStars"
@@ -68,12 +68,6 @@
             class="col-span-6"
         />
     </div>
-
-    <!-- <form-toggle
-    v-model:enabled="paramsLocal.allowHalfSteps"
-    :label="t('allow_half_steps')"
-    class="my-3"
-/> -->
 </template>
 
 <script>
@@ -81,15 +75,15 @@ import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import FormInput from '../../Forms/FormInput.vue'
 import FormToggle from '../../Forms/FormToggle.vue'
+import TinyMce from '../../Common/TinyMce.vue'
 import { useStore } from 'vuex'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
-import TipTap from '../../../components/Common/TipTap.vue'
 import useVuelidate from '@vuelidate/core'
 import { required, between, minLength, maxLength } from '@vuelidate/validators'
 
 export default {
     name: 'ElementTypeStarRating',
-    components: { FormToggle, FormInput, LanguageSwitch, TipTap },
+    components: { TinyMce, FormToggle, FormInput, LanguageSwitch },
     props: {
         params: {
             type: Object,
@@ -100,7 +94,7 @@ export default {
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
-
+        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
@@ -158,21 +152,16 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        const paramsValidation = useVuelidate(validations, paramsLocal, {
+        const validateParams = useVuelidate(validations, paramsLocal.value, {
             $scope: 'surveyElement',
         })
 
         watch(
-            () => paramsValidation.value.$invalid,
+            () => validateParams.value.$invalid,
             (invalid) => {
-                console.log('emmiting isvalid', !invalid)
                 emit('isValid', !invalid)
             },
         )
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.question[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
 
         return {
             selectedLanguage,
@@ -180,8 +169,8 @@ export default {
             paramsLocal,
             t,
             store,
-            v$: paramsValidation,
-            onTipTapUpdate,
+            validateParams,
+            tinyMceKey,
         }
     },
 }

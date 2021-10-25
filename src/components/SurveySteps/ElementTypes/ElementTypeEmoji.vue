@@ -5,24 +5,14 @@
         @select="setSelectedLanguage($event)"
     />
     <label>{{ t('questions', 1) }}</label>
-    <tip-tap
+
+    <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
-        :value="paramsLocal.question[language.code]"
-        @update:value="onTipTapUpdate(language, $event)"
-    ></tip-tap>
-    <!-- <form-input
-        v-for="language in store.state.languages.languages.filter(
-            (item) => item.code === selectedLanguage.code,
-        )"
-        :key="'question_lang' + language.id"
-        v-model:value="paramsLocal.question[language.code]"
-        class="mt-3"
-        :name="'question' + language.id"
-        :label="t('questions', 1) + ' (' + language.title + ')'"
-    /> -->
+        v-model:text="paramsLocal.question[language.code]"
+    />
 
     <div v-if="paramsLocal.emojis.length > 0" class="table-wrap mt-3">
         <table>
@@ -72,7 +62,6 @@ import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import FormSelectEmoji from '../../Forms/FormSelectEmoji.vue'
-import TipTap from '../../../components/Common/TipTap.vue'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
@@ -81,15 +70,16 @@ import { minLength, maxLength, required, helpers } from '@vuelidate/validators'
 const meaningValidation = helpers.regex(/^[a-z][a-z0-9_]*$/)
 
 import useVuelidate from '@vuelidate/core'
+import TinyMce from '../../Common/TinyMce.vue'
 
 export default {
     name: 'ElementTypeEmoji',
     components: {
+        TinyMce,
         FormSelectEmoji,
         FormInput,
         TrashIcon,
         LanguageSwitch,
-        TipTap,
     },
     props: {
         params: {
@@ -101,6 +91,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const selectedEmoji = ref({
             type: '',
             meaning: '',
@@ -124,14 +115,14 @@ export default {
             }
         })
 
-        // Todo: Regex for Emoji validation ... https://vuelidate-next.netlify.app/custom_validators.html#regex-based-validator
-        // Todo: Some emojis appear to not be valid, example ❤️ ... length > 1?
         const emojiValidation = () => {
+            const valid = /\p{Extended_Pictographic}/u.test(
+                selectedEmoji.value.type,
+            )
             return {
                 type: {
                     required,
-                    minLength: minLength(1),
-                    maxLength: maxLength(1),
+                    valid,
                 },
                 meaning: {
                     required,
@@ -208,11 +199,6 @@ export default {
             }
         }
 
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.question[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
-
         return {
             paramsLocal,
             selectedEmoji,
@@ -224,7 +210,7 @@ export default {
             setSelectedLanguage,
             validateParams,
             validateEmoji,
-            onTipTapUpdate,
+            tinyMceKey,
         }
     },
 }
