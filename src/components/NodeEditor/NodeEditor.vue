@@ -88,11 +88,14 @@
                     </div>
                     <div class="w-full border-t">
                         <div class="flex flex-row h-9">
-                            <div
+                            <button
                                 class="flex-1 w-8 pointer"
                                 :class="{
                                     'bg-blue-200': step.id === selectedInput,
+                                    'opacity-50':
+                                        hasNextAndPreviousSockets(step),
                                 }"
+                                :disabled="hasNextAndPreviousSockets(step)"
                                 @click.prevent.stop="selectInput(step.id)"
                             >
                                 <div
@@ -105,7 +108,7 @@
                                 >
                                     <ArrowLeftIcon class="h-4 w-4" />
                                 </div>
-                            </div>
+                            </button>
 
                             <button
                                 class="flex-1 disabled:opacity-25"
@@ -130,64 +133,7 @@
                             </button>
                             <button
                                 class="flex-1 disabled:opacity-25"
-                                :disabled="
-                                    ![
-                                        'multipleChoice',
-                                        'binary',
-                                        'starRating',
-                                        'emoji',
-                                    ].includes(
-                                        steps.find((x) => x.id === step.id)
-                                            ?.surveyElementType,
-                                    ) ||
-                                    /*
-                                    TODO: tooltip
-                                    multiple choice && min===max===1
-                                    */
-                                    (steps.find((x) => x.id === step.id)
-                                        ?.surveyElementType ===
-                                        'multipleChoice' &&
-                                        store.state.surveyElements.surveyElements.find(
-                                            (element) =>
-                                                element.id ===
-                                                steps.find(
-                                                    (x) => x.id === step.id,
-                                                )?.surveyElementId,
-                                        ).params.minSelectable === 1 &&
-                                        store.state.surveyElements.surveyElements.find(
-                                            (element) =>
-                                                element.id ===
-                                                steps.find(
-                                                    (x) => x.id === step.id,
-                                                )?.surveyElementId,
-                                        ).params.maxSelectable === 1) ||
-                                    /*
-                                    TODO: tooltip
-                                    is time based next step
-
-                                        item.timeBasedSteps?.forEach(
-                                            (timeBasedStep) => {
-                                                if (false) {
-                                                    found = true
-                                                }
-                                            },
-                                        )
-                                    */
-                                    steps.find((item) => {
-                                        let found = false
-                                        item.timeBasedSteps?.forEach(
-                                            (timeBasedStep) => {
-                                                if (
-                                                    timeBasedStep.stepId ===
-                                                    step.id
-                                                ) {
-                                                    found = true
-                                                }
-                                            },
-                                        )
-                                        return found
-                                    }) != null
-                                "
+                                :disabled="hasResultBasedNextStepsButton(step)"
                                 @click.prevent.stop="
                                     openResultBasedModal(step.id)
                                 "
@@ -229,11 +175,14 @@
                                     />
                                 </div>
                             </div>
-                            <div
+                            <button
                                 class="flex-1 pointer"
                                 :class="{
                                     'bg-blue-200': step.id === selectedOutput,
+                                    'opacity-50':
+                                        hasNextAndPreviousSockets(step),
                                 }"
+                                :disabled="hasNextAndPreviousSockets(step)"
                                 @click.prevent.stop="selectOutput(step.id)"
                             >
                                 <div
@@ -246,7 +195,7 @@
                                 >
                                     <ArrowRightIcon class="h-4 w-4" />
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -484,8 +433,6 @@ export default {
                     }
                 }
             })
-
-            console.log(connections)
         }
 
         const selectSurveyStep = async (stepId) => {
@@ -606,6 +553,59 @@ export default {
             console.log('toggle skippable', stepId)
         }
 
+        const hasNextAndPreviousSockets = (step) => {
+            return (
+                props.steps.find((item) => {
+                    let found = false
+                    item.timeBasedSteps?.forEach((timeBasedStep) => {
+                        if (timeBasedStep.stepId === step.id) {
+                            found = true
+                        }
+                    })
+                    return found
+                }) != null
+            )
+        }
+        const hasResultBasedNextStepsButton = (step) => {
+            return (
+                !['multipleChoice', 'binary', 'starRating', 'emoji'].includes(
+                    props.steps.find((x) => x.id === step.id)
+                        ?.surveyElementType,
+                ) ||
+                /*
+                                    TODO: tooltip
+                                    multiple choice && min===max===1
+                                    */
+                (props.steps.find((x) => x.id === step.id)
+                    ?.surveyElementType === 'multipleChoice' &&
+                    store.state.surveyElements.surveyElements.find(
+                        (element) =>
+                            element.id ===
+                            steps.find((x) => x.id === step.id)
+                                ?.surveyElementId,
+                    ).params.minSelectable === 1 &&
+                    store.state.surveyElements.surveyElements.find(
+                        (element) =>
+                            element.id ===
+                            props.steps.find((x) => x.id === step.id)
+                                ?.surveyElementId,
+                    ).params.maxSelectable === 1) ||
+                /*
+                                    TODO: tooltip
+                                    is time based next step
+                                    */
+                props.steps.find((item) => {
+                    let found = false
+                    item.timeBasedSteps?.forEach((timeBasedStep) => {
+                        if (timeBasedStep.stepId === step.id) {
+                            found = true
+                        }
+                    })
+                    return found
+                }) != null
+            )
+        }
+
         /** WATCHER **/
         watch(
             () => timeBasedModalIsOpen.value,
@@ -649,6 +649,8 @@ export default {
             toggleSkippableStep,
             unlinkNextStep,
             width,
+            hasNextAndPreviousSockets,
+            hasResultBasedNextStepsButton,
         }
     },
 }
