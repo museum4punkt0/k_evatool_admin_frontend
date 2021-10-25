@@ -203,11 +203,6 @@ export default {
             },
         )
 
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.question[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
-
         return {
             store,
             paramsLocal,
@@ -217,7 +212,6 @@ export default {
             setSelectedLanguage,
             addOption,
             removeOption,
-            onTipTapUpdate,
             tinyMceKey,
         }
     },

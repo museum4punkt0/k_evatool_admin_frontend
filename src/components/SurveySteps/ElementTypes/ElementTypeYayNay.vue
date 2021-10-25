@@ -15,15 +15,6 @@
         class="my-3"
     />
 
-    <!--    <tip-tap
-      v-for="language in store.state.languages.languages.filter(
-          (item) => item.code === selectedLanguage.code,
-      )"
-      :key="'lang' + language.id"
-      :value="paramsLocal.question[language.code]"
-      @update:value="onTipTapUpdate(language, $event)"
-  ></tip-tap>-->
-
     <div class="grid grid-cols-12 gap-4">
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -85,7 +76,6 @@
 <script>
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
-import TipTap from '../../../components/Common/TipTap.vue'
 import TinyMce from '../../../components/Common/TinyMce.vue'
 
 import { computed, watch } from 'vue'
@@ -106,7 +96,6 @@ export default {
         FormInput,
         LanguageSwitch,
         AssetSelectorModal,
-        TipTap,
     },
     props: {
         params: {
@@ -194,11 +183,6 @@ export default {
             emit('update:params', paramsLocal.value)
         }
 
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.question[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
-
         return {
             validateParams,
             store,
@@ -210,7 +194,6 @@ export default {
             setAssetSelectorModalOpen,
             onAssetsSelected,
             assets,
-            onTipTapUpdate,
             tinyMceKey,
         }
     },

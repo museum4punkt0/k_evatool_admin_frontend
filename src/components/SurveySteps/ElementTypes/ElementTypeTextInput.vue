@@ -83,10 +83,6 @@ export default {
                 emit('isValid', !invalid)
             },
         )
-        const onTipTapUpdate = (language, value) => {
-            paramsLocal.value.question[language.code] = value
-            emit('update:params', paramsLocal.value)
-        }
 
         return {
             store,
@@ -95,7 +91,6 @@ export default {
             v$: paramsValidation,
             selectedLanguage,
             setSelectedLanguage,
-            onTipTapUpdate,
             tinyMceKey,
         }
     },
