@@ -22,13 +22,15 @@
             class="mr-2"
             :color="'bg-gray-200'"
             :executing="false"
-            @click="saveSurvey"
+            @click="store.dispatch('surveyElements/setSurveyElement', null)"
         />
         <action-button
             class="flex-grow"
             :disabled="v$.$invalid || surveySaving"
-            :action-text="t('action_save')"
-            @click="store.dispatch('surveyElements/setSurveyElement', null)"
+            :action-text="
+                store.state.surveys.survey ? t('action_save') : t('action_add')
+            "
+            @click="saveSurvey"
         />
     </div>
 
