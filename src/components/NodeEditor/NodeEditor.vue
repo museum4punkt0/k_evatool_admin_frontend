@@ -566,6 +566,8 @@ export default {
             (value) => {
                 value.log
             },
+        )
+        watch(
             () => props.steps,
             () => {
                 initAdminLayout()
