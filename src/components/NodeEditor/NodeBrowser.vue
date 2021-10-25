@@ -96,6 +96,7 @@ import ElementContent from './ElementContent.vue'
 import SURVEY_SERVICE from '../../services/surveyService'
 import ActionButton from '../Common/ActionButton.vue'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/outline'
+import { TYPES } from '../../store/notifications'
 
 export default {
     name: 'NodeBrowser',
@@ -127,9 +128,9 @@ export default {
                     (item) => item.id === event,
                 )?.name
             setShowSurveyElementForm(false)
-            store.dispatch('notifications/addSuccess', {
-                message:
-                    'successfully created survey element. it can be added to the survey now.',
+            store.dispatch('notifications/add', {
+                type: TYPES.SUCCESS,
+                message: 'notification_success_survey_element_added',
             })
         }
         const addElementToSurvey = async (element) => {
@@ -143,16 +144,13 @@ export default {
                 },
                 survey.value.id,
             )
-
             await store.dispatch('surveys/setSurveyStepId', savedSurveyStep.id)
             await store.dispatch('surveys/getSurvey')
             await store.dispatch('surveys/getSurveySteps', survey.value.id)
-            // await getSurveyStep()
-            // emit('saved')
             savingSurveyStep.value = false
-            store.dispatch('notifications/addSuccess', {
-                message:
-                    'successfully added survey step. it can be patched now.',
+            store.dispatch('notifications/add', {
+                type: TYPES.SUCCESS,
+                message: 'notification_success_survey_step_added',
             })
         }
         const editElement = async (element) => {
