@@ -47,6 +47,7 @@
                 :survey-id="surveyId"
                 :reset-after-save="false"
                 @saved="surveySaved"
+                @cancel="setShowSurveyDetailsEdit(false)"
             />
             <survey-element
                 v-else-if="store.state.surveyElements.surveyElement"

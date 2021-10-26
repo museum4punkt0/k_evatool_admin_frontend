@@ -22,7 +22,7 @@
             class="mr-2"
             color="secondary"
             :executing="false"
-            @click="store.dispatch('surveyElements/setSurveyElement', null)"
+            @click="cancel"
         />
         <action-button
             class="flex-grow"
@@ -100,6 +100,11 @@ export default {
             surveyTitle.value = t('new_survey')
         }
 
+        const cancel = () => {
+            store.dispatch('surveyElements/setSurveyElement', null)
+            emit('cancel')
+        }
+
         setSurvey(props.surveyId)
 
         return {
@@ -110,6 +115,7 @@ export default {
             t,
             store,
             surveySaving,
+            cancel,
         }
     },
     validations: {
