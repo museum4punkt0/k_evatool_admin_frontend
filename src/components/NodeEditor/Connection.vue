@@ -1,5 +1,6 @@
 <template>
     <svg
+        v-if="validConnection"
         xmlns="http://www.w3.org/2000/svg"
         :style="{
             width: `${width}px`,
@@ -48,6 +49,8 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+
 export default {
     name: 'Connection',
     components: {},
@@ -81,8 +84,21 @@ export default {
             default: '',
         },
     },
-    setup() {
-        return {}
+    setup(props) {
+        const validConnection = computed(() => {
+            if (
+                props.width &&
+                props.height &&
+                props.start.x &&
+                props.start.y &&
+                props.end.x &&
+                props.end.y
+            ) {
+                return true
+            }
+            return false
+        })
+        return { validConnection }
     },
 }
 </script>
