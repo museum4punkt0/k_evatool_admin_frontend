@@ -65,7 +65,7 @@
                             </td>
                             <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon
-                                    class="mx-1 h-5 w-5"
+                                    class="mx-1 h-5 w-5 pointer"
                                     @click.prevent.stop="editSurvey(survey.id)"
                                 />
                                 <trash-icon
@@ -76,6 +76,7 @@
                                         w-5
                                         text-gray-500
                                         cursor-not-allowed
+                                        pointer
                                     "
                                 />
                                 <trash-icon
