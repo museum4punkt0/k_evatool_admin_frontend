@@ -37,9 +37,27 @@
         :label="'Admin'"
     />
 
-    <button class="primary mt-3" :disabled="savingUser" @click="saveUser">
-        {{ t('action_save') }}
-    </button>
+    <div class="flex flex-row">
+        <button class="secondary mr-3" @click="cancelUser">
+            {{ t('action_cancel') }}
+        </button>
+        <button
+            v-if="user.id"
+            class="primary flex-1"
+            :disabled="savingUser"
+            @click="saveUser"
+        >
+            {{ t('action_save') }}
+        </button>
+        <button
+            v-else
+            class="primary flex-1"
+            :disabled="savingUser"
+            @click="saveUser"
+        >
+            {{ t('action_add') }}
+        </button>
+    </div>
 </template>
 
 <script>
@@ -63,7 +81,7 @@ export default {
             default: -1,
         },
     },
-    emits: ['saved'],
+    emits: ['saved', 'cancel'],
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
@@ -80,6 +98,9 @@ export default {
             user.value = await USERS.getUser(userId)
         }
 
+        const cancelUser = async () => {
+            emit('cancel')
+        }
         const saveUser = async () => {
             savingUser.value = true
             await USERS.saveUser(user.value)
@@ -104,10 +125,18 @@ export default {
         )
 
         if (props.userId > 0) {
-            getUser()
+            getUser(props.userId)
         }
 
-        return { t, user, v$: useVuelidate(), saveUser, savingUser, store }
+        return {
+            t,
+            user,
+            v$: useVuelidate(),
+            saveUser,
+            savingUser,
+            cancelUser,
+            store,
+        }
     },
     validations: {
         user: {

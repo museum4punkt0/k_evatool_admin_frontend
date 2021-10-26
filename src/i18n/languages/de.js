@@ -11,6 +11,7 @@ export default {
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
     action_new_survey_element: 'Neues Umfrage-Element',
+    action_new_user: 'Neuer Nutzer',
     action_open_preview: 'Vorschau öffnen',
     action_reload: 'Neu laden',
     action_select: 'Auswählen',
