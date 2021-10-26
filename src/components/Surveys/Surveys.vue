@@ -19,7 +19,7 @@
 
             <div class="table-wrap mt-3 overflow-x-scroll">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-blue-500">
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>{{ t('names', 1) }}</th>
