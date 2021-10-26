@@ -48,17 +48,23 @@
                                 rounded-2xl
                             "
                         >
-                            <DialogTitle
-                                as="h3"
-                                class="
-                                    text-lg
-                                    font-medium
-                                    leading-6
-                                    text-gray-900 text-capitalize
-                                "
-                            >
-                                {{ t('assets', 2) }}
-                            </DialogTitle>
+                            <div class="flex justify-between">
+                                <DialogTitle
+                                    as="h3"
+                                    class="
+                                        text-lg
+                                        font-medium
+                                        leading-6
+                                        text-gray-900 text-capitalize
+                                    "
+                                >
+                                    {{ t('assets', 2) }}
+                                </DialogTitle>
+                                <x-icon
+                                    class="h-6 w-6 pointer"
+                                    @click="closeModal"
+                                />
+                            </div>
 
                             <dashboard
                                 class="mt-3"
@@ -154,7 +160,7 @@ import { useI18n } from 'vue-i18n'
 import FormInput from '../Forms/FormInput.vue'
 import FormSelect from '../Forms/FormSelect.vue'
 
-import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
+import { TrashIcon, StopIcon, XIcon } from '@heroicons/vue/outline'
 
 import { Dashboard } from '@uppy/vue'
 
@@ -178,6 +184,7 @@ export default {
         DialogTitle,
         TrashIcon,
         StopIcon,
+        XIcon,
         Dashboard,
     },
     props: {
