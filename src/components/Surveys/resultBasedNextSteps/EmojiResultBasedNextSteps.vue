@@ -46,7 +46,7 @@
             </table>
         </div>
 
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-5 gap-4">
             <form-select
                 v-model:selected="nextStep.type"
                 :options="surveyElementParams?.emojis"
@@ -57,7 +57,7 @@
             />
             <form-select
                 v-model:selected="nextStep.stepId"
-                :options="surveySteps"
+                :options="surveySteps.filter((x) => x.id !== surveyStep.id)"
                 title-key="name"
                 value-key="id"
                 :default-value="-1"
