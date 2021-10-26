@@ -1,6 +1,7 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
+            {{ store.state.surveyResults }}
             <h1>
                 {{ t('stats', 1) }}
                 <strong>{{ store.state.surveys.survey?.name }}</strong>
@@ -61,7 +62,12 @@
                                 </span>
                                 <span v-else>-</span>
                             </td>
-                            <td></td>
+                            <td>
+                                <eye-icon
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="goToStep(step.id)"
+                                />
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -72,30 +78,39 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { onBeforeUnmount } from 'vue'
 
+import { EyeIcon } from '@heroicons/vue/outline'
+
 export default {
     name: 'SurveyStats',
+    components: { EyeIcon },
     setup() {
         const { t } = useI18n()
         const route = useRoute()
+        const router = useRouter()
         const store = useStore()
 
-        const surveyId = route.params.id
+        const surveyId = route.params.survey_id
         store.dispatch('surveys/setSurveyId', surveyId)
 
-        store.dispatch('surveyResults/getSurveyResults', surveyId)
+        store.dispatch('surveyResults/getSurveySteps', surveyId)
 
         onBeforeUnmount(() => {
             store.dispatch('surveys/resetSurveyId')
         })
 
+        const goToStep = (stepId) => {
+            router.push('/stats/' + surveyId + '/' + stepId)
+        }
+
         return {
             surveyId,
             t,
             store,
+            goToStep,
         }
     },
 }

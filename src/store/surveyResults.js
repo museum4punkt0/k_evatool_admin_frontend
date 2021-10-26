@@ -6,14 +6,24 @@ export default {
         results: [],
     },
     mutations: {
-        setSurveyResults(state, results) {
+        setSurveySteps(state, steps) {
+            state.steps = steps
+        },
+        setSurveyStepResults(state, results) {
             state.results = results
         },
     },
     actions: {
-        async getSurveyResults({ commit }, surveyId) {
-            const results = await SURVEY_RESULTS.getSurveyResults(surveyId)
-            commit('setSurveyResults', results)
+        async getSurveySteps({ commit }, surveyId) {
+            const steps = await SURVEY_RESULTS.getSurveySteps(surveyId)
+            commit('setSurveySteps', steps.data)
+        },
+        async getSurveyStepResults({ commit }, { surveyId, stepId }) {
+            const results = await SURVEY_RESULTS.getSurveyStepResults(
+                surveyId,
+                stepId,
+            )
+            commit('setSurveyStepResults', results.data)
         },
     },
 }
