@@ -1,7 +1,21 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1>{{ surveys?.length }} {{ t('surveys', surveys?.length) }}</h1>
+            <div class="flex mb-3 items-center">
+                <h1>
+                    {{ surveys?.length }} {{ t('surveys', surveys?.length) }}
+                </h1>
+                <div class="flex-grow items-center flex flex-row-reverse">
+                    <button
+                        class="primary mr-1"
+                        @click="
+                            setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
+                        "
+                    >
+                        {{ t('new_survey') }}
+                    </button>
+                </div>
+            </div>
 
             <div class="table-wrap mt-3 overflow-x-scroll">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -97,8 +111,12 @@
                 </table>
             </div>
         </main>
-        <aside>
-            <survey-details :survey-id="surveyId" @saved="surveySaved" />
+        <aside v-if="showSurveyDetailsEdit">
+            <survey-details
+                :survey-id="surveyId"
+                @saved="surveySaved"
+                @cancel="setShowSurveyDetailsEdit(false)"
+            />
         </aside>
     </div>
 </template>
@@ -117,6 +135,7 @@ import Collection from '../Common/Collection/Collection.vue'
 import SurveyDetails from './SurveyDetails.vue'
 import { computed, ref } from 'vue'
 import PublishedState from '../Common/PublishedState.vue'
+import { useState } from '../../composables/state'
 
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
@@ -136,9 +155,11 @@ export default {
     setup() {
         const router = useRouter()
         const store = useStore()
+        const { t } = useI18n()
         const surveyId = ref(-1)
         const isBusy = ref(false)
-        const { t } = useI18n()
+        const [showSurveyDetailsEdit, setShowSurveyDetailsEdit] =
+            useState(false)
 
         const surveys = computed({
             get: () => store.state.surveys.surveys,
@@ -147,6 +168,7 @@ export default {
         store.dispatch('surveys/getSurveys')
 
         const surveySaved = () => {
+            setShowSurveyDetailsEdit(false)
             store.dispatch('surveys/getSurveys')
         }
 
@@ -205,6 +227,8 @@ export default {
             duplicateSurvey,
             publishSurvey,
             surveySaved,
+            showSurveyDetailsEdit,
+            setShowSurveyDetailsEdit,
         }
     },
 }
