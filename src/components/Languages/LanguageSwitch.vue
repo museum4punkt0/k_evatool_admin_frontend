@@ -6,13 +6,13 @@
                 :key="language.id"
                 class="text-white px-2 py-1 text-sm flex-auto pointer"
                 :class="{
-                    'bg-blue-500':
+                    primary:
                         activeLanguage.code === language.code &&
                         !isInvalid.includes(language.code),
                     'bg-red-500':
                         activeLanguage.code === language.code &&
                         isInvalid.includes(language.code),
-                    'bg-blue-700':
+                    secondary:
                         activeLanguage.code !== language.code &&
                         !isInvalid.includes(language.code),
                     'bg-red-700':
