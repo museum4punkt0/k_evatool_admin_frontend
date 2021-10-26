@@ -159,6 +159,7 @@ export default {
         valueKey: { type: String, default: 'value' },
         defaultValue: { type: [String, Number], default: null },
         defaultTitle: { type: String, default: 'Nicht ausgewählt' },
+        titleGetter: { type: Function, default: null },
         useDefault: { type: Boolean, default: true },
         selected: {
             type: [String, Number],
@@ -175,7 +176,9 @@ export default {
             get: () => {
                 const localOptions2 = [...props.options].map((option) => {
                     return {
-                        title: option[props.titleKey],
+                        title: props.titleGetter
+                            ? props.titleGetter(option)
+                            : option[props.titleKey],
                         id: option[props.valueKey],
                     }
                 })

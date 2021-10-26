@@ -14,13 +14,14 @@
         />
     </div>
 
+    <!-- TODO: get default language -->
     <form-select
         v-if="elementTypes"
         v-model:selected="surveyElement.surveyElementType"
         class="mt-3"
         :options="elementTypes"
         :label="t('types', 1)"
-        title-key="name"
+        :title-getter="(elementType) => elementType.descriptions.title.de"
         value-key="key"
         readonly
     />
