@@ -18,6 +18,33 @@ const createDefaultQuestion = (languages) => {
     return question
 }
 
+const createTrueLabel = (language) => {
+    switch (language.code) {
+        case 'de':
+            return 'ja'
+        case 'en':
+            return 'yes'
+        case 'fr':
+            return 'oui'
+        case 'it':
+            return 'si'
+    }
+    return 'true'
+}
+const createFalseLabel = (language) => {
+    switch (language.code) {
+        case 'de':
+            return 'nein'
+        case 'en':
+            return 'no'
+        case 'fr':
+            return 'non'
+        case 'it':
+            return 'no'
+    }
+    return 'true'
+}
+
 export default (type, languages) => {
     switch (type) {
         case TYPES.SIMPLETEXT: {
@@ -69,40 +96,15 @@ export default (type, languages) => {
         case TYPES.BINARY: {
             const trueLabel = {}
             const falseLabel = {}
-            /*const createTrueLabel = (language) => {
-                switch (language.code) {
-                    case 'de':
-                        return 'ja'
-                    case 'en':
-                        return 'yes'
-                    case 'fr':
-                        return 'oui'
-                    case 'it':
-                        return 'si'
-                }
-                return 'true'
-            }*/
-            /*const createFalseLabel = (language) => {
-                switch (language.code) {
-                    case 'de':
-                        return 'nein'
-                    case 'en':
-                        return 'no'
-                    case 'fr':
-                        return 'non'
-                    case 'it':
-                        return 'no'
-                }
-                return 'true'
-            }*/
+
             languages.forEach((language) => {
-                trueLabel[language.code] = ''
-                falseLabel[language.code] = ''
+                trueLabel[language.code] = createTrueLabel(language)
+                falseLabel[language.code] = createFalseLabel(language)
             })
             return {
                 question: createDefaultQuestion(languages),
-                trueValue: 'accepted',
-                falseValue: 'declined',
+                trueValue: 'ja',
+                falseValue: 'nein',
                 trueLabel,
                 falseLabel,
             }
@@ -112,13 +114,13 @@ export default (type, languages) => {
             const falseLabel = {}
 
             languages.forEach((language) => {
-                trueLabel[language.code] = ''
-                falseLabel[language.code] = ''
+                trueLabel[language.code] = createTrueLabel(language)
+                falseLabel[language.code] = createFalseLabel(language)
             })
             return {
                 question: createDefaultQuestion(languages),
-                trueValue: 'accepted',
-                falseValue: 'declined',
+                trueValue: 'ja',
+                falseValue: 'nein',
                 trueLabel,
                 falseLabel,
                 assetIds: [],

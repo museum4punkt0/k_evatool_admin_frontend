@@ -1,7 +1,17 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <h1>{{ users.length }} {{ t('users', users.length) }}</h1>
+            <div class="flex flex-row justify-between">
+                <h1>{{ users.length }} {{ t('users', users.length) }}</h1>
+                <button
+                    v-if="store.state.users.user.admin"
+                    class="primary mr-1"
+                    @click="setShowSideBar(true)"
+                >
+                    {{ t('action_new_user') }}
+                </button>
+            </div>
+
             <div class="table-wrap mt-3">
                 <table>
                     <thead>
@@ -58,11 +68,12 @@
                 </table>
             </div>
         </main>
-        <aside>
+        <aside v-if="showSideBar">
             <user
                 v-if="store.state.users.user.admin"
                 :user-id="userId"
-                @saved="getUsers"
+                @saved="onSave"
+                @cancel="onCancel"
             />
         </aside>
     </div>
@@ -72,7 +83,7 @@
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-
+import { useState } from '../../composables/state'
 import userService from '../../services/userService'
 
 import {
@@ -94,13 +105,24 @@ export default {
         const userId = ref(-1)
 
         const users = computed(() => store.state.users.users)
+        const [showSideBar, setShowSideBar] = useState(false)
 
         const getUsers = () => {
             store.dispatch('users/getUsers')
         }
+        const onSave = () => {
+            setShowSideBar(false)
+            getUsers()
+        }
+        const onCancel = () => {
+            setShowSideBar(false)
+            userId.value = -1
+            getUsers()
+        }
 
         const editUser = (userIdToEdit) => {
             userId.value = userIdToEdit
+            setShowSideBar(true)
         }
 
         const deleteUser = (userId) => {
@@ -120,11 +142,14 @@ export default {
             users,
             t,
             userId,
-            getUsers,
+            onSave,
+            onCancel,
             editUser,
             deleteUser,
             inviteUser,
             store,
+            showSideBar,
+            setShowSideBar,
         }
     },
 }

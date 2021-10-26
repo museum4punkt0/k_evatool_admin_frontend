@@ -178,19 +178,16 @@
                             <button
                                 type="button"
                                 class="
+                                    secondary
                                     flex
-                                    bg-blue-600
                                     p-2
                                     px-4
                                     rounded-full
                                     items-center
                                     justify-center
-                                    text-white
-                                    hover:bg-blue-700
                                     focus:outline-none
                                     focus:ring-2
                                     focus:ring-offset-2
-                                    focus:ring-blue-500
                                 "
                                 @click="logoutUser"
                             >

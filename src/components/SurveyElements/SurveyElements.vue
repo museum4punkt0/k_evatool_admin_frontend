@@ -6,9 +6,15 @@
                     {{ surveyElements?.length }}
                     {{ t('survey_elements', surveyElements?.length) }}
                 </h1>
-                <button class="primary" @click="getSurveyElements">
+                <!-- <button class="primary" @click="getSurveyElements">
                     <refresh-icon class="h-4 w-4 mr-2" />
                     {{ t('action_reload') }}
+                </button> -->
+                <button
+                    class="primary mr-1"
+                    @click="setShowNewElement(!showNewElement)"
+                >
+                    {{ t('action_new_survey_element') }}
                 </button>
             </div>
             <div class="table-wrap mt-3">
@@ -76,7 +82,7 @@
                 </table>
             </div>
         </main>
-        <aside>
+        <aside v-if="showNewElement">
             <survey-element
                 :survey-element-id="surveyElementId"
                 @cancel="resetSurveyElement"
@@ -88,8 +94,9 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
+import { useState } from '../../composables/state'
 import { RefreshIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/outline'
 
 import SurveyElement from '../Surveys/SurveyElement.vue'
@@ -102,6 +109,7 @@ export default {
         const store = useStore()
         const isBusy = ref(false)
         const surveyElementId = ref(-1)
+        const [showNewElement, setShowNewElement] = useState(false)
 
         const surveyElements = computed({
             get: () => store.state.surveyElements.surveyElements,
@@ -112,15 +120,18 @@ export default {
         }
 
         const editSurveyElement = async (selectedSurveyElementId) => {
+            setShowNewElement(true)
             surveyElementId.value = selectedSurveyElementId
         }
 
         const savedSurveyElement = async () => {
+            setShowNewElement(false)
             getSurveyElements()
             surveyElementId.value = -1
         }
 
         const resetSurveyElement = async () => {
+            setShowNewElement(false)
             surveyElementId.value = -1
         }
 
@@ -139,6 +150,10 @@ export default {
             }
         }
 
+        onMounted(() => {
+            store.dispatch('surveyElements/getSurveyElements')
+        })
+
         return {
             t,
             surveyElements,
@@ -149,6 +164,8 @@ export default {
             surveyElementId,
             resetSurveyElement,
             savedSurveyElement,
+            showNewElement,
+            setShowNewElement,
         }
     },
 }

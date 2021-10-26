@@ -12,7 +12,7 @@
         </div>
         <div
             v-if="surveyStep.resultBasedNextSteps?.length > 0"
-            class="table-wrap"
+            class="table-wrap mb-3"
         >
             <table>
                 <thead class="bg-blue-500">
@@ -36,7 +36,7 @@
                             }}
                         </td>
                         <td
-                            class="pointer float-right"
+                            class="pointer float-right text-red-600"
                             @click="removeResultBasedStep(index)"
                         >
                             <TrashIcon class="h-5 w-5" />
@@ -46,9 +46,10 @@
             </table>
         </div>
 
-        <div class="grid grid-cols-3 gap-4">
+        <div class="flex">
             <form-select
                 v-model:selected="nextStep.type"
+                class="w-1/6 mr-4"
                 :options="surveyElementParams?.emojis"
                 title-key="type"
                 value-key="type"
@@ -57,17 +58,20 @@
             />
             <form-select
                 v-model:selected="nextStep.stepId"
-                :options="surveySteps"
+                class="flex-grow mr-4"
+                :options="surveySteps.filter((x) => x.id !== surveyStep.id)"
                 title-key="name"
                 value-key="id"
                 :default-value="-1"
                 :label="t('steps', 1)"
             />
             <action-button
-                :action-text="t('action_add')"
+                class="mt-6"
                 :disabled="v$.$invalid"
                 @execute="addResultBasedStep"
-            />
+            >
+                <plus-icon class="h-5 w-5" />
+            </action-button>
         </div>
     </div>
 </template>

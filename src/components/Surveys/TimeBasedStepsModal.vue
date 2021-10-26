@@ -114,27 +114,62 @@
                                                     {{ timeBasedStep.timecode }}
                                                 </td>
                                                 <td>
-                                                    <StopIcon
-                                                        v-if="
-                                                            timeBasedStep.stopsVideo
-                                                        "
-                                                        class="h-5 w-5"
-                                                    />
+                                                    <div class="flex">
+                                                        <div class="mx-1">
+                                                            <StopIcon
+                                                                v-if="
+                                                                    timeBasedStep.stopsVideo
+                                                                "
+                                                                class="h-5 w-5"
+                                                            />
+                                                        </div>
+                                                        <div
+                                                            class="
+                                                                mx-1
+                                                                pointer
+                                                                text-blue-800
+                                                            "
+                                                            @click="
+                                                                editTimeBasedStep(
+                                                                    timeBasedStep.stepId,
+                                                                )
+                                                            "
+                                                        >
+                                                            <PencilAltIcon
+                                                                class="h-5 w-5"
+                                                            />
+                                                        </div>
+                                                        <div
+                                                            class="
+                                                                mx-1
+                                                                pointer
+                                                                text-red-600
+                                                            "
+                                                            @click="
+                                                                deleteTimeBasedStep(
+                                                                    tIndex,
+                                                                )
+                                                            "
+                                                        >
+                                                            <TrashIcon
+                                                                class="h-5 w-5"
+                                                            />
+                                                        </div>
+                                                        <!--Todo: Add uuid for each element <- ist schon drin! -->
+                                                        <!--
+                                                        <div>
+                                                            <p
+                                                                class="
+                                                                    text-xs
+                                                                    text-gray-500
+                                                                "
+                                                            >
+                                                                {{ timeBasedStep.uuid }}
+                                                            </p>
+                                                        </div>
+                                                        -->
+                                                    </div>
                                                 </td>
-                                                <td
-                                                    class="pointer"
-                                                    @click="
-                                                        deleteTimeBasedStep(
-                                                            tIndex,
-                                                        )
-                                                    "
-                                                >
-                                                    <TrashIcon
-                                                        class="h-5 w-5"
-                                                    />
-                                                </td>
-                                                <!--Todo: Add edit button and functionality-->
-                                                <!--Todo: Add uuid for each element-->
                                             </tr>
                                         </tbody>
                                     </table>
@@ -142,6 +177,7 @@
 
                                 <div class="w-full bg-blue-200 p-2 rounded-lg">
                                     <form-select
+                                        v-if="!isEditingTimeBasedStep"
                                         v-model:selected="
                                             selectedTimeBasedStep.stepId
                                         "
@@ -150,7 +186,12 @@
                                                 ?.filter(
                                                     (item) =>
                                                         item.surveyElementType !==
-                                                        'video',
+                                                            'video' &&
+                                                        !timeBasedSteps?.find(
+                                                            (x) =>
+                                                                x.stepId ===
+                                                                item.id,
+                                                        ),
                                                 )
                                                 ?.map(mapStepsAlreadyInUse)
                                         "
@@ -159,6 +200,20 @@
                                         :default-value="-1"
                                         :label="t('steps', 1)"
                                     />
+                                    <template v-else>
+                                        <label>
+                                            {{ t('steps', 1) }}
+                                        </label>
+                                        <h2>
+                                            {{
+                                                store.state.surveys?.survey?.steps?.find(
+                                                    (x) =>
+                                                        x.id ===
+                                                        selectedTimeBasedStep.stepId,
+                                                )?.name
+                                            }}
+                                        </h2>
+                                    </template>
                                     <form-input
                                         v-model:value="
                                             selectedTimeBasedStep.timecode
@@ -201,13 +256,31 @@
                                         class="my-3"
                                         :label="t('allow_changing_answer')"
                                     />
-                                    <button
-                                        class="primary"
-                                        :disabled="savingTimeBasedSteps"
-                                        @click="addTimeBasedStep"
-                                    >
-                                        {{ t('action_add_time_based_step') }}
-                                    </button>
+                                    <template v-if="!isEditingTimeBasedStep">
+                                        <button
+                                            class="primary"
+                                            :disabled="savingTimeBasedSteps"
+                                            @click="addTimeBasedStep"
+                                        >
+                                            {{
+                                                t('action_add_time_based_step')
+                                            }}
+                                        </button>
+                                    </template>
+                                    <template v-else>
+                                        <button
+                                            class="secondary mr-3"
+                                            @click="resetTimeBasedStep"
+                                        >
+                                            {{ t('action_cancel') }}
+                                        </button>
+                                        <button
+                                            class="primary"
+                                            @click="saveChangeTimeBasedStep"
+                                        >
+                                            {{ t('action_save') }}
+                                        </button>
+                                    </template>
                                 </div>
                             </div>
 
@@ -249,7 +322,7 @@ import { v4 as uuidv4 } from 'uuid'
 import SURVEYS from '../../services/surveyService'
 import ASSETS from '../../services/assetService'
 
-import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
+import { TrashIcon, StopIcon, PencilAltIcon } from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
 import { maxLength, required, minValue } from '@vuelidate/validators'
@@ -268,6 +341,7 @@ export default {
         DialogOverlay,
         DialogTitle,
         TrashIcon,
+        PencilAltIcon,
         StopIcon,
     },
     props: {
@@ -298,8 +372,8 @@ export default {
 
         const getAsset = async () => {
             asset.value = await ASSETS.getAsset(
-                store.state.surveys.surveyStep.surveyElement.params
-                    .videoAssetId,
+                store.state.surveys?.surveyStep?.surveyElement?.params
+                    ?.videoAssetId,
             )
         }
 
@@ -320,15 +394,12 @@ export default {
             }
             timeBasedSteps.value.push(selectedTimeBasedStep.value)
             await saveSurveyStep()
-            selectedTimeBasedStep.value = {
-                uuid: uuidv4(),
-                stepId: -1,
-                timecode: '00:00:00:00',
-                displayTime: 5,
-                stopsVideo: true,
-                description: '',
-                allowChangingAnswer: false,
-            }
+            selectedTimeBasedStep.value = initTimeBasedStep
+        }
+
+        const saveChangeTimeBasedStep = async () => {
+            await saveSurveyStep()
+            selectedTimeBasedStep.value = initTimeBasedStep
         }
 
         const deleteTimeBasedStep = (index) => {
@@ -337,6 +408,18 @@ export default {
                 timeBasedSteps.value.splice(index, 1)
                 saveSurveyStep()
             }
+        }
+
+        const editTimeBasedStep = (id) => {
+            const tbStep = timeBasedSteps.value.find((x) => x.stepId === id)
+            if (tbStep) {
+                selectedTimeBasedStep.value = tbStep
+            }
+        }
+
+        const resetTimeBasedStep = () => {
+            // TODO: RESET THE STATE BACK
+            selectedTimeBasedStep.value = initTimeBasedStep
         }
 
         const saveSurveyStep = async () => {
@@ -370,16 +453,29 @@ export default {
             return step
         }
 
+        const isEditingTimeBasedStep = computed({
+            get: () => {
+                const tbStep = timeBasedSteps.value?.find(
+                    (x) => x.stepId === selectedTimeBasedStep.value.stepId,
+                )
+                return tbStep
+            },
+        })
+
         return {
             v$: useVuelidate(),
             modalIsOpen,
             savingTimeBasedSteps,
+            resetTimeBasedStep,
+            saveChangeTimeBasedStep,
             selectedTimeBasedStep,
             store,
             t,
             timeBasedSteps,
             addTimeBasedStep,
             deleteTimeBasedStep,
+            editTimeBasedStep,
+            isEditingTimeBasedStep,
             closeModal() {
                 modalIsOpen.value = false
             },
