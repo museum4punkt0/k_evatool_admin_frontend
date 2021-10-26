@@ -118,6 +118,9 @@ export default {
         const defaultLanguage = computed(
             () => store.state.languages.defaultLanguage,
         )
+        const elementTypes = computed(
+            () => store.state.elementTypes.elementTypes,
+        )
         const elementSearchQuery = ref('')
         const savingSurveyStep = ref(false)
         const { t } = useI18n()
@@ -147,6 +150,20 @@ export default {
             await store.dispatch('surveys/setSurveyStepId', savedSurveyStep.id)
             await store.dispatch('surveys/getSurvey')
             await store.dispatch('surveys/getSurveySteps', survey.value.id)
+            // const adminLayout = store.state.surveys.survey.adminLayout
+            // const nodeIndex = adminLayout.findIndex(
+            //     (node) => node.id === savedSurveyStep.id,
+            // )
+            // let mostRightPosition = { x: 0, y: 0 }
+            // adminLayout.forEach((node) => {
+            //     if (node.position.x > mostRightPosition.x) {
+            //         mostRightPosition = node.position
+            //     }
+            // })
+
+            // adminLayout[nodeIndex].position = { ...mostRightPosition }
+            // adminLayout[nodeIndex].position.x =
+            //     adminLayout[nodeIndex].position.x + 200
             savingSurveyStep.value = false
             store.dispatch('notifications/add', {
                 type: TYPES.SUCCESS,
@@ -183,8 +200,29 @@ export default {
                 )
                     includedInQuestionOrText = true
             })
+
+            const elementType = elementTypes.value.find(
+                (elementType) => elementType.key === item.surveyElementType,
+            )
+            let includedInElementTypeTitles = false
+            if (elementType?.descriptions) {
+                Object.entries(elementType?.descriptions?.title).forEach(
+                    (title) => {
+                        if (
+                            title[1]
+                                .toLowerCase()
+                                .includes(
+                                    elementSearchQuery.value.toLowerCase(),
+                                )
+                        ) {
+                            includedInElementTypeTitles = true
+                        }
+                    },
+                )
+            }
             return (
                 includedInQuestionOrText ||
+                includedInElementTypeTitles ||
                 item.name
                     .toLowerCase()
                     .includes(elementSearchQuery.value.toLowerCase()) ||
