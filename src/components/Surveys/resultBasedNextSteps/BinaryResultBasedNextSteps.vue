@@ -10,14 +10,14 @@
         </div>
         <form-select
             v-model:selected="nextSteps.trueNextStep.stepId"
-            :options="surveySteps"
+            :options="surveySteps.filter((x) => x.id !== surveyStep.id)"
             title-key="name"
             value-key="id"
             :label="surveyElementParams?.trueLabel[language.code]"
         />
         <form-select
             v-model:selected="nextSteps.falseNextStep.stepId"
-            :options="surveySteps"
+            :options="surveySteps.filter((x) => x.id !== surveyStep.id)"
             title-key="name"
             value-key="id"
             :label="surveyElementParams?.falseLabel[language.code]"

@@ -55,11 +55,10 @@
                 value-key="value"
                 :label="t('options', 1)"
             />
-
             <form-select
                 v-model:selected="nextStep.stepId"
                 class="mt-3 col-span-2"
-                :options="surveySteps"
+                :options="surveySteps.filter((x) => x.id !== surveyStep.id)"
                 title-key="name"
                 value-key="id"
                 :default-value="-1"

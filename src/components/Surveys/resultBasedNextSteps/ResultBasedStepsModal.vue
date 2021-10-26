@@ -84,12 +84,6 @@
                                         'starRating'
                                     "
                                 ></star-rating-result-based-next-steps>
-                                <yay-nay-result-based-next-steps
-                                    v-if="
-                                        surveyStep.surveyElementType ===
-                                        'yayNay'
-                                    "
-                                ></yay-nay-result-based-next-steps>
                             </div>
 
                             <div class="mt-4">
@@ -133,7 +127,6 @@ import BinaryResultBasedNextSteps from './BinaryResultBasedNextSteps.vue'
 import EmojiResultBasedNextSteps from './EmojiResultBasedNextSteps.vue'
 import MultipleChoiceResultBasedNextSteps from './MultipleChoiceResultBasedNextSteps.vue'
 import StarRatingResultBasedNextSteps from './StarRatingResultBasedNextSteps.vue'
-import YayNayResultBasedNextSteps from './YayNayResultBasedNextSteps.vue'
 
 export default {
     name: 'ResultBasedStepsModal',
@@ -152,7 +145,6 @@ export default {
         EmojiResultBasedNextSteps,
         MultipleChoiceResultBasedNextSteps,
         StarRatingResultBasedNextSteps,
-        YayNayResultBasedNextSteps,
     },
     props: {
         isOpen: {
