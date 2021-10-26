@@ -88,7 +88,7 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import { RefreshIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/outline'
 
@@ -138,6 +138,10 @@ export default {
                 isBusy.value = false
             }
         }
+
+        onMounted(() => {
+            store.dispatch('surveyElement/getSurveyElements')
+        })
 
         return {
             t,
