@@ -303,11 +303,11 @@
 
 <script>
 import {
-    TransitionRoot,
-    TransitionChild,
     Dialog,
     DialogOverlay,
     DialogTitle,
+    TransitionChild,
+    TransitionRoot,
 } from '@headlessui/vue'
 
 import { computed, ref } from 'vue'
@@ -322,10 +322,10 @@ import { v4 as uuidv4 } from 'uuid'
 import SURVEYS from '../../services/surveyService'
 import ASSETS from '../../services/assetService'
 
-import { TrashIcon, StopIcon, PencilAltIcon } from '@heroicons/vue/outline'
+import { PencilAltIcon, StopIcon, TrashIcon } from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
-import { maxLength, required, minValue } from '@vuelidate/validators'
+import { maxLength, minValue, required } from '@vuelidate/validators'
 
 import msToTimecode from 'ms-to-timecode'
 
@@ -411,9 +411,11 @@ export default {
         }
 
         const editTimeBasedStep = (id) => {
-            const tbStep = timeBasedSteps.value.find((x) => x.stepId === id)
-            if (tbStep) {
-                selectedTimeBasedStep.value = tbStep
+            const timeBasedStep = timeBasedSteps.value.find(
+                (x) => x.stepId === id,
+            )
+            if (timeBasedStep) {
+                selectedTimeBasedStep.value = timeBasedStep
             }
         }
 
@@ -438,8 +440,7 @@ export default {
 
         const videoTimeUpdate = (event) => {
             const timestamp = parseInt(event.target.currentTime * 1000)
-            const timecode = msToTimecode(timestamp, 25)
-            selectedTimeBasedStep.value.timecode = timecode
+            selectedTimeBasedStep.value.timecode = msToTimecode(timestamp, 25)
         }
 
         const mapStepsAlreadyInUse = (step) => {
@@ -455,10 +456,9 @@ export default {
 
         const isEditingTimeBasedStep = computed({
             get: () => {
-                const tbStep = timeBasedSteps.value?.find(
+                return timeBasedSteps.value?.find(
                     (x) => x.stepId === selectedTimeBasedStep.value.stepId,
                 )
-                return tbStep
             },
         })
 
