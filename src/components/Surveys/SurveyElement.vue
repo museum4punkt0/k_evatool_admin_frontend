@@ -15,14 +15,21 @@
     </div>
 
     <!-- TODO: get default language -->
+    <!-- :title-getter="(elementType) => elementType.descriptions.title.de" -->
+    <!-- :title-getter="
+            (elementType) =>
+                store.getters['elementTypes/getDisplayNameForKey'](
+                    elementType?.key,
+                )
+        " -->
     <form-select
         v-if="elementTypes"
         v-model:selected="surveyElement.surveyElementType"
         class="mt-3"
         :options="elementTypes"
         :label="t('types', 1)"
-        :title-getter="(elementType) => elementType.descriptions.title.de"
         value-key="key"
+        :title-getter="(elementType) => elementType.descriptions.title.de"
         readonly
     />
 

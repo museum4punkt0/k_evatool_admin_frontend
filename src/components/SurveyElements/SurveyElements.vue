@@ -41,7 +41,13 @@
 {{ surveyElement.description }}
 </p>-->
                             </td>
-                            <td>{{ surveyElement.surveyElementType }}</td>
+                            <td>
+                                {{
+                                    store.getters[
+                                        'elementTypes/getDisplayNameForKey'
+                                    ](surveyElement.surveyElementType)
+                                }}
+                            </td>
                             <td class="text-sm">
                                 <template
                                     v-if="surveyElement.surveyStepsCount > 0"

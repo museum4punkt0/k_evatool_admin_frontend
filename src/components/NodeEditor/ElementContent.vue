@@ -4,9 +4,9 @@
             {{ element.name }}
             <p class="w-full text-xs text-gray-500">
                 {{
-                    surveyElementTypes?.find(
-                        (x) => x.key === element.surveyElementType,
-                    )?.descriptions?.title?.de
+                    store.getters['elementTypes/getDisplayNameForKey'](
+                        element.surveyElementType,
+                    )
                 }}
             </p>
         </div>

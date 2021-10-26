@@ -21,5 +21,17 @@ export default {
             commit('setElementTypes', data)
         },
     },
-    getters: {},
+    getters: {
+        getDisplayNameForKey: (state) => (key) => {
+            const elementType = state.elementTypes.find(
+                (elementType) => elementType.key === key,
+            )
+            if (elementType) {
+                const language = 'de'
+                // TODO: get user language
+                return elementType.descriptions.title[language]
+            }
+            return key
+        },
+    },
 }
