@@ -140,7 +140,7 @@ export default {
         }
 
         onMounted(() => {
-            store.dispatch('surveyElement/getSurveyElements')
+            store.dispatch('surveyElements/getSurveyElements')
         })
 
         return {
