@@ -24,6 +24,7 @@ export default createStore({
     state: {
         debug: import.meta.env.VITE_DEBUG === 'true',
         app: null,
+        language: 'de',
     },
     mutations: {
         setApp(state, app) {

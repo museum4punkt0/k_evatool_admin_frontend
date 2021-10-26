@@ -22,13 +22,12 @@ export default {
         },
     },
     getters: {
-        getDisplayNameForKey: (state) => (key) => {
+        getDisplayNameForKey: (state, getters, rootState) => (key) => {
             const elementType = state.elementTypes.find(
                 (elementType) => elementType.key === key,
             )
             if (elementType) {
-                const language = 'de'
-                // TODO: get user language
+                const language = rootState.language
                 return elementType.descriptions.title[language]
             }
             return key
