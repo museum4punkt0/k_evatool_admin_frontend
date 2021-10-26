@@ -15,7 +15,7 @@ import Login from '../components/Login.vue'
 
 import Users from '../components/Users/Users.vue'
 
-import SurveyStats from '../components/stats/SurveyStats.vue'
+import SurveyStats from '../components/Stats/SurveyStats.vue'
 
 import ConfirmInvitation from '../components/Users/ConfirmInvitation.vue'
 
