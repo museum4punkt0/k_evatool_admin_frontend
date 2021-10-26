@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.328",
+    "version": "1.0.329",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -17,8 +17,6 @@
         "@heroicons/vue": "^1.0.5",
         "@tailwindcss/forms": "^0.3.4",
         "@tinymce/tinymce-vue": "^4.0.4",
-        "@tiptap/starter-kit": "^2.0.0-beta.130",
-        "@tiptap/vue-3": "^2.0.0-beta.72",
         "@uppy/core": "^2.1.1",
         "@uppy/locales": "^2.0.3",
         "@uppy/tus": "^2.1.1",
