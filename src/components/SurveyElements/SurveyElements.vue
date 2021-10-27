@@ -2,20 +2,38 @@
     <div class="flex overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row justify-between">
-                <h1>
-                    {{ surveyElements?.length }}
-                    {{ t('survey_elements', surveyElements?.length) }}
-                </h1>
-                <!-- <button class="primary" @click="getSurveyElements">
-                    <refresh-icon class="h-4 w-4 mr-2" />
-                    {{ t('action_reload') }}
-                </button> -->
-                <button
-                    class="primary mr-1"
-                    @click="setShowNewElement(!showNewElement)"
+                <h1
+                    v-if="
+                        filteredSurveyElements.length > 0 &&
+                        filteredSurveyElements.length < surveyElements.length
+                    "
                 >
-                    {{ t('action_new_survey_element') }}
-                </button>
+                    {{ filteredSurveyElements.length }} {{ t('of') }}
+                    {{ surveyElements.length }}
+                    {{ t('survey_elements', surveyElements.length) }}
+                </h1>
+                <h1 v-else>
+                    {{ filteredSurveyElements.length }}
+                    {{ t('survey_elements', filteredSurveyElements.length) }}
+                </h1>
+                <div class="flex-1 flex flex-row justify-end">
+                    <form-input
+                        v-model:value="searchQuery"
+                        name="name"
+                        type="text"
+                        label=""
+                        :placeholder="`${t('filter', 1)}: ${t('id')}, ${t(
+                            'name',
+                        )}`"
+                        class="mr-4"
+                    />
+                    <button
+                        class="primary mr-1"
+                        @click="setShowNewElement(!showNewElement)"
+                    >
+                        {{ t('action_new_survey_element') }}
+                    </button>
+                </div>
             </div>
             <div class="table-wrap mt-3">
                 <table>
@@ -31,7 +49,9 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="surveyElement in surveyElements"
+                            v-for="surveyElement in surveyElements.filter(
+                                filter,
+                            )"
                             :key="surveyElement.id"
                             @click="editSurveyElement(surveyElement.id)"
                         >
@@ -102,26 +122,42 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useState } from '../../composables/state'
 import { RefreshIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/outline'
 
 import SurveyElement from '../Surveys/SurveyElement.vue'
+import FormInput from '../Forms/FormInput.vue'
+
+import { searchForWordsInString } from '../../utils/search'
 
 export default {
     name: 'SurveyElements',
-    components: { SurveyElement, RefreshIcon, PencilAltIcon, TrashIcon },
+    components: {
+        FormInput,
+        SurveyElement,
+        RefreshIcon,
+        PencilAltIcon,
+        TrashIcon,
+    },
     setup() {
         const { t } = useI18n()
         const store = useStore()
         const isBusy = ref(false)
         const surveyElementId = ref(-1)
+        const searchQuery = ref('')
         const [showNewElement, setShowNewElement] = useState(false)
 
         const surveyElements = computed({
             get: () => store.state.surveyElements.surveyElements,
         })
+        const [filteredSurveyElements, setFilteredSurveyElements] = useState(
+            surveyElements.value,
+        )
+        const elementTypes = computed(
+            () => store.state.elementTypes.elementTypes,
+        )
 
         const getSurveyElements = () => {
             store.dispatch('surveyElements/getSurveyElements')
@@ -162,6 +198,48 @@ export default {
             store.dispatch('surveyElements/getSurveyElements')
         })
 
+        const filter = (surveyElement) => {
+            const languageKeys = surveyElement.params.text
+                ? Object.keys(surveyElement.params.text)
+                : surveyElement.params.question
+                ? Object.keys(surveyElement.params.question)
+                : []
+            const includedInQuestionOrText =
+                searchForWordsInString(
+                    [surveyElement.params.text, surveyElement.params.question],
+                    searchQuery.value,
+                    languageKeys,
+                ).length > 0
+
+            const elementType = elementTypes.value.find(
+                (elementType) =>
+                    elementType.key === surveyElement.surveyElementType,
+            )
+
+            const includedInElementTypeTitles =
+                elementType &&
+                searchForWordsInString(
+                    [elementType.descriptions.title],
+                    searchQuery.value,
+                    Object.keys(elementType.descriptions.title),
+                ).length > 0
+
+            return (
+                includedInQuestionOrText ||
+                includedInElementTypeTitles ||
+                searchForWordsInString([surveyElement], searchQuery.value, [
+                    'id',
+                    'name',
+                    'description',
+                    'surveyElementType',
+                ]).length > 0
+            )
+        }
+        watch(searchQuery, () => {
+            const filteredSurveyElements = surveyElements.value.filter(filter)
+            setFilteredSurveyElements(filteredSurveyElements)
+        })
+
         return {
             t,
             surveyElements,
@@ -174,6 +252,9 @@ export default {
             savedSurveyElement,
             showNewElement,
             setShowNewElement,
+            searchQuery,
+            filter,
+            filteredSurveyElements,
         }
     },
 }
