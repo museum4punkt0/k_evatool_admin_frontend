@@ -5,7 +5,7 @@
                 <li>
                     {{ t('questions', 1) }}:
                     {{
-                        surveyStep.surveyElement.params.question[language.code]
+                        surveyStep.surveyElement?.params.question[language.code]
                     }}
                 </li>
             </ul>
@@ -15,14 +15,14 @@
             class="table-wrap"
         >
             <table>
-                <thead class="bg-blue-500">
+                <thead>
                     <tr>
                         <th>{{ t('options', 1) }}</th>
                         <th>{{ t('steps', 1) }}</th>
                         <th>{{ t('actions', 2) }}</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody>
                     <tr
                         v-for="(step, s) in surveyStep.resultBasedNextSteps"
                         :key="s"
@@ -65,10 +65,12 @@
                 :label="t('steps', 1)"
             />
             <action-button
-                class="mt-9"
-                :action-text="t('action_add')"
+                class="mt-9 col-span-1"
+                :disabled="v$.$invalid"
                 @execute="setNextStep"
-            />
+            >
+                <PlusIcon class="h-5 w-5" />
+            </action-button>
         </div>
     </div>
 </template>
@@ -79,14 +81,15 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
 import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
 import FormSelect from '../../Forms/FormSelect.vue'
 import ActionButton from '../../Common/ActionButton.vue'
 
-import { TrashIcon } from '@heroicons/vue/outline'
+import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 
 export default {
-    components: { ActionButton, FormSelect, TrashIcon },
+    components: { ActionButton, FormSelect, TrashIcon, PlusIcon },
     setup() {
         const store = useStore()
         const { t } = useI18n()
@@ -111,6 +114,10 @@ export default {
             surveyStep.value.resultBasedNextSteps.push({ ...nextStep.value })
 
             store.dispatch('surveys/saveSurveyStep', surveyStep.value)
+            nextStep.value = {
+                value: '',
+                stepId: -1,
+            }
         }
 
         const deleteResultBasedStep = (index) => {
@@ -122,8 +129,26 @@ export default {
             }
         }
 
+        const validations = {
+            value: {
+                required,
+            },
+            stepId: {
+                required,
+                exists: (value) => {
+                    return (
+                        surveySteps.value.find((step) => step.id === value) !=
+                        null
+                    )
+                },
+            },
+        }
+        const v$ = useVuelidate(validations, nextStep, {
+            scope: 'multipleChoiceResultBasedNextSteps',
+        })
+
         return {
-            v$: useVuelidate(),
+            v$,
             store,
             t,
             surveyStep,
