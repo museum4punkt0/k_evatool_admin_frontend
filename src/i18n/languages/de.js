@@ -89,6 +89,7 @@ export default {
     result_based_steps:
         'Antwortabhängige Schritte | Antwortabhängiger Schritt | Antwortabhängige Schritte',
     search: 'Suche',
+    filter: 'Filter',
     slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',

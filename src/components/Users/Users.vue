@@ -2,13 +2,14 @@
     <div class="flex overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row">
-                <h1>{{ users.length }} {{ t('users', users.length) }}</h1>
+                <h1>{{ titlePrefix }} {{ t('users', users.length) }}</h1>
                 <div class="flex-1 flex flex-row justify-end">
                     <form-input
                         v-model:value="searchQuery"
                         name="name"
                         type="text"
-                        :label="t('search', 1)"
+                        :label="t('filter', 1)"
+                        :placeholder="`${t('name')}, ${t('email')}`"
                         class="mr-4"
                     />
                     <button
@@ -93,7 +94,7 @@
 
 <script>
 import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useState } from '../../composables/state'
 import userService from '../../services/userService'
@@ -128,6 +129,7 @@ export default {
 
         const users = computed(() => store.state.users.users)
         const [showSideBar, setShowSideBar] = useState(false)
+        const [titlePrefix, setTitlePrefix] = useState(users.value.length)
 
         const getUsers = () => {
             store.dispatch('users/getUsers')
@@ -163,6 +165,18 @@ export default {
             searchForWordsInString([user], searchQuery.value, ['name', 'email'])
                 .length > 0
 
+        watch(searchQuery, () => {
+            const matchedUsers = users.value.filter(filter)
+            if (
+                0 < matchedUsers.length &&
+                matchedUsers.length < users.value.length
+            ) {
+                setTitlePrefix(`${matchedUsers.length}/${users.value.length}`)
+            } else {
+                setTitlePrefix(users.value.length)
+            }
+        })
+
         getUsers()
 
         return {
@@ -179,6 +193,7 @@ export default {
             setShowSideBar,
             searchQuery,
             filter,
+            titlePrefix,
         }
     },
 }
