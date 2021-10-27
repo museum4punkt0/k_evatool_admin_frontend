@@ -33,6 +33,7 @@
                         <tr
                             v-for="surveyElement in surveyElements"
                             :key="surveyElement.id"
+                            @click="editSurveyElement(surveyElement.id)"
                         >
                             <td class="text-lg">{{ surveyElement.id }}</td>
                             <td>
@@ -74,6 +75,7 @@
                                         text-gray-500
                                         cursor-not-allowed
                                     "
+                                    @click.prevent.stop="null"
                                 />
                                 <trash-icon
                                     v-else

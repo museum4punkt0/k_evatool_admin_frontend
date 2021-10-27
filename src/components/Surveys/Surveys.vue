@@ -35,7 +35,7 @@
                         :key="'survey_row_' + survey.id"
                         class="bg-white divide-y divide-gray-200"
                     >
-                        <tr>
+                        <tr @click.prevent.stop="editSurvey(survey.id)">
                             <td class="text-lg">
                                 {{ survey.id }}
                             </td>
@@ -76,8 +76,8 @@
                                         w-5
                                         text-gray-500
                                         cursor-not-allowed
-                                        pointer
                                     "
+                                    @click.prevent.stop="null"
                                 />
                                 <trash-icon
                                     v-else

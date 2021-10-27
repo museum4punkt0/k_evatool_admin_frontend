@@ -26,7 +26,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="user in users" :key="user.id">
+                        <tr
+                            v-for="user in users"
+                            :key="user.id"
+                            @click.prevent.stop="editUser(user.id)"
+                        >
                             <td>{{ user.id }}</td>
                             <td>
                                 {{ user.name }}
@@ -50,17 +54,17 @@
                                 <PencilAltIcon
                                     v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5"
-                                    @click="editUser(user.id)"
+                                    @click.prevent.stop="editUser(user.id)"
                                 />
                                 <TrashIcon
                                     v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
-                                    @click="deleteUser(user.id)"
+                                    @click.prevent.stop="deleteUser(user.id)"
                                 />
                                 <MailIcon
                                     v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 pointer"
-                                    @click="inviteUser(user.id)"
+                                    @click.prevent.stop="inviteUser(user.id)"
                                 />
                             </td>
                         </tr>
@@ -121,6 +125,7 @@ export default {
         }
 
         const editUser = (userIdToEdit) => {
+            if (!store.state.users.user.admin) return
             userId.value = userIdToEdit
             setShowSideBar(true)
         }
