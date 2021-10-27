@@ -88,9 +88,7 @@
                                 />
                                 <EyeIcon
                                     class="mx-1 h-5 w-5 pointer"
-                                    @click.prevent.stop="
-                                        previewSurvey(survey.id)
-                                    "
+                                    @click.prevent.stop="previewSurvey(survey)"
                                 />
                                 <DocumentDuplicateIcon
                                     v-if="store.state.users.user.admin"
@@ -186,12 +184,12 @@ export default {
             isBusy.value = false
         }
 
-        const previewSurvey = (surveyIdPreview) => {
+        const previewSurvey = (surveyPreview) => {
             window
                 .open(
                     import.meta.env.VITE_PREVIEW_URL +
-                        '/#/?id=' +
-                        surveyIdPreview +
+                        '/#/?survey=' +
+                        surveyPreview.slug +
                         '&demo=true',
                     '_blank',
                 )
