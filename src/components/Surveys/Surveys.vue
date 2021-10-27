@@ -2,10 +2,31 @@
     <div class="flex overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row justify-between">
-                <h1>
-                    {{ surveys?.length }} {{ t('surveys', surveys?.length) }}
+                <h1
+                    v-if="
+                        filteredSurveys.length > 0 &&
+                        filteredSurveys.length < surveys.length
+                    "
+                >
+                    {{ filteredSurveys.length }} {{ t('of') }}
+                    {{ surveys.length }}
+                    {{ t('surveys', surveys.length) }}
                 </h1>
-                <div class="flex-grow items-center flex flex-row-reverse">
+                <h1 v-else>
+                    {{ surveys.length }}
+                    {{ t('surveys', filteredSurveys.length) }}
+                </h1>
+                <div class="flex-1 flex flex-row justify-end">
+                    <form-input
+                        v-model:value="searchQuery"
+                        name="name"
+                        type="text"
+                        label=""
+                        :placeholder="`${t('filter', 1)}: ${t('id')}, ${t(
+                            'name',
+                        )}, ${t('description')}`"
+                        class="mr-4"
+                    />
                     <button
                         class="primary mr-1"
                         @click="
@@ -31,7 +52,7 @@
                         </tr>
                     </thead>
                     <tbody
-                        v-for="survey in surveys"
+                        v-for="survey in surveys.filter(filter)"
                         :key="'survey_row_' + survey.id"
                         class="bg-white divide-y divide-gray-200"
                     >
@@ -132,16 +153,20 @@ import { useRouter } from 'vue-router'
 
 import Collection from '../Common/Collection/Collection.vue'
 import SurveyDetails from './SurveyDetails.vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import PublishedState from '../Common/PublishedState.vue'
 import { useState } from '../../composables/state'
 
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+import FormInput from '../Forms/FormInput.vue'
+
+import { searchForWordsInString } from '../../utils/search'
 
 export default {
     name: 'SurveysList',
     components: {
+        FormInput,
         PublishedState,
         SurveyDetails,
         Collection,
@@ -163,6 +188,8 @@ export default {
         const surveys = computed({
             get: () => store.state.surveys.surveys,
         })
+        const searchQuery = ref('')
+        const [filteredSurveys, setFilteredSurveys] = useState(surveys.value)
 
         store.dispatch('surveys/getSurveys')
 
@@ -214,6 +241,20 @@ export default {
             }
         }
 
+        const filter = (survey) => {
+            return (
+                searchForWordsInString([survey], searchQuery.value, [
+                    'id',
+                    'name',
+                    'description',
+                ]).length > 0
+            )
+        }
+        watch(searchQuery, () => {
+            const filteredSurveys = surveys.value.filter(filter)
+            setFilteredSurveys(filteredSurveys)
+        })
+
         return {
             store,
             surveys,
@@ -228,6 +269,9 @@ export default {
             surveySaved,
             showSurveyDetailsEdit,
             setShowSurveyDetailsEdit,
+            searchQuery,
+            filter,
+            filteredSurveys,
         }
     },
 }
