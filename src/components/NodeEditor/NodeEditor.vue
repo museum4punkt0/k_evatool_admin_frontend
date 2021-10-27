@@ -434,6 +434,10 @@ export default {
             }
         }
 
+        const refreshSteps = () => {
+            store.dispatch('surveys/getSurveySteps', props.surveyId)
+        }
+
         /** MOUSEHANDLER **/
         const onMouseDown = (step) => {
             draggedStep.value = step
@@ -486,6 +490,7 @@ export default {
                 stepId,
                 nextStepId,
             })
+            refreshSteps()
             // TODO: only on success
             selectedInput.value = -1
             selectedOutput.value = -1
@@ -496,6 +501,7 @@ export default {
                 surveyId: props.surveyId,
                 stepId,
             })
+            refreshSteps()
         }
 
         const getStepElementPosition = (id, anchor) => {
@@ -640,6 +646,7 @@ export default {
             width,
             hasNextAndPreviousSockets,
             hasResultBasedNextStepsButton,
+            refreshSteps,
         }
     },
 }
