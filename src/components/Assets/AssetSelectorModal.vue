@@ -72,7 +72,7 @@
                                 :props="dashboardOptions"
                             />
 
-                            <div class="mt-2 grid grid-cols-3 gap-4">
+                            <div class="mt-2 flex w-full flex-wrap">
                                 <div
                                     v-for="asset in assets.filter((item) => {
                                         return item.mime.startsWith(
@@ -80,16 +80,14 @@
                                         )
                                     })"
                                     :key="'asset-' + asset.id"
-                                    @click="selectAsset(asset.id)"
+                                    class="w-1/2"
                                 >
                                     <div
-                                        class="
-                                            pointer
-                                            relative
-                                            w-full
-                                            h-40
-                                            rounded-lg
-                                            overflow-hidden
+                                        class="flex flex-col p-1 rounded"
+                                        :class="
+                                            selectedAssets.includes(asset.id)
+                                                ? 'ring-2 ring-blue-500'
+                                                : ''
                                         "
                                     >
                                         <img
@@ -98,7 +96,13 @@
                                             "
                                             :src="asset.urls.original"
                                             alt="Avatar"
-                                            class="object-cover w-full h-full"
+                                            class="
+                                                object-cover
+                                                w-full
+                                                h-full
+                                                pointer
+                                            "
+                                            @click="selectAsset(asset.id)"
                                         />
 
                                         <video
@@ -113,26 +117,19 @@
                                                 :type="asset.mime"
                                             />
                                         </video>
-                                        <div
-                                            class="
-                                                absolute
-                                                w-full
-                                                py-2.5
-                                                bottom-0
-                                                inset-x-0
-                                                bg-gray-400
-                                                text-white text-xs text-center
-                                                leading-4
+                                        <button
+                                            class="mt-1"
+                                            :class="
+                                                selectedAssets.includes(
+                                                    asset.id,
+                                                )
+                                                    ? 'secondary'
+                                                    : 'primary'
                                             "
-                                            :class="{
-                                                'bg-green-500':
-                                                    selectedAssets.includes(
-                                                        asset.id,
-                                                    ),
-                                            }"
+                                            @click="selectAsset(asset.id)"
                                         >
                                             {{ asset.filename }}
-                                        </div>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -299,8 +296,4 @@ export default {
 }
 </script>
 
-<style scoped>
-video {
-    pointer-events: none;
-}
-</style>
+<style scoped></style>

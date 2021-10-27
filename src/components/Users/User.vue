@@ -1,41 +1,45 @@
 <template>
-    <h1 v-if="user.id">{{ t('edit_user') }}</h1>
-    <h1 v-else>{{ t('new_user') }}</h1>
-    <form-input
-        v-model:value="user.name"
-        name="name"
-        class="mt-3"
-        :label="t('names', 1)"
-    />
-    <form-input
-        v-model:value="user.email"
-        name="email"
-        class="mt-3"
-        :label="t('email')"
-    />
-    <form-input
-        v-if="!user.id"
-        v-model:value="user.password"
-        type="password"
-        name="password"
-        class="mt-3"
-        :label="t('passwords', 1)"
-    />
-    <form-input
-        v-if="!user.id"
-        v-model:value="user.passwordConfirmation"
-        class="mt-3"
-        type="password"
-        name="password"
-        :label="t('password_confirmation')"
-    />
+    <form>
+        <h1 v-if="user.id">{{ t('edit_user') }}</h1>
+        <h1 v-else>{{ t('new_user') }}</h1>
+        <form-input
+            v-model:value="user.name"
+            name="name"
+            class="mt-3"
+            :label="t('names', 1)"
+        />
+        <form-input
+            v-model:value="user.email"
+            name="email"
+            class="mt-3"
+            :label="t('email')"
+        />
+        <form-input
+            v-if="!user.id"
+            v-model:value="user.password"
+            type="password"
+            autocomplete="new-password"
+            name="password"
+            class="mt-3"
+            :label="t('passwords', 1)"
+        />
+        <form-input
+            v-if="!user.id"
+            v-model:value="user.passwordConfirmation"
+            class="mt-3"
+            type="password"
+            autocomplete="new-password"
+            name="password-confirmation"
+            :label="t('password_confirmation')"
+        />
 
-    <form-toggle
-        v-if="store.state.users.user.admin"
-        v-model:enabled="user.admin"
-        class="my-3"
-        :label="'Admin'"
-    />
+        <form-toggle
+            v-if="store.state.users.user.admin"
+            v-model:enabled="user.admin"
+            class="my-3"
+            :label="'Admin'"
+        />
+    </form>
 
     <div class="flex flex-row">
         <button class="secondary mr-3" @click="cancelUser">

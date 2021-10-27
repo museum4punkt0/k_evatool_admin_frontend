@@ -86,16 +86,15 @@ export default {
     },
     setup(props) {
         const validConnection = computed(() => {
-            if (
-                props.width &&
-                props.height &&
-                props.start.x &&
-                props.start.y &&
-                props.end.x &&
-                props.end.y
-            ) {
+            if (props.start.x && props.start.y && props.end.x && props.end.y) {
                 return true
             }
+            console.warn(
+                'ERROR: could not draw connection ' +
+                    props.label +
+                    ' | id ' +
+                    props.id,
+            )
             return false
         })
         return { validConnection }
