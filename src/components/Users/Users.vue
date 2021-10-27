@@ -8,8 +8,10 @@
                         v-model:value="searchQuery"
                         name="name"
                         type="text"
-                        :label="t('filter', 1)"
-                        :placeholder="`${t('name')}, ${t('email')}`"
+                        label=""
+                        :placeholder="`${t('filter', 1)}: ${t('name')}, ${t(
+                            'email',
+                        )}`"
                         class="mr-4"
                     />
                     <button
