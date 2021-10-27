@@ -25,8 +25,8 @@
         v-if="!user.id"
         v-model:value="user.passwordConfirmation"
         class="mt-3"
-        type="password"
-        name="password"
+        type="password_confirmation"
+        name="password_confirmation"
         :label="t('password_confirmation')"
     />
 
