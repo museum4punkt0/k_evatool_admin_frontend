@@ -5,7 +5,7 @@
                 <li>
                     {{ t('questions', 1) }}:
                     {{
-                        surveyStep.surveyElement.params.question[language.code]
+                        surveyStep.surveyElement?.params.question[language.code]
                     }}
                 </li>
             </ul>
@@ -15,7 +15,7 @@
             class="table-wrap mb-3"
         >
             <table>
-                <thead class="bg-blue-500">
+                <thead>
                     <tr>
                         <th class="sticky">{{ t('emoji', 1) }}</th>
                         <th class="sticky">{{ t('steps', 1) }}</th>
@@ -50,7 +50,14 @@
             <form-select
                 v-model:selected="nextStep.type"
                 class="w-1/6 mr-4"
-                :options="surveyElementParams?.emojis"
+                :options="
+                    surveyElementParams?.emojis.filter(
+                        (emoji) =>
+                            surveyStep.resultBasedNextSteps.find(
+                                (step) => step.type === emoji.type,
+                            ) == null,
+                    )
+                "
                 title-key="type"
                 value-key="type"
                 :default-value="-1"
