@@ -28,8 +28,8 @@
         class="mt-3"
         :options="elementTypes"
         :label="t('types', 1)"
+        :title-getter="elementTypeTitleGetter"
         value-key="key"
-        :title-getter="(elementType) => elementType.descriptions.title.de"
         readonly
     />
 
@@ -272,6 +272,12 @@ export default {
             $scope: 'surveyElement',
         })
 
+        const elementTypeTitleGetter = (elementType) => {
+            return store.getters['elementTypes/getDisplayNameForKey'](
+                elementType.key,
+            )
+        }
+
         return {
             validator,
             surveyElement,
@@ -283,6 +289,7 @@ export default {
             cancelEdit,
             setParamsValid,
             validations,
+            elementTypeTitleGetter,
         }
     },
 }
