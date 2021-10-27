@@ -19,7 +19,7 @@
                     <button
                         class="primary mr-1"
                         :disabled="store.state.surveys.surveyStep"
-                        @click.prevent.stop="previewSurvey(survey.id)"
+                        @click.prevent.stop="previewSurvey(survey)"
                     >
                         <EyeIcon class="h-5 w-5 mr-2 pointer" />
                         {{ t('action_open_preview') }}
@@ -139,12 +139,12 @@ export default {
         }
 
         const onScroll = () => {}
-        const previewSurvey = (surveyIdPreview) => {
+        const previewSurvey = (surveyPreview) => {
             window
                 .open(
                     import.meta.env.VITE_PREVIEW_URL +
                         '/#/?id=' +
-                        surveyIdPreview +
+                        surveyPreview.slug +
                         '&demo=true',
                     '_blank',
                 )
