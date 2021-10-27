@@ -51,7 +51,11 @@
                     :class="{
                         'shadow-lg': surveyStepId === step.id,
                         'node-selected': surveyStepId === step.id,
-                        'border-1': draggedStep,
+                        'border border-1 border-red-600':
+                            steps.find((item) => item.id === step.id)
+                                ?.previousSteps.length === 0 &&
+                            steps.find((item) => item.id === step.id)
+                                ?.nextStepId === null,
                     }"
                 >
                     <div

@@ -34,6 +34,7 @@
                                     assetRefs['asset' + i] = el
                                 }
                             "
+                            @click="openAssetModal(asset.id)"
                         >
                             <td class="text-lg">
                                 {{ asset.id }}
@@ -70,6 +71,7 @@
                                             text-gray-500
                                             cursor-not-allowed
                                         "
+                                        @click.prevent.stop="null"
                                     />
                                     -->
                                 <trash-icon
