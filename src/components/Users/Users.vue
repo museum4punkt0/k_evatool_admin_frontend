@@ -1,15 +1,24 @@
 <template>
     <div class="flex overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
-            <div class="flex flex-row justify-between">
+            <div class="flex flex-row">
                 <h1>{{ users.length }} {{ t('users', users.length) }}</h1>
-                <button
-                    v-if="store.state.users.user.admin"
-                    class="primary mr-1"
-                    @click="setShowSideBar(true)"
-                >
-                    {{ t('action_new_user') }}
-                </button>
+                <div class="flex-1 flex flex-row justify-end">
+                    <form-input
+                        v-model:value="searchQuery"
+                        name="name"
+                        type="text"
+                        :label="t('filter', 1)"
+                        class="mr-4"
+                    />
+                    <button
+                        v-if="store.state.users.user.admin"
+                        class="primary mr-1"
+                        @click="setShowSideBar(true)"
+                    >
+                        {{ t('action_new_user') }}
+                    </button>
+                </div>
             </div>
             <div class="table-wrap mt-3">
                 <table>
@@ -26,7 +35,7 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="user in users"
+                            v-for="user in users.filter(filter)"
                             :key="user.id"
                             @click.prevent.stop="editUser(user.id)"
                         >
@@ -88,6 +97,8 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useState } from '../../composables/state'
 import userService from '../../services/userService'
+import FormInput from '../Forms/FormInput.vue'
+import { searchForWordsInString } from '../../utils/search'
 
 import {
     TrashIcon,
@@ -100,12 +111,20 @@ import User from './User.vue'
 
 export default {
     name: 'Users',
-    components: { User, TrashIcon, PencilAltIcon, CheckIcon, MailIcon },
+    components: {
+        FormInput,
+        User,
+        TrashIcon,
+        PencilAltIcon,
+        CheckIcon,
+        MailIcon,
+    },
     setup() {
         const store = useStore()
         const { t } = useI18n()
 
         const userId = ref(-1)
+        const searchQuery = ref('')
 
         const users = computed(() => store.state.users.users)
         const [showSideBar, setShowSideBar] = useState(false)
@@ -140,6 +159,10 @@ export default {
             }
         }
 
+        const filter = (user) =>
+            searchForWordsInString([user], searchQuery.value, ['name', 'email'])
+                .length > 0
+
         getUsers()
 
         return {
@@ -154,6 +177,8 @@ export default {
             store,
             showSideBar,
             setShowSideBar,
+            searchQuery,
+            filter,
         }
     },
 }
