@@ -1,6 +1,6 @@
 <template>
-    <div class="flex-1 flex items-stretch overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-3">
+    <div class="flex overflow-hidden">
+        <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row justify-between">
                 <h1>
                     {{ surveyElements?.length }}

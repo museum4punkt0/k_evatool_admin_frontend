@@ -1,66 +1,67 @@
 <template>
-    <div class="flex-1 flex items-stretch overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-3">
-            <h1 v-if="store.state.assets?.assets" class="mb-3">
-                {{ store.state.assets.assets.length }}
-                {{ t('assets', store.state.assets.assets.length) }}
-            </h1>
-
-            <template
+    <div class="flex overflow-hidden">
+        <main class="flex h-full w-full flex-col p-3">
+            <div class="flex flex-row justify-between">
+                <h1 v-if="store.state.assets?.assets" class="mb-3">
+                    {{ store.state.assets.assets.length }}
+                    {{ t('assets', store.state.assets.assets.length) }}
+                </h1>
+            </div>
+            <div
                 v-if="
                     store.state.assets?.assets &&
                     store.state.assets.assets.length > 0
                 "
+                class="table-wrap"
             >
-                <div class="table-wrap">
-                    <table class="table-fixed">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th></th>
-                                <th>{{ t('filename') }}</th>
-                                <th>{{ t('filetype') }}</th>
-                                <th>{{ t('filesize') }}</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="(asset, i) in store.state.assets?.assets"
-                                :key="asset.id"
-                                :ref="
-                                    (el) => {
-                                        assetRefs['asset' + i] = el
-                                    }
-                                "
-                                @click="openAssetModal(asset.id)"
-                            >
-                                <td class="text-lg">
-                                    {{ asset.id }}
-                                </td>
-                                <td class="m-0 p-0">
-                                    <img
-                                        v-if="asset.urls.thumbnail"
-                                        class="max-h-8 max-w-16"
-                                        :alt="asset.filename"
-                                        :src="asset.urls.thumbnail"
-                                    />
-                                </td>
-                                <td>
-                                    {{ asset.filename }}
-                                    <p class="text-xs text-gray-500">
-                                        {{ asset.hash }}
-                                    </p>
-                                </td>
-                                <td class="text-sm">
-                                    {{ asset.mime }}
-                                </td>
-                                <td>
-                                    {{ asset.sizeHuman }}
-                                </td>
-                                <td class="px-6 py-4 flex flex-row">
-                                    <!-- TODO: DISABLE DELETE IF IN USE -->
-                                    <!--
+                <table class="table-fixed">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th></th>
+                            <th>{{ t('filename') }}</th>
+                            <th>{{ t('filetype') }}</th>
+                            <th>{{ t('filesize') }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(asset, i) in store.state.assets?.assets"
+                            :key="asset.id"
+                            :ref="
+                                (el) => {
+                                    assetRefs['asset' + i] = el
+                                }
+                            "
+                            @click="openAssetModal(asset.id)"
+                        >
+                            <td class="text-lg">
+                                {{ asset.id }}
+                            </td>
+                            <td class="m-0 p-0">
+                                <img
+                                    v-if="asset.urls.thumbnail"
+                                    class="max-h-8 max-w-16"
+                                    :alt="asset.filename"
+                                    :src="asset.urls.thumbnail"
+                                />
+                            </td>
+                            <td>
+                                {{ asset.filename }}
+                                <p class="text-xs text-gray-500">
+                                    {{ asset.hash }}
+                                </p>
+                            </td>
+                            <td class="text-sm">
+                                {{ asset.mime }}
+                            </td>
+                            <td>
+                                {{ asset.sizeHuman }}
+                            </td>
+                            <td class="px-6 py-4 flex flex-row">
+                                <!-- TODO: DISABLE DELETE IF IN USE -->
+                                <!--
                                     <trash-icon
                                         v-if="inUse > 0"
                                         class="
@@ -73,30 +74,21 @@
                                         @click.prevent.stop="null"
                                     />
                                     -->
-                                    <trash-icon
-                                        class="
-                                            mx-1
-                                            h-5
-                                            w-5
-                                            text-red-500
-                                            pointer
-                                        "
-                                        @click.prevent.stop="
-                                            deleteAsset(asset.id)
-                                        "
-                                    />
-                                    <EyeIcon
-                                        class="mx-1 h-5 w-5 pointer"
-                                        @click.prevent.stop="
-                                            openAssetModal(asset.id)
-                                        "
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </template>
+                                <trash-icon
+                                    class="mx-1 h-5 w-5 text-red-500 pointer"
+                                    @click.prevent.stop="deleteAsset(asset.id)"
+                                />
+                                <EyeIcon
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="
+                                        openAssetModal(asset.id)
+                                    "
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
         <aside>
             <h1 class="text-xl">Upload</h1>
