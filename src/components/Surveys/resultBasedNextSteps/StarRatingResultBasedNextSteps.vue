@@ -27,7 +27,7 @@
             class="table-wrap mb-6"
         >
             <table>
-                <thead class="bg-blue-500">
+                <thead>
                     <tr>
                         <th>{{ t('from') }}</th>
                         <th>{{ t('to') }}</th>
@@ -56,34 +56,6 @@
                             <TrashIcon class="h-5 w-5" />
                         </td>
                     </tr>
-                    <!-- TODO: fix dropdown not overlapping bug -->
-                    <!-- <tr>
-                        <td>
-                            <form-input
-                                v-model:value="nextStep.start"
-                                label=""
-                            />
-                        </td>
-                        <td>
-                            <form-input v-model:value="nextStep.end" label="" />
-                        </td>
-                        <td>
-                            <form-select
-                                v-model:selected="nextStep.stepId"
-                                :options="surveySteps"
-                                title-key="name"
-                                value-key="id"
-                                :default-value="-1"
-                                label=""
-                            />
-                        </td>
-                        <td>
-                            <action-button
-                                :action-text="t('action_add')"
-                                @execute="addResultBasedStep"
-                            />
-                        </td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -112,9 +84,11 @@
             />
             <action-button
                 class="mt-9 col-span-3"
-                :action-text="t('action_add')"
+                :disabled="v$.$invalid"
                 @execute="addResultBasedStep"
-            />
+            >
+                <PlusIcon class="h-5 w-5" />
+            </action-button>
         </div>
     </div>
 </template>
@@ -155,7 +129,6 @@ export default {
               )
 
         const addResultBasedStep = () => {
-            console.log(typeof surveyStep.value.resultBasedNextSteps)
             // add to array
             if (!surveyStep.value.resultBasedNextSteps) {
                 surveyStep.value.resultBasedNextSteps = []
@@ -186,34 +159,32 @@ export default {
         //         savingTimeBasedSteps.value = false
         // }
 
-        const validations = computed({
-            get: () => {
-                return {
-                    start: {
-                        required,
-                        between: between(
-                            1,
-                            surveyElementParams.value.numberOfStars,
-                        ),
-                    },
-                    end: {
-                        required,
-                        between: between(
-                            nextStep.value.start,
-                            surveyElementParams.value.numberOfStars,
-                        ),
-                    },
-                    stepId: {
-                        exists: (value) =>
-                            surveySteps.value.find((step) => step.id === value),
-                    },
-                }
+        const validations = {
+            start: {
+                required,
+                between: between(1, surveyElementParams.value.numberOfStars),
             },
-            set: () => {},
+            end: {
+                required,
+                between: between(
+                    nextStep.value.start,
+                    surveyElementParams.value.numberOfStars,
+                ),
+            },
+            stepId: {
+                exists: (value) => {
+                    return (
+                        surveySteps.value.find((step) => step.id === value) !=
+                        null
+                    )
+                },
+            },
+        }
+        const v$ = useVuelidate(validations, nextStep, {
+            scope: 'starRatingResultBasedNextSteps',
         })
 
         return {
-            v$: useVuelidate(validations, nextStep),
             store,
             language,
             t,
@@ -223,6 +194,7 @@ export default {
             nextStep,
             addResultBasedStep,
             removeResultBasedStep,
+            v$,
         }
     },
 }
