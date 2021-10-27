@@ -81,6 +81,7 @@ export default {
     number_of_stars: 'Anzahl der Sterne',
     options: 'Optionen | Option | Optionen',
     optional_name: 'Optionaler Name',
+    of: 'von',
     passwords: 'Passwörter | Passwort | Passwörter',
     parent_elements: 'Elternelemente | Elternelement | Elternelemente',
     password_confirmation: 'Passwortbestätigung',

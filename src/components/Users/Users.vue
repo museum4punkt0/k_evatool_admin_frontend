@@ -2,16 +2,27 @@
     <div class="flex overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row">
-                <h1>{{ titlePrefix }} {{ t('users', users.length) }}</h1>
+                <h1
+                    v-if="
+                        filteredUsers.length > 0 &&
+                        filteredUsers.length < users.length
+                    "
+                >
+                    {{ filteredUsers.length }} {{ t('of') }} {{ users.length }}
+                    {{ t('users', filteredUsers.length) }}
+                </h1>
+                <h1 v-else>
+                    {{ users.length }} {{ t('users', users.length) }}
+                </h1>
                 <div class="flex-1 flex flex-row justify-end">
                     <form-input
                         v-model:value="searchQuery"
                         name="name"
                         type="text"
                         label=""
-                        :placeholder="`${t('filter', 1)}: ${t('name')}, ${t(
-                            'email',
-                        )}`"
+                        :placeholder="`${t('filter', 1)}: ${t('id')}, ${t(
+                            'name',
+                        )}, ${t('email')}`"
                         class="mr-4"
                     />
                     <button
@@ -131,7 +142,7 @@ export default {
 
         const users = computed(() => store.state.users.users)
         const [showSideBar, setShowSideBar] = useState(false)
-        const [titlePrefix, setTitlePrefix] = useState(users.value.length)
+        const [filteredUsers, setFilteredUsers] = useState(users.value)
         const getUsers = async () => {
             await store.dispatch('users/getUsers')
         }
@@ -164,25 +175,15 @@ export default {
         }
 
         const filter = (user) =>
-            searchForWordsInString([user], searchQuery.value, ['name', 'email'])
-                .length > 0
-
-        watch(users, (value) => {
-            if (searchQuery.value === '') {
-                setTitlePrefix(value.length)
-            }
-        })
+            searchForWordsInString([user], searchQuery.value, [
+                'id',
+                'name',
+                'email',
+            ]).length > 0
 
         watch(searchQuery, () => {
-            const matchedUsers = users.value.filter(filter)
-            if (
-                0 < matchedUsers.length &&
-                matchedUsers.length < users.value.length
-            ) {
-                setTitlePrefix(`${matchedUsers.length}/${users.value.length}`)
-            } else {
-                setTitlePrefix(users.value.length)
-            }
+            const filteredUsers = users.value.filter(filter)
+            setFilteredUsers(filteredUsers)
         })
         getUsers()
 
@@ -200,7 +201,7 @@ export default {
             setShowSideBar,
             searchQuery,
             filter,
-            titlePrefix,
+            filteredUsers,
         }
     },
 }
