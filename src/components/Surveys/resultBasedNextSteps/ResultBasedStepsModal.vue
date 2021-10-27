@@ -48,17 +48,23 @@
                                 rounded-2xl
                             "
                         >
-                            <DialogTitle
-                                as="h3"
-                                class="
-                                    text-lg
-                                    font-medium
-                                    leading-6
-                                    text-gray-900 text-capitalize
-                                "
-                            >
-                                {{ t('result_based_steps', 2) }}
-                            </DialogTitle>
+                            <div class="flex justify-between">
+                                <DialogTitle
+                                    as="h3"
+                                    class="
+                                        text-lg
+                                        font-medium
+                                        leading-6
+                                        text-gray-900 text-capitalize
+                                    "
+                                >
+                                    {{ t('result_based_steps', 2) }}
+                                </DialogTitle>
+                                <x-icon
+                                    class="h-6 w-6 pointer"
+                                    @click="closeModal"
+                                />
+                            </div>
 
                             <div class="mt-2">
                                 <binary-result-based-next-steps
@@ -85,16 +91,6 @@
                                     "
                                 ></star-rating-result-based-next-steps>
                             </div>
-
-                            <div class="mt-4">
-                                <button
-                                    class="primary"
-                                    :disabled="savingResultBasedSteps"
-                                    @click="closeModal"
-                                >
-                                    {{ t('action_close') }}
-                                </button>
-                            </div>
                         </div>
                     </TransitionChild>
                 </div>
@@ -119,7 +115,7 @@ import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 import FormSelect from '../../Forms/FormSelect.vue'
 
-import { TrashIcon, StopIcon } from '@heroicons/vue/outline'
+import { TrashIcon, StopIcon, XIcon } from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
 
@@ -141,6 +137,7 @@ export default {
         DialogTitle,
         TrashIcon,
         StopIcon,
+        XIcon,
         BinaryResultBasedNextSteps,
         EmojiResultBasedNextSteps,
         MultipleChoiceResultBasedNextSteps,

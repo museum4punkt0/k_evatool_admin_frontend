@@ -22,12 +22,25 @@
             value-key="id"
             :label="surveyElementParams?.falseLabel[language.code]"
         />
-        <action-button :action-text="t('action_delete')" @execute="remove" />
-        <action-button
-            :disabled="v$.$invalid"
-            :action-text="t('action_save')"
-            @execute="save"
-        />
+
+        <div class="flex flex-row justify-end">
+            <action-button
+                v-if="surveyStep.id"
+                color="danger"
+                :disabled="surveyStep.resultCount > 0"
+                :executing="deletingSurveyStep"
+                class="mr-2"
+                @execute="remove"
+            >
+                <TrashIcon class="h-5 w-5" />
+            </action-button>
+
+            <action-button
+                :disabled="v$.$invalid"
+                :action-text="t('action_save')"
+                @execute="save"
+            />
+        </div>
     </div>
 </template>
 <script>
@@ -43,7 +56,13 @@ import ActionButton from '../../Common/ActionButton.vue'
 
 export default {
     name: 'BinaryResultBasedNextSteps',
-    components: { FormInput, FormSelect, ActionButton, TrashIcon, PlusIcon },
+    components: {
+        FormInput,
+        FormSelect,
+        ActionButton,
+        TrashIcon,
+        PlusIcon,
+    },
     setup() {
         const store = useStore()
         const { t } = useI18n()
@@ -103,6 +122,9 @@ export default {
                         stepId: {
                             required,
                         },
+                        unique: () =>
+                            nextSteps.value.trueNextStep.stepId !=
+                            nextSteps.value.falseNextStep.stepId,
                     },
                 }
             },
