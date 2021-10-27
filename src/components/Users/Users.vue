@@ -130,10 +130,10 @@ export default {
         const users = computed(() => store.state.users.users)
         const [showSideBar, setShowSideBar] = useState(false)
         const [titlePrefix, setTitlePrefix] = useState(users.value.length)
-
-        const getUsers = () => {
-            store.dispatch('users/getUsers')
+        const getUsers = async () => {
+            await store.dispatch('users/getUsers')
         }
+
         const onSave = () => {
             setShowSideBar(false)
             getUsers()
@@ -165,6 +165,12 @@ export default {
             searchForWordsInString([user], searchQuery.value, ['name', 'email'])
                 .length > 0
 
+        watch(users, (value) => {
+            if (searchQuery.value === '') {
+                setTitlePrefix(value.length)
+            }
+        })
+
         watch(searchQuery, () => {
             const matchedUsers = users.value.filter(filter)
             if (
@@ -176,7 +182,6 @@ export default {
                 setTitlePrefix(users.value.length)
             }
         })
-
         getUsers()
 
         return {
