@@ -19,7 +19,7 @@ h4 {
 }
 
 .table-wrap {
-    @apply shadow overflow-x-scroll border-b border-gray-200 sm:rounded-lg
+    @apply flex h-full w-full shadow overflow-auto border-b border-gray-200 sm:rounded-lg
 }
 
 table {
@@ -27,7 +27,7 @@ table {
 }
 
 thead {
-    @apply bg-blue-500
+    @apply sticky top-0 bg-blue-500
 }
 
 th {

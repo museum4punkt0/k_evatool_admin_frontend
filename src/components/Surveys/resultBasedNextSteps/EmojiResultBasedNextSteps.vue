@@ -17,9 +17,9 @@
             <table>
                 <thead class="bg-blue-500">
                     <tr>
-                        <th>{{ t('emoji', 1) }}</th>
-                        <th>{{ t('steps', 1) }}</th>
-                        <th>{{ t('actions', 2) }}</th>
+                        <th class="sticky">{{ t('emoji', 1) }}</th>
+                        <th class="sticky">{{ t('steps', 1) }}</th>
+                        <th class="sticky">{{ t('actions', 2) }}</th>
                     </tr>
                 </thead>
                 <tbody>

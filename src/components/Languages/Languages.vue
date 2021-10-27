@@ -1,9 +1,12 @@
 <template>
-    <div class="flex-1 flex items-stretch overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-3">
-            <h1 class="mb-3">
-                {{ languages.length }} {{ t('languages', languages.length) }}
-            </h1>
+    <div class="flex overflow-hidden">
+        <main class="flex h-full w-full flex-col p-3">
+            <div class="flex flex-row justify-between">
+                <h1 class="mb-3">
+                    {{ languages.length }}
+                    {{ t('languages', languages.length) }}
+                </h1>
+            </div>
             <div class="table-wrap">
                 <table class="table-fixed">
                     <thead>
@@ -16,7 +19,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="language in languages" :key="language.id">
+                        <tr
+                            v-for="language in languages"
+                            :key="'language_' + language.id"
+                        >
                             <td>{{ language.id }}</td>
                             <td>{{ language.code }}</td>
                             <td>{{ language.subCode }}</td>
