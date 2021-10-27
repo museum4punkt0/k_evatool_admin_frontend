@@ -16,6 +16,13 @@
         type="text"
         :label="t('slugs', 1)"
     />
+    <form-checkbox
+        v-model:value="survey.languages"
+        :options="store.state.languages.languages"
+        name="language"
+        class="mt-3"
+        :label="t('languages', store.state.languages.languages.length)"
+    />
     <div class="flex flex-row">
         <action-button
             :action-text="t('action_cancel')"
@@ -49,10 +56,11 @@ import { maxLength, minLength, required } from '@vuelidate/validators'
 import ActionButton from '../Common/ActionButton.vue'
 import DataViewer from '../Common/DataViewer.vue'
 import FormInput from '../Forms/FormInput.vue'
+import FormCheckbox from '../Forms/FormCheckbox.vue'
 
 export default {
     name: 'SurveyDetails',
-    components: { FormInput, ActionButton, DataViewer },
+    components: { FormCheckbox, FormInput, ActionButton, DataViewer },
     props: {
         surveyId: { type: Number, default: -1 },
         resetAfterSave: { type: Boolean, default: true },
@@ -96,6 +104,7 @@ export default {
         const initSurvey = () => {
             survey.value = {
                 name: '',
+                language: [],
             }
             surveyTitle.value = t('new_survey')
         }
@@ -126,6 +135,10 @@ export default {
             },
             slug: {
                 maxLength: maxLength(100),
+            },
+            languages: {
+                required,
+                minLength: minLength(0),
             },
         },
     },
