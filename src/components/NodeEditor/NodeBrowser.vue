@@ -97,6 +97,7 @@ import SURVEY_SERVICE from '../../services/surveyService'
 import ActionButton from '../Common/ActionButton.vue'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/outline'
 import { TYPES } from '../../store/notifications'
+import { searchForWordsInString } from '../../utils/search'
 
 export default {
     name: 'NodeBrowser',
@@ -184,54 +185,38 @@ export default {
             useState(false)
 
         const filter = (item) => {
-            const questionEntries = item.params.question
-                ? Object.entries(item.params.question)
+            const languageKeys = item.params.text
+                ? Object.keys(item.params.text)
+                : item.params.question
+                ? Object.keys(item.params.question)
                 : []
-            const textEntries = item.params.text
-                ? Object.entries(item.params.text)
-                : []
-            let includedInQuestionOrText = false
-            const allEntries = [...questionEntries, ...textEntries]
-            allEntries.forEach((entry) => {
-                if (
-                    entry[1]
-                        .toLowerCase()
-                        .includes(elementSearchQuery.value.toLowerCase())
-                )
-                    includedInQuestionOrText = true
-            })
+            const includedInQuestionOrText =
+                searchForWordsInString(
+                    [item.params.text, item.params.question],
+                    elementSearchQuery.value,
+                    languageKeys,
+                ).length > 0
 
             const elementType = elementTypes.value.find(
                 (elementType) => elementType.key === item.surveyElementType,
             )
-            let includedInElementTypeTitles = false
-            if (elementType?.descriptions) {
-                Object.entries(elementType?.descriptions?.title).forEach(
-                    (title) => {
-                        if (
-                            title[1]
-                                .toLowerCase()
-                                .includes(
-                                    elementSearchQuery.value.toLowerCase(),
-                                )
-                        ) {
-                            includedInElementTypeTitles = true
-                        }
-                    },
-                )
-            }
+
+            const includedInElementTypeTitles =
+                elementType &&
+                searchForWordsInString(
+                    [elementType.descriptions.title],
+                    elementSearchQuery.value,
+                    Object.keys(elementType.descriptions.title),
+                ).length > 0
+
             return (
                 includedInQuestionOrText ||
                 includedInElementTypeTitles ||
-                item.name
-                    .toLowerCase()
-                    .includes(elementSearchQuery.value.toLowerCase()) ||
-                item.description
-                    .toLowerCase()
-                    .includes(elementSearchQuery.value.toLowerCase()) ||
-                item.surveyElementType
-                    .toLowerCase()
-                    .includes(elementSearchQuery.value.toLowerCase())
+                searchForWordsInString([item], elementSearchQuery.value, [
+                    'name',
+                    'description',
+                    'surveyElementType',
+                ]).length > 0
             )
         }
         return {

@@ -1,6 +1,6 @@
 const searchForWordsInString = (data, search, keys) => {
     const searchArr = search.toString().toLowerCase().split(' ')
-    let results = data
+    let results = data.filter((item) => item != null)
     for (let s = 0; s < searchArr.length; s++) {
         results = results.filter((m) => {
             return keys.some((key) =>
