@@ -8,7 +8,7 @@
                         v-model:value="searchQuery"
                         name="name"
                         type="text"
-                        :label="t('filter', 1)"
+                        :label="t('search', 1)"
                         class="mr-4"
                     />
                     <button
