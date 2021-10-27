@@ -48,7 +48,7 @@
         <button
             v-if="user.id"
             class="primary flex-1"
-            :disabled="savingUser"
+            :disabled="savingUser || userValidation.$invalid"
             @click="saveUser"
         >
             {{ t('action_save') }}
@@ -56,7 +56,7 @@
         <button
             v-else
             class="primary flex-1"
-            :disabled="savingUser"
+            :disabled="savingUser || userValidation.$invalid"
             @click="saveUser"
         >
             {{ t('action_add') }}
@@ -132,18 +132,7 @@ export default {
             getUser(props.userId)
         }
 
-        return {
-            t,
-            user,
-            v$: useVuelidate(),
-            saveUser,
-            savingUser,
-            cancelUser,
-            store,
-        }
-    },
-    validations: {
-        user: {
+        const validations = {
             name: { required, minLength: minLength(1) },
             email: {
                 required,
@@ -154,8 +143,24 @@ export default {
             },
             passwordConfirmation: {
                 minLength: minLength(12),
+                matchPassword: () =>
+                    user.value.passwordConfirmation === user.value.password,
             },
-        },
+        }
+
+        const userValidation = useVuelidate(validations, user, {
+            $scope: 'user',
+        })
+
+        return {
+            t,
+            user,
+            userValidation,
+            saveUser,
+            savingUser,
+            cancelUser,
+            store,
+        }
     },
 }
 </script>
