@@ -22,7 +22,7 @@
                         <th>{{ t('actions', 2) }}</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="surveyStep.resultBasedNextSteps">
                     <tr
                         v-for="(step, s) in surveyStep.resultBasedNextSteps"
                         :key="s"
@@ -53,7 +53,7 @@
                 :options="
                     surveyStep.surveyElement.params.options.filter(
                         (option) =>
-                            surveyStep.resultBasedNextSteps.find(
+                            surveyStep.resultBasedNextSteps?.find(
                                 (resultBasedStep) =>
                                     resultBasedStep.value === option.value,
                             ) == null,
@@ -140,10 +140,13 @@ export default {
         const validations = {
             value: {
                 required,
-                unique: (value) =>
-                    surveyStep.value.resultBasedNextSteps.find(
-                        (nextStep) => nextStep.value === value,
-                    ) == null,
+                unique: (value) => {
+                    return (
+                        surveyStep.value.resultBasedNextSteps?.find(
+                            (nextStep) => nextStep.value === value,
+                        ) == null
+                    )
+                },
             },
             stepId: {
                 required,

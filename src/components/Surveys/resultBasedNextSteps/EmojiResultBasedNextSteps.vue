@@ -53,7 +53,7 @@
                 :options="
                     surveyElementParams?.emojis.filter(
                         (emoji) =>
-                            surveyStep.resultBasedNextSteps.find(
+                            surveyStep.resultBasedNextSteps?.find(
                                 (step) => step.type === emoji.type,
                             ) == null,
                     )
