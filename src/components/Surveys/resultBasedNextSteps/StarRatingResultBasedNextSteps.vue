@@ -152,17 +152,24 @@ export default {
             store.dispatch('surveys/saveSurveyStep', surveyStep.value)
         }
 
-        // const saveSurveyStep = async () => {
-        //         savingTimeBasedSteps.value = true
-        //         surveyStep.value.timeBasedSteps = timeBasedSteps.value
-        //         await SURVEYS.saveSurveyStep(surveyStep, surveyStep.value.surveyId)
-        //         savingTimeBasedSteps.value = false
-        // }
-
         const validations = {
             start: {
                 required,
                 between: between(1, surveyElementParams.value.numberOfStars),
+                unique: (value) => {
+                    let isUnique = true
+                    surveyStep.value.resultBasedNextSteps.forEach(
+                        (resultBasedNextStep) => {
+                            if (
+                                resultBasedNextStep.start <= value &&
+                                value <= resultBasedNextStep.end
+                            ) {
+                                isUnique = false
+                            }
+                        },
+                    )
+                    return isUnique
+                },
             },
             end: {
                 required,
@@ -170,6 +177,20 @@ export default {
                     nextStep.value.start,
                     surveyElementParams.value.numberOfStars,
                 ),
+                unique: (value) => {
+                    let isUnique = true
+                    surveyStep.value.resultBasedNextSteps.forEach(
+                        (resultBasedNextStep) => {
+                            if (
+                                resultBasedNextStep.start <= value &&
+                                value <= resultBasedNextStep.end
+                            ) {
+                                isUnique = false
+                            }
+                        },
+                    )
+                    return isUnique
+                },
             },
             stepId: {
                 exists: (value) => {
