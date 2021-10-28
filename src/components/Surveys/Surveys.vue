@@ -51,12 +51,12 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody
-                        v-for="survey in surveys.filter(filter)"
-                        :key="'survey_row_' + survey.id"
-                        class="bg-white divide-y divide-gray-200"
-                    >
-                        <tr @click.prevent.stop="editSurvey(survey.id)">
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr
+                            v-for="survey in surveys.filter(filter)"
+                            :key="'survey_row_' + survey.id"
+                            @click.prevent.stop="editSurvey(survey.id)"
+                        >
                             <td class="text-lg">
                                 {{ survey.id }}
                             </td>

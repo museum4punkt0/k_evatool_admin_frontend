@@ -52,7 +52,7 @@
                             v-for="surveyElement in surveyElements.filter(
                                 filter,
                             )"
-                            :key="surveyElement.id"
+                            :key="`survey_element-${surveyElement.id}`"
                             @click="editSurveyElement(surveyElement.id)"
                         >
                             <td class="text-lg">{{ surveyElement.id }}</td>
