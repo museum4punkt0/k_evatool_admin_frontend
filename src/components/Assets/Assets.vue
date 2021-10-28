@@ -2,17 +2,42 @@
     <div class="flex overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row justify-between">
-                <h1 v-if="store.state.assets?.assets" class="mb-3">
+                <!-- <h1 v-if="store.state.assets?.assets" class="mb-3">
                     {{ store.state.assets.assets.length }}
                     {{ t('assets', store.state.assets.assets.length) }}
+                </h1> -->
+                <h1
+                    v-if="
+                        filteredAssets.length > 0 &&
+                        filteredAssets.length < assets.length
+                    "
+                >
+                    {{ filteredAssets.length }} {{ t('of') }}
+                    {{ assets.length }}
+                    {{ t('assets', filteredAssets.length) }}
                 </h1>
+                <h1 v-else>
+                    {{ assets.length }} {{ t('assets', assets.length) }}
+                </h1>
+                <div class="flex-1 flex flex-row justify-end">
+                    <form-input
+                        v-model:value="searchQuery"
+                        name="name"
+                        type="text"
+                        label=""
+                        :placeholder="`${t('filter', 1)}: ${t('id')}, ${t(
+                            'file',
+                        )}, ${t('type')}`"
+                        class="mr-4"
+                    />
+                </div>
             </div>
             <div
                 v-if="
                     store.state.assets?.assets &&
                     store.state.assets.assets.length > 0
                 "
-                class="table-wrap"
+                class="table-wrap mt-3"
             >
                 <table class="table-fixed">
                     <thead>
@@ -27,7 +52,7 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="(asset, i) in store.state.assets?.assets"
+                            v-for="(asset, i) in assets.filter(filter)"
                             :key="asset.id"
                             :ref="
                                 (el) => {
@@ -117,11 +142,13 @@ import {
     onMounted,
     onBeforeUpdate,
     watchEffect,
+    watch,
     computed,
 } from 'vue'
 import { useStore } from 'vuex'
 
 import { Dashboard } from '@uppy/vue'
+import FormInput from '../Forms/FormInput.vue'
 
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
@@ -134,6 +161,10 @@ import German from '@uppy/locales/lib/de_DE'
 import { useI18n } from 'vue-i18n'
 import AssetModal from './AssetModal.vue'
 import AssetSelectorModal from './AssetSelectorModal.vue'
+import { useState } from '../../composables/state'
+
+import { searchForWordsInString } from '../../utils/search'
+
 export default {
     name: 'Assets',
     components: {
@@ -141,6 +172,7 @@ export default {
         AssetModal,
         Dashboard,
         EyeIcon,
+        FormInput,
         TrashIcon,
     },
     setup() {
@@ -150,10 +182,14 @@ export default {
         const { t } = useI18n()
 
         const selectedAssets = ref(-1)
+        const searchQuery = ref('')
 
         const assetModalIsOpen = ref(false)
         const selectorModalIsOpen = ref(false)
         const assetModalStepId = ref(-1)
+
+        const assets = computed(() => store.state.assets.assets)
+        const [filteredAssets, setFilteredAssets] = useState(assets.value)
 
         onMounted(() => {
             store.dispatch('assets/getAssets')
@@ -205,6 +241,20 @@ export default {
             isBusy.value = false
         }
 
+        const filter = (asset) => {
+            return (
+                searchForWordsInString([asset], searchQuery.value, [
+                    'id',
+                    'filename',
+                    'mime',
+                ]).length > 0
+            )
+        }
+        watch(searchQuery, () => {
+            const filteredSurveys = assets.value.filter(filter)
+            setFilteredAssets(filteredSurveys)
+        })
+
         return {
             selectedAssets,
             assetModalIsOpen,
@@ -222,6 +272,10 @@ export default {
             assetRefs,
             t,
             uppy,
+            assets,
+            filter,
+            filteredAssets,
+            searchQuery,
         }
     },
 }
