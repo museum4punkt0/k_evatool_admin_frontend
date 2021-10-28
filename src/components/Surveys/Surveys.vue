@@ -23,8 +23,9 @@
                         type="text"
                         label=""
                         :placeholder="`${t('filter', 1)}: ${t('id')}, ${t(
-                            'name',
-                        )}, ${t('description')}`"
+                            'names',
+                            1,
+                        )}, ${t('descriptions', 1)}`"
                         class="mr-4"
                     />
                     <button

@@ -21,7 +21,8 @@
                         type="text"
                         label=""
                         :placeholder="`${t('filter', 1)}: ${t('id')}, ${t(
-                            'name',
+                            'names',
+                            1,
                         )}, ${t('email')}`"
                         class="mr-4"
                     />

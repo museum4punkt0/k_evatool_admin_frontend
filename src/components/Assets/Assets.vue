@@ -26,8 +26,8 @@
                         type="text"
                         label=""
                         :placeholder="`${t('filter', 1)}: ${t('id')}, ${t(
-                            'file',
-                        )}, ${t('type')}`"
+                            'filename',
+                        )}, ${t('filetype')}`"
                         class="mr-4"
                     />
                 </div>
