@@ -48,17 +48,23 @@
                                 rounded-2xl
                             "
                         >
-                            <DialogTitle
-                                as="h3"
-                                class="
-                                    text-lg
-                                    font-medium
-                                    leading-6
-                                    text-gray-900 text-capitalize
-                                "
-                            >
-                                {{ t('time_based_steps', 2) }}
-                            </DialogTitle>
+                            <div class="flex justify-between">
+                                <DialogTitle
+                                    as="h3"
+                                    class="
+                                        text-lg
+                                        font-medium
+                                        leading-6
+                                        text-gray-900 text-capitalize
+                                    "
+                                >
+                                    {{ t('time_based_steps', 2) }}
+                                </DialogTitle>
+                                <x-icon
+                                    class="h-6 w-6 pointer"
+                                    @click="closeModal"
+                                />
+                            </div>
 
                             <div class="mt-2">
                                 <video
@@ -297,15 +303,6 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <button
-                                    class="primary"
-                                    :disabled="savingTimeBasedSteps"
-                                    @click="closeModal"
-                                >
-                                    {{ t('action_close') }}
-                                </button>
-                            </div>
                         </div>
                     </TransitionChild>
                 </div>
@@ -335,7 +332,12 @@ import { v4 as uuidv4 } from 'uuid'
 import SURVEYS from '../../services/surveyService'
 import ASSETS from '../../services/assetService'
 
-import { PencilAltIcon, StopIcon, TrashIcon } from '@heroicons/vue/outline'
+import {
+    PencilAltIcon,
+    StopIcon,
+    TrashIcon,
+    XIcon,
+} from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
 // import { maxLength, minValue, required } from '@vuelidate/validators'
@@ -359,6 +361,7 @@ export default {
         DialogTitle,
         TrashIcon,
         PencilAltIcon,
+        XIcon,
         StopIcon,
     },
     props: {
