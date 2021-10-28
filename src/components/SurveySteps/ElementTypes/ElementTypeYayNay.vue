@@ -52,15 +52,16 @@
             name="falseValue"
         />
     </div>
-    <div class="grid grid-cols-6 gap-4 my-3">
-        <img
-            v-for="asset in paramsLocal.assetIds"
-            :key="`asset-${asset}`"
-            class="rounded"
-            :src="assets.find((item) => item.id === asset)?.urls.original"
-            @click="setAssetSelectorModalOpen(true)"
-        />
-    </div>
+    <draggable v-model="paramsLocal.assetIds" class="flex flex-row mt-3 mb-3">
+        <template #item="{ element }">
+            <img
+                :key="`asset-${element}`"
+                class="rounded w-1/6 mr-3"
+                :src="assets.find((item) => item.id === element)?.urls.original"
+                @click="setAssetSelectorModalOpen(true)"
+            />
+        </template>
+    </draggable>
     <button class="primary" @click="setAssetSelectorModalOpen(true)">
         {{ t('button_choose_assets') }}
     </button>
@@ -86,6 +87,7 @@ import { useState } from '../../../composables/state'
 import AssetSelectorModal from '../../Assets/AssetSelectorModal.vue'
 
 import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
+import draggable from 'vuedraggable'
 
 const systemValueValidation = helpers.regex(/^[a-z0-9_]*$/)
 
@@ -96,6 +98,7 @@ export default {
         FormInput,
         LanguageSwitch,
         AssetSelectorModal,
+        draggable,
     },
     props: {
         params: {
