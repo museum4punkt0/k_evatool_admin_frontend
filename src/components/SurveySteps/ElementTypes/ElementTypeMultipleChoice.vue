@@ -71,7 +71,6 @@
             name="maxSelectable"
         />
     </div>
-    {{ v$.$invalid }}
 </template>
 
 <script>
