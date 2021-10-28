@@ -5,6 +5,7 @@
             <input
                 :id="name"
                 v-model="valueLocal"
+                :class="invalid ? 'invalid' : ''"
                 :type="type"
                 :name="name"
                 autocomplete="off"
@@ -39,6 +40,10 @@ export default {
         helptext: {
             type: String,
             default: '',
+        },
+        invalid: {
+            type: Boolean,
+            default: false,
         },
         placeholder: {
             type: String,
