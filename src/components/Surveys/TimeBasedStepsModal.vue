@@ -284,6 +284,12 @@
                                         </button>
                                         <button
                                             class="primary"
+                                            :disabled="
+                                                savingTimeBasedSteps ||
+                                                v$.timecode.$invalid ||
+                                                v$.stepId.$invalid ||
+                                                v$.description.$invalid
+                                            "
                                             @click="saveChangeTimeBasedStep"
                                         >
                                             {{ t('action_save') }}
