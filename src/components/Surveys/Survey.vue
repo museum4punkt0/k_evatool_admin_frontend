@@ -13,11 +13,12 @@
                     @click="setShowSurveyDetailsEdit(!showSurveyDetailsEdit)"
                 />
                 <div class="flex-grow items-center flex flex-row-reverse">
-                    <button class="primary mr-1">
+                    <button class="secondary mr-1">
+                        <ChartBarIcon class="mx-1 h-5 w-5 pointer" />
                         {{ t('action_show_results') }}
                     </button>
                     <button
-                        class="primary mr-1"
+                        class="secondary mr-1"
                         :disabled="store.state.surveys.surveyStep"
                         @click.prevent.stop="previewSurvey(survey)"
                     >
@@ -84,10 +85,11 @@ import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import NodeBrowser from '../NodeEditor/NodeBrowser.vue'
 import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
 import { useI18n } from 'vue-i18n'
-import { EyeIcon, PencilIcon } from '@heroicons/vue/outline'
+import { ChartBarIcon, EyeIcon, PencilIcon } from '@heroicons/vue/outline'
 
 export default {
     components: {
+        ChartBarIcon,
         SurveyElement,
         TimeBasedStepsModal,
         SurveyDetails,
