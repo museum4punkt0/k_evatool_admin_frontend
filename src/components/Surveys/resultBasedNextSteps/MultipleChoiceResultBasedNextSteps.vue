@@ -140,6 +140,10 @@ export default {
         const validations = {
             value: {
                 required,
+                unique: (value) =>
+                    surveyStep.value.resultBasedNextSteps.find(
+                        (nextStep) => nextStep.value === value,
+                    ) == null,
             },
             stepId: {
                 required,
