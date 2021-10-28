@@ -181,6 +181,7 @@
                                         v-model:selected="
                                             selectedTimeBasedStep.stepId
                                         "
+                                        :invalid="v$.stepId.$invalid"
                                         :options="
                                             store.state.surveys?.survey?.steps
                                                 ?.filter(
@@ -218,6 +219,7 @@
                                         v-model:value="
                                             selectedTimeBasedStep.timecode
                                         "
+                                        :invalid="v$.timecode.$invalid"
                                         class="mt-3"
                                         :placeholder="t('timestamps', 1)"
                                         :label="t('timestamps', 1)"
@@ -227,6 +229,7 @@
                                         v-model:value="
                                             selectedTimeBasedStep.description
                                         "
+                                        :invalid="v$.description.$invalid"
                                         class="mt-3"
                                         :placeholder="t('descriptions', 1)"
                                         :label="t('descriptions', 1)"
@@ -259,7 +262,12 @@
                                     <template v-if="!isEditingTimeBasedStep">
                                         <button
                                             class="primary"
-                                            :disabled="savingTimeBasedSteps"
+                                            :disabled="
+                                                savingTimeBasedSteps ||
+                                                v$.timecode.$invalid ||
+                                                v$.stepId.$invalid ||
+                                                v$.description.$invalid
+                                            "
                                             @click="addTimeBasedStep"
                                         >
                                             {{
@@ -276,6 +284,12 @@
                                         </button>
                                         <button
                                             class="primary"
+                                            :disabled="
+                                                savingTimeBasedSteps ||
+                                                v$.timecode.$invalid ||
+                                                v$.stepId.$invalid ||
+                                                v$.description.$invalid
+                                            "
                                             @click="saveChangeTimeBasedStep"
                                         >
                                             {{ t('action_save') }}
@@ -283,7 +297,6 @@
                                     </template>
                                 </div>
                             </div>
-
                             <div class="mt-4">
                                 <button
                                     class="primary"
@@ -325,7 +338,11 @@ import ASSETS from '../../services/assetService'
 import { PencilAltIcon, StopIcon, TrashIcon } from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
-import { maxLength, minValue, required } from '@vuelidate/validators'
+// import { maxLength, minValue, required } from '@vuelidate/validators'
+import { maxLength, minValue, required, helpers } from '@vuelidate/validators'
+const timecodeValidator = helpers.regex(
+    /^(?:(?:[0-1][0-9]|[0-2][0-3]):)(?:[0-5][0-9]:){2}(?:[0-2][0-9])$/,
+)
 
 import msToTimecode from 'ms-to-timecode'
 
@@ -462,8 +479,29 @@ export default {
             },
         })
 
+        const validations = computed({
+            get: () => {
+                return {
+                    description: {
+                        maxLength: maxLength(100),
+                    },
+                    stepId: {
+                        required,
+                        minValue: minValue(1),
+                    },
+                    timecode: {
+                        required,
+                        timecodeValidator,
+                    },
+                }
+            },
+            set: () => {},
+        })
+
         return {
-            v$: useVuelidate(),
+            v$: useVuelidate(validations, selectedTimeBasedStep, {
+                scope: 'scheisegal',
+            }),
             modalIsOpen,
             savingTimeBasedSteps,
             resetTimeBasedStep,
@@ -487,17 +525,6 @@ export default {
             videoEnded,
             mapStepsAlreadyInUse,
         }
-    },
-    validations: {
-        selectedTimeBasedStep: {
-            description: {
-                maxLength: maxLength(100),
-            },
-            stepId: {
-                required,
-                minValue: minValue(1),
-            },
-        },
     },
 }
 </script>

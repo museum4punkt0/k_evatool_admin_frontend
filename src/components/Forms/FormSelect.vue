@@ -24,6 +24,11 @@
                         focus:border-blue-500
                         sm:text-sm
                     "
+                    :class="
+                        invalid
+                            ? 'focus:ring-red-500 focus:border-red-50 bg-red-200 border-red-700'
+                            : ''
+                    "
                 >
                     <span class="block truncate">
                         {{
@@ -161,6 +166,10 @@ export default {
         defaultTitle: { type: String, default: 'Nicht ausgewählt' },
         titleGetter: { type: Function, default: null },
         useDefault: { type: Boolean, default: true },
+        invalid: {
+            type: Boolean,
+            default: false,
+        },
         selected: {
             type: [String, Number],
             default: '',
