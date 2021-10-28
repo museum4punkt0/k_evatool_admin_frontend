@@ -50,7 +50,15 @@
             <form-select
                 v-model:selected="nextStep.value"
                 class="mt-3 col-span-2"
-                :options="surveyStep.surveyElement.params.options"
+                :options="
+                    surveyStep.surveyElement.params.options.filter(
+                        (option) =>
+                            surveyStep.resultBasedNextSteps.find(
+                                (resultBasedStep) =>
+                                    resultBasedStep.value === option.value,
+                            ) == null,
+                    )
+                "
                 title-key="value"
                 value-key="value"
                 :label="t('options', 1)"
