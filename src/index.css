@@ -19,7 +19,7 @@ h4 {
 }
 
 .table-wrap {
-    @apply flex h-full w-full shadow overflow-auto border-b border-gray-200 sm:rounded-lg
+    @apply flex h-full w-full shadow overflow-auto border-b border-gray-200 sm:rounded-lg;
 }
 
 table {
@@ -27,7 +27,7 @@ table {
 }
 
 thead {
-    @apply sticky top-0 bg-gray-200
+    @apply sticky top-0 bg-gray-200;
 }
 
 th {
@@ -38,6 +38,9 @@ tbody {
     @apply bg-white divide-y divide-gray-200;
 }
 
+tr {
+    @apply hover:bg-gray-200;
+}
 td {
     @apply px-6 py-2 whitespace-nowrap;
 }
