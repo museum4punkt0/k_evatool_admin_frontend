@@ -37,12 +37,12 @@
         "vuex-composition-helpers": "^2.0.0"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue": "^1.9.3",
-        "@vue/cli-plugin-eslint": "~4.5.14",
+        "@vitejs/plugin-vue": "^1.9.4",
+        "@vue/cli-plugin-eslint": "~4.5.15",
         "@vue/compiler-sfc": "^3.2.20",
         "@vue/eslint-config-prettier": "^6.0.0",
         "@vue/eslint-config-standard": "^6.1.0",
-        "autoprefixer": "^10.3.7",
+        "autoprefixer": "^10.4.0",
         "babel-eslint": "^10.1.0",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
@@ -55,7 +55,7 @@
         "pre-commit": "^1.2.2",
         "prettier": "^2.4.1",
         "tailwindcss": "^2.2.17",
-        "vite": "^2.6.12",
+        "vite": "^2.6.13",
         "vite-plugin-vue-env": "^1.0.5"
     }
 }
