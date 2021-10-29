@@ -3,17 +3,16 @@
     <h3 v-if="surveyElementId > 0">{{ t('elements', 1) }}</h3>
     <h3 v-else>Neues Element</h3>
     <label for="name" class="capitalize">{{ t('names', 1) }}</label>
-    <div class="mt-1">
-        <input
-            id="name"
-            v-model="surveyElement.name"
-            type="text"
-            name="name"
-            autocomplete="off"
-            :placeholder="t('names', 1)"
-        />
-    </div>
-
+    <form-input
+        v-model:value="surveyElement.name"
+        class="mt-1"
+        :invalid="validator.name.$invalid"
+        type="text"
+        :placeholder="t('names', 1)"
+        :label="t('timestamps', 1)"
+        name="timecode"
+        autocomplete="off"
+    />
     <!-- TODO: get default language -->
     <!-- :title-getter="(elementType) => elementType.descriptions.title.de" -->
     <!-- :title-getter="
@@ -25,6 +24,7 @@
     <form-select
         v-if="elementTypes"
         v-model:selected="surveyElement.surveyElementType"
+        :invalid="validator.surveyElementType.$invalid"
         class="mt-3"
         :options="elementTypes"
         :label="t('types', 1)"
@@ -123,10 +123,12 @@ import SURVEY_ELEMENT_SERVICE from '../../services/surveyElementService'
 import useVuelidate from '@vuelidate/core'
 import { minLength, required } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
+import FormInput from '../Forms/FormInput.vue'
 
 export default {
     name: 'SurveyElement',
     components: {
+        FormInput,
         ActionButton,
         DataViewer,
         ElementTypeYayNay,
@@ -256,6 +258,10 @@ export default {
                         required,
                         minLength: minLength(1),
                     },
+                    surveyElementType: {
+                        required,
+                        minLength: minLength(1),
+                    },
                 }
             },
         })
@@ -288,7 +294,6 @@ export default {
             paramsValid,
             cancelEdit,
             setParamsValid,
-            validations,
             elementTypeTitleGetter,
         }
     },

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="invalid ? 'invalid' : ''">
         <editor
             v-model="textLocal"
             :initial-value="text"
@@ -30,6 +30,10 @@ export default {
         text: {
             type: String,
             default: '',
+        },
+        invalid: {
+            type: Boolean,
+            default: false,
         },
     },
     emits: ['update:text'],
