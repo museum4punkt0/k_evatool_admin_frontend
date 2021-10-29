@@ -56,6 +56,9 @@
                                 ?.previousSteps.length === 0 &&
                             steps.find((item) => item.id === step.id)
                                 ?.nextStepId === null,
+                        'ring-yellow-400 ring-offset-1 ring-2': steps?.find(
+                            (x) => x?.id === step?.id,
+                        )?.isFirstStep,
                     }"
                 >
                     <div
@@ -72,11 +75,47 @@
                                 justify-center
                             "
                         >
-                            <div class="font-bold text-center p-2 break-words">
-                                {{
-                                    steps?.find((x) => x?.id === step?.id)?.name
-                                }}
+                            <div class="flex border-b-2">
+                                <button
+                                    class="w-10 pointer border-r-2"
+                                    @click.prevent.stop="selectStart(step.id)"
+                                >
+                                    <div
+                                        class="
+                                            flex
+                                            h-full
+                                            justify-center
+                                            items-center
+                                        "
+                                    >
+                                        <StarIcon
+                                            :class="
+                                                steps?.find(
+                                                    (x) => x?.id === step?.id,
+                                                )?.isFirstStep
+                                                    ? 'text-yellow-400'
+                                                    : 'text-gray-400'
+                                            "
+                                            class="h-5 w-5"
+                                        />
+                                    </div>
+                                </button>
+                                <div
+                                    class="
+                                        flex-grow
+                                        font-bold
+                                        text-center
+                                        p-2
+                                        break-words
+                                    "
+                                >
+                                    {{
+                                        steps?.find((x) => x?.id === step?.id)
+                                            ?.name
+                                    }}
+                                </div>
                             </div>
+
                             <element-content
                                 :element="
                                     store.state.surveyElements.surveyElements.find(
@@ -230,6 +269,7 @@ import {
     FastForwardIcon,
     SwitchHorizontalIcon,
 } from '@heroicons/vue/outline'
+import { StarIcon } from '@heroicons/vue/solid'
 
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 import ResultBasedStepsModal from '../Surveys/resultBasedNextSteps/ResultBasedStepsModal.vue'
@@ -238,7 +278,7 @@ import ElementContent from './ElementContent.vue'
 import SURVEYS from '../../services/surveyService'
 
 export default {
-    name: 'NodeEditorTest',
+    name: 'NodeEditor',
     components: {
         TimeBasedStepsModal,
         ResultBasedStepsModal,
@@ -248,6 +288,7 @@ export default {
         ArrowRightIcon,
         PencilIcon,
         FastForwardIcon,
+        StarIcon,
         SwitchHorizontalIcon,
         ElementContent,
     },
@@ -315,17 +356,17 @@ export default {
 
             props.steps
                 .filter((x) => !x.parentStepId)
-                .forEach((step) => {
+                .forEach((step, stepIndex) => {
                     const index = props.adminLayout.findIndex(
                         (x) => x.id === step.id,
                     )
-
+                    console.log(index, step)
                     if (index < 0) {
                         adminLayoutInit.push({
                             id: step.id,
                             position: {
-                                x: 100,
-                                y: 100,
+                                x: 150 + (stepIndex % 3) * 300,
+                                y: 150 + Math.floor(stepIndex / 3) * 300,
                             },
                         })
                     } else {
@@ -484,6 +525,11 @@ export default {
             }
         }
 
+        const selectStart = async (stepId) => {
+            await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
+            refreshSteps()
+        }
+
         const linkNextStep = async (stepId, nextStepId) => {
             await store.dispatch('surveys/setNextStep', {
                 surveyId: props.surveyId,
@@ -635,6 +681,7 @@ export default {
             selectInput,
             selectOutput,
             selectSurveyStep,
+            selectStart,
             store,
             surveyStepId,
             stepElements,

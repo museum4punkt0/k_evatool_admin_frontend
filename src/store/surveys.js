@@ -105,6 +105,12 @@ export default {
             await SURVEY_SERVICE.deleteSurvey(surveyId)
             await dispatch('getSurveys')
         },
+        async setStartStep({ commit }, { surveyId, stepId }) {
+            commit(
+                'updateSurveyStep',
+                await SURVEY_SERVICE.surveyStepSetStartStep(surveyId, stepId),
+            )
+        },
         async setNextStep({ commit }, { surveyId, stepId, nextStepId }) {
             commit(
                 'updateSurveyStep',
