@@ -360,7 +360,7 @@ export default {
                     const index = props.adminLayout.findIndex(
                         (x) => x.id === step.id,
                     )
-                    console.log(index, step)
+                    // console.log(index, step)
                     if (index < 0) {
                         adminLayoutInit.push({
                             id: step.id,

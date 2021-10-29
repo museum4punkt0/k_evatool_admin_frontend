@@ -158,16 +158,18 @@ export default {
                 between: between(1, surveyElementParams.value.numberOfStars),
                 unique: (value) => {
                     let isUnique = true
-                    surveyStep.value.resultBasedNextSteps.forEach(
-                        (resultBasedNextStep) => {
-                            if (
-                                resultBasedNextStep.start <= value &&
-                                value <= resultBasedNextStep.end
-                            ) {
-                                isUnique = false
-                            }
-                        },
-                    )
+                    if (surveyStep?.value?.resultBasedNextSteps) {
+                        surveyStep.value.resultBasedNextSteps.forEach(
+                            (resultBasedNextStep) => {
+                                if (
+                                    resultBasedNextStep.start <= value &&
+                                    value <= resultBasedNextStep.end
+                                ) {
+                                    isUnique = false
+                                }
+                            },
+                        )
+                    }
                     return isUnique
                 },
             },
@@ -179,16 +181,18 @@ export default {
                 ),
                 unique: (value) => {
                     let isUnique = true
-                    surveyStep.value.resultBasedNextSteps.forEach(
-                        (resultBasedNextStep) => {
-                            if (
-                                resultBasedNextStep.start <= value &&
-                                value <= resultBasedNextStep.end
-                            ) {
-                                isUnique = false
-                            }
-                        },
-                    )
+                    if (surveyStep?.value?.resultBasedNextSteps) {
+                        surveyStep.value.resultBasedNextSteps.forEach(
+                            (resultBasedNextStep) => {
+                                if (
+                                    resultBasedNextStep.start <= value &&
+                                    value <= resultBasedNextStep.end
+                                ) {
+                                    isUnique = false
+                                }
+                            },
+                        )
+                    }
                     return isUnique
                 },
             },
