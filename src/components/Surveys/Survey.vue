@@ -145,7 +145,7 @@ export default {
             window
                 .open(
                     import.meta.env.VITE_PREVIEW_URL +
-                        '/#/?id=' +
+                        '/#/?survey_id=' +
                         surveyPreview.slug +
                         '&demo=true',
                     '_blank',
