@@ -106,6 +106,8 @@ export default {
         'Dieser Schritt hat bereits {resultCount} Ergebnisse und kann daher nicht mehr gelöscht werden.',
     system_value: 'Systemwert',
     timestamps: 'Zeiten | Zeit | Zeiten',
+    timestamp_start: 'Startzeit',
+    timestamp_stop: 'Stopzeit',
     time_based_steps:
         'Zeitbasierte Schritte | Zeitbasierter Schritt | Zeitbasierte Schritte',
     titles: 'Titel | Titel | Titel',

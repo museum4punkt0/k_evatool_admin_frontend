@@ -248,6 +248,7 @@
     <time-based-steps-modal
         v-if="timeBasedModalStepId > 0 && timeBasedModalIsOpen"
         v-model:is-open="timeBasedModalIsOpen"
+        v-model:timecodes="stepTimecodes"
     />
     <result-based-steps-modal
         v-if="resultBasedModalStepId > 0 && resultBasedModalIsOpen"
@@ -326,6 +327,7 @@ export default {
         const timeBasedModalStepId = ref(-1)
         const resultBasedModalIsOpen = ref(false)
         const resultBasedModalStepId = ref(-1)
+        const stepTimecodes = ref({})
 
         /** COMPUTED PROPERTIES **/
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
@@ -360,7 +362,6 @@ export default {
                     const index = props.adminLayout.findIndex(
                         (x) => x.id === step.id,
                     )
-                    console.log(index, step)
                     if (index < 0) {
                         adminLayoutInit.push({
                             id: step.id,
@@ -530,6 +531,13 @@ export default {
             refreshSteps()
         }
 
+        const updateStepParams = async (stepId, params) => {
+            console.log(stepId)
+            console.log(params)
+            // await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
+            // refreshSteps()
+        }
+
         const linkNextStep = async (stepId, nextStepId) => {
             await store.dispatch('surveys/setNextStep', {
                 surveyId: props.surveyId,
@@ -582,6 +590,12 @@ export default {
             await selectSurveyStep(stepId)
             timeBasedModalIsOpen.value = true
             timeBasedModalStepId.value = stepId
+            const params = store.state.surveys.survey.steps.find(
+                (item) => item.id === timeBasedModalStepId.value,
+            ).params
+            stepTimecodes.value = params
+                ? params
+                : { startTimecode: '00:00:00:00', stopTimecode: '00:00:00:00' }
         }
 
         const openResultBasedModal = async (stepId) => {
@@ -648,18 +662,31 @@ export default {
         }
 
         /** WATCHER **/
+        /*
         watch(
             () => timeBasedModalIsOpen.value,
             (value) => {
-                value.log
+                console.log(value)
             },
         )
+        */
         watch(
             () => props.steps,
             () => {
                 initAdminLayout()
                 initConnections()
             },
+        )
+        watch(
+            () => stepTimecodes,
+            (value) => {
+                let stepData = store.state.surveys.survey.steps.find(
+                    (item) => item.id === timeBasedModalStepId.value,
+                )
+                stepData['params'] = value.value
+                SURVEYS.saveSurveyStep(stepData, props.surveyId)
+            },
+            { deep: true },
         )
 
         return {
@@ -685,11 +712,13 @@ export default {
             store,
             surveyStepId,
             stepElements,
+            stepTimecodes,
             t,
             timeBasedModalIsOpen,
             timeBasedModalStepId,
             toggleSkippableStep,
             unlinkNextStep,
+            updateStepParams,
             width,
             hasNextAndPreviousSockets,
             hasResultBasedNextStepsButton,
