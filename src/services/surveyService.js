@@ -135,6 +135,24 @@ export default {
             })
     },
 
+    async surveyStepSetStartStep(surveyId, surveyStepIdSelf) {
+        const url =
+            'evaluation-tool/surveys/' +
+            surveyId +
+            '/steps/' +
+            surveyStepIdSelf +
+            '/set-start-step'
+
+        return axios
+            .post(url, {})
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
+
     async surveyStepSetNextStep(surveyId, surveyStepIdSelf, surveyStepIdNext) {
         const url =
             'evaluation-tool/surveys/' +

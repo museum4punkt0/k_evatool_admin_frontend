@@ -64,12 +64,12 @@
                             <td>
                                 <div class="text text-gray-900">
                                     {{ survey.name }}
-                                    <span
+                                    <!--                                    <p
                                         v-if="store.state.users.user.admin"
-                                        class="text-xs ml-1 text-gray-500"
+                                        class="text-xs text-gray-500"
                                     >
                                         {{ survey.slug }}
-                                    </span>
+                                    </p>-->
                                 </div>
                                 <div class="text-sm text-gray-500">
                                     {{ survey.description }}

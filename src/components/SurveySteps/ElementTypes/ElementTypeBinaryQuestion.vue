@@ -4,14 +4,14 @@
         :active-language="selectedLanguage"
         @select="setSelectedLanguage($event)"
     />
-
-    <label>{{ t('questions', 1) }}</label>
+    <label class="mt-3">{{ t('questions', 1) }}</label>
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
+        :invalid="v$.question.$invalid"
     />
     <div class="grid grid-cols-12 gap-4">
         <form-input
@@ -20,6 +20,7 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.trueLabel[language.code]"
+            :invalid="v$.trueLabel.$invalid"
             :name="'lang' + language.id"
             class="mt-3 col-span-6"
             :label="t('binary_positive_label') + ' (' + language.title + ')'"
@@ -30,6 +31,7 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.falseLabel[language.code]"
+            :invalid="v$.falseLabel.$invalid"
             :name="'lang' + language.id"
             class="mt-3 col-span-6"
             :label="t('binary_negative_label') + ' (' + language.title + ')'"
@@ -38,12 +40,14 @@
     <div class="grid grid-cols-12 gap-4">
         <form-input
             v-model:value="paramsLocal.trueValue"
+            :invalid="v$.trueValue.$invalid"
             class="mt-3 col-span-6"
             :label="t('binary_positive')"
             name="trueValue"
         />
         <form-input
             v-model:value="paramsLocal.falseValue"
+            :invalid="v$.falseValue.$invalid"
             class="mt-3 col-span-6"
             :label="t('binary_negative')"
             name="falseValue"

@@ -54,6 +54,7 @@ input[type='password'] {
     @apply shadow-sm focus:ring-blue-500 focus:border-blue-50 block w-full sm:text-sm border-gray-300 rounded-md;
 }
 
+.invalid .tox .tox-edit-area__iframe,
 input.invalid,
 input[type='text'].invalid,
 input[type='password'].invalid {
@@ -82,6 +83,10 @@ button.secondary,
 button.danger,
 .btn-danger {
     @apply inline-flex items-center justify-center bg-red-800 px-4 py-2 border rounded-lg shadow-sm text-sm text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50;
+}
+button:disabled,
+.btn-disabled {
+    @apply cursor-not-allowed;
 }
 
 .alert-danger {
