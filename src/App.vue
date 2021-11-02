@@ -175,7 +175,7 @@
                             <span class="text-xs text-gray-500">
                                 {{ version }}
                             </span>
-                            <language-switch></language-switch>
+                            <!-- <language-switch></language-switch> -->
                             <button
                                 type="button"
                                 class="
