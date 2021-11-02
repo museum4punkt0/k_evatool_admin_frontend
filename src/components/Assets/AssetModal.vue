@@ -48,17 +48,23 @@
                                 rounded-2xl
                             "
                         >
-                            <DialogTitle
-                                as="h3"
-                                class="
-                                    text-lg
-                                    font-medium
-                                    leading-6
-                                    text-gray-900 text-capitalize
-                                "
-                            >
-                                {{ asset.filename }}
-                            </DialogTitle>
+                            <div class="flex justify-between">
+                                <DialogTitle
+                                    as="h3"
+                                    class="
+                                        text-lg
+                                        font-medium
+                                        leading-6
+                                        text-gray-900 text-capitalize
+                                    "
+                                >
+                                    {{ asset.filename }}
+                                </DialogTitle>
+                                <x-icon
+                                    class="h-6 w-6 pointer"
+                                    @click="closeModal"
+                                />
+                            </div>
 
                             <div class="mt-2">
                                 <video
@@ -81,12 +87,6 @@
                                     {{ asset }}
                                 </template>
                             </div>
-
-                            <div class="mt-4">
-                                <button class="primary" @click="closeModal">
-                                    {{ t('action_close') }}
-                                </button>
-                            </div>
                         </div>
                     </TransitionChild>
                 </div>
@@ -106,7 +106,7 @@ import {
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
-import { StopIcon, TrashIcon } from '@heroicons/vue/outline'
+import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 
 export default {
     name: 'AssetModal',
@@ -118,6 +118,7 @@ export default {
         DialogTitle,
         TrashIcon,
         StopIcon,
+        XIcon,
     },
     props: {
         isOpen: {
