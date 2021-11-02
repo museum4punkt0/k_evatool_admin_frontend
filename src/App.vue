@@ -175,6 +175,7 @@
                             <span class="text-xs text-gray-500">
                                 {{ version }}
                             </span>
+                            <language-switch></language-switch>
                             <button
                                 type="button"
                                 class="
@@ -273,6 +274,7 @@ import {
 import { SearchIcon } from '@heroicons/vue/solid'
 import MainMenu from './components/MainMenu.vue'
 import Notifications from './components/Notifications/Notifications.vue'
+import LanguageSwitch from './components/UserLanguageSwitch.vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -303,6 +305,7 @@ export default {
         UserIcon,
         LogoutIcon,
         Notifications,
+        LanguageSwitch,
     },
     setup() {
         const mobileMenuOpen = ref(false)

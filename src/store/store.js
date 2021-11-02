@@ -30,11 +30,17 @@ export default createStore({
         setApp(state, app) {
             state.app = app
         },
+        setLanguage(state, language) {
+            state.language = language
+        },
     },
     actions: {
         async getApp({ commit }) {
             const app = await APP.getApp()
             commit('setApp', app)
+        },
+        async setLanguage({ commit }, language) {
+            commit('setLanguage', language)
         },
     },
 })

@@ -77,7 +77,6 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { useState } from '../../composables/state'
 import Button from '../Common/Button.js'
-import Record from '../Common/Record.vue'
 import SurveyElement from './SurveyElement.vue'
 import SurveyStep from './SurveyStep.vue'
 import SurveyDetails from './SurveyDetails.vue'
@@ -95,7 +94,6 @@ export default {
         SurveyDetails,
         SurveyStep,
         Button,
-        Record,
         NodeEditor,
         NodeBrowser,
         EyeIcon,

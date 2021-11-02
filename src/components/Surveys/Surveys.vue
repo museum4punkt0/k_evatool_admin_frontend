@@ -152,7 +152,6 @@ import {
 } from '@heroicons/vue/outline'
 import { useRouter } from 'vue-router'
 
-import Collection from '../Common/Collection/Collection.vue'
 import SurveyDetails from './SurveyDetails.vue'
 import { computed, ref, watch } from 'vue'
 import PublishedState from '../Common/PublishedState.vue'
@@ -170,7 +169,6 @@ export default {
         FormInput,
         PublishedState,
         SurveyDetails,
-        Collection,
         TrashIcon,
         EyeIcon,
         PencilAltIcon,

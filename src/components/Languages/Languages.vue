@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import Collection from '../Common/Collection/Collection.vue'
 import PublishedState from '../Common/PublishedState.vue'
 import { CheckIcon } from '@heroicons/vue/outline'
 import { computed } from 'vue'
@@ -56,7 +55,6 @@ import { useI18n } from 'vue-i18n'
 export default {
     components: {
         PublishedState,
-        Collection,
         CheckIcon,
     },
     setup() {
