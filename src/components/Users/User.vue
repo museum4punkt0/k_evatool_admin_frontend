@@ -72,7 +72,8 @@ import { ref, watch } from 'vue'
 import USERS from '../../services/userService'
 
 import useVuelidate from '@vuelidate/core'
-import { email, minLength, required } from '@vuelidate/validators'
+import { email, minLength, required, requiredIf } from '@vuelidate/validators'
+
 import FormToggle from '../Forms/FormToggle.vue'
 import { useStore } from 'vuex'
 
@@ -107,10 +108,6 @@ export default {
         }
         const saveUser = async () => {
             savingUser.value = true
-            if (user.value.password === '') {
-                delete user.value.password
-                delete user.value.passwordConfirmation
-            }
             await USERS.saveUser(user.value)
             user.value = {
                 name: '',
@@ -132,6 +129,21 @@ export default {
             },
         )
 
+        watch(
+            () => user.value,
+            (value) => {
+                if (value.id) {
+                    if (value.password === '') {
+                        delete value.password
+                    }
+                    if (value.passwordConfirmation === '') {
+                        delete value.passwordConfirmation
+                    }
+                }
+            },
+            { deep: true, immediate: true },
+        )
+
         if (props.userId > 0) {
             getUser(props.userId)
         }
@@ -143,9 +155,15 @@ export default {
                 email,
             },
             password: {
+                required: requiredIf(() => {
+                    return !user.value.id || user.value.id <= 0
+                }),
                 minLength: minLength(12),
             },
             passwordConfirmation: {
+                required: requiredIf(() => {
+                    return !user.value.id || user.value.id <= 0
+                }),
                 minLength: minLength(12),
                 matchPassword: () =>
                     user.value.passwordConfirmation === user.value.password,
