@@ -15,7 +15,7 @@
             :label="t('email')"
         />
         <form-input
-            v-if="!user.id"
+            v-if="store.state.users.user.admin"
             v-model:value="user.password"
             type="password"
             autocomplete="new-password"
@@ -24,7 +24,7 @@
             :label="t('passwords', 1)"
         />
         <form-input
-            v-if="!user.id"
+            v-if="store.state.users.user.admin"
             v-model:value="user.passwordConfirmation"
             class="mt-3"
             type="password"
@@ -107,6 +107,10 @@ export default {
         }
         const saveUser = async () => {
             savingUser.value = true
+            if (user.value.password === '') {
+                delete user.value.password
+                delete user.value.passwordConfirmation
+            }
             await USERS.saveUser(user.value)
             user.value = {
                 name: '',
