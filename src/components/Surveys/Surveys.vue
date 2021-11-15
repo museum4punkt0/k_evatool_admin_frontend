@@ -79,7 +79,9 @@
                                 <published-state
                                     class="pointer"
                                     :published="survey.published"
-                                    @click="publishSurvey(survey.id)"
+                                    @click.stop.prevent="
+                                        publishSurvey(survey.id)
+                                    "
                                 />
                             </td>
                             <td>
