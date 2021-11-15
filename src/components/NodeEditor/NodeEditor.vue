@@ -633,18 +633,20 @@ export default {
                                     */
                 (props.steps.find((x) => x.id === step.id)
                     ?.surveyElementType === 'multipleChoice' &&
-                    store.state.surveyElements.surveyElements.find(
-                        (element) =>
-                            element.id ===
-                            props.steps.find((x) => x.id === step.id)
-                                ?.surveyElementId,
-                    ).params.minSelectable === 1 &&
-                    store.state.surveyElements.surveyElements.find(
-                        (element) =>
-                            element.id ===
-                            props.steps.find((x) => x.id === step.id)
-                                ?.surveyElementId,
-                    ).params.maxSelectable === 1) ||
+                    !(
+                        store.state.surveyElements.surveyElements.find(
+                            (element) =>
+                                element.id ===
+                                props.steps.find((x) => x.id === step.id)
+                                    ?.surveyElementId,
+                        ).params.minSelectable === 1 &&
+                        store.state.surveyElements.surveyElements.find(
+                            (element) =>
+                                element.id ===
+                                props.steps.find((x) => x.id === step.id)
+                                    ?.surveyElementId,
+                        ).params.maxSelectable === 1
+                    )) ||
                 /*
                                     TODO: tooltip
                                     is time based next step
