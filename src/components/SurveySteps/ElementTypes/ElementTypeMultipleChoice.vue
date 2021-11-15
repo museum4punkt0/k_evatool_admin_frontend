@@ -34,6 +34,9 @@
                         <TrashIcon class="mx-1 h-5 w-5 pointer" />
                     </button>
                 </div>
+                <p class="text-xs text-gray-500 ml-1 mt-1">
+                    {{ t('validation_snake_case') }}
+                </p>
                 <div>
                     <form-input
                         v-for="language in store.state.languages.languages.filter(
@@ -197,7 +200,7 @@ export default {
         watch(
             () => paramsValidation.value.$invalid,
             (invalid) => {
-                console.log('emmiting isvalid', !invalid)
+                console.log('emitting isvalid', !invalid)
                 emit('isValid', !invalid)
             },
         )

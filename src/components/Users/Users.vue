@@ -24,11 +24,10 @@
                             'names',
                             1,
                         )}, ${t('email')}`"
-                        class="mr-4"
                     />
                     <button
-                        v-if="store.state.users.user.admin"
-                        class="primary mr-1"
+                        v-if="store.state.users.user.admin && userId < 0"
+                        class="primary ml-4 mr-1"
                         @click="setShowSideBar(true)"
                     >
                         {{ t('action_new_user') }}

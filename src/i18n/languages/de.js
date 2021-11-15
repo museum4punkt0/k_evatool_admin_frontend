@@ -115,6 +115,7 @@ export default {
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',
+    validation_snake_case: 'Nur Kleinbuchstaben und "_"',
     videos: 'Videos | Video | Video',
     viewport_incompatible:
         'Bitte benutzen Sie ein Gerät mit einer höheren Auflösung!',
