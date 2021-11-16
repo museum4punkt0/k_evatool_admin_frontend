@@ -124,7 +124,7 @@
                                                 "
                                                 @click="resetTimecode('start')"
                                             >
-                                                <trash-icon class="h-5 w-5" />
+                                                <reply-icon class="h-5 w-5" />
                                             </button>
                                         </div>
                                         <div class="flex items-end">
@@ -165,7 +165,7 @@
                                                 "
                                                 @click="resetTimecode('stop')"
                                             >
-                                                <trash-icon class="h-5 w-5" />
+                                                <reply-icon class="h-5 w-5" />
                                             </button>
                                         </div>
                                     </div>
@@ -413,6 +413,7 @@ import {
     StopIcon,
     ClockIcon,
     TrashIcon,
+    ReplyIcon,
     XIcon,
 } from '@heroicons/vue/outline'
 
@@ -440,6 +441,7 @@ export default {
         PencilAltIcon,
         XIcon,
         StopIcon,
+        ReplyIcon,
     },
     props: {
         isOpen: {
@@ -639,16 +641,62 @@ export default {
             set: () => {},
         })
 
+        const timeBasedStepsMappedTimecodes = () => {
+            const timeBasedStepsTimecodes = store.state.surveys?.survey?.steps
+                ?.find((x) => !x.parentStepId)
+                ?.timeBasedSteps?.map((step) => step.timecode)
+            return timeBasedStepsTimecodes
+        }
+
+        const timeBasedStepLowestTimecode = () => {
+            return timeBasedStepsMappedTimecodes().reduce(function (p, v) {
+                return p < v ? p : v
+            })
+        }
+
+        const timeBasedStepHighestTimecode = () => {
+            return timeBasedStepsMappedTimecodes().reduce(function (p, v) {
+                return p > v ? p : v
+            })
+        }
+
+        const startTimecodeValidator = () => {
+            if (
+                selectedTimecodes.value.startTimecode >
+                    timeBasedStepLowestTimecode() ||
+                selectedTimecodes.value.startTimecode >=
+                    selectedTimecodes.value.stopTimecode
+            ) {
+                return false
+            }
+            return true
+        }
+
+        const stopTimecodeValidator = () => {
+            if (
+                selectedTimecodes.value.stopTimecode <
+                    timeBasedStepHighestTimecode() ||
+                selectedTimecodes.value.startTimecode >=
+                    selectedTimecodes.value.stopTimecode ||
+                selectedTimecodes.value.stopTimecode > videoDuration.value
+            ) {
+                return false
+            }
+            return true
+        }
+
         const validateTimecodes = computed({
             get: () => {
                 return {
                     startTimecode: {
                         required,
                         timecodeValidator,
+                        startTimecodeValidator,
                     },
                     stopTimecode: {
                         required,
                         timecodeValidator,
+                        stopTimecodeValidator,
                     },
                 }
             },
