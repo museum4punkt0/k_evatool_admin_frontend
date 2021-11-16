@@ -23,6 +23,15 @@
         class="mt-3"
         :label="t('languages', store.state.languages.languages.length)"
     />
+    <form-input
+        v-model:value="survey.description"
+        class="mt-3"
+        name="description"
+        type="text"
+        :label="t('descriptions', 1)"
+    />
+    <!-- <label for="description">{{ t('descriptions', 1) }}</label> -->
+    <!-- <tiny-mce v-model:text="survey.description" name="description" /> -->
     <div class="flex flex-row">
         <action-button
             :action-text="t('action_cancel')"
@@ -57,10 +66,11 @@ import ActionButton from '../Common/ActionButton.vue'
 import DataViewer from '../Common/DataViewer.vue'
 import FormInput from '../Forms/FormInput.vue'
 import FormCheckbox from '../Forms/FormCheckbox.vue'
+import TinyMce from '../Common/TinyMce.vue'
 
 export default {
     name: 'SurveyDetails',
-    components: { FormCheckbox, FormInput, ActionButton, DataViewer },
+    components: { FormCheckbox, FormInput, ActionButton, DataViewer, TinyMce },
     props: {
         surveyId: { type: Number, default: -1 },
         resetAfterSave: { type: Boolean, default: true },
