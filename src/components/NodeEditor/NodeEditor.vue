@@ -664,14 +664,15 @@ export default {
         }
 
         /** WATCHER **/
-        /*
         watch(
             () => timeBasedModalIsOpen.value,
             (value) => {
                 console.log(value)
+                if (!value) {
+                    refreshSteps()
+                }
             },
         )
-        */
         watch(
             () => props.steps,
             () => {
