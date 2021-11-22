@@ -106,7 +106,7 @@
                                         font-bold
                                         text-center
                                         p-2
-                                        break-words
+                                        break-all
                                     "
                                 >
                                     {{
