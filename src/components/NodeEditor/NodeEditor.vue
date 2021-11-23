@@ -2,24 +2,18 @@
     <div
         ref="nodeEditor"
         class="node-editor-wrap relative bg-blue-300 rounded-lg"
+        @mousemove="onMouseMove"
+        @mouseup.prevent.stop="onMouseUp"
+        @mouseleave="onMouseUp"
     >
-        <div
-            class="
-                zoom-menu
-                m-1
-                absolute
-                right-0
-                bg-gray-500 bg-opacity-50
-                rounded-lg
-            "
-        >
+        <div class="zoom-menu m-1 fixed bg-gray-500 bg-opacity-50 rounded-lg">
             <button
                 class="pointer disabled:opacity-50"
                 :disabled="zoomFactor >= 1"
                 @click.prevent.stop="zoom(0.1)"
             >
                 <div class="p-2 flex h-full justify-center items-center">
-                    <ZoomInIcon class="h-8 w-8" />
+                    <ZoomInIcon class="h-6 w-6" />
                 </div>
             </button>
             <button
@@ -28,7 +22,7 @@
                 @click.prevent.stop="zoom(-0.1)"
             >
                 <div class="p-2 flex h-full justify-center items-center">
-                    <ZoomOutIcon class="h-8 w-8" />
+                    <ZoomOutIcon class="h-6 w-6" />
                 </div>
             </button>
         </div>
@@ -38,6 +32,7 @@
             :key="'connection_' + connection.id"
             :style="{
                 height: `${height}px`,
+                width: `${width}px`,
                 transform: 'scale(' + zoomFactor + ')',
             }"
             :start="
@@ -60,9 +55,6 @@
             ref="nodeCanvas"
             :style="{ transform: 'scale(' + zoomFactor + ')' }"
             class="node-canvas relative"
-            @mousemove="onMouseMove"
-            @mouseup.prevent.stop="onMouseUp"
-            @mouseleave="onMouseUp"
         >
             <div
                 v-for="step in adminLayout"
@@ -96,6 +88,7 @@
                     'ring-yellow-400 ring-offset-1 ring-2': steps?.find(
                         (x) => x?.id === step?.id,
                     )?.isFirstStep,
+                    'z-10': draggedStep?.id === step.id,
                 }"
             >
                 <div
@@ -325,6 +318,7 @@ export default {
         const nodeEditor = ref(null)
         const nodeCanvas = ref(null)
         const height = ref(0)
+        const width = ref(0)
         const zoomFactor = ref(1)
 
         /** COMPUTED PROPERTIES **/
@@ -357,25 +351,35 @@ export default {
             props.steps
                 .filter((x) => !x.parentStepId)
                 .forEach((step, stepIndex) => {
-                    const index = props.adminLayout.findIndex(
-                        (x) => x.id === step.id,
-                    )
-                    if (index < 0) {
+                    if (props.adminLayout) {
+                        const index = props.adminLayout.findIndex(
+                            (x) => x.id === step.id,
+                        )
+                        if (index < 0) {
+                            adminLayoutInit.push({
+                                id: step.id,
+                                position: {
+                                    x: 150,
+                                    y: 150,
+                                },
+                            })
+                        } else {
+                            let stepFound = props.adminLayout.find(
+                                (x) => x.id === step.id,
+                            )
+                            stepFound.position = fixLayoutPosition(
+                                stepFound.position,
+                            )
+                            adminLayoutInit.push(stepFound)
+                        }
+                    } else {
                         adminLayoutInit.push({
                             id: step.id,
                             position: {
-                                x: 150 + (stepIndex % 3) * 300,
-                                y: 150 + Math.floor(stepIndex / 3) * 300,
+                                x: 150,
+                                y: 150 + stepIndex * 300,
                             },
                         })
-                    } else {
-                        let stepFound = props.adminLayout.find(
-                            (x) => x.id === step.id,
-                        )
-                        stepFound.position = fixLayoutPosition(
-                            stepFound.position,
-                        )
-                        adminLayoutInit.push(stepFound)
                     }
                 })
             store.dispatch('surveys/setSurveyAdminLayout', adminLayoutInit)
@@ -465,6 +469,7 @@ export default {
 
         const setCanvasSize = () => {
             height.value = nodeCanvas.value.scrollHeight
+            width.value = nodeCanvas.value.scrollWidth
         }
 
         const selectSurveyStep = async (stepId) => {
@@ -690,6 +695,7 @@ export default {
                     (zoomFactor.value + zoomfactor).toFixed(1),
                 )
             }
+            refreshSteps()
         }
 
         /** WATCHER **/
@@ -763,6 +769,7 @@ export default {
             toggleSkippableStep,
             unlinkNextStep,
             updateStepParams,
+            width,
             zoom,
             zoomFactor,
         }
@@ -777,6 +784,7 @@ export default {
     overflow: auto;
 }
 .node-canvas {
+    z-index: 3;
     transform-origin: left top;
     transition: all 250ms ease-in-out;
 }
