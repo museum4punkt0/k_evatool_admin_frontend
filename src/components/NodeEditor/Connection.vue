@@ -2,14 +2,8 @@
     <svg
         v-if="validConnection"
         xmlns="http://www.w3.org/2000/svg"
-        :style="{
-            width: `${width}px`,
-            height: `${height}px`,
-            zIndex: 1,
-        }"
-        class="absolute"
+        class="absolute w-full"
     >
-        <!-- 'background-color': 'rgba(200,0,0,0.4)', -->
         <defs>
             <marker
                 id="arrowhead"
@@ -37,6 +31,8 @@
             :stroke-dasharray="dashed ? 2 : 0"
         />
         <text
+            v-if="dashed"
+            class="text-middle"
             style="fill: #000"
             text-anchor="middle"
             dominant-baseline="text-top"
@@ -44,6 +40,16 @@
             <textPath :xlink:href="`#${id}_textpath`" startOffset="50%">
                 {{ label }}
             </textPath>
+        </text>
+        <text
+            v-else
+            class="text-start"
+            style="fill: #000"
+            text-anchor="start"
+            :x="(start.x + end.x) / 2"
+            :y="(start.y + end.y) / 2"
+        >
+            {{ label }}
         </text>
     </svg>
 </template>
@@ -61,14 +67,6 @@ export default {
         },
         end: {
             type: Object,
-            required: true,
-        },
-        width: {
-            type: Number,
-            required: true,
-        },
-        height: {
-            type: Number,
             required: true,
         },
         dashed: {
@@ -102,4 +100,17 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+svg {
+    transition: all 250ms ease-in-out;
+    pointer-events: none;
+    z-index: 1;
+    transform-origin: left top;
+}
+.text-start {
+    transform: translateX(1%);
+}
+.text-middle {
+    transform: translateY(-1%);
+}
+</style>

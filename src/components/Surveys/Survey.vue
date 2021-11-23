@@ -1,6 +1,6 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
-        <main ref="container" class="flex-1 overflow-y-auto p-3">
+        <main ref="container" class="flex flex-1 flex-col overflow-y-auto p-3">
             <div class="flex mb-3 items-center">
                 <h1>
                     {{ t('surveys', 1) }}:

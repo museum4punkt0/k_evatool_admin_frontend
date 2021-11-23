@@ -1,246 +1,237 @@
 <template>
-    <div>
-        <div class="node-editor-wrap bg-blue-300 rounded-lg">
-            <div
-                class="relative"
-                :style="{ width: `${width}px`, height: `${height}px` }"
-                @mousemove="onMouseMove"
-                @mouseup.prevent.stop="onMouseUp"
-                @mouseleave="onMouseUp"
+    <div
+        ref="nodeEditor"
+        class="node-editor-wrap relative bg-blue-300 rounded-lg"
+    >
+        <div
+            class="
+                zoom-menu
+                m-1
+                absolute
+                right-0
+                bg-gray-500 bg-opacity-50
+                rounded-lg
+            "
+        >
+            <button
+                class="pointer disabled:opacity-50"
+                :disabled="zoomFactor >= 1"
+                @click.prevent.stop="zoom(0.1)"
             >
-                <connection
-                    v-for="connection in connections"
-                    :id="connection.id"
-                    :key="'connection_' + connection.id"
-                    :start="
-                        getStepElementPosition(
-                            connection.start.id,
-                            connection.start.outlet === 'next'
-                                ? 'right'
-                                : 'bottom',
-                        )
-                    "
-                    :end="getStepElementPosition(connection.end, 'left')"
-                    :height="height"
-                    :width="width"
-                    :dashed="connection.start.outlet !== 'next'"
-                    :label="connection.label"
-                    @click.prevent.stop="deselectStep"
-                />
+                <div class="p-2 flex h-full justify-center items-center">
+                    <ZoomInIcon class="h-8 w-8" />
+                </div>
+            </button>
+            <button
+                class="pointer disabled:opacity-50"
+                :disabled="zoomFactor <= 0.5"
+                @click.prevent.stop="zoom(-0.1)"
+            >
+                <div class="p-2 flex h-full justify-center items-center">
+                    <ZoomOutIcon class="h-8 w-8" />
+                </div>
+            </button>
+        </div>
+        <connection
+            v-for="connection in connections"
+            :id="connection.id"
+            :key="'connection_' + connection.id"
+            :style="{
+                height: `${height}px`,
+                transform: 'scale(' + zoomFactor + ')',
+            }"
+            :start="
+                getStepElementPosition(
+                    connection.start.id,
+                    connection.start.outlet === 'next' ? 'bottom' : 'right',
+                )
+            "
+            :end="
+                getStepElementPosition(
+                    connection.end,
+                    connection.start.outlet === 'next' ? 'top' : 'left',
+                )
+            "
+            :dashed="connection.start.outlet !== 'next'"
+            :label="connection.label"
+            @click.prevent.stop="deselectStep"
+        />
+        <div
+            ref="nodeCanvas"
+            :style="{ transform: 'scale(' + zoomFactor + ')' }"
+            class="node-canvas relative"
+            @mousemove="onMouseMove"
+            @mouseup.prevent.stop="onMouseUp"
+            @mouseleave="onMouseUp"
+        >
+            <div
+                v-for="step in adminLayout"
+                :key="'step_element_' + step.id"
+                :ref="(el) => (stepElements[step.id] = el)"
+                class="
+                    step
+                    p-0
+                    m-0
+                    rounded-lg
+                    border-0
+                    bg-white
+                    shadow
+                    overflow-hidden
+                    h-full
+                    flex
+                "
+                :style="{
+                    top: step?.position.y + 'px',
+                    left: step?.position.x + 'px',
+                    zIndex: draggedStep?.id === step?.id ? 3 : 2,
+                }"
+                :class="{
+                    'shadow-lg': surveyStepId === step.id,
+                    'node-selected': surveyStepId === step.id,
+                    'border border-1 border-red-600':
+                        steps.find((item) => item.id === step.id)?.previousSteps
+                            .length === 0 &&
+                        steps.find((item) => item.id === step.id)
+                            ?.nextStepId === null,
+                    'ring-yellow-400 ring-offset-1 ring-2': steps?.find(
+                        (x) => x?.id === step?.id,
+                    )?.isFirstStep,
+                }"
+            >
                 <div
-                    v-for="step in adminLayout"
-                    :key="'step_element_' + step.id"
-                    :ref="(el) => (stepElements[step.id] = el)"
-                    class="
-                        step
-                        p-0
-                        m-0
-                        rounded-lg
-                        border-0
-                        bg-white
-                        shadow
-                        overflow-hidden
-                        h-full
-                        flex flex-col
-                    "
-                    :style="{
-                        top: step?.position.y + 'px',
-                        left: step?.position.x + 'px',
-                        zIndex: draggedStep?.id === step?.id ? 3 : 2,
-                    }"
-                    :class="{
-                        'shadow-lg': surveyStepId === step.id,
-                        'node-selected': surveyStepId === step.id,
-                        'border border-1 border-red-600':
-                            steps.find((item) => item.id === step.id)
-                                ?.previousSteps.length === 0 &&
-                            steps.find((item) => item.id === step.id)
-                                ?.nextStepId === null,
-                        'ring-yellow-400 ring-offset-1 ring-2': steps?.find(
-                            (x) => x?.id === step?.id,
-                        )?.isFirstStep,
-                    }"
+                    class="node-content flex-grow"
+                    @mousedown.prevent.stop="onMouseDown(step, $event)"
+                    @click.prevent.stop="selectSurveyStep(step.id)"
                 >
                     <div
-                        class="node-content flex-grow"
-                        @mousedown.prevent.stop="onMouseDown(step, $event)"
-                        @click.prevent.stop="selectSurveyStep(step.id)"
+                        class="
+                            pointer
+                            h-full
+                            flex-col
+                            items-center
+                            justify-center
+                        "
                     >
-                        <div
-                            class="
-                                pointer
-                                h-full
-                                flex-col
-                                items-center
-                                justify-center
-                            "
-                        >
-                            <div class="flex border-b-2">
-                                <button
-                                    class="w-10 pointer border-r-2"
-                                    @click.prevent.stop="selectStart(step.id)"
+                        <div class="flex border-b-2">
+                            <button
+                                class="w-10 pointer border-r-2"
+                                @click.prevent.stop="selectStart(step.id)"
+                            >
+                                <div
+                                    class="
+                                        flex
+                                        h-full
+                                        justify-center
+                                        items-center
+                                    "
                                 >
-                                    <div
-                                        class="
-                                            flex
-                                            h-full
-                                            justify-center
-                                            items-center
+                                    <StarIcon
+                                        :class="
+                                            steps?.find(
+                                                (x) => x?.id === step?.id,
+                                            )?.isFirstStep
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-400'
                                         "
-                                    >
-                                        <StarIcon
-                                            :class="
-                                                steps?.find(
-                                                    (x) => x?.id === step?.id,
-                                                )?.isFirstStep
-                                                    ? 'text-yellow-400'
-                                                    : 'text-gray-400'
-                                            "
-                                            class="h-5 w-5"
-                                        />
-                                    </div>
-                                </button>
-                                <div
-                                    class="
-                                        flex-grow
-                                        font-bold
-                                        text-center
-                                        p-2
-                                        break-all
-                                    "
-                                >
-                                    {{
-                                        steps?.find((x) => x?.id === step?.id)
-                                            ?.name
-                                    }}
-                                </div>
-                            </div>
-
-                            <element-content
-                                :element="
-                                    store.state.surveyElements.surveyElements.find(
-                                        (element) =>
-                                            element.id ===
-                                            steps.find((x) => x.id === step.id)
-                                                ?.surveyElementId,
-                                    )
-                                "
-                                class="m-2"
-                            ></element-content>
-                        </div>
-                    </div>
-                    <div class="w-full border-t">
-                        <div class="flex flex-row h-9">
-                            <button
-                                class="flex-1 w-8 pointer"
-                                :class="{
-                                    'bg-blue-200': step.id === selectedInput,
-                                    'opacity-50':
-                                        hasNextAndPreviousSockets(step),
-                                }"
-                                :disabled="hasNextAndPreviousSockets(step)"
-                                @click.prevent.stop="selectInput(step.id)"
-                            >
-                                <div
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
-                                >
-                                    <ArrowLeftIcon class="h-4 w-4" />
-                                </div>
-                            </button>
-
-                            <button
-                                class="flex-1 disabled:opacity-25"
-                                :disabled="
-                                    steps.find((x) => x.id === step.id)
-                                        ?.surveyElementType !== 'video'
-                                "
-                                @click.prevent.stop="
-                                    openTimeBasedModal(step.id)
-                                "
-                            >
-                                <span
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
-                                >
-                                    <ClockIcon class="h-5 w-5" />
-                                </span>
-                            </button>
-                            <button
-                                class="flex-1 disabled:opacity-25"
-                                :disabled="hasResultBasedNextStepsButton(step)"
-                                @click.prevent.stop="
-                                    openResultBasedModal(step.id)
-                                "
-                            >
-                                <span
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
-                                >
-                                    <switch-horizontal-icon class="h-5 w-5" />
-                                </span>
-                            </button>
-                            <div
-                                class="flex-1 pointer"
-                                @click.prevent.stop="
-                                    toggleSkippableStep(step.id)
-                                "
-                            >
-                                <div
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
-                                >
-                                    <FastForwardIcon
                                         class="h-5 w-5"
-                                        :class="{
-                                            'text-blue-800':
-                                                store.state.surveys.survey.steps.find(
-                                                    (item) =>
-                                                        item.id === step.id,
-                                                )?.allowSkip,
-                                        }"
                                     />
                                 </div>
-                            </div>
-                            <button
-                                class="flex-1 pointer"
-                                :class="{
-                                    'bg-blue-200': step.id === selectedOutput,
-                                    'opacity-50':
-                                        hasNextAndPreviousSockets(step),
-                                }"
-                                :disabled="hasNextAndPreviousSockets(step)"
-                                @click.prevent.stop="selectOutput(step.id)"
-                            >
-                                <div
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
-                                >
-                                    <ArrowRightIcon class="h-4 w-4" />
-                                </div>
                             </button>
+                            <div
+                                class="
+                                    flex-grow
+                                    font-bold
+                                    text-center
+                                    p-2
+                                    break-all
+                                "
+                            >
+                                {{
+                                    steps?.find((x) => x?.id === step?.id)?.name
+                                }}
+                            </div>
+                        </div>
+
+                        <element-content
+                            :element="
+                                store.state.surveyElements.surveyElements.find(
+                                    (element) =>
+                                        element.id ===
+                                        steps.find((x) => x.id === step.id)
+                                            ?.surveyElementId,
+                                )
+                            "
+                            class="m-2"
+                        ></element-content>
+                    </div>
+                </div>
+                <div class="flex flex-col w-9 border-l">
+                    <button
+                        class="flex-1 w-8 pointer disabled:opacity-50"
+                        :class="{
+                            'bg-blue-200': step.id === selectedInput,
+                        }"
+                        :disabled="
+                            hasNextAndPreviousSockets(step) ||
+                            steps?.find((x) => x?.id === step?.id)?.isFirstStep
+                        "
+                        @click.prevent.stop="selectInput(step.id)"
+                    >
+                        <div class="flex h-full justify-center items-center">
+                            <ArrowUpIcon class="h-4 w-4" />
+                        </div>
+                    </button>
+
+                    <button
+                        class="flex-1 disabled:opacity-25"
+                        :disabled="
+                            steps.find((x) => x.id === step.id)
+                                ?.surveyElementType !== 'video'
+                        "
+                        @click.prevent.stop="openTimeBasedModal(step.id)"
+                    >
+                        <span class="flex h-full justify-center items-center">
+                            <ClockIcon class="h-5 w-5" />
+                        </span>
+                    </button>
+                    <button
+                        class="flex-1 disabled:opacity-25"
+                        :disabled="hasResultBasedNextStepsButton(step)"
+                        @click.prevent.stop="openResultBasedModal(step.id)"
+                    >
+                        <span class="flex h-full justify-center items-center">
+                            <switch-horizontal-icon class="h-5 w-5" />
+                        </span>
+                    </button>
+                    <div
+                        class="flex-1 pointer"
+                        @click.prevent.stop="toggleSkippableStep(step.id)"
+                    >
+                        <div class="flex h-full justify-center items-center">
+                            <FastForwardIcon
+                                class="h-5 w-5"
+                                :class="{
+                                    'text-blue-800':
+                                        store.state.surveys.survey.steps.find(
+                                            (item) => item.id === step.id,
+                                        )?.allowSkip,
+                                }"
+                            />
                         </div>
                     </div>
+                    <button
+                        class="flex-1 pointer"
+                        :class="{
+                            'bg-blue-200': step.id === selectedOutput,
+                            'opacity-50': hasNextAndPreviousSockets(step),
+                        }"
+                        :disabled="hasNextAndPreviousSockets(step)"
+                        @click.prevent.stop="selectOutput(step.id)"
+                    >
+                        <div class="flex h-full justify-center items-center">
+                            <ArrowDownIcon class="h-4 w-4" />
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -263,12 +254,14 @@ import { useI18n } from 'vue-i18n'
 import Connection from './Connection.vue'
 
 import {
-    ArrowLeftIcon,
-    ArrowRightIcon,
+    ArrowUpIcon,
+    ArrowDownIcon,
     ClockIcon,
     PencilIcon,
     FastForwardIcon,
     SwitchHorizontalIcon,
+    ZoomInIcon,
+    ZoomOutIcon,
 } from '@heroicons/vue/outline'
 import { StarIcon } from '@heroicons/vue/solid'
 
@@ -285,13 +278,15 @@ export default {
         ResultBasedStepsModal,
         Connection,
         ClockIcon,
-        ArrowLeftIcon,
-        ArrowRightIcon,
+        ArrowUpIcon,
+        ArrowDownIcon,
         PencilIcon,
         FastForwardIcon,
         StarIcon,
         SwitchHorizontalIcon,
         ElementContent,
+        ZoomInIcon,
+        ZoomOutIcon,
     },
     props: {
         steps: {
@@ -313,9 +308,8 @@ export default {
         const store = useStore()
         const { t } = useI18n()
 
-        /** CONST VARS **/
-        const width = 2000
-        const height = 2000
+        /** VARS **/
+        let draggedStepOffsetY = 0
 
         /** REFERENCES **/
         const draggedStep = ref(null)
@@ -328,6 +322,10 @@ export default {
         const resultBasedModalIsOpen = ref(false)
         const resultBasedModalStepId = ref(-1)
         const stepTimecodes = ref({})
+        const nodeEditor = ref(null)
+        const nodeCanvas = ref(null)
+        const height = ref(0)
+        const zoomFactor = ref(1)
 
         /** COMPUTED PROPERTIES **/
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
@@ -465,6 +463,10 @@ export default {
             })
         }
 
+        const setCanvasSize = () => {
+            height.value = nodeCanvas.value.scrollHeight
+        }
+
         const selectSurveyStep = async (stepId) => {
             if (stepId !== store.state.surveys.surveyStepId) {
                 await deselectStep()
@@ -481,18 +483,25 @@ export default {
         }
 
         /** MOUSEHANDLER **/
-        const onMouseDown = (step) => {
+        const onMouseDown = (step, e) => {
             draggedStep.value = step
+            draggedStepOffsetY =
+                draggedStep.value.position.y -
+                (e.clientY + nodeEditor.value.scrollTop)
         }
         const onMouseMove = (e) => {
             if (draggedStep.value) {
                 draggedStep.value.position.x =
-                    draggedStep.value.position.x + e.movementX
+                    draggedStep.value.position.x +
+                    e.movementX * (1 / zoomFactor.value)
+                // TODO: FIX DRAGGED POSITION WHILE ZOOME
                 draggedStep.value.position.y =
-                    draggedStep.value.position.y + e.movementY
+                    nodeEditor.value.scrollTop + e.clientY + draggedStepOffsetY
             }
         }
         const onMouseUp = async () => {
+            setCanvasSize()
+            draggedStepOffsetY = 0
             draggedStep.value = null
             await SURVEYS.saveAdminLayout(props.surveyId, props.adminLayout)
         }
@@ -562,21 +571,30 @@ export default {
             const element = stepElements.value[id]
             let offsetX = 0
             let offsetY = 0
+            const normalizedWidth =
+                (element?.getBoundingClientRect().width *
+                    (1 / zoomFactor.value)) /
+                2
+            const normalizedHeight =
+                (element?.getBoundingClientRect().height *
+                    (1 / zoomFactor.value)) /
+                2
+            const offset = 10 * zoomFactor.value
             switch (anchor) {
                 case 'left': {
-                    offsetX = -element?.getBoundingClientRect().width / 2 - 10
+                    offsetX = -normalizedWidth - offset
                     break
                 }
                 case 'right': {
-                    offsetX = element?.getBoundingClientRect().width / 2 + 10
+                    offsetX = normalizedWidth + offset
                     break
                 }
                 case 'top': {
-                    offsetY = -element?.getBoundingClientRect().height / 2 - 10
+                    offsetY = -normalizedHeight - offset
                     break
                 }
                 case 'bottom': {
-                    offsetY = element?.getBoundingClientRect().height / 2 + 10
+                    offsetY = normalizedHeight + offset
                     break
                 }
             }
@@ -662,6 +680,17 @@ export default {
                 }) != null
             )
         }
+        const zoom = (zoomfactor) => {
+            if (zoomfactor < 0 && zoomFactor.value > 0.5) {
+                zoomFactor.value = parseFloat(
+                    (zoomFactor.value + zoomfactor).toFixed(1),
+                )
+            } else if (zoomfactor > 0 && zoomFactor.value < 1.0) {
+                zoomFactor.value = parseFloat(
+                    (zoomFactor.value + zoomfactor).toFixed(1),
+                )
+            }
+        }
 
         /** WATCHER **/
         watch(
@@ -672,6 +701,13 @@ export default {
                     refreshSteps()
                 }
             },
+        )
+        watch(
+            () => nodeCanvas.value,
+            () => {
+                setCanvasSize()
+            },
+            { deep: true },
         )
         watch(
             () => props.steps,
@@ -698,12 +734,17 @@ export default {
             deselectStep,
             draggedStep,
             getStepElementPosition,
+            hasNextAndPreviousSockets,
+            hasResultBasedNextStepsButton,
             height,
+            nodeCanvas,
+            nodeEditor,
             onMouseDown,
             onMouseMove,
             onMouseUp,
             openResultBasedModal,
             openTimeBasedModal,
+            refreshSteps,
             resultBasedModalIsOpen,
             resultBasedModalStepId,
             selectedOutput,
@@ -722,10 +763,8 @@ export default {
             toggleSkippableStep,
             unlinkNextStep,
             updateStepParams,
-            width,
-            hasNextAndPreviousSockets,
-            hasResultBasedNextStepsButton,
-            refreshSteps,
+            zoom,
+            zoomFactor,
         }
     },
 }
@@ -734,8 +773,12 @@ export default {
 <style scoped>
 .node-editor-wrap {
     width: 100%;
-    height: calc(100vh - 138px);
+    height: 100%;
     overflow: auto;
+}
+.node-canvas {
+    transform-origin: left top;
+    transition: all 250ms ease-in-out;
 }
 .step {
     width: 200px;
@@ -743,5 +786,8 @@ export default {
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
     hyphens: auto;
+}
+.zoom-menu {
+    z-index: 10;
 }
 </style>
