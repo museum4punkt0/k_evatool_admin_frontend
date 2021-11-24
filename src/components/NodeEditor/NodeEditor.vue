@@ -789,7 +789,7 @@ export default {
     transition: all 250ms ease-in-out;
 }
 .step {
-    width: 200px;
+    width: 230px;
     height: fit-content;
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
