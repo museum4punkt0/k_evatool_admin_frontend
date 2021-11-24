@@ -7,7 +7,7 @@
                 <strong>{{ store.state.surveys.survey?.name }}</strong>
             </h1>
 
-            total: {{ store.state.stats.stats.total }}
+            total: {{ store.state.stats.stats?.total }}
             <!-- <div class="table-wrap mt-3">
                 <table>
                     <thead>
@@ -74,32 +74,65 @@
                     </tbody>
                 </table>
             </div> -->
-            <div class="filter">TODO: date picker range</div>
+            <div class="filter">
+                <litepie-datepicker
+                    v-model="timeSpan"
+                    :formatter="formatter"
+                    separator=" to "
+                ></litepie-datepicker>
+            </div>
         </main>
     </div>
 </template>
 
 <script>
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { EyeIcon } from '@heroicons/vue/outline'
+import LitepieDatepicker from 'litepie-datepicker'
+import dayjs from 'dayjs'
 
 export default {
     name: 'SurveyStats',
-    components: { EyeIcon },
+    components: { EyeIcon, LitepieDatepicker },
     setup() {
         const { t } = useI18n()
         const route = useRoute()
         const store = useStore()
+        const timeSpan = ref([dayjs().add(-7, 'day'), dayjs()])
+        const formatter = ref({
+            date: 'YYYY-MM-DD',
+        })
 
         const surveyId = route.params.survey_id
-        store.dispatch('stats/getStats', { surveyId })
+        store.dispatch('stats/getStats', {
+            surveyId,
+            start: dayjs(timeSpan.value[0], 'YYYY-MM_DD'),
+            end: dayjs(timeSpan.value[1], 'YYYY-MM_DD'),
+        })
+
+        watch(
+            () => timeSpan.value,
+            (value) => {
+                console.log(value)
+                if (value.length > 1) {
+                    store.dispatch('stats/getStats', {
+                        surveyId,
+                        start: dayjs(value[0], 'YYYY-MM_DD'),
+                        end: dayjs(value[1], 'YYYY-MM_DD'),
+                    })
+                }
+            },
+        )
 
         return {
             surveyId,
             t,
             store,
+            timeSpan,
+            formatter,
         }
     },
 }

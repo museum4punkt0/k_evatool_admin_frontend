@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.397",
+    "version": "1.0.398",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -24,6 +24,8 @@
         "@vuelidate/core": "^2.0.0-alpha.30",
         "@vuelidate/validators": "^2.0.0-alpha.24",
         "axios": "^0.24.0",
+        "dayjs": "^1.10.7",
+        "litepie-datepicker": "^1.0.14",
         "lodash": "^4.17.21",
         "ms-to-timecode": "^0.1.2",
         "uuid": "^8.3.2",
