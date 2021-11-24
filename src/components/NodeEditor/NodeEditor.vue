@@ -499,9 +499,13 @@ export default {
                 draggedStep.value.position.x =
                     draggedStep.value.position.x +
                     e.movementX * (1 / zoomFactor.value)
-                // TODO: FIX DRAGGED POSITION WHILE ZOOME
+                /*
                 draggedStep.value.position.y =
                     nodeEditor.value.scrollTop + e.clientY + draggedStepOffsetY
+                */
+                draggedStep.value.position.y =
+                    draggedStep.value.position.y +
+                    e.movementY * (1 / zoomFactor.value)
             }
         }
         const onMouseUp = async () => {
