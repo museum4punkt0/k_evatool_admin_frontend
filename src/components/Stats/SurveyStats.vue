@@ -8,24 +8,25 @@
             </h1>
 
             total: {{ store.state.stats.stats?.total }}
-            <!-- <div class="table-wrap mt-3">
+            <div class="table-wrap mt-3">
                 <table>
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>{{ t('steps', 1) }}</th>
+                            <!-- <th>{{ t('steps', 1) }}</th>
                             <th>{{ t('elements', 1) }}</th>
                             <th>{{ t('parent_elements', 1) }}</th>
                             <th># {{ t('results', 2) }}</th>
-                            <th></th>
+                            <th></th> -->
                         </tr>
                     </thead>
-                    <tbody v-if="store.state.surveys.survey?.steps">
+                    <tbody>
                         <tr
-                            v-for="step in store.state.surveys.survey.steps"
-                            :key="step.id"
+                            v-for="(result, index) in store.state.stats.results"
+                            :key="`result_${index}`"
                         >
-                            <td class="text-lg">{{ step.id }}</td>
+                            {{ index }}
+                            <!-- <td class="text-lg">{{ step.id }}</td>
                             <td>
                                 {{ step.name }}
                                 <p class="text-gray-500 text-xs">
@@ -69,11 +70,12 @@
                                     class="mx-1 h-5 w-5 pointer"
                                     @click.prevent.stop="goToStep(step.id)"
                                 />
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>
-            </div> -->
+            </div>
+
             <div class="footer">
                 <form-toggle v-model:enabled="demo" :label="'demo'" />
                 <litepie-datepicker

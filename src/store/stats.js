@@ -12,6 +12,9 @@ export default {
         setStats(state, stats) {
             state.stats = stats
         },
+        clearResults(state) {
+            state.results = []
+        },
         addResults(state, results) {
             state.results = [...state.results, ...results]
         },
@@ -31,6 +34,7 @@ export default {
             { surveyId, start, end, demo, page },
         ) {
             if (!page) {
+                dispatch('clearResults')
                 page = 1
             }
             const results = await SURVEYSTATS_SERVICE.getStatsList(
