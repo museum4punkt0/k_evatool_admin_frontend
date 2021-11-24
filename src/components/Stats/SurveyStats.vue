@@ -74,7 +74,8 @@
                     </tbody>
                 </table>
             </div> -->
-            <div class="filter">
+            <div class="footer">
+                <form-toggle v-model:enabled="demo" :label="'demo'" />
                 <litepie-datepicker
                     v-model="timeSpan"
                     :formatter="formatter"
@@ -92,16 +93,18 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { EyeIcon } from '@heroicons/vue/outline'
 import LitepieDatepicker from 'litepie-datepicker'
+import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
 
 export default {
     name: 'SurveyStats',
-    components: { EyeIcon, LitepieDatepicker },
+    components: { EyeIcon, FormToggle, LitepieDatepicker },
     setup() {
         const { t } = useI18n()
         const route = useRoute()
         const store = useStore()
-        const timeSpan = ref([dayjs().add(-7, 'day'), dayjs()])
+        const timeSpan = ref([dayjs().add(-1, 'year'), dayjs()])
+        const demo = ref(true)
         const formatter = ref({
             date: 'YYYY-MM-DD',
         })
@@ -109,21 +112,37 @@ export default {
         const surveyId = route.params.survey_id
         store.dispatch('stats/getStats', {
             surveyId,
-            start: dayjs(timeSpan.value[0], 'YYYY-MM_DD'),
-            end: dayjs(timeSpan.value[1], 'YYYY-MM_DD'),
+            start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+            end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+            demo: demo.value,
+        })
+        store.dispatch('stats/getStatsList', {
+            surveyId,
+            start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+            end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+            demo: demo.value,
         })
 
         watch(
+            () => demo.value,
+            () => {
+                store.dispatch('stats/getStats', {
+                    surveyId,
+                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                    demo: demo.value,
+                })
+            },
+        )
+        watch(
             () => timeSpan.value,
-            (value) => {
-                console.log(value)
-                if (value.length > 1) {
-                    store.dispatch('stats/getStats', {
-                        surveyId,
-                        start: dayjs(value[0], 'YYYY-MM_DD'),
-                        end: dayjs(value[1], 'YYYY-MM_DD'),
-                    })
-                }
+            () => {
+                store.dispatch('stats/getStats', {
+                    surveyId,
+                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                    demo: demo.value,
+                })
             },
         )
 
@@ -133,6 +152,7 @@ export default {
             store,
             timeSpan,
             formatter,
+            demo,
         }
     },
 }

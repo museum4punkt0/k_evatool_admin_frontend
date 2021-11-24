@@ -2,6 +2,7 @@ import SURVEYSTATS_SERVICE from '../services/surveyStatsService'
 
 const initialState = {
     stats: null,
+    results: [],
 }
 
 export default {
@@ -11,15 +12,44 @@ export default {
         setStats(state, stats) {
             state.stats = stats
         },
+        addResults(state, results) {
+            state.results = [...state.results, ...results]
+        },
     },
     actions: {
-        async getStats({ commit }, { surveyId, start, end }) {
+        async getStats({ commit }, { surveyId, start, end, demo }) {
             const stats = await SURVEYSTATS_SERVICE.getStats(
                 surveyId,
                 start,
                 end,
+                demo,
             )
             commit('setStats', stats)
+        },
+        async getStatsList(
+            { commit, dispatch },
+            { surveyId, start, end, demo, page },
+        ) {
+            if (!page) {
+                page = 1
+            }
+            const results = await SURVEYSTATS_SERVICE.getStatsList(
+                surveyId,
+                start,
+                end,
+                demo,
+                page,
+            )
+            commit('addResults', results.data)
+            if (results.current_page < results.last_page) {
+                dispatch('getStatsList', {
+                    surveyId,
+                    start,
+                    end,
+                    demo,
+                    page: results.current_page + 1,
+                })
+            }
         },
     },
     getters: {},

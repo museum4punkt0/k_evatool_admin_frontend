@@ -1,10 +1,26 @@
 import axios from 'axios'
 
 export default {
-    async getStats(surveyId) {
+    async getStats(surveyId, start, end, demo) {
         return axios
             .get(
-                `evaluation-tool/surveys/${surveyId}/stats?demo=1&start=2001-10-20&end=2021-11-22`,
+                `evaluation-tool/surveys/${surveyId}/stats?${
+                    demo ? 'demo=1' : ''
+                }&start=${start}&end=${end}`,
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    async getStatsList(surveyId, start, end, demo, page) {
+        return axios
+            .get(
+                `evaluation-tool/surveys/${surveyId}/stats-list?${
+                    demo ? 'demo=1' : ''
+                }&start=${start}&end=${end}${page ? '&page=' + page : ''}`,
             )
             .then((response) => {
                 return response.data
