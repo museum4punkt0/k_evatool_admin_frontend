@@ -1,8 +1,10 @@
 import SURVEYSTATS_SERVICE from '../services/surveyStatsService'
+import SURVEY_SERVICE from '../services/surveyService'
 
 const initialState = {
     stats: null,
     results: [],
+    surveySteps: [],
 }
 
 export default {
@@ -17,6 +19,9 @@ export default {
         },
         addResults(state, results) {
             state.results = [...state.results, ...results]
+        },
+        setSurveySteps(state, surveySteps) {
+            state.surveySteps = surveySteps
         },
     },
     actions: {
@@ -57,6 +62,10 @@ export default {
                     page: results.current_page + 1,
                 })
             }
+        },
+        async getSurveySteps({ commit }, surveyId) {
+            const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
+            commit('setSurveySteps', surveySteps)
         },
     },
     getters: {},

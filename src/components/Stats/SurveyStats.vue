@@ -22,34 +22,73 @@
                 </div>
             </div>
 
-            total: {{ store.state.stats.stats?.total }}
-            <div class="table-wrap mt-3">
+            <div
+                v-if="store.state.stats.surveySteps.length > 0"
+                class="table-wrap mt-3"
+            >
                 <table>
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>uuid</th>
-                            <th>count</th>
+                            <th>UUID</th>
+                            <th>Duration</th>
+                            <th
+                                v-for="step in store.state.stats.surveySteps"
+                                :key="step.id"
+                            >
+                                {{ step.id }} {{ step.surveyElementType }}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
-                            v-for="(result, index) in store.state.stats.results"
-                            :key="`result_${index}`"
+                            v-for="result in store.state.stats.results"
+                            :key="result.uuid"
                         >
-                            <td>
-                                {{ index }}
-                            </td>
-                            <td>
-                                {{ result.uuid }}
-                            </td>
-                            <td>
-                                {{ result.resultCount }}
+                            <td>{{ result.uuid }}</td>
+                            <td>{{ result.duration }}</td>
+                            <td
+                                v-for="step in store.state.stats.surveySteps"
+                                :key="result.uuid + '-' + step.id"
+                            >
+                                {{
+                                    result.results.find(
+                                        (x) => x.stepId === step.id,
+                                    )
+                                }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            <!--            total: {{ store.state.stats.stats?.total }}
+<div class="table-wrap mt-3">
+<table>
+  <thead>
+      <tr>
+          <th>#</th>
+          <th>uuid</th>
+          <th>count</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr
+          v-for="(result, index) in store.state.stats.results"
+          :key="`result_${index}`"
+      >
+          <td>
+              {{ index }}
+          </td>
+          <td>
+              {{ result.uuid }}
+          </td>
+          <td>
+              {{ result.resultCount }}
+          </td>
+      </tr>
+  </tbody>
+</table>
+</div>-->
 
             <div class="footer"></div>
         </main>
@@ -92,6 +131,7 @@ export default {
             end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
             demo: demo.value,
         })
+        store.dispatch('stats/getSurveySteps', surveyId)
 
         watch(
             () => demo.value,
