@@ -28,11 +28,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <!-- <th>{{ t('steps', 1) }}</th>
-                            <th>{{ t('elements', 1) }}</th>
-                            <th>{{ t('parent_elements', 1) }}</th>
-                            <th># {{ t('results', 2) }}</th>
-                            <th></th> -->
+                            <th>uuid</th>
+                            <th>count</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,52 +37,15 @@
                             v-for="(result, index) in store.state.stats.results"
                             :key="`result_${index}`"
                         >
-                            {{ index }}
-                            <!-- <td class="text-lg">{{ step.id }}</td>
                             <td>
-                                {{ step.name }}
-                                <p class="text-gray-500 text-xs">
-                                    {{
-                                        store.state.surveyElements.surveyElements.find(
-                                            (x) =>
-                                                x.id === step.surveyElementId,
-                                        ).name
-                                    }}
-                                </p>
+                                {{ index }}
                             </td>
                             <td>
-                                <template
-                                    v-if="
-                                        store.state.surveyElements.surveyElements.find(
-                                            (x) =>
-                                                x.id === step.surveyElementId,
-                                        ).params?.question
-                                    "
-                                >
-                                    {{
-                                        store.state.surveyElements.surveyElements.find(
-                                            (x) =>
-                                                x.id === step.surveyElementId,
-                                        ).params?.question[
-                                            store.state.languages
-                                                .defaultLanguage.code
-                                        ]
-                                    }}
-                                </template>
-                            </td>
-                            <td>{{ step.parentStepId }}</td>
-                            <td>
-                                <span v-if="step.resultCount > 0">
-                                    {{ step.resultCount }}
-                                </span>
-                                <span v-else>-</span>
+                                {{ result.uuid }}
                             </td>
                             <td>
-                                <eye-icon
-                                    class="mx-1 h-5 w-5 pointer"
-                                    @click.prevent.stop="goToStep(step.id)"
-                                />
-                            </td> -->
+                                {{ result.resultCount }}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
