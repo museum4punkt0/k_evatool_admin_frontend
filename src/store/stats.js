@@ -29,6 +29,9 @@ export default {
             )
             commit('setStats', stats)
         },
+        async clearResults({ commit }) {
+            commit('clearResults')
+        },
         async getStatsList(
             { commit, dispatch },
             { surveyId, start, end, demo, page },

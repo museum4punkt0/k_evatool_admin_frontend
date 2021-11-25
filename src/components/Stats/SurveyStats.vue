@@ -1,18 +1,33 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <!-- {{ store.state.surveyResults }} -->
-            <h1>
-                {{ t('stats', 1) }}
-                <strong>{{ store.state.surveys.survey?.name }}</strong>
-            </h1>
+            <div class="flex flex-row">
+                <!-- {{ store.state.surveyResults }} -->
+                <h1>
+                    {{ t('stats', 1) }}
+                    <strong>{{ store.state.surveys.survey?.name }}</strong>
+                </h1>
+                <div class="flex-1 flex flex-row justify-end ml-4">
+                    <litepie-datepicker
+                        v-model="timeSpan"
+                        :formatter="formatter"
+                        separator=" to "
+                    ></litepie-datepicker>
+                    <form-toggle
+                        v-model:enabled="demo"
+                        :label="'demo'"
+                        class="ml-3"
+                    />
+                    <button class="primary ml-3 mr-3">export</button>
+                </div>
+            </div>
 
             total: {{ store.state.stats.stats?.total }}
             <div class="table-wrap mt-3">
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>#</th>
                             <!-- <th>{{ t('steps', 1) }}</th>
                             <th>{{ t('elements', 1) }}</th>
                             <th>{{ t('parent_elements', 1) }}</th>
@@ -76,14 +91,7 @@
                 </table>
             </div>
 
-            <div class="footer">
-                <form-toggle v-model:enabled="demo" :label="'demo'" />
-                <litepie-datepicker
-                    v-model="timeSpan"
-                    :formatter="formatter"
-                    separator=" to "
-                ></litepie-datepicker>
-            </div>
+            <div class="footer"></div>
         </main>
     </div>
 </template>
