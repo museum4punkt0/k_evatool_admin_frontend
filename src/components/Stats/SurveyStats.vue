@@ -1,6 +1,7 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
+            <survey-stats-trend :data="store.state.stats.stats" />
             <div class="flex flex-row">
                 <!-- {{ store.state.surveyResults }} -->
                 <h1>
@@ -104,10 +105,11 @@ import { EyeIcon } from '@heroicons/vue/outline'
 import LitepieDatepicker from 'litepie-datepicker'
 import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
+import SurveyStatsTrend from './SurveyStatsTrend.vue'
 
 export default {
     name: 'SurveyStats',
-    components: { EyeIcon, FormToggle, LitepieDatepicker },
+    components: { SurveyStatsTrend, EyeIcon, FormToggle, LitepieDatepicker },
     setup() {
         const { t } = useI18n()
         const route = useRoute()

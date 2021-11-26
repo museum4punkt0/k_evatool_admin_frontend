@@ -20,6 +20,7 @@ export default {
     allow_changing_answer: 'Ändern der Antwort erlauben',
     allow_half_steps: 'Halbe Schritte erlauben (z.B. 3,5)',
     allow_skip: 'Überspringen erlauben',
+    answers_total: 'Antworten gesamt',
     assets: 'Medien | Medium | Medien',
     binary_positive: 'Positiver Systemwert',
     binary_negative: 'Negativer Systemwert',
@@ -83,6 +84,7 @@ export default {
     options: 'Optionen | Option | Optionen',
     optional_name: 'Optionaler Name',
     of: 'von',
+    participants: 'Teilnehmer | Teilnehmer | Teilnehmer',
     passwords: 'Passwörter | Passwort | Passwörter',
     parent_elements: 'Elternelemente | Elternelement | Elternelemente',
     password_confirmation: 'Passwortbestätigung',
@@ -101,6 +103,8 @@ export default {
     stops_video: 'Stoppt das Video',
     success_confirm_password: 'Passwort erfolgreich gespeichert.',
     surveys: 'Umfragen | Umfrage | Umfragen',
+    surveys_completed:
+        'Abgeschlossene Umfragen | Abgeschlossene Umfrage | Abgeschlossene Umfragen',
     survey_elements: 'Umfrage-Elemente | Umfrage-Element | Umfrage-Elemente',
     survey_step_has_result:
         'Dieser Schritt hat bereits {resultCount} Ergebnisse und kann daher nicht mehr gelöscht werden.',
