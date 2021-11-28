@@ -1,7 +1,10 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex-1 overflow-y-auto p-3">
-            <survey-stats-trend :data="store.state.stats.stats" />
+            <survey-stats-trend
+                v-if="store.state.stats.trend"
+                :trend="store.state.stats.trend"
+            />
             <div class="flex flex-row">
                 <!-- {{ store.state.surveyResults }} -->
                 <h1>
@@ -30,7 +33,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>UUID</th>
+                            <th>
+                                <div v-html="t('finished_at')"></div>
+                                <span class="text-xs text-gray-500">UUID</span>
+                            </th>
                             <th>Duration</th>
                             <th
                                 v-for="step in store.state.stats.surveySteps"
@@ -45,7 +51,17 @@
                             v-for="result in store.state.stats.results"
                             :key="result.uuid"
                         >
-                            <td>{{ result.uuid }}</td>
+                            <td>
+                                {{
+                                    moment(result.lastResultTimestamp)
+                                        .locale('de')
+                                        .format('LLLL')
+                                }}
+                                <span class="text-xs text-gray-500">
+                                    <br />
+                                    {{ result.uuid }}
+                                </span>
+                            </td>
                             <td>{{ result.duration }}</td>
                             <td
                                 v-for="step in store.state.stats.surveySteps"
@@ -65,29 +81,29 @@
             <!--            total: {{ store.state.stats.stats?.total }}
 <div class="table-wrap mt-3">
 <table>
-  <thead>
-      <tr>
-          <th>#</th>
-          <th>uuid</th>
-          <th>count</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr
-          v-for="(result, index) in store.state.stats.results"
-          :key="`result_${index}`"
-      >
-          <td>
-              {{ index }}
-          </td>
-          <td>
-              {{ result.uuid }}
-          </td>
-          <td>
-              {{ result.resultCount }}
-          </td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+    <th>#</th>
+    <th>uuid</th>
+    <th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr
+    v-for="(result, index) in store.state.stats.results"
+    :key="`result_${index}`"
+>
+    <td>
+        {{ index }}
+    </td>
+    <td>
+        {{ result.uuid }}
+    </td>
+    <td>
+        {{ result.resultCount }}
+    </td>
+</tr>
+</tbody>
 </table>
 </div>-->
 
@@ -106,6 +122,8 @@ import LitepieDatepicker from 'litepie-datepicker'
 import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
 import SurveyStatsTrend from './SurveyStatsTrend.vue'
+import moment from 'moment'
+import 'moment/locale/de'
 
 export default {
     name: 'SurveyStats',
@@ -121,6 +139,9 @@ export default {
         })
 
         const surveyId = route.params.survey_id
+
+        store.dispatch('stats/getStatsTrend', surveyId)
+
         store.dispatch('stats/getStats', {
             surveyId,
             start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
@@ -165,6 +186,7 @@ export default {
             timeSpan,
             formatter,
             demo,
+            moment,
         }
     },
 }

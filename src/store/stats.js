@@ -5,6 +5,7 @@ const initialState = {
     stats: null,
     results: [],
     surveySteps: [],
+    trend: null,
 }
 
 export default {
@@ -22,6 +23,9 @@ export default {
         },
         setSurveySteps(state, surveySteps) {
             state.surveySteps = surveySteps
+        },
+        setTrend(state, trend) {
+            state.trend = trend
         },
     },
     actions: {
@@ -66,6 +70,10 @@ export default {
         async getSurveySteps({ commit }, surveyId) {
             const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
             commit('setSurveySteps', surveySteps)
+        },
+        async getStatsTrend({ commit }, surveyId) {
+            const trend = await SURVEYSTATS_SERVICE.getStatsTrend(surveyId)
+            commit('setTrend', trend)
         },
     },
     getters: {},

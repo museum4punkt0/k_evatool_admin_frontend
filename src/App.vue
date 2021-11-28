@@ -41,13 +41,13 @@
                         class="flex-1 flex justify-between px-4 sm:px-6"
                     >
                         <div class="flex-1 flex">
-                            <form
+                            <!--                            <form
                                 class="w-full flex md:ml-0"
                                 action="#"
                                 method="GET"
                             >
                                 <label for="search-field" class="sr-only">
-                                    <!--                                    Search all files-->
+                                    &lt;!&ndash;                                    Search all files&ndash;&gt;
                                 </label>
                                 <div
                                     class="
@@ -93,7 +93,7 @@
                                         type="search"
                                     />
                                 </div>
-                            </form>
+                            </form>-->
                         </div>
                         <div
                             class="
@@ -175,7 +175,7 @@
                             <span class="text-xs text-gray-500">
                                 {{ version }}
                             </span>
-                            <language-switch></language-switch>
+                            <!--                            <language-switch></language-switch>-->
                             <button
                                 type="button"
                                 class="
@@ -332,16 +332,10 @@ export default {
 
         router.beforeEach(() => {
             console.log(navigator.userAgent)
-            if (
+            viewportIncompatible.value =
                 /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
                     navigator.userAgent,
-                ) ||
-                window.outerWidth <= 1024
-            ) {
-                viewportIncompatible.value = true
-            } else {
-                viewportIncompatible.value = false
-            }
+                ) || window.outerWidth <= 1024
         })
 
         const loadApp = async () => {
