@@ -1,10 +1,10 @@
 <template>
-    <div>{{ result.value.value }}</div>
+    <div>{{ result?.value?.meaning }}</div>
 </template>
 
 <script>
 export default {
-    name: 'BinaryResult',
+    name: 'EmojiResult',
     props: {
         result: {
             type: Object,

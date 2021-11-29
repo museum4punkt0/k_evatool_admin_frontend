@@ -1,10 +1,10 @@
 <template>
-    <div>{{ result.value.value }}</div>
+    <div>{{ result?.value?.text }}</div>
 </template>
 
 <script>
 export default {
-    name: 'BinaryResult',
+    name: 'TextInputResult',
     props: {
         result: {
             type: Object,

@@ -1,10 +1,10 @@
 <template>
-    <div>{{ result.value.value }}</div>
+    <div>{{ result.value.selected.join(', ') }}</div>
 </template>
 
 <script>
 export default {
-    name: 'BinaryResult',
+    name: 'MultipleChoiceResult',
     props: {
         result: {
             type: Object,
