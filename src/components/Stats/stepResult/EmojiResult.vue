@@ -1,10 +1,10 @@
 <template>
-    <div>{{ result.value.selected.join(', ') }}</div>
+    <div>{{ result?.value?.meaning }}</div>
 </template>
 
 <script>
 export default {
-    name: 'MultipleChoiceResult',
+    name: 'EmojiResult',
     props: {
         result: {
             type: Object,

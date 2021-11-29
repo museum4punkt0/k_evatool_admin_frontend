@@ -1,10 +1,10 @@
 <template>
-    <div>{{ result.value.selected.join(', ') }}</div>
+    <div>{{ result?.value?.rating }}</div>
 </template>
 
 <script>
 export default {
-    name: 'MultipleChoiceResult',
+    name: 'StarRatingResult',
     props: {
         result: {
             type: Object,

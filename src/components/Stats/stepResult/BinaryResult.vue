@@ -1,5 +1,5 @@
 <template>
-    <div>value: {{ result.value.value }}</div>
+    <div>{{ result.value.value }}</div>
 </template>
 
 <script>

@@ -1,10 +1,14 @@
 <template>
-    <div>{{ result.value.selected.join(', ') }}</div>
+    <div>
+        <div v-for="(image, index) in result?.value?.images" :key="index">
+            asset: {{ image.asset }}, value: {{ image.value }}
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
-    name: 'MultipleChoiceResult',
+    name: 'YayNayResult',
     props: {
         result: {
             type: Object,
