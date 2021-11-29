@@ -1,12 +1,24 @@
 <template>
-    <div>
+    <div class="flex">
         <div v-for="(image, index) in result?.value?.images" :key="index">
-            asset: {{ image.asset }}, value: {{ image.value }}
+            <div class="mr-3">
+                {{ image.value }}
+                <img
+                    class="rounded mr-3"
+                    :src="
+                        assets.find((item) => item.id === image.asset)?.urls
+                            .original
+                    "
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
 export default {
     name: 'YayNayResult',
     props: {
@@ -16,7 +28,11 @@ export default {
         },
     },
     setup() {
-        return {}
+        const store = useStore()
+        const assets = computed({
+            get: () => store.state.assets.assets,
+        })
+        return { assets }
     },
 }
 </script>

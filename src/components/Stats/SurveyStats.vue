@@ -209,7 +209,14 @@ export default {
             stepResultsModalIsOpen.value = true
             selectedSurveyStepId.value = id
         }
+        const hasStepResultDetailView = (step) => {
+            const elementTypesWithDetailView = ['yayNay', 'textInput']
+            return elementTypesWithDetailView.includes(step.surveyElementType)
+        }
         const showStepResult = (step, stepResult) => {
+            if (!hasStepResultDetailView(step)) {
+                return
+            }
             selectedSurveyStep.value = step
             selectedSurveyStepResult.value = stepResult
             stepResultModalIsOpen.value = true
