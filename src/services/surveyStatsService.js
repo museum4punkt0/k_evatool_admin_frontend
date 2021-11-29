@@ -41,4 +41,14 @@ export default {
                 return error.response
             })
     },
+    async getStatsByStep(surveyId, stepId) {
+        return axios
+            .get(`evaluation-tool/surveys/${surveyId}/stats/${stepId}`)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }
