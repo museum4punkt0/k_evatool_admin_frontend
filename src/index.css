@@ -23,7 +23,7 @@ h4 {
 }
 
 table {
-    @apply min-w-full divide-y divide-gray-200;
+    @apply h-full min-w-full divide-y divide-gray-200;
 }
 
 thead {
