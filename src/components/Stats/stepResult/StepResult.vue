@@ -7,6 +7,11 @@
         v-else-if="step.surveyElementType === 'binary'"
         :result="result"
     ></binary-result>
+    <multiple-choice-result
+        v-else-if="step.surveyElementType === 'multipleChoice'"
+        :result="result"
+    ></multiple-choice-result>
+
     <template v-else>
         {{ result }}
     </template>
@@ -15,9 +20,10 @@
 <script>
 import SimpleTextResult from './SimpleTextResult.vue'
 import BinaryResult from './BinaryResult.vue'
+import MultipleChoiceResult from './MultipleChoiceResult.vue'
 export default {
     name: 'StepResult',
-    components: { SimpleTextResult, BinaryResult },
+    components: { SimpleTextResult, BinaryResult, MultipleChoiceResult },
     props: {
         step: {
             type: Object,
