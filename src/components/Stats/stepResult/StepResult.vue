@@ -1,9 +1,11 @@
 <template>
     <simple-text-result
         v-if="step.surveyElementType === 'simpleText'"
+        :result="result"
     ></simple-text-result>
     <binary-result
         v-else-if="step.surveyElementType === 'binary'"
+        :result="result"
     ></binary-result>
     <template v-else>
         {{ result }}

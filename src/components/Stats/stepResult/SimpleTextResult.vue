@@ -1,5 +1,5 @@
 <template>
-    <div>simple text result</div>
+    <div>{{ result.value.read ? 'read' : 'not read' }}</div>
 </template>
 
 <script>

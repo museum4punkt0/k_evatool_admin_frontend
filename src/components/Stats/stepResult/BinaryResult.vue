@@ -1,5 +1,5 @@
 <template>
-    <div>binary result</div>
+    <div>value: {{ result.value.value }}</div>
 </template>
 
 <script>
