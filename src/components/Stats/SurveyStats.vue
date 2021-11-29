@@ -43,6 +43,12 @@
                                 :key="step.id"
                             >
                                 {{ step.id }} {{ step.surveyElementType }}
+                                <external-link-icon
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="
+                                        showStepResults(step.id)
+                                    "
+                                ></external-link-icon>
                             </th>
                         </tr>
                     </thead>
@@ -82,6 +88,7 @@
             </div>
             <step-results-modal
                 v-model:is-open="stepResultsModalIsOpen"
+                :survey-step-id="selectedSurveyStepId"
             ></step-results-modal>
             <div class="footer"></div>
         </main>
@@ -93,7 +100,7 @@ import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { EyeIcon } from '@heroicons/vue/outline'
+import { EyeIcon, ExternalLinkIcon } from '@heroicons/vue/outline'
 import LitepieDatepicker from 'litepie-datepicker'
 import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
@@ -109,6 +116,7 @@ export default {
     components: {
         SurveyStatsTrend,
         EyeIcon,
+        ExternalLinkIcon,
         FormToggle,
         LitepieDatepicker,
         StepResult,
@@ -124,6 +132,7 @@ export default {
             date: 'YYYY-MM-DD',
         })
         const stepResultsModalIsOpen = ref(true)
+        const selectedSurveyStepId = ref(-1)
 
         const surveyId = route.params.survey_id
 
@@ -152,6 +161,12 @@ export default {
                     end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
                     demo: demo.value,
                 })
+                store.dispatch('stats/getStatsList', {
+                    surveyId,
+                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                    demo: demo.value,
+                })
             },
         )
         watch(
@@ -163,8 +178,19 @@ export default {
                     end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
                     demo: demo.value,
                 })
+                store.dispatch('stats/getStatsList', {
+                    surveyId,
+                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                    demo: demo.value,
+                })
             },
         )
+
+        const showStepResults = (id) => {
+            stepResultsModalIsOpen.value = true
+            selectedSurveyStepId.value = id
+        }
 
         return {
             surveyId,
@@ -175,6 +201,8 @@ export default {
             demo,
             moment,
             stepResultsModalIsOpen,
+            selectedSurveyStepId,
+            showStepResults,
         }
     },
 }

@@ -66,7 +66,19 @@
                                 />
                             </div>
 
-                            <div class="mt-2">modal content</div>
+                            <div class="mt-2">
+                                modal content
+                                <ul>
+                                    <li>
+                                        {{ surveyStepId }}
+                                    </li>
+                                    <li>
+                                        todo: get result data from store and
+                                        render graph
+                                    </li>
+                                </ul>
+                                <demo></demo>
+                            </div>
                         </div>
                     </TransitionChild>
                 </div>
@@ -87,6 +99,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
+import Demo from './Demo.vue'
 
 export default {
     name: 'AssetModal',
@@ -99,8 +112,13 @@ export default {
         TrashIcon,
         StopIcon,
         XIcon,
+        Demo,
     },
     props: {
+        surveyStepId: {
+            type: Number,
+            required: true,
+        },
         isOpen: {
             type: Boolean,
             default: false,
