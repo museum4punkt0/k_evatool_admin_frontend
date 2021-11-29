@@ -19,7 +19,7 @@ h4 {
 }
 
 .table-wrap {
-    @apply flex h-full w-full shadow overflow-auto border-b border-gray-200 sm:rounded-lg;
+    @apply flex w-full shadow overflow-auto border-b border-gray-200 sm:rounded-lg;
 }
 
 table {
@@ -60,7 +60,6 @@ input[type='text'].invalid,
 input[type='password'].invalid {
     @apply focus:ring-red-500 focus:border-red-50 bg-red-200 border-red-700;
 }
-
 
 input[type='text']::placeholder {
     @apply capitalize;

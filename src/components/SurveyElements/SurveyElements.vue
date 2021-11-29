@@ -1,5 +1,5 @@
 <template>
-    <div class="flex overflow-hidden">
+    <div class="flex flex-grow overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row justify-between">
                 <h1
@@ -89,13 +89,7 @@
                                 />
                                 <trash-icon
                                     v-if="surveyElement.surveyStepsCount > 0"
-                                    class="
-                                        ml-3
-                                        h-5
-                                        w-5
-                                        text-gray-500
-                                        cursor-not-allowed
-                                    "
+                                    class="ml-3 h-5 w-5 text-gray-500 cursor-not-allowed"
                                     @click.prevent.stop="null"
                                 />
                                 <trash-icon

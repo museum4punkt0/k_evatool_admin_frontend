@@ -1,6 +1,6 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-3">
+        <main class="flex flex-col flex-1 overflow-y-auto p-3">
             <survey-stats-trend
                 v-if="store.state.stats.trend"
                 :trend="store.state.stats.trend"
@@ -43,6 +43,12 @@
                                 :key="step.id"
                             >
                                 {{ step.id }} {{ step.surveyElementType }}
+                                <external-link-icon
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="
+                                        showStepResults(step.id)
+                                    "
+                                ></external-link-icon>
                             </th>
                         </tr>
                     </thead>
@@ -67,46 +73,23 @@
                                 v-for="step in store.state.stats.surveySteps"
                                 :key="result.uuid + '-' + step.id"
                             >
-                                {{
-                                    result.results.find(
-                                        (x) => x.stepId === step.id,
-                                    )
-                                }}
+                                <step-result
+                                    :step="step"
+                                    :result="
+                                        result.results.find(
+                                            (x) => x.stepId === step.id,
+                                        )
+                                    "
+                                ></step-result>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <!--            total: {{ store.state.stats.stats?.total }}
-<div class="table-wrap mt-3">
-<table>
-<thead>
-<tr>
-    <th>#</th>
-    <th>uuid</th>
-    <th>count</th>
-</tr>
-</thead>
-<tbody>
-<tr
-    v-for="(result, index) in store.state.stats.results"
-    :key="`result_${index}`"
->
-    <td>
-        {{ index }}
-    </td>
-    <td>
-        {{ result.uuid }}
-    </td>
-    <td>
-        {{ result.resultCount }}
-    </td>
-</tr>
-</tbody>
-</table>
-</div>-->
-
+            <step-results-modal
+                v-model:is-open="stepResultsModalIsOpen"
+                :survey-step-id="selectedSurveyStepId"
+            ></step-results-modal>
             <div class="footer"></div>
         </main>
     </div>
@@ -117,7 +100,7 @@ import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { EyeIcon } from '@heroicons/vue/outline'
+import { EyeIcon, ExternalLinkIcon } from '@heroicons/vue/outline'
 import LitepieDatepicker from 'litepie-datepicker'
 import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
@@ -125,9 +108,20 @@ import SurveyStatsTrend from './SurveyStatsTrend.vue'
 import moment from 'moment'
 import 'moment/locale/de'
 
+import StepResult from './stepResult/StepResult.vue'
+import StepResultsModal from './stepResults/StepResultsModal.vue'
+
 export default {
     name: 'SurveyStats',
-    components: { SurveyStatsTrend, EyeIcon, FormToggle, LitepieDatepicker },
+    components: {
+        SurveyStatsTrend,
+        EyeIcon,
+        ExternalLinkIcon,
+        FormToggle,
+        LitepieDatepicker,
+        StepResult,
+        StepResultsModal,
+    },
     setup() {
         const { t } = useI18n()
         const route = useRoute()
@@ -137,6 +131,8 @@ export default {
         const formatter = ref({
             date: 'YYYY-MM-DD',
         })
+        const stepResultsModalIsOpen = ref(true)
+        const selectedSurveyStepId = ref(-1)
 
         const surveyId = route.params.survey_id
 
@@ -165,6 +161,12 @@ export default {
                     end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
                     demo: demo.value,
                 })
+                store.dispatch('stats/getStatsList', {
+                    surveyId,
+                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                    demo: demo.value,
+                })
             },
         )
         watch(
@@ -176,8 +178,19 @@ export default {
                     end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
                     demo: demo.value,
                 })
+                store.dispatch('stats/getStatsList', {
+                    surveyId,
+                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                    demo: demo.value,
+                })
             },
         )
+
+        const showStepResults = (id) => {
+            stepResultsModalIsOpen.value = true
+            selectedSurveyStepId.value = id
+        }
 
         return {
             surveyId,
@@ -187,6 +200,9 @@ export default {
             formatter,
             demo,
             moment,
+            stepResultsModalIsOpen,
+            selectedSurveyStepId,
+            showStepResults,
         }
     },
 }

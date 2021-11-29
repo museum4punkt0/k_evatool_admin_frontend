@@ -1,5 +1,5 @@
 <template>
-    <div class="flex overflow-hidden">
+    <div class="flex flex-grow overflow-hidden">
         <main class="flex h-full w-full flex-col p-3">
             <div class="flex flex-row">
                 <h1
