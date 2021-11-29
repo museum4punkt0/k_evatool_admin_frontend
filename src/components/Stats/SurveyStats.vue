@@ -1,6 +1,6 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-3">
+        <main class="flex flex-col flex-1 overflow-y-auto p-3">
             <survey-stats-trend
                 v-if="store.state.stats.trend"
                 :trend="store.state.stats.trend"
