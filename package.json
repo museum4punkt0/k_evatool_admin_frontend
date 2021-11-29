@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.390",
+    "version": "1.0.391",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -21,6 +21,7 @@
         "@uppy/locales": "^2.0.3",
         "@uppy/tus": "^2.1.1",
         "@uppy/vue": "^0.4.3",
+        "@vue/cli-service": "^4.5.15",
         "@vuelidate/core": "^2.0.0-alpha.30",
         "@vuelidate/validators": "^2.0.0-alpha.24",
         "axios": "^0.24.0",
@@ -37,6 +38,8 @@
         "vuex-composition-helpers": "^2.0.0"
     },
     "devDependencies": {
+        "@cypress/vue": "^3.0.5",
+        "@cypress/webpack-dev-server": "^1.7.0",
         "@vitejs/plugin-vue": "^1.9.4",
         "@vue/cli-plugin-eslint": "~4.5.15",
         "@vue/compiler-sfc": "^3.2.20",
@@ -44,6 +47,7 @@
         "@vue/eslint-config-standard": "^6.1.0",
         "autoprefixer": "^10.4.0",
         "babel-eslint": "^10.1.0",
+        "cypress": "^9.0.0",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-import": "^2.25.2",
