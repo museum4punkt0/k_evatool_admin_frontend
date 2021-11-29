@@ -66,7 +66,18 @@
                                 />
                             </div>
 
-                            <div class="mt-2">modal content</div>
+                            <div class="mt-2">
+                                modal content
+                                <ul>
+                                    <li>
+                                        {{ surveyStepId }}
+                                    </li>
+                                    <li>
+                                        todo: get result data from store and
+                                        render graph
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </TransitionChild>
                 </div>
@@ -101,6 +112,10 @@ export default {
         XIcon,
     },
     props: {
+        surveyStepId: {
+            type: Number,
+            required: true,
+        },
         isOpen: {
             type: Boolean,
             default: false,
