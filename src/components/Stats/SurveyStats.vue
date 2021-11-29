@@ -208,4 +208,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+thead {
+    z-index: 10;
+}
+</style>
