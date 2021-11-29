@@ -72,6 +72,14 @@
                             <td
                                 v-for="step in store.state.stats.surveySteps"
                                 :key="result.uuid + '-' + step.id"
+                                @click.prevent.stop="
+                                    showStepResult(
+                                        step,
+                                        result.results.find(
+                                            (x) => x.stepId === step.id,
+                                        ),
+                                    )
+                                "
                             >
                                 <step-result
                                     :step="step"
@@ -86,6 +94,11 @@
                     </tbody>
                 </table>
             </div>
+            <step-result-modal
+                v-model:is-open="stepResultModalIsOpen"
+                :survey-step="selectedSurveyStep"
+                :survey-step-result="selectedSurveyStepResult"
+            ></step-result-modal>
             <step-results-modal
                 v-model:is-open="stepResultsModalIsOpen"
                 :survey-step-id="selectedSurveyStepId"
@@ -108,6 +121,7 @@ import SurveyStatsTrend from './SurveyStatsTrend.vue'
 import moment from 'moment'
 import 'moment/locale/de'
 
+import StepResultModal from './stepResult/StepResultModal.vue'
 import StepResult from './stepResult/StepResult.vue'
 import StepResultsModal from './stepResults/StepResultsModal.vue'
 
@@ -120,6 +134,7 @@ export default {
         FormToggle,
         LitepieDatepicker,
         StepResult,
+        StepResultModal,
         StepResultsModal,
     },
     setup() {
@@ -131,8 +146,11 @@ export default {
         const formatter = ref({
             date: 'YYYY-MM-DD',
         })
-        const stepResultsModalIsOpen = ref(true)
+        const stepResultModalIsOpen = ref(true)
+        const stepResultsModalIsOpen = ref(false)
         const selectedSurveyStepId = ref(-1)
+        const selectedSurveyStepResult = ref(null)
+        const selectedSurveyStep = ref(null)
 
         const surveyId = route.params.survey_id
 
@@ -191,6 +209,12 @@ export default {
             stepResultsModalIsOpen.value = true
             selectedSurveyStepId.value = id
         }
+        const showStepResult = (step, stepResult) => {
+            selectedSurveyStep.value = step
+            selectedSurveyStepResult.value = stepResult
+            stepResultModalIsOpen.value = true
+            // selectedSurveyStepId.value = id
+        }
 
         return {
             surveyId,
@@ -200,9 +224,13 @@ export default {
             formatter,
             demo,
             moment,
+            stepResultModalIsOpen,
             stepResultsModalIsOpen,
             selectedSurveyStepId,
             showStepResults,
+            selectedSurveyStep,
+            selectedSurveyStepResult,
+            showStepResult,
         }
     },
 }
