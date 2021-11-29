@@ -19,7 +19,7 @@ h4 {
 }
 
 .table-wrap {
-    @apply flex h-full w-full shadow overflow-auto border-b border-gray-200 sm:rounded-lg;
+    @apply flex w-full shadow overflow-auto border-b border-gray-200 sm:rounded-lg;
 }
 
 table {
