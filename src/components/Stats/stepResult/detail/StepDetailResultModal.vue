@@ -65,10 +65,25 @@
                                     @click="closeModal"
                                 />
                             </div>
-
-                            <div class="mt-2">
-                                type: {{ surveyStep.surveyElementType }}
-                                {{ surveyStepResult }}
+                            TODO: question preview
+                            <yay-nay-detail-result
+                                v-if="
+                                    surveyStep?.surveyElementType === 'yayNay'
+                                "
+                                :result="surveyStepResult"
+                            ></yay-nay-detail-result>
+                            <text-input-detail-result
+                                v-else-if="
+                                    surveyStep?.surveyElementType ===
+                                    'textInput'
+                                "
+                                :result="surveyStepResult"
+                            ></text-input-detail-result>
+                            <div v-else>
+                                <div class="mt-2">
+                                    type: {{ surveyStep?.surveyElementType }}
+                                    {{ surveyStepResult }}
+                                </div>
                             </div>
                         </div>
                     </TransitionChild>
@@ -90,9 +105,11 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
+import YayNayDetailResult from './YayNayDetailResult.vue'
+import TextInputDetailResult from './TextInputDetailResult.vue'
 
 export default {
-    name: 'AssetModal',
+    name: 'StepDetailResultModal',
     components: {
         TransitionRoot,
         TransitionChild,
@@ -102,6 +119,8 @@ export default {
         TrashIcon,
         StopIcon,
         XIcon,
+        YayNayDetailResult,
+        TextInputDetailResult,
     },
     props: {
         surveyStep: {

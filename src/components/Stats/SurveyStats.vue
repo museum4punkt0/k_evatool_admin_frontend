@@ -73,7 +73,7 @@
                                 v-for="step in store.state.stats.surveySteps"
                                 :key="result.uuid + '-' + step.id"
                                 @click.prevent.stop="
-                                    showStepResult(
+                                    showStepDetailResult(
                                         step,
                                         result.results.find(
                                             (x) => x.stepId === step.id,
@@ -94,11 +94,11 @@
                     </tbody>
                 </table>
             </div>
-            <step-result-modal
+            <step-detail-result-modal
                 v-model:is-open="stepResultModalIsOpen"
                 :survey-step="selectedSurveyStep"
                 :survey-step-result="selectedSurveyStepResult"
-            ></step-result-modal>
+            ></step-detail-result-modal>
             <step-results-modal
                 v-model:is-open="stepResultsModalIsOpen"
                 :survey-step-id="selectedSurveyStepId"
@@ -122,7 +122,7 @@ import SurveyStatsTrend from './SurveyStatsTrend.vue'
 import moment from 'moment'
 import 'moment/locale/de'
 
-import StepResultModal from './stepResult/StepResultModal.vue'
+import StepDetailResultModal from './stepResult/detail/StepDetailResultModal.vue'
 import StepResult from './stepResult/StepResult.vue'
 import StepResultsModal from './stepResults/StepResultsModal.vue'
 import SURVEYSTATS_SERVICE from '../../services/surveyStatsService'
@@ -136,7 +136,7 @@ export default {
         FormToggle,
         LitepieDatepicker,
         StepResult,
-        StepResultModal,
+        StepDetailResultModal,
         StepResultsModal,
     },
     setup() {
@@ -226,7 +226,7 @@ export default {
             const elementTypesWithDetailView = ['yayNay', 'textInput']
             return elementTypesWithDetailView.includes(step.surveyElementType)
         }
-        const showStepResult = (step, stepResult) => {
+        const showStepDetailResult = (step, stepResult) => {
             if (!hasStepResultDetailView(step)) {
                 return
             }
@@ -251,7 +251,7 @@ export default {
             selectedSurveyStepId,
             selectedSurveyStepList,
             selectedSurveyStepResult,
-            showStepResult,
+            showStepDetailResult,
         }
     },
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>{{ result?.value?.text }}</div>
+    <div class="truncate">{{ result?.value?.text }}</div>
 </template>
 
 <script>
