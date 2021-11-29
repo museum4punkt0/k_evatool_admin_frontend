@@ -67,11 +67,6 @@
                                 v-for="step in store.state.stats.surveySteps"
                                 :key="result.uuid + '-' + step.id"
                             >
-                                <!-- {{
-                                    result.results.find(
-                                        (x) => x.stepId === step.id,
-                                    )
-                                }} -->
                                 <step-result
                                     :step="step"
                                     :result="
@@ -85,36 +80,9 @@
                     </tbody>
                 </table>
             </div>
-
-            <!--            total: {{ store.state.stats.stats?.total }}
-<div class="table-wrap mt-3">
-<table>
-<thead>
-<tr>
-    <th>#</th>
-    <th>uuid</th>
-    <th>count</th>
-</tr>
-</thead>
-<tbody>
-<tr
-    v-for="(result, index) in store.state.stats.results"
-    :key="`result_${index}`"
->
-    <td>
-        {{ index }}
-    </td>
-    <td>
-        {{ result.uuid }}
-    </td>
-    <td>
-        {{ result.resultCount }}
-    </td>
-</tr>
-</tbody>
-</table>
-</div>-->
-
+            <step-results-modal
+                v-model:is-open="stepResultsModalIsOpen"
+            ></step-results-modal>
             <div class="footer"></div>
         </main>
     </div>
@@ -134,6 +102,7 @@ import moment from 'moment'
 import 'moment/locale/de'
 
 import StepResult from './stepResult/StepResult.vue'
+import StepResultsModal from './stepResults/StepResultsModal.vue'
 
 export default {
     name: 'SurveyStats',
@@ -143,6 +112,7 @@ export default {
         FormToggle,
         LitepieDatepicker,
         StepResult,
+        StepResultsModal,
     },
     setup() {
         const { t } = useI18n()
@@ -153,6 +123,7 @@ export default {
         const formatter = ref({
             date: 'YYYY-MM-DD',
         })
+        const stepResultsModalIsOpen = ref(true)
 
         const surveyId = route.params.survey_id
 
@@ -203,6 +174,7 @@ export default {
             formatter,
             demo,
             moment,
+            stepResultsModalIsOpen,
         }
     },
 }
