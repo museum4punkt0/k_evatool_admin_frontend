@@ -146,7 +146,7 @@ export default {
         const formatter = ref({
             date: 'YYYY-MM-DD',
         })
-        const stepResultModalIsOpen = ref(true)
+        const stepResultModalIsOpen = ref(false)
         const stepResultsModalIsOpen = ref(false)
         const selectedSurveyStepId = ref(-1)
         const selectedSurveyStepResult = ref(null)
