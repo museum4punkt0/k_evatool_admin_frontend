@@ -67,11 +67,19 @@
                                 v-for="step in store.state.stats.surveySteps"
                                 :key="result.uuid + '-' + step.id"
                             >
-                                {{
+                                <!-- {{
                                     result.results.find(
                                         (x) => x.stepId === step.id,
                                     )
-                                }}
+                                }} -->
+                                <step-result
+                                    :step="step"
+                                    :result="
+                                        result.results.find(
+                                            (x) => x.stepId === step.id,
+                                        )
+                                    "
+                                ></step-result>
                             </td>
                         </tr>
                     </tbody>
@@ -125,9 +133,17 @@ import SurveyStatsTrend from './SurveyStatsTrend.vue'
 import moment from 'moment'
 import 'moment/locale/de'
 
+import StepResult from './stepResult/StepResult.vue'
+
 export default {
     name: 'SurveyStats',
-    components: { SurveyStatsTrend, EyeIcon, FormToggle, LitepieDatepicker },
+    components: {
+        SurveyStatsTrend,
+        EyeIcon,
+        FormToggle,
+        LitepieDatepicker,
+        StepResult,
+    },
     setup() {
         const { t } = useI18n()
         const route = useRoute()
