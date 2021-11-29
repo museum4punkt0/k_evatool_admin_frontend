@@ -77,6 +77,7 @@
                                         render graph
                                     </li>
                                 </ul>
+                                <demo></demo>
                             </div>
                         </div>
                     </TransitionChild>
@@ -98,6 +99,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
+import Demo from './Demo.vue'
 
 export default {
     name: 'AssetModal',
@@ -110,6 +112,7 @@ export default {
         TrashIcon,
         StopIcon,
         XIcon,
+        Demo,
     },
     props: {
         surveyStepId: {
