@@ -38,12 +38,10 @@ export default {
         },
     },
     setup(props) {
-        console.log(props.result)
         const stars = computed({
             get: () => props.result?.value?.rating,
         })
 
-        console.log(stars)
         return { stars }
     },
 }
