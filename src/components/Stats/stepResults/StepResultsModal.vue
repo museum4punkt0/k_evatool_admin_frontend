@@ -33,32 +33,17 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <div
-                            class="
-                                inline-block
-                                w-full
-                                max-w-xl
-                                p-6
-                                my-8
-                                text-left
-                                align-middle
-                                transition-all
-                                transform
-                                bg-white
-                                shadow-xl
-                                rounded-2xl
-                            "
+                            class="inline-block w-full max-w-xl p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
                         >
                             <div class="flex justify-between">
                                 <DialogTitle
                                     as="h3"
-                                    class="
-                                        text-lg
-                                        font-medium
-                                        leading-6
-                                        text-gray-900 text-capitalize
-                                    "
+                                    class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
                                 >
-                                    modal title
+                                    {{
+                                        surveyStepList?.elementParams?.question
+                                            ?.de
+                                    }}
                                 </DialogTitle>
                                 <x-icon
                                     class="h-6 w-6 pointer"
@@ -67,18 +52,36 @@
                             </div>
 
                             <div class="mt-2">
-                                modal content
-                                <ul>
-                                    <li>
-                                        {{ surveyStepId }}
-                                    </li>
-                                    <li>
-                                        todo: get result data from store and
-                                        render graph
-                                    </li>
-                                </ul>
-
-                                <demo></demo>
+                                <!--                                <pre>{{ surveyStepId }}</pre>-->
+                                <pre
+                                    v-if="
+                                        surveyStepList.results.total.results
+                                            .length === 0
+                                    "
+                                >
+                                    {{ surveyStepList }}
+                                </pre>
+                                <type-bar-chart
+                                    v-else-if="
+                                        barChart.includes(
+                                            surveyStepList.elementType,
+                                        )
+                                    "
+                                    :chart-label="surveyStepList.elementType"
+                                    :labels="
+                                        Object.keys(
+                                            surveyStepList.results.total
+                                                .results,
+                                        )
+                                    "
+                                    :values="
+                                        Object.values(
+                                            surveyStepList.results.total
+                                                .results,
+                                        )
+                                    "
+                                />
+                                <demo v-else></demo>
                             </div>
                         </div>
                     </TransitionChild>
@@ -101,10 +104,12 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 import Demo from './Demo.vue'
+import TypeBarChart from './ChartTypes/TypeBarChart.vue'
 
 export default {
     name: 'AssetModal',
     components: {
+        TypeBarChart,
         TransitionRoot,
         TransitionChild,
         Dialog,
@@ -120,6 +125,10 @@ export default {
             type: Number,
             required: true,
         },
+        surveyStepList: {
+            type: Object,
+            required: true,
+        },
         isOpen: {
             type: Boolean,
             default: false,
@@ -130,6 +139,8 @@ export default {
         const store = useStore()
         const { t } = useI18n()
 
+        const barChart = ['binary', 'emoji', 'starRating']
+
         const modalIsOpen = computed({
             get: () => props.isOpen,
             set: (val) => emit('update:is-open', val),
@@ -139,6 +150,7 @@ export default {
             modalIsOpen,
             store,
             t,
+            barChart,
             closeModal() {
                 modalIsOpen.value = false
             },

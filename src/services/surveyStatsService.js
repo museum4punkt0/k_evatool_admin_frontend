@@ -31,9 +31,13 @@ export default {
                 return error.response
             })
     },
-    async getStatsTrend(surveyId) {
+    async getStatsStepList(surveyId, stepId, start, end, demo) {
         return axios
-            .get(`evaluation-tool/surveys/${surveyId}/stats-trend`)
+            .get(
+                `evaluation-tool/surveys/${surveyId}/stats/${stepId}?${
+                    demo ? 'demo=1' : ''
+                }&perPage=500&start=${start}&end=${end}`,
+            )
             .then((response) => {
                 return response.data
             })
@@ -41,9 +45,9 @@ export default {
                 return error.response
             })
     },
-    async getStatsByStep(surveyId, stepId) {
+    async getStatsTrend(surveyId) {
         return axios
-            .get(`evaluation-tool/surveys/${surveyId}/stats/${stepId}`)
+            .get(`evaluation-tool/surveys/${surveyId}/stats-trend`)
             .then((response) => {
                 return response.data
             })

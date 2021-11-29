@@ -102,6 +102,7 @@
             <step-results-modal
                 v-model:is-open="stepResultsModalIsOpen"
                 :survey-step-id="selectedSurveyStepId"
+                :survey-step-list="selectedSurveyStepList"
             ></step-results-modal>
             <div class="footer"></div>
         </main>
@@ -124,6 +125,7 @@ import 'moment/locale/de'
 import StepResultModal from './stepResult/StepResultModal.vue'
 import StepResult from './stepResult/StepResult.vue'
 import StepResultsModal from './stepResults/StepResultsModal.vue'
+import SURVEYSTATS_SERVICE from '../../services/surveyStatsService'
 
 export default {
     name: 'SurveyStats',
@@ -148,9 +150,10 @@ export default {
         })
         const stepResultModalIsOpen = ref(false)
         const stepResultsModalIsOpen = ref(false)
-        const selectedSurveyStepId = ref(-1)
         const selectedSurveyStepResult = ref(null)
         const selectedSurveyStep = ref(null)
+        const selectedSurveyStepId = ref(-1)
+        const selectedSurveyStepList = ref({})
 
         const surveyId = route.params.survey_id
 
@@ -205,9 +208,19 @@ export default {
             },
         )
 
-        const showStepResults = (id) => {
-            stepResultsModalIsOpen.value = true
-            selectedSurveyStepId.value = id
+        const showStepResults = async (id) => {
+            if (id > -1) {
+                selectedSurveyStepList.value =
+                    await SURVEYSTATS_SERVICE.getStatsStepList(
+                        surveyId,
+                        id,
+                        dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
+                        dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                        demo.value,
+                    )
+                stepResultsModalIsOpen.value = true
+                selectedSurveyStepId.value = id
+            }
         }
         const hasStepResultDetailView = (step) => {
             const elementTypesWithDetailView = ['yayNay', 'textInput']
@@ -233,9 +246,10 @@ export default {
             moment,
             stepResultModalIsOpen,
             stepResultsModalIsOpen,
-            selectedSurveyStepId,
             showStepResults,
             selectedSurveyStep,
+            selectedSurveyStepId,
+            selectedSurveyStepList,
             selectedSurveyStepResult,
             showStepResult,
         }
