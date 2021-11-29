@@ -2,7 +2,9 @@
     <simple-text-result
         v-if="step.surveyElementType === 'simpleText'"
     ></simple-text-result>
-    <binary-result v-if="step.surveyElementType === 'binary'"></binary-result>
+    <binary-result
+        v-else-if="step.surveyElementType === 'binary'"
+    ></binary-result>
     <template v-else>
         {{ result }}
     </template>
