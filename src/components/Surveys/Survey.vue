@@ -1,6 +1,6 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
-        <main ref="container" class="flex-1 overflow-y-auto p-3">
+        <main ref="container" class="flex flex-1 flex-col overflow-y-auto p-3">
             <div class="flex mb-3 items-center">
                 <h1>
                     {{ t('surveys', 1) }}:
@@ -13,7 +13,10 @@
                     @click="setShowSurveyDetailsEdit(!showSurveyDetailsEdit)"
                 />
                 <div class="flex-grow items-center flex flex-row-reverse">
-                    <button class="secondary mr-1">
+                    <button
+                        class="secondary mr-1"
+                        @click.prevent.stop="showSurveyResults(survey)"
+                    >
                         <ChartBarIcon class="mx-1 h-5 w-5 pointer" />
                         {{ t('action_show_results') }}
                     </button>
@@ -74,7 +77,7 @@
 <script>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useState } from '../../composables/state'
 import Button from '../Common/Button.js'
 import SurveyElement from './SurveyElement.vue'
@@ -104,6 +107,7 @@ export default {
         const { t } = useI18n()
         const nodeEditor = ref(null)
         const route = useRoute()
+        const router = useRouter()
         const store = useStore()
         const [showSurveyDetailsEdit, setShowSurveyDetailsEdit] =
             useState(false)
@@ -150,6 +154,9 @@ export default {
                 )
                 .focus()
         }
+        const showSurveyResults = (survey) => {
+            router.push(`/stats/${survey.id}`)
+        }
 
         return {
             id,
@@ -164,6 +171,7 @@ export default {
             surveySaved,
             surveyStepDeleted,
             previewSurvey,
+            showSurveyResults,
             showSurveyDetailsEdit,
             setShowSurveyDetailsEdit,
         }

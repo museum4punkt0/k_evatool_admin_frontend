@@ -33,8 +33,8 @@ export default {
         const { t } = useI18n()
         const language = computed(() => store.state.language)
 
-        const setLanguage = () => {
-            console.log(t)
+        const setLanguage = (language) => {
+            console.log(language, t)
             //     store.dispatch('setLanguage', language)
         }
         return {

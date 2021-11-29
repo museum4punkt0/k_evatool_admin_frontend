@@ -7,6 +7,7 @@ import surveyResults from './surveyResults'
 import notifications from './notifications'
 import assets from './assets'
 import users from './users'
+import stats from './stats'
 
 import APP from '../services/appService'
 
@@ -19,6 +20,7 @@ export default createStore({
         surveyElements,
         surveyResults,
         surveys,
+        stats,
         users,
     },
     state: {

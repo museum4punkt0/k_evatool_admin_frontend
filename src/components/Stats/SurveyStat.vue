@@ -22,6 +22,9 @@ export default {
         const surveyId = route.params.survey_id
         const stepId = route.params.step_id
 
+        store.dispatch('stats/getStats', {
+            surveyId,
+        })
         store.dispatch('surveyResults/getSurveyStepResults', {
             surveyId,
             stepId,

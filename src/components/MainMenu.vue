@@ -178,6 +178,7 @@ import {
     PresentationChartLineIcon,
     UsersIcon,
     GlobeAltIcon,
+    // ChartPieIcon,
 } from '@heroicons/vue/outline'
 
 import { XIcon } from '@heroicons/vue/outline'
@@ -221,6 +222,7 @@ export default {
                 icon: GlobeAltIcon,
             },
             { name: t('users', 2), href: '/users', icon: UsersIcon },
+            // { name: t('results', 2), href: '/stats', icon: ChartPieIcon },
         ]
 
         return {
