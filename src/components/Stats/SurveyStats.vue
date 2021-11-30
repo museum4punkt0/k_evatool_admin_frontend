@@ -12,11 +12,20 @@
                     <strong>{{ store.state.surveys.survey?.name }}</strong>
                 </h1>
                 <div class="flex-1 flex flex-row justify-end ml-4">
-                    <litepie-datepicker
+                    <!-- <litepie-datepicker
                         v-model="timeSpan"
                         :formatter="formatter"
                         separator=" to "
-                    ></litepie-datepicker>
+                    ></litepie-datepicker> -->
+                    <Datepicker
+                        v-model="timeSpan"
+                        range
+                        locale="de"
+                        cancel-text="abbrechen"
+                        select-text="auswählen"
+                        :enable-time-picker="false"
+                        class="w-1/3"
+                    />
                     <form-toggle
                         v-model:enabled="demo"
                         :label="'demo'"
@@ -115,7 +124,7 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { EyeIcon, ExternalLinkIcon } from '@heroicons/vue/outline'
-import LitepieDatepicker from 'litepie-datepicker'
+import Datepicker from 'vue3-date-time-picker'
 import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
 import SurveyStatsTrend from './SurveyStatsTrend.vue'
@@ -127,6 +136,8 @@ import StepResult from './stepResult/StepResult.vue'
 import StepResultsModal from './stepResults/StepResultsModal.vue'
 import SURVEYSTATS_SERVICE from '../../services/surveyStatsService'
 
+import 'vue3-date-time-picker/dist/main.css'
+
 export default {
     name: 'SurveyStats',
     components: {
@@ -134,16 +145,21 @@ export default {
         EyeIcon,
         ExternalLinkIcon,
         FormToggle,
-        LitepieDatepicker,
         StepResult,
         StepDetailResultModal,
         StepResultsModal,
+        Datepicker,
     },
     setup() {
         const { t } = useI18n()
         const route = useRoute()
         const store = useStore()
-        const timeSpan = ref([dayjs().add(-1, 'year'), dayjs()])
+        const timeSpan = ref(null)
+        const endDate = new Date()
+        const startDate = new Date(
+            new Date().setDate(endDate.getDate() - 30 * 6),
+        )
+        timeSpan.value = [startDate, endDate]
         const demo = ref(true)
         const formatter = ref({
             date: 'YYYY-MM-DD',

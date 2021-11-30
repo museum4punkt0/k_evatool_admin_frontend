@@ -13,6 +13,9 @@ module.exports = {
     },
     variants: {
         extend: {
+            cursor: ['disabled'],
+            textOpacity: ['disabled'],
+            textColor: ['disabled'],
             opacity: ['disabled'],
         },
     },
