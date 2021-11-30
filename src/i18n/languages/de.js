@@ -40,6 +40,7 @@ export default {
     descriptions: 'Beschreibungen | Beschreibung | Beschreibungen',
     display_time: 'Anzeigedauer',
     display_value: 'Anzeigewert',
+    duration: 'Dauer',
     edit_survey: 'Umfrage bearbeiten',
     edit_user: 'Benutzer bearbeiten',
     emojis: 'Emojis | Emoji | Emojis',

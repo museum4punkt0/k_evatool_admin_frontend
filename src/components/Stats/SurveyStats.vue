@@ -37,7 +37,7 @@
                                 <div v-html="t('finished_at')"></div>
                                 <span class="text-xs text-gray-500">UUID</span>
                             </th>
-                            <th>Duration</th>
+                            <th>{{ t('duration') }}</th>
                             <th
                                 v-for="step in store.state.stats.surveySteps"
                                 :key="step.id"
