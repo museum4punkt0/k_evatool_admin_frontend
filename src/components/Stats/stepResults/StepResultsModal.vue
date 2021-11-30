@@ -33,12 +33,30 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <div
-                            class="inline-block w-full max-w-xl p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+                            class="
+                                inline-block
+                                w-full
+                                max-w-xl
+                                p-6
+                                my-8
+                                text-left
+                                align-middle
+                                transition-all
+                                transform
+                                bg-white
+                                shadow-xl
+                                rounded-2xl
+                            "
                         >
                             <div class="flex justify-between">
                                 <DialogTitle
                                     as="h3"
-                                    class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
+                                    class="
+                                        text-lg
+                                        font-medium
+                                        leading-6
+                                        text-gray-900 text-capitalize
+                                    "
                                 >
                                     {{
                                         surveyStepList?.elementParams?.question
@@ -139,7 +157,7 @@ export default {
         const store = useStore()
         const { t } = useI18n()
 
-        const barChart = ['binary', 'emoji', 'starRating']
+        const barChart = ['binary', 'emoji', 'starRating', 'multipleChoice']
 
         const modalIsOpen = computed({
             get: () => props.isOpen,
