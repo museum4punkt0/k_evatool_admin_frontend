@@ -99,6 +99,20 @@
                                         )
                                     "
                                 />
+
+                                <yay-nay-results
+                                    v-else-if="
+                                        surveyStepList.elementType === 'yayNay'
+                                    "
+                                    :chart-label="surveyStepList.elementType"
+                                    :labels="
+                                        Array.from(
+                                            surveyStepList.results.total.results.images.keys(),
+                                        )
+                                    "
+                                    :datasets="getDatasets(surveyStepList)"
+                                />
+
                                 <demo v-else></demo>
                             </div>
                         </div>
@@ -123,6 +137,7 @@ import { computed } from 'vue'
 import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 import Demo from './Demo.vue'
 import TypeBarChart from './ChartTypes/TypeBarChart.vue'
+import YayNayResults from './YayNayResults.vue'
 
 export default {
     name: 'AssetModal',
@@ -137,6 +152,7 @@ export default {
         StopIcon,
         XIcon,
         Demo,
+        YayNayResults,
     },
     props: {
         surveyStepId: {
@@ -157,12 +173,57 @@ export default {
         const store = useStore()
         const { t } = useI18n()
 
-        const barChart = ['binary', 'emoji', 'starRating', 'multipleChoice']
+        const barChart = [
+            'simpleText',
+            'binary',
+            'emoji',
+            'starRating',
+            'multipleChoice',
+        ]
 
         const modalIsOpen = computed({
             get: () => props.isOpen,
             set: (val) => emit('update:is-open', val),
         })
+
+        const getDatasets = (surveyStepList) => {
+            if (surveyStepList.elementType === 'yayNay') {
+                const colors = ['rgb(29, 78, 216)', 'rgb(255, 78, 216)']
+                const datasets = []
+                const keys = []
+                surveyStepList.results.timespan.results.images.forEach(
+                    (image) => {
+                        Object.keys(image).forEach((key) => {
+                            if (!keys.includes(key)) {
+                                keys.push(key)
+                            }
+                        })
+                    },
+                )
+                keys.forEach((key, index) => {
+                    const data = []
+
+                    datasets.push({
+                        label: key,
+                        data,
+                        borderColor: colors[index],
+                        backgroundColor: colors[index],
+                    })
+                })
+
+                surveyStepList.results.timespan.results.images.forEach(
+                    (image) => {
+                        Object.entries(image).forEach((entry) => {
+                            datasets
+                                .find((d) => d.label === entry[0])
+                                .data.push(entry[1])
+                        })
+                    },
+                )
+                return datasets
+            }
+            return []
+        }
 
         return {
             modalIsOpen,
@@ -172,6 +233,7 @@ export default {
             closeModal() {
                 modalIsOpen.value = false
             },
+            getDatasets,
         }
     },
 }

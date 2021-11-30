@@ -7,7 +7,7 @@ import { BarChart, useBarChart } from 'vue-chart-3'
 import { computed } from 'vue'
 
 export default {
-    name: 'TypeBarChart',
+    name: 'YayNayResults',
     components: { BarChart },
     props: {
         chartLabel: {
@@ -15,6 +15,10 @@ export default {
             required: true,
         },
         labels: {
+            type: Array,
+            required: true,
+        },
+        datasets: {
             type: Array,
             required: true,
         },
@@ -29,16 +33,10 @@ export default {
         },
     },
     setup(props) {
+        console.log(props)
         const chartData = computed(() => ({
             labels: props.labels,
-            datasets: [
-                {
-                    label: props.chartLabel,
-                    data: props.values,
-                    backgroundColor: props.colors,
-                    borderColor: props.colors,
-                },
-            ],
+            datasets: props.datasets,
         }))
 
         const { barChartProps, barChartRef } = useBarChart({
