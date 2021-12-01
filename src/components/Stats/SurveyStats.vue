@@ -39,7 +39,7 @@
                 v-if="store.state.stats.surveySteps.length > 0"
                 class="table-wrap mt-3"
             >
-                <table>
+                <table class="table-fixed">
                     <thead>
                         <tr>
                             <th>
@@ -276,5 +276,8 @@ export default {
 <style scoped>
 thead {
     z-index: 10;
+}
+td {
+    max-width: 500px;
 }
 </style>
