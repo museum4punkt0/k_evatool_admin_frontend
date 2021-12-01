@@ -112,6 +112,13 @@
                                     "
                                     :datasets="getDatasets(surveyStepList)"
                                 />
+                                <text-input-results
+                                    v-else-if="
+                                        surveyStepList.elementType ===
+                                        'textInput'
+                                    "
+                                    :results="surveyStepList.results"
+                                />
 
                                 <demo v-else></demo>
                             </div>
@@ -138,6 +145,7 @@ import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 import Demo from './Demo.vue'
 import TypeBarChart from './ChartTypes/TypeBarChart.vue'
 import YayNayResults from './YayNayResults.vue'
+import TextInputResults from './TextInputResults.vue'
 
 export default {
     name: 'AssetModal',
@@ -153,6 +161,7 @@ export default {
         XIcon,
         Demo,
         YayNayResults,
+        TextInputResults,
     },
     props: {
         surveyStepId: {

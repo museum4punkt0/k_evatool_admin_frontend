@@ -33,7 +33,6 @@ export default {
         },
     },
     setup(props) {
-        console.log(props)
         const chartData = computed(() => ({
             labels: props.labels,
             datasets: props.datasets,
