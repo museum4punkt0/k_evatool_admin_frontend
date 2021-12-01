@@ -35,10 +35,7 @@
                 </div>
             </div>
 
-            <div
-                v-if="store.state.stats.surveySteps.length > 0"
-                class="table-wrap mt-3"
-            >
+            <div v-if="surveySteps.length > 0" class="table-wrap mt-3">
                 <table class="table-fixed">
                     <thead>
                         <tr>
@@ -47,10 +44,7 @@
                                 <span class="text-xs text-gray-500">UUID</span>
                             </th>
                             <th>{{ t('duration') }}</th>
-                            <th
-                                v-for="step in store.state.stats.surveySteps"
-                                :key="step.id"
-                            >
+                            <th v-for="step in surveySteps" :key="step.id">
                                 <div class="flex whitespace-nowrap">
                                     {{
                                         store.state.surveyElements?.surveyElements.find(
@@ -142,7 +136,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -195,6 +189,11 @@ export default {
         const selectedSurveyStepList = ref({})
 
         const surveyId = route.params.survey_id
+        const surveySteps = computed(() =>
+            store.state.stats.surveySteps.filter(
+                (step) => step.surveyElementType !== 'simpleText',
+            ),
+        )
 
         store.dispatch('stats/getStatsTrend', surveyId)
 
@@ -283,6 +282,7 @@ export default {
             formatter,
             demo,
             moment,
+            surveySteps,
             stepResultModalIsOpen,
             stepResultsModalIsOpen,
             showStepResults,

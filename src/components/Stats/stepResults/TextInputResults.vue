@@ -1,15 +1,18 @@
 <template>
     <div>
         <pre>
-            {{ results.total.results.analysis }}
+            <!-- {{ results.total.results.analysis.en.phrases }} -->
+            <word-cloud :data="results.total.results.analysis.en.phrases"></word-cloud>
+ 
         </pre>
     </div>
 </template>
 
 <script>
+import WordCloud from '../WordCloud.vue'
 export default {
     name: 'TextInputResults',
-    components: {},
+    components: { WordCloud },
     props: {
         results: {
             type: Array,
