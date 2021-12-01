@@ -51,13 +51,15 @@
                                 v-for="step in store.state.stats.surveySteps"
                                 :key="step.id"
                             >
-                                {{ step.id }} {{ step.surveyElementType }}
-                                <external-link-icon
-                                    class="mx-1 h-5 w-5 pointer"
-                                    @click.prevent.stop="
-                                        showStepResults(step.id)
-                                    "
-                                ></external-link-icon>
+                                <div class="flex whitespace-nowrap">
+                                    {{ step.id }} {{ step.surveyElementType }}
+                                    <external-link-icon
+                                        class="mx-1 h-5 w-5 pointer"
+                                        @click.prevent.stop="
+                                            showStepResults(step.id)
+                                        "
+                                    ></external-link-icon>
+                                </div>
                             </th>
                         </tr>
                     </thead>
