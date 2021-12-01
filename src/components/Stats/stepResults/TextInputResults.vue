@@ -1,10 +1,14 @@
 <template>
     <div>
-        <pre>
-            <!-- {{ results.total.results.analysis.en.phrases }} -->
-            <word-cloud :data="results.total.results.analysis.en.phrases"></word-cloud>
- 
-        </pre>
+        <div
+            v-for="languageCode in Object.keys(results.total.results.texts)"
+            :key="languageCode"
+        >
+            {{ languageCode }}
+        </div>
+        {{ results.total.results.analysis }}
+        <!-- {{ results.total.results.analysis.en.phrases }} -->
+        <!-- <word-cloud :data="results.total.results.analysis.en.phrases"></word-cloud> -->
     </div>
 </template>
 

@@ -96,7 +96,7 @@
                             </td>
                             <td>{{ result.duration }}</td>
                             <td
-                                v-for="step in store.state.stats.surveySteps"
+                                v-for="step in surveySteps"
                                 :key="result.uuid + '-' + step.id"
                                 @click.prevent.stop="
                                     showStepDetailResult(
