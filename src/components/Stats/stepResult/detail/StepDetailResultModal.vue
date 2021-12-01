@@ -58,14 +58,20 @@
                                         text-gray-900 text-capitalize
                                     "
                                 >
-                                    modal title
+                                    {{
+                                        store.state.surveyElements?.surveyElements.find(
+                                            (element) =>
+                                                element.id ===
+                                                surveyStep.surveyElementId,
+                                        )?.params.question?.de
+                                    }}
                                 </DialogTitle>
                                 <x-icon
                                     class="h-6 w-6 pointer"
                                     @click="closeModal"
                                 />
                             </div>
-                            TODO: question preview
+
                             <yay-nay-detail-result
                                 v-if="
                                     surveyStep?.surveyElementType === 'yayNay'
