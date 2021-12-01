@@ -52,13 +52,34 @@
                                 :key="step.id"
                             >
                                 <div class="flex whitespace-nowrap">
-                                    {{ step.id }} {{ step.surveyElementType }}
+                                    {{
+                                        store.state.surveyElements?.surveyElements.find(
+                                            (element) =>
+                                                element.id ===
+                                                step.surveyElementId,
+                                        )?.params.question?.de
+                                    }}
                                     <external-link-icon
                                         class="mx-1 h-5 w-5 pointer"
                                         @click.prevent.stop="
                                             showStepResults(step.id)
                                         "
                                     ></external-link-icon>
+                                </div>
+                                <div>
+                                    <span
+                                        v-if="store.state.users.user.admin"
+                                        class="text-xs text-gray-500 mr-1"
+                                    >
+                                        id: {{ step.id }}
+                                    </span>
+                                    <span class="text-xs text-gray-500">
+                                        {{
+                                            store.getters[
+                                                'elementTypes/getDisplayNameForKey'
+                                            ](step.surveyElementType)
+                                        }}
+                                    </span>
                                 </div>
                             </th>
                         </tr>
