@@ -45,7 +45,19 @@
                             </th>
                             <th>{{ t('duration') }}</th>
                             <th v-for="step in surveySteps" :key="step.id">
-                                <div class="flex whitespace-nowrap">
+                                <div
+                                    v-if="step.surveyElementType === 'video'"
+                                    class="flex whitespace-nowrap"
+                                >
+                                    video
+                                    <external-link-icon
+                                        class="mx-1 h-5 w-5 pointer"
+                                        @click.prevent.stop="
+                                            showStepResults(step.id)
+                                        "
+                                    ></external-link-icon>
+                                </div>
+                                <div v-else class="flex whitespace-nowrap">
                                     {{
                                         store.state.surveyElements?.surveyElements.find(
                                             (element) =>

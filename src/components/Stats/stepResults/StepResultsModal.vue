@@ -126,6 +126,9 @@
                                     v-else-if="
                                         surveyStepList.elementType === 'video'
                                     "
+                                    :element-params="
+                                        surveyStepList?.elementParams
+                                    "
                                     :results="
                                         surveyStepList.results.timespan.results
                                     "
