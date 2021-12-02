@@ -13,10 +13,10 @@
                 </h1>
                 <div class="flex-1 flex flex-row justify-end ml-4">
                     <!-- <litepie-datepicker
-                        v-model="timeSpan"
-                        :formatter="formatter"
-                        separator=" to "
-                    ></litepie-datepicker> -->
+v-model="timeSpan"
+:formatter="formatter"
+separator=" to "
+></litepie-datepicker> -->
                     <Datepicker
                         v-model="timeSpan"
                         range
@@ -24,6 +24,8 @@
                         cancel-text="abbrechen"
                         select-text="auswählen"
                         :enable-time-picker="false"
+                        :format="format"
+                        :preview-format="format"
                         class="w-1/3"
                     />
                     <form-toggle
@@ -286,6 +288,19 @@ export default {
             // selectedSurveyStepId.value = id
         }
 
+        const format = (date) => {
+            // from Date
+            const dayFrom = date[0].getDate()
+            const monthFrom = date[0].getMonth() + 1
+            const yearFrom = date[0].getFullYear()
+            // until Date
+            const dayTil = date[1].getDate()
+            const monthTil = date[1].getMonth() + 1
+            const yearTil = date[1].getFullYear()
+
+            return `${dayFrom}.${monthFrom}.${yearFrom} - ${dayTil}.${monthTil}.${yearTil}`
+        }
+
         return {
             surveyId,
             t,
@@ -294,6 +309,7 @@ export default {
             formatter,
             demo,
             moment,
+            format,
             surveySteps,
             stepResultModalIsOpen,
             stepResultsModalIsOpen,
@@ -312,6 +328,7 @@ export default {
 thead {
     z-index: 10;
 }
+
 td {
     max-width: 500px;
 }

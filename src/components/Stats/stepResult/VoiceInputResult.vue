@@ -31,6 +31,7 @@ export default {
     z-index: 1;
     position: relative;
 }
+
 audio::-webkit-media-controls-play-button,
 audio::-webkit-media-controls-panel {
     background-color: #e1effe;
