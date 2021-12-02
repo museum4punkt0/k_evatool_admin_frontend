@@ -143,20 +143,12 @@ export default {
 
         const onScroll = () => {}
         const previewSurvey = (surveyPreview) => {
-            // ${
-            //     import.meta.env.VITE_PREVIEW_URL.includes(
-            //         'localhost',
-            //     )
-            //         ? '&demo=true'
-            //         : ''
-            // }
-
             window
                 .open(
                     `
                     ${import.meta.env.VITE_PREVIEW_URL}/#/?survey=${
                         surveyPreview.slug
-                    }
+                    }&demo=true
                 `,
                     '_blank',
                 )
