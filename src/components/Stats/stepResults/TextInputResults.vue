@@ -1,12 +1,12 @@
 <template>
     <div>
         <div
-            v-for="languageCode in Object.keys(results.total.results.texts)"
+            v-for="languageCode in Object.keys(results.timespan.results.texts)"
             :key="languageCode"
         >
             {{ languageCode }}
         </div>
-        {{ results.total.results.analysis }}
+        {{ results.timespan.results.analysis }}
         <!-- {{ results.total.results.analysis.en.phrases }} -->
         <!-- <word-cloud :data="results.total.results.analysis.en.phrases"></word-cloud> -->
     </div>

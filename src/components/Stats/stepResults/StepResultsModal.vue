@@ -73,7 +73,7 @@
                                 <!--                                <pre>{{ surveyStepId }}</pre>-->
                                 <pre
                                     v-if="
-                                        surveyStepList.results.total.results
+                                        surveyStepList.results.timespan.results
                                             .length === 0
                                     "
                                 >
@@ -88,13 +88,13 @@
                                     :chart-label="surveyStepList.elementType"
                                     :labels="
                                         Object.keys(
-                                            surveyStepList.results.total
+                                            surveyStepList.results.timespan
                                                 .results,
                                         )
                                     "
                                     :values="
                                         Object.values(
-                                            surveyStepList.results.total
+                                            surveyStepList.results.timespan
                                                 .results,
                                         )
                                     "
@@ -107,7 +107,7 @@
                                     :chart-label="surveyStepList.elementType"
                                     :labels="
                                         Array.from(
-                                            surveyStepList.results.total.results.images.keys(),
+                                            surveyStepList.results.timespan.results.images.keys(),
                                         )
                                     "
                                     :datasets="getDatasets(surveyStepList)"
