@@ -22,7 +22,6 @@
                     </button>
                     <button
                         class="secondary mr-1"
-                        :disabled="store.state.surveys.surveyStep"
                         @click.prevent.stop="previewSurvey(survey)"
                     >
                         <EyeIcon class="h-5 w-5 mr-2 pointer" />
