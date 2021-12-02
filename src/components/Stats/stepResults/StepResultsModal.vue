@@ -122,6 +122,14 @@
                                         surveyStepList.results.timespan.results
                                     "
                                 />
+                                <video-results
+                                    v-else-if="
+                                        surveyStepList.elementType === 'video'
+                                    "
+                                    :results="
+                                        surveyStepList.results.timespan.results
+                                    "
+                                />
 
                                 <demo v-else></demo>
                             </div>
@@ -149,6 +157,8 @@ import Demo from './Demo.vue'
 import TypeBarChart from './ChartTypes/TypeBarChart.vue'
 import YayNayResults from './YayNayResults.vue'
 import TextAnalysisResults from './TextAnalysisResults.vue'
+import VideoResults from './VideoResults.vue'
+import VideoResult from '../stepResult/VideoResult.vue'
 
 export default {
     name: 'AssetModal',
@@ -165,6 +175,8 @@ export default {
         Demo,
         YayNayResults,
         TextAnalysisResults,
+        VideoResults,
+        VideoResult,
     },
     props: {
         surveyStepId: {
