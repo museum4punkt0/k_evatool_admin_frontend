@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.443",
+    "version": "1.0.444",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -25,7 +25,7 @@
         "@vuelidate/core": "^2.0.0-alpha.32",
         "@vuelidate/validators": "^2.0.0-alpha.25",
         "axios": "^0.24.0",
-        "chart.js": "^3.6.0",
+        "chart.js": "^3.6.1",
         "dayjs": "^1.10.7",
         "lodash": "^4.17.21",
         "moment": "^2.29.1",
@@ -58,7 +58,7 @@
         "eslint-plugin-import": "^2.25.3",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-prettier": "^4.0.0",
-        "eslint-plugin-promise": "^5.1.1",
+        "eslint-plugin-promise": "^5.2.0",
         "eslint-plugin-vue": "^7.20.0",
         "postcss": "^8.4.4",
         "pre-commit": "^1.2.2",

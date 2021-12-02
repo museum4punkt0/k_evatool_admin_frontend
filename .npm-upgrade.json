@@ -3,6 +3,10 @@
         "eslint": {
             "versions": ">7",
             "reason": "Breaking change"
+        },
+        "eslint-plugin-vue": {
+            "versions": ">7",
+            "reason": "Breaking change"
         }
     }
 }
