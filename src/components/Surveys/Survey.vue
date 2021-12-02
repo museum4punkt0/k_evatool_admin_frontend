@@ -25,7 +25,12 @@
                         class="secondary mr-1"
                         @click.prevent.stop="copyLiveLinkToClipboard"
                     >
-                        <EyeIcon class="h-5 w-5 mr-2 pointer" />
+                        <clipboard-copy-icon
+                            class="h-5 w-5 mr-2 pointer"
+                            @click="
+                                setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
+                            "
+                        />
                         {{ t('action_copy_live_link') }}
                     </button>
                     <button
@@ -101,7 +106,12 @@ import NodeEditor from '../NodeEditor/NodeEditor.vue'
 import NodeBrowser from '../NodeEditor/NodeBrowser.vue'
 import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
 import { useI18n } from 'vue-i18n'
-import { ChartBarIcon, EyeIcon, PencilIcon } from '@heroicons/vue/outline'
+import {
+    ChartBarIcon,
+    EyeIcon,
+    PencilIcon,
+    ClipboardCopyIcon,
+} from '@heroicons/vue/outline'
 import { TYPES as NOTIFICATIONTYPES } from '../../store/notifications'
 
 export default {
@@ -115,6 +125,7 @@ export default {
         NodeEditor,
         NodeBrowser,
         EyeIcon,
+        ClipboardCopyIcon,
         PencilIcon,
     },
     setup() {
