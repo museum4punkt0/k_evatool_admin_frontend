@@ -34,10 +34,23 @@
     </div>
 
     <div class="p-2 bg-blue-200 rounded-lg mt-3">
-        <form-select-emoji
+        <!-- <form-select-emoji
             v-model:selected="selectedEmoji.type"
             name="emoji"
             :label="t('emojis')"
+        /> -->
+        <VuemojiPicker
+            :picker-style="pickerStyle"
+            :is-dark="false"
+            @emojiClick="handleEmojiClick"
+        />
+
+        <form-input
+            v-model:value="selectedEmoji.type"
+            class="mt-3"
+            name="type"
+            :label="t('type', 1)"
+            :helptext="t('validation_emoji_type')"
         />
         <form-input
             v-model:value="selectedEmoji.meaning"
@@ -62,6 +75,7 @@ import { useI18n } from 'vue-i18n'
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import FormSelectEmoji from '../../Forms/FormSelectEmoji.vue'
+import { VuemojiPicker } from 'vuemoji-picker'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
@@ -80,6 +94,7 @@ export default {
         FormInput,
         TrashIcon,
         LanguageSwitch,
+        VuemojiPicker,
     },
     props: {
         params: {
@@ -198,6 +213,16 @@ export default {
                 paramsLocal.value.emojis.splice(index, 1)
             }
         }
+        const handleEmojiClick = (emoji) => {
+            console.log(emoji.unicode)
+            // do something
+            selectedEmoji.value.type = emoji.unicode
+        }
+
+        const pickerStyle = {
+            borderSize: '2px',
+            buttonActiveBackground: 'white',
+        }
 
         return {
             paramsLocal,
@@ -211,6 +236,8 @@ export default {
             validateParams,
             validateEmoji,
             tinyMceKey,
+            handleEmojiClick,
+            pickerStyle,
         }
     },
 }
