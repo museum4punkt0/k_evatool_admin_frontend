@@ -73,7 +73,7 @@
                                 <!--                                <pre>{{ surveyStepId }}</pre>-->
                                 <pre
                                     v-if="
-                                        surveyStepList.results.timespan.results
+                                        surveyStepList.results?.timespan.results
                                             .length === 0
                                     "
                                 >
@@ -112,12 +112,15 @@
                                     "
                                     :datasets="getDatasets(surveyStepList)"
                                 />
-                                <text-input-results
+                                <text-analysis-results
                                     v-else-if="
-                                        surveyStepList.elementType ===
-                                        'textInput'
+                                        ['textInput', 'voiceInput'].includes(
+                                            surveyStepList.elementType,
+                                        )
                                     "
-                                    :results="surveyStepList.results"
+                                    :results="
+                                        surveyStepList.results.timespan.results
+                                    "
                                 />
 
                                 <demo v-else></demo>
@@ -145,7 +148,7 @@ import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 import Demo from './Demo.vue'
 import TypeBarChart from './ChartTypes/TypeBarChart.vue'
 import YayNayResults from './YayNayResults.vue'
-import TextInputResults from './TextInputResults.vue'
+import TextAnalysisResults from './TextAnalysisResults.vue'
 
 export default {
     name: 'AssetModal',
@@ -161,7 +164,7 @@ export default {
         XIcon,
         Demo,
         YayNayResults,
-        TextInputResults,
+        TextAnalysisResults,
     },
     props: {
         surveyStepId: {
