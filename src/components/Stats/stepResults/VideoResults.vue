@@ -36,6 +36,7 @@
                 >
                     <div v-if="languageCode === selectedLanguage">
                         <div :class="`results_${languageCode}`">
+                            {{ result.comments?.reduce((r, a) => {}) }}
                             <ul>
                                 <li
                                     v-for="(comments, index) in results

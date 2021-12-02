@@ -2,17 +2,32 @@
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main ref="container" class="flex flex-1 flex-col overflow-y-auto p-3">
             <div class="flex mb-3 items-center">
-                <h1>
-                    {{ t('surveys', 1) }}:
-                    <strong>
-                        {{ survey?.name }}
-                    </strong>
-                </h1>
-                <PencilIcon
-                    class="h-5 w-5 ml-5"
-                    @click="setShowSurveyDetailsEdit(!showSurveyDetailsEdit)"
-                />
-                <div class="flex-grow items-center flex flex-row-reverse">
+                <div flex flex-column>
+                    <h1>
+                        {{ t('surveys', 1) }}:
+                        <strong>
+                            {{ survey?.name }}
+                        </strong>
+                    </h1>
+
+                    <span class="text-xs text-gray-500 mr-1">
+                        {{ `${previewUrl}/#/?survey=${survey?.slug}` }}
+                    </span>
+                </div>
+                <div class="flex-grow items-center flex justify-end">
+                    <PencilIcon
+                        class="h-5 w-5 mr-2"
+                        @click="
+                            setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
+                        "
+                    />
+                    <button
+                        class="secondary mr-1"
+                        @click.prevent.stop="copyLiveLinkToClipboard"
+                    >
+                        <EyeIcon class="h-5 w-5 mr-2 pointer" />
+                        {{ t('action_copy_live_link') }}
+                    </button>
                     <button
                         class="secondary mr-1"
                         @click.prevent.stop="showSurveyResults(survey)"
@@ -22,7 +37,6 @@
                     </button>
                     <button
                         class="secondary mr-1"
-                        :disabled="store.state.surveys.surveyStep"
                         @click.prevent.stop="previewSurvey(survey)"
                     >
                         <EyeIcon class="h-5 w-5 mr-2 pointer" />
@@ -88,6 +102,7 @@ import NodeBrowser from '../NodeEditor/NodeBrowser.vue'
 import TimeBasedStepsModal from './TimeBasedStepsModal.vue'
 import { useI18n } from 'vue-i18n'
 import { ChartBarIcon, EyeIcon, PencilIcon } from '@heroicons/vue/outline'
+import { TYPES as NOTIFICATIONTYPES } from '../../store/notifications'
 
 export default {
     components: {
@@ -114,6 +129,8 @@ export default {
         const surveyId = ref(parseInt(route.params.id))
         const survey = computed(() => store.state.surveys.survey)
         const container = ref(null)
+
+        const previewUrl = `${import.meta.env.VITE_PREVIEW_URL}`
 
         onMounted(() => {
             store.dispatch('surveys/setSurveyId', surveyId.value)
@@ -144,20 +161,12 @@ export default {
 
         const onScroll = () => {}
         const previewSurvey = (surveyPreview) => {
-            // ${
-            //     import.meta.env.VITE_PREVIEW_URL.includes(
-            //         'localhost',
-            //     )
-            //         ? '&demo=true'
-            //         : ''
-            // }
-
             window
                 .open(
                     `
                     ${import.meta.env.VITE_PREVIEW_URL}/#/?survey=${
                         surveyPreview.slug
-                    }
+                    }&demo=true
                 `,
                     '_blank',
                 )
@@ -165,6 +174,23 @@ export default {
         }
         const showSurveyResults = (survey) => {
             router.push(`/stats/${survey.id}`)
+        }
+
+        const copyLiveLinkToClipboard = () => {
+            const text = `${import.meta.env.VITE_PREVIEW_URL}/#/?survey=${
+                survey.value.slug
+            }`
+            navigator.clipboard.writeText(text).then(
+                function () {
+                    store.dispatch('notifications/add', {
+                        type: NOTIFICATIONTYPES.SUCCESS,
+                        message: 'notification_success_survey_link_copied',
+                    })
+                },
+                function (err) {
+                    console.error('Async: Could not copy text: ', err)
+                },
+            )
         }
 
         return {
@@ -183,6 +209,8 @@ export default {
             showSurveyResults,
             showSurveyDetailsEdit,
             setShowSurveyDetailsEdit,
+            copyLiveLinkToClipboard,
+            previewUrl,
         }
     },
 }

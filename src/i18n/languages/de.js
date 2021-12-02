@@ -8,6 +8,7 @@ export default {
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',
     action_confirm: 'Bestätigen',
+    action_copy_live_link: 'Live Link in die Zwischenablage kopieren',
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
     action_new_survey_element: 'Neues Umfrage-Element',
@@ -81,6 +82,8 @@ export default {
         'Neues Umfrage-Element erstellt.<br> Es kann nun hinzugefügt werden.',
     notification_success_survey_step_added:
         'Neuer Umfrage-Schritt eingefügt.<br> Er kann nun verknüpft werden.',
+    notification_success_survey_link_copied:
+        'Yay, der Survey Link wurde erfolgreich in die Zwischenablage kopiert',
     notification_warning_headline: 'Achtung',
     number_of_stars: 'Anzahl der Sterne',
     options: 'Optionen | Option | Optionen',

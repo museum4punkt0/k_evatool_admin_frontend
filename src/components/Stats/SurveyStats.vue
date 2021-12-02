@@ -60,13 +60,15 @@ separator=" to "
                                     ></external-link-icon>
                                 </div>
                                 <div v-else class="flex whitespace-nowrap">
-                                    {{
-                                        store.state.surveyElements?.surveyElements.find(
-                                            (element) =>
-                                                element.id ===
-                                                step.surveyElementId,
-                                        )?.params.question?.de
-                                    }}
+                                    <span
+                                        v-html="
+                                            store.state.surveyElements?.surveyElements.find(
+                                                (element) =>
+                                                    element.id ===
+                                                    step.surveyElementId,
+                                            )?.params.question?.de
+                                        "
+                                    ></span>
                                     <external-link-icon
                                         class="mx-1 h-5 w-5 pointer"
                                         @click.prevent.stop="
