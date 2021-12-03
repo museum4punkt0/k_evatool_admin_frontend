@@ -70,6 +70,10 @@ separator=" to "
                                         "
                                     ></span>
                                     <external-link-icon
+                                        v-if="
+                                            step.surveyElementType !==
+                                            'textInput'
+                                        "
                                         class="mx-1 h-5 w-5 pointer"
                                         @click.prevent.stop="
                                             showStepResults(step.id)
