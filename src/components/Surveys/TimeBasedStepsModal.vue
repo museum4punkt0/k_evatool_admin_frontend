@@ -33,30 +33,12 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <div
-                            class="
-                                inline-block
-                                max-w-2xl
-                                p-6
-                                my-8
-                                overflow-hidden
-                                text-left
-                                align-middle
-                                transition-all
-                                transform
-                                bg-white
-                                shadow-xl
-                                rounded-2xl
-                            "
+                            class="inline-block max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
                         >
                             <div class="flex justify-between">
                                 <DialogTitle
                                     as="h3"
-                                    class="
-                                        text-lg
-                                        font-medium
-                                        leading-6
-                                        text-gray-900 text-capitalize
-                                    "
+                                    class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
                                 >
                                     {{ t('time_based_steps', 2) }}
                                 </DialogTitle>
@@ -191,10 +173,7 @@
                                                         ).name
                                                     }}
                                                     <p
-                                                        class="
-                                                            text-xs
-                                                            text-gray-500
-                                                        "
+                                                        class="text-xs text-gray-500"
                                                     >
                                                         {{
                                                             timeBasedStep.description
@@ -202,9 +181,7 @@
                                                     </p>
                                                 </td>
                                                 <td
-                                                    class="
-                                                        text-gray-500 text-sm
-                                                    "
+                                                    class="text-gray-500 text-sm"
                                                 >
                                                     {{ timeBasedStep.timecode }}
                                                 </td>
@@ -219,11 +196,7 @@
                                                             />
                                                         </div>
                                                         <div
-                                                            class="
-                                                                mx-1
-                                                                pointer
-                                                                text-blue-800
-                                                            "
+                                                            class="mx-1 pointer text-blue-800"
                                                             @click="
                                                                 editTimeBasedStep(
                                                                     timeBasedStep.stepId,
@@ -235,11 +208,7 @@
                                                             />
                                                         </div>
                                                         <div
-                                                            class="
-                                                                mx-1
-                                                                pointer
-                                                                text-red-600
-                                                            "
+                                                            class="mx-1 pointer text-red-600"
                                                             @click="
                                                                 deleteTimeBasedStep(
                                                                     tIndex,
@@ -518,12 +487,12 @@ export default {
             }
             timeBasedSteps.value.push(selectedTimeBasedStep.value)
             await saveSurveyStep()
-            selectedTimeBasedStep.value = initTimeBasedStep
+            selectedTimeBasedStep.value = Object.assign({}, initTimeBasedStep)
         }
 
         const saveChangeTimeBasedStep = async () => {
             await saveSurveyStep()
-            selectedTimeBasedStep.value = initTimeBasedStep
+            selectedTimeBasedStep.value = Object.assign({}, initTimeBasedStep)
         }
 
         const deleteTimeBasedStep = (index) => {
@@ -616,11 +585,27 @@ export default {
 
         const isEditingTimeBasedStep = computed({
             get: () => {
+                console.log(
+                    timeBasedSteps.value,
+                    selectedTimeBasedStep.value.stepId,
+                )
                 return timeBasedSteps.value?.find(
                     (x) => x.stepId === selectedTimeBasedStep.value.stepId,
                 )
             },
         })
+
+        const newTimeBasedStepTimecodeValidator = () => {
+            if (
+                selectedTimecodes.value.startTimecode <=
+                    selectedTimeBasedStep.value.timecode &&
+                selectedTimecodes.value.stopTimecode >=
+                    selectedTimeBasedStep.value.timecode
+            ) {
+                return true
+            }
+            return false
+        }
 
         const validations = computed({
             get: () => {
@@ -635,6 +620,7 @@ export default {
                     timecode: {
                         required,
                         timecodeValidator,
+                        newTimeBasedStepTimecodeValidator,
                     },
                 }
             },
@@ -642,22 +628,30 @@ export default {
         })
 
         const timeBasedStepsMappedTimecodes = () => {
-            const timeBasedStepsTimecodes = store.state.surveys?.survey?.steps
-                ?.find((x) => !x.parentStepId)
-                ?.timeBasedSteps?.map((step) => step.timecode)
+            const timeBasedStepsTimecodes = timeBasedSteps.value.map(
+                (step) => step.timecode,
+            )
             return timeBasedStepsTimecodes
         }
 
         const timeBasedStepLowestTimecode = () => {
-            return timeBasedStepsMappedTimecodes().reduce(function (p, v) {
-                return p < v ? p : v
-            })
+            if (timeBasedStepsMappedTimecodes().length > 0) {
+                return timeBasedStepsMappedTimecodes().reduce(function (p, v) {
+                    return p < v ? p : v
+                })
+            } else {
+                return selectedTimecodes.value.stopTimecode
+            }
         }
 
         const timeBasedStepHighestTimecode = () => {
-            return timeBasedStepsMappedTimecodes().reduce(function (p, v) {
-                return p > v ? p : v
-            })
+            if (timeBasedStepsMappedTimecodes().length > 0) {
+                return timeBasedStepsMappedTimecodes().reduce(function (p, v) {
+                    return p > v ? p : v
+                })
+            } else {
+                return selectedTimecodes.value.startTimecode
+            }
         }
 
         const startTimecodeValidator = () => {
@@ -708,7 +702,7 @@ export default {
                 scope: 'timeBaseSteps',
             }),
             vtc$: useVuelidate(validateTimecodes, selectedTimecodes, {
-                scope: 'timecodes',
+                scope: 'timecodesInModal',
             }),
             modalIsOpen,
             savingTimeBasedSteps,

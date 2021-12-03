@@ -60,18 +60,7 @@
                 v-for="step in adminLayout"
                 :key="'step_element_' + step.id"
                 :ref="(el) => (stepElements[step.id] = el)"
-                class="
-                    step
-                    p-0
-                    m-0
-                    rounded-lg
-                    border-0
-                    bg-white
-                    shadow
-                    overflow-hidden
-                    h-full
-                    flex
-                "
+                class="step p-0 m-0 rounded-lg border-0 bg-white shadow overflow-hidden h-full flex"
                 :style="{
                     top: step?.position.y + 'px',
                     left: step?.position.x + 'px',
@@ -97,13 +86,7 @@
                     @click.prevent.stop="selectSurveyStep(step.id)"
                 >
                     <div
-                        class="
-                            pointer
-                            h-full
-                            flex-col
-                            items-center
-                            justify-center
-                        "
+                        class="pointer h-full flex-col items-center justify-center"
                     >
                         <div class="flex border-b-2">
                             <button
@@ -111,12 +94,7 @@
                                 @click.prevent.stop="selectStart(step.id)"
                             >
                                 <div
-                                    class="
-                                        flex
-                                        h-full
-                                        justify-center
-                                        items-center
-                                    "
+                                    class="flex h-full justify-center items-center"
                                 >
                                     <StarIcon
                                         :class="
@@ -131,13 +109,7 @@
                                 </div>
                             </button>
                             <div
-                                class="
-                                    flex-grow
-                                    font-bold
-                                    text-center
-                                    p-2
-                                    break-all
-                                "
+                                class="flex-grow font-bold text-center p-2 break-all"
                             >
                                 {{
                                     steps?.find((x) => x?.id === step?.id)?.name
@@ -301,9 +273,6 @@ export default {
         const store = useStore()
         const { t } = useI18n()
 
-        /** VARS **/
-        let draggedStepOffsetY = 0
-
         /** REFERENCES **/
         const draggedStep = ref(null)
         const connections = ref([])
@@ -332,6 +301,7 @@ export default {
             store.dispatch('surveys/resetSurveyStep')
             initAdminLayout()
             initConnections()
+            setCanvasSize()
         })
 
         /** METHODS **/
@@ -360,7 +330,7 @@ export default {
                                 id: step.id,
                                 position: {
                                     x: 150,
-                                    y: 150,
+                                    y: 150 + stepIndex * 220,
                                 },
                             })
                         } else {
@@ -377,7 +347,7 @@ export default {
                             id: step.id,
                             position: {
                                 x: 150,
-                                y: 150 + stepIndex * 300,
+                                y: 150 + stepIndex * 220,
                             },
                         })
                     }
@@ -490,19 +460,13 @@ export default {
         /** MOUSEHANDLER **/
         const onMouseDown = (step, e) => {
             draggedStep.value = step
-            draggedStepOffsetY =
-                draggedStep.value.position.y -
-                (e.clientY + nodeEditor.value.scrollTop)
         }
         const onMouseMove = (e) => {
             if (draggedStep.value) {
                 draggedStep.value.position.x =
                     draggedStep.value.position.x +
                     e.movementX * (1 / zoomFactor.value)
-                /*
-                draggedStep.value.position.y =
-                    nodeEditor.value.scrollTop + e.clientY + draggedStepOffsetY
-                */
+
                 draggedStep.value.position.y =
                     draggedStep.value.position.y +
                     e.movementY * (1 / zoomFactor.value)
@@ -510,7 +474,6 @@ export default {
         }
         const onMouseUp = async () => {
             setCanvasSize()
-            draggedStepOffsetY = 0
             draggedStep.value = null
             await SURVEYS.saveAdminLayout(props.surveyId, props.adminLayout)
         }
