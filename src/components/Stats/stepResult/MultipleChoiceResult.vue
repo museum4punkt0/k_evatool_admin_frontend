@@ -1,5 +1,5 @@
 <template>
-    <div>{{ result.value.selected.join(', ') }}</div>
+    <div>{{ result?.value?.selected.join(', ') }}</div>
 </template>
 
 <script>
