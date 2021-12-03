@@ -33,36 +33,17 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <div
-                            class="
-                                inline-block
-                                w-full
-                                max-w-xl
-                                p-6
-                                my-8
-                                text-left
-                                align-middle
-                                transition-all
-                                transform
-                                bg-white
-                                shadow-xl
-                                rounded-2xl
-                            "
+                            class="inline-block w-full max-w-xl p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
                         >
                             <div class="flex justify-between">
                                 <DialogTitle
                                     as="h3"
-                                    class="
-                                        text-lg
-                                        font-medium
-                                        leading-6
-                                        text-gray-900 text-capitalize
-                                    "
-                                >
-                                    {{
+                                    class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
+                                    v-html="
                                         surveyStepList?.elementParams?.question
                                             ?.de
-                                    }}
-                                </DialogTitle>
+                                    "
+                                ></DialogTitle>
                                 <x-icon
                                     class="h-6 w-6 pointer"
                                     @click="closeModal"
