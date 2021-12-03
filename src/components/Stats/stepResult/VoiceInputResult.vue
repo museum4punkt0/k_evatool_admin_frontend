@@ -1,10 +1,10 @@
 <template>
     <div class="audio">
         <audio
-            v-if="result?.value?.audio"
+            v-if="result?.value?.url"
             class="audio-player"
             preload="auto"
-            :src="result?.value?.audio"
+            :src="result?.value?.url"
             type="audio/wav"
             controls
         ></audio>
