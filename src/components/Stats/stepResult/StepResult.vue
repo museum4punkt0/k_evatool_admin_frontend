@@ -2,40 +2,40 @@
     <simple-text-result
         v-if="step.surveyElementType === 'simpleText'"
         :result="result"
-    ></simple-text-result>
+    />
     <binary-result
         v-else-if="step.surveyElementType === 'binary'"
         :result="result"
-    ></binary-result>
+    />
     <multiple-choice-result
         v-else-if="step.surveyElementType === 'multipleChoice'"
         :result="result"
-    ></multiple-choice-result>
+    />
     <star-rating-result
         v-else-if="step.surveyElementType === 'starRating'"
         :result="result"
-    ></star-rating-result>
+    />
     <emoji-result
         v-else-if="step.surveyElementType === 'emoji'"
+        :params="stepParams.emojis"
         :result="result"
-    ></emoji-result>
+    />
     <text-input-result
         v-else-if="step.surveyElementType === 'textInput'"
         :result="result"
-    ></text-input-result>
+    />
     <voice-input-result
         v-else-if="step.surveyElementType === 'voiceInput'"
         :result="result"
-    ></voice-input-result>
+    />
     <yay-nay-result
         v-else-if="step.surveyElementType === 'yayNay'"
         :result="result"
-    ></yay-nay-result>
+    />
     <video-result
         v-else-if="step.surveyElementType === 'video'"
         :result="result"
-    ></video-result>
-
+    />
     <template v-else>
         {{ result }}
     </template>
@@ -73,6 +73,10 @@ export default {
         result: {
             type: Object,
             required: true,
+        },
+        stepParams: {
+            type: Object,
+            default: () => {},
         },
     },
     setup() {
