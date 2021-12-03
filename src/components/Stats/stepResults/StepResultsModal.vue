@@ -67,12 +67,7 @@
                                         )
                                     "
                                     :chart-label="surveyStepList.elementType"
-                                    :labels="
-                                        Object.keys(
-                                            surveyStepList.results.timespan
-                                                .results,
-                                        )
-                                    "
+                                    :labels="getChartLabels"
                                     :values="
                                         Object.values(
                                             surveyStepList.results.timespan
@@ -194,6 +189,24 @@ export default {
             set: (val) => emit('update:is-open', val),
         })
 
+        const getChartLabels = computed({
+            get: () => {
+                if (props.surveyStepList?.elementParams?.emojis) {
+                    const keys = Object.keys(
+                        props.surveyStepList.results.timespan.results,
+                    )
+                    return keys.map((x) => {
+                        return props.surveyStepList.elementParams.emojis.find(
+                            (y) => x === y.meaning,
+                        )?.type
+                    })
+                }
+                return Object.keys(
+                    props.surveyStepList.results.timespan.results,
+                )
+            },
+        })
+
         const getDatasets = (surveyStepList) => {
             if (surveyStepList.elementType === 'yayNay') {
                 const colors = ['rgb(29, 78, 216)', 'rgb(255, 78, 216)']
@@ -242,6 +255,7 @@ export default {
                 modalIsOpen.value = false
             },
             getDatasets,
+            getChartLabels,
         }
     },
 }

@@ -124,11 +124,23 @@ separator=" to "
                                 "
                             >
                                 <step-result
+                                    v-if="
+                                        result.results.find(
+                                            (x) => x.stepId === step.id,
+                                        )
+                                    "
                                     :step="step"
                                     :result="
                                         result.results.find(
                                             (x) => x.stepId === step.id,
                                         )
+                                    "
+                                    :step-params="
+                                        store.state.surveyElements?.surveyElements.find(
+                                            (element) =>
+                                                element.id ===
+                                                step.surveyElementId,
+                                        ).params
                                     "
                                 ></step-result>
                             </td>
@@ -199,8 +211,8 @@ export default {
         })
         const stepResultModalIsOpen = ref(false)
         const stepResultsModalIsOpen = ref(false)
-        const selectedSurveyStepResult = ref(null)
-        const selectedSurveyStep = ref(null)
+        const selectedSurveyStepResult = ref(-1)
+        const selectedSurveyStep = ref(-1)
         const selectedSurveyStepId = ref(-1)
         const selectedSurveyStepList = ref({})
 
