@@ -36,7 +36,6 @@ export default {
                 end,
                 demo,
             )
-            console.log('got stats', stats)
             commit('setStats', stats)
         },
         async clearResults({ commit }) {
