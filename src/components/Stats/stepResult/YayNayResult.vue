@@ -1,10 +1,10 @@
 <template>
     <div class="flex">
         <div v-for="(image, index) in result?.value?.images" :key="index">
-            <div class="mr-3">
-                {{ image.value }}
+            <div class="mr-2">
+                <small>{{ image.value }}</small>
                 <img
-                    class="rounded mr-3"
+                    class="rounded"
                     :src="
                         assets.find((item) => item.id === image.asset)?.urls
                             .original
@@ -37,4 +37,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+img {
+    max-width: 40px;
+    max-height: 40px;
+}
+</style>

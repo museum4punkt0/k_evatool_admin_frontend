@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.454",
+    "version": "1.0.455",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -64,6 +64,7 @@
         "postcss": "^8.4.4",
         "pre-commit": "^1.2.2",
         "prettier": "^2.5.0",
+        "sass": "^1.44.0",
         "tailwindcss": "^2.2.19",
         "vite": "^2.6.14",
         "vite-plugin-vue-env": "^1.0.5"
