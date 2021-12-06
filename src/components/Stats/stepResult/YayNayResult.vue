@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 img {
     max-width: 40px;
     max-height: 40px;
