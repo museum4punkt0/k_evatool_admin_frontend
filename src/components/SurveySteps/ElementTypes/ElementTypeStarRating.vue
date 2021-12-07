@@ -54,19 +54,29 @@
         />
     </div>
 
-    <div class="grid grid-cols-12 gap-4 mt-3">
-        <form-input
-            v-model:value="paramsLocal.meaningLowestValue"
-            name="meaningLowestValue"
-            :label="t('meaning_lowest_value')"
-            class="col-span-6"
-        />
-        <form-input
-            v-model:value="paramsLocal.meaningHighestValue"
-            name="meaningHighestValue"
-            :label="t('meaning_highest_value')"
-            class="col-span-6"
-        />
+    <div class="flex flex-row mt-3">
+        <div class="mr-3">
+            <form-input
+                v-model:value="paramsLocal.meaningLowestValue"
+                name="meaningLowestValue"
+                :label="t('meaning_lowest_value')"
+                class="col-span-6"
+            />
+            <p class="text-xs text-gray-500 ml-1 mt-1">
+                {{ t('validation_snake_case') }}
+            </p>
+        </div>
+        <div>
+            <form-input
+                v-model:value="paramsLocal.meaningHighestValue"
+                name="meaningHighestValue"
+                :label="t('meaning_highest_value')"
+                class="col-span-6"
+            />
+            <p class="text-xs text-gray-500 ml-1 mt-1">
+                {{ t('validation_snake_case') }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -79,7 +89,13 @@ import TinyMce from '../../Common/TinyMce.vue'
 import { useStore } from 'vuex'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import useVuelidate from '@vuelidate/core'
-import { required, between, minLength, maxLength } from '@vuelidate/validators'
+import {
+    required,
+    between,
+    minLength,
+    maxLength,
+    helpers,
+} from '@vuelidate/validators'
 
 export default {
     name: 'ElementTypeStarRating',
@@ -126,6 +142,7 @@ export default {
             }
         })
 
+        const meaningValidation = helpers.regex(/^[a-z][a-z0-9_]*$/)
         const validations = computed({
             get: () => {
                 return {
@@ -141,11 +158,13 @@ export default {
                         required,
                         minLength: minLength(1),
                         maxLength: maxLength(20),
+                        meaningValidation,
                     },
                     meaningHighestValue: {
                         required,
                         minLength: minLength(1),
                         maxLength: maxLength(20),
+                        meaningValidation,
                     },
                 }
             },
