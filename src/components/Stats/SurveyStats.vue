@@ -33,7 +33,9 @@ separator=" to "
                         :label="'demo'"
                         class="ml-3"
                     />
-                    <button class="primary ml-3 mr-3">export</button>
+                    <button class="primary ml-3 mr-3" @click="openExportModal">
+                        {{ t('action_export') }}
+                    </button>
                 </div>
             </div>
 
@@ -163,6 +165,11 @@ separator=" to "
                 :survey-step-list="selectedSurveyStepList"
             ></step-results-modal>
             <div class="footer"></div>
+
+            <!--            <survey-stats-export-modal
+                v-model:open="exportModalOpen"
+                :survey-id="surveyId"
+            />-->
         </main>
     </div>
 </template>
@@ -176,20 +183,22 @@ import { EyeIcon, ExternalLinkIcon } from '@heroicons/vue/outline'
 import Datepicker from 'vue3-date-time-picker'
 import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
-import SurveyStatsTrend from './SurveyStatsTrend.vue'
 import moment from 'moment'
 import 'moment/locale/de'
 
 import StepDetailResultModal from './stepResult/detail/StepDetailResultModal.vue'
+import SurveyStatsExportModal from './SurveyStatsExportModal.vue'
+import SurveyStatsTrend from './SurveyStatsTrend.vue'
 import StepResult from './stepResult/StepResult.vue'
 import StepResultsModal from './stepResults/StepResultsModal.vue'
-import SURVEYSTATS_SERVICE from '../../services/surveyStatsService'
+import SURVEY_STATS_SERVICE from '../../services/surveyStatsService'
 
 import 'vue3-date-time-picker/dist/main.css'
 
 export default {
     name: 'SurveyStats',
     components: {
+        SurveyStatsExportModal,
         SurveyStatsTrend,
         EyeIcon,
         ExternalLinkIcon,
@@ -220,7 +229,8 @@ export default {
         const selectedSurveyStepId = ref(-1)
         const selectedSurveyStepList = ref({})
 
-        const surveyId = route.params.survey_id
+        const surveyId = parseInt(route.params.survey_id)
+
         const surveySteps = computed(() =>
             store.state.stats.surveySteps.filter(
                 (step) => step.surveyElementType !== 'simpleText',
@@ -281,7 +291,7 @@ export default {
         const showStepResults = async (id) => {
             if (id > -1) {
                 selectedSurveyStepList.value =
-                    await SURVEYSTATS_SERVICE.getStatsStepList(
+                    await SURVEY_STATS_SERVICE.getStatsStepList(
                         surveyId,
                         id,
                         dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
@@ -319,6 +329,12 @@ export default {
             return `${dayFrom}.${monthFrom}.${yearFrom} - ${dayTil}.${monthTil}.${yearTil}`
         }
 
+        const exportModalOpen = ref(false)
+
+        const openExportModal = () => {
+            exportModalOpen.value = true
+        }
+
         return {
             surveyId,
             t,
@@ -337,6 +353,8 @@ export default {
             selectedSurveyStepList,
             selectedSurveyStepResult,
             showStepDetailResult,
+            openExportModal,
+            exportModalOpen,
         }
     },
 }

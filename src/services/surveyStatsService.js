@@ -55,4 +55,22 @@ export default {
                 return error.response
             })
     },
+    async exportStats(surveyId, start, end, demo, execute = false) {
+        let url = `evaluation-tool/surveys/${surveyId}/stats-export?${
+            demo ? 'demo=1' : ''
+        }&start=${start}&end=${end}`
+
+        if (execute) {
+            url += '&execute=1'
+        }
+
+        return axios
+            .get(url)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }
