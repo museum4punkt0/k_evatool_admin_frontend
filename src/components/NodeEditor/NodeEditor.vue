@@ -216,6 +216,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { debounce } from 'lodash'
 import Connection from './Connection.vue'
 
 import {
@@ -472,10 +473,15 @@ export default {
                     e.movementY * (1 / zoomFactor.value)
             }
         }
+
+        const debouncedAdminLayoutSaver = debounce(async () => {
+            await SURVEYS.saveAdminLayout(props.surveyId, props.adminLayout)
+        }, 2000)
+
         const onMouseUp = async () => {
             setCanvasSize()
             draggedStep.value = null
-            await SURVEYS.saveAdminLayout(props.surveyId, props.adminLayout)
+            debouncedAdminLayoutSaver()
         }
 
         const deselectStep = () => {
