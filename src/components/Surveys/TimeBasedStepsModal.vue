@@ -594,10 +594,10 @@ export default {
 
         const isEditingTimeBasedStep = computed({
             get: () => {
-                console.log(
-                    timeBasedSteps.value,
-                    selectedTimeBasedStep.value.stepId,
-                )
+                // console.log(
+                //     timeBasedSteps.value,
+                //     selectedTimeBasedStep.value.stepId,
+                // )
                 return timeBasedSteps.value?.find(
                     (x) => x.stepId === selectedTimeBasedStep.value.stepId,
                 )

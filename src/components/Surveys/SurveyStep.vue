@@ -187,7 +187,7 @@ export default {
         watch(
             () => store.state.surveys.surveyStep,
             (step) => {
-                if (step.id === surveyStepId.value) {
+                if (step?.id === surveyStepId.value) {
                     surveyStep.value = step
                 }
             },
