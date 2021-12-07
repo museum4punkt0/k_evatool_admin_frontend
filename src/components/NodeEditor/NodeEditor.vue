@@ -218,6 +218,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { debounce } from 'lodash'
 import Connection from './Connection.vue'
+import { TYPES } from '../../store/notifications'
 
 import {
     ArrowUpIcon,
@@ -514,8 +515,22 @@ export default {
         }
 
         const selectStart = async (stepId) => {
-            await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
-            refreshSteps()
+            const step = store.state.surveys.survey.steps.find(
+                (step) => step.id === stepId,
+            )
+
+            if (
+                (step && !step.previousSteps) ||
+                (step && step.previousSteps.length === 0)
+            ) {
+                await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
+                refreshSteps()
+            } else {
+                store.dispatch('notifications/add', {
+                    type: TYPES.ERROR,
+                    message: 'notification_error_startstep_previous',
+                })
+            }
         }
 
         const updateStepParams = async (stepId, params) => {
