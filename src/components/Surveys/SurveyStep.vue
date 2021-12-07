@@ -184,6 +184,15 @@ export default {
             },
         )
 
+        watch(
+            () => store.state.surveys.surveyStep,
+            (step) => {
+                if (step.id === surveyStepId.value) {
+                    surveyStep.value = step
+                }
+            },
+        )
+
         const saveSurveyStep = async () => {
             savingSurveyStep.value = true
             const savedSurveyStep = await SURVEY_SERVICE.saveSurveyStep(

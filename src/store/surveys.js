@@ -169,6 +169,9 @@ export default {
             await SURVEY_SERVICE.duplicateSurvey(surveyId)
             await dispatch('getSurveys')
         },
+        async setSurveyStep({ commit }, surveyStep) {
+            commit('setSurveyStep', surveyStep)
+        },
     },
     getters: {},
 }

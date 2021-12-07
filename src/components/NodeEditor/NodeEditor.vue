@@ -519,8 +519,6 @@ export default {
         }
 
         const updateStepParams = async (stepId, params) => {
-            console.log(stepId)
-            console.log(params)
             // await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
             // refreshSteps()
         }
@@ -675,7 +673,6 @@ export default {
         watch(
             () => timeBasedModalIsOpen.value,
             (value) => {
-                console.log(value)
                 if (!value) {
                     refreshSteps()
                 }
