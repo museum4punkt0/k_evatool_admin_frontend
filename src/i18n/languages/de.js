@@ -50,6 +50,7 @@ export default {
     email: 'E-Mail',
     elements: 'Elemente | Element | Elemente',
     end: 'Ende',
+    export_type: 'Export-Format',
     filename: 'Dateiname',
     filesize: 'Größe',
     filetype: 'Dateityp',
@@ -86,6 +87,7 @@ export default {
     notification_success_survey_link_copied:
         'Yay, der Survey Link wurde erfolgreich in die Zwischenablage kopiert',
     notification_warning_headline: 'Achtung',
+    number_of_results: 'Ergebnis-Anzahl',
     number_of_stars: 'Anzahl der Sterne',
     options: 'Optionen | Option | Optionen',
     optional_name: 'Optionaler Name',
@@ -94,6 +96,7 @@ export default {
     passwords: 'Passwörter | Passwort | Passwörter',
     parent_elements: 'Elternelemente | Elternelement | Elternelemente',
     password_confirmation: 'Passwortbestätigung',
+    please_select: 'Bitte wählen',
     questions: 'Fragen | Frage | Fragen',
     results: 'Ergebnisse | Ergebnis | Ergebnisse',
     result_based_steps:

@@ -55,17 +55,38 @@ export default {
                 return error.response
             })
     },
-    async exportStats(surveyId, start, end, demo, execute = false) {
-        let url = `evaluation-tool/surveys/${surveyId}/stats-export?${
-            demo ? 'demo=1' : ''
-        }&start=${start}&end=${end}`
-
+    async exportStats(params, execute = false) {
         if (execute) {
-            url += '&execute=1'
+            params.execute = true
+        } else {
+            delete params.exportType
         }
+        let url = `evaluation-tool/surveys/${params.surveyId}/stats-export`
 
         return axios
-            .get(url)
+            .post(url, params)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    async downloadExport(surveyId, params) {
+        let url = `evaluation-tool/surveys/${surveyId}/stats-download`
+
+        console.log(params)
+
+        const payload = {
+            filehash: params.hash,
+            filename: params.filename,
+        }
+
+        console.log(url)
+        console.log(payload)
+
+        return axios
+            .post(url, payload)
             .then((response) => {
                 return response.data
             })

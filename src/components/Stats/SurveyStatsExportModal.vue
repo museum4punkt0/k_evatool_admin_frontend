@@ -49,25 +49,82 @@
                             </div>
 
                             <div class="mt-4">
-                                <div class="flex mb-3">
-                                    <Datepicker
-                                        v-model="timespan"
-                                        range
-                                        locale="de"
-                                        :cancel-text="t('action_cancel')"
-                                        :select-text="t('action_select')"
-                                        :enable-time-picker="false"
-                                        :format="format"
-                                        :preview-format="format"
-                                        class="w-full"
-                                    />
+                                <div class="my-4 grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="start" class="mb-1">
+                                            {{ t('start') }}
+                                        </label>
+                                        <input
+                                            id="start"
+                                            v-model="params.start"
+                                            type="text"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label for="end" class="mb-1">
+                                            {{ t('end') }}
+                                        </label>
+                                        <input
+                                            id="end"
+                                            v-model="params.end"
+                                            type="text"
+                                        />
+                                    </div>
                                 </div>
-                                <button class="primary">
-                                    {{ t('action_export') }}
-                                </button>
-                                <button class="link ml-4" @click="closeModal">
-                                    {{ t('action_cancel') }}
-                                </button>
+
+                                <form-toggle
+                                    v-model:enabled="params.demo"
+                                    label="Demo"
+                                />
+
+                                <form-select
+                                    v-model:selected="params.exportType"
+                                    class="mt-3"
+                                    :label="t('export_type')"
+                                    :options="exportTypes"
+                                    value-key="id"
+                                    title-key="title"
+                                />
+
+                                <hr class="my-4" />
+
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <template v-if="statsExportData.hash">
+                                            <button
+                                                class="primary"
+                                                @click="downloadExport"
+                                            >
+                                                Download
+                                            </button>
+                                            {{ statsExportData.url }}
+                                        </template>
+                                        <template v-else>
+                                            <button
+                                                class="primary"
+                                                :disabled="
+                                                    statsExportData?.totalResults ===
+                                                        0 || v$.$invalid
+                                                "
+                                                @click="exportStats(true)"
+                                            >
+                                                {{ t('action_export') }}
+                                            </button>
+                                            <button
+                                                class="link ml-4"
+                                                @click="closeModal"
+                                            >
+                                                {{ t('action_cancel') }}
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <div>
+                                        <div class="inline text-gray-500">
+                                            {{ t('number_of_results') }}:
+                                            {{ statsExportData.totalResults }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </TransitionChild>
@@ -85,16 +142,50 @@ import {
     TransitionRoot,
     TransitionChild,
 } from '@headlessui/vue'
+
 import { useI18n } from 'vue-i18n'
 import { XIcon } from '@heroicons/vue/outline'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Datepicker from 'vue3-date-time-picker'
 import SURVEY_STATS_SERVICE from '../../services/surveyStatsService'
-import dayjs from 'dayjs'
+import moment from 'moment'
+import FormToggle from '../Forms/FormToggle.vue'
+import useVuelidate from '@vuelidate/core'
+import { required, helpers } from '@vuelidate/validators'
+import FormSelect from '../Forms/FormSelect.vue'
+
+const dateFormat = helpers.regex(
+    /^\d{4}-(02-(0[1-9]|[12][0-9])|(0[469]|11)-(0[1-9]|[12][0-9]|30)|(0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))$/,
+)
+
+const maxDate = (param) => (value) => {
+    return (
+        moment(value, 'YYYY-MM-DD').format('X') <=
+        moment(param, 'YYYY-MM-DD').format('X')
+    )
+}
+
+const minDate = (param) => (value) => {
+    return (
+        moment(value, 'YYYY-MM-DD').format('X') >=
+        moment(param, 'YYYY-MM-DD').format('X')
+    )
+}
+
+const exportTypes = [
+    { id: 'xlsx', title: 'Excel (xlsx)' },
+    { id: 'csv', title: 'CSV' },
+    { id: 'json', title: 'JSON' },
+]
+
+const validExportType = (value) =>
+    exportTypes.findIndex((x) => x.id === value) >= 0
 
 export default {
     name: 'SurveyStatsExportModal',
     components: {
+        FormSelect,
+        FormToggle,
         TransitionRoot,
         TransitionChild,
         Dialog,
@@ -122,54 +213,88 @@ export default {
             set: (val) => emit('update:open', val),
         })
 
-        const params = ref(null)
-
         const closeModal = () => {
             modalIsOpen.value = false
         }
 
-        params.value.timespan = null
-        params.value.endDate = new Date()
-        params.value.startDate = new Date(
-            new Date().setDate(params.value.endDate.getDate() - 30 * 6),
-        )
+        const statsExportData = ref({})
 
-        params.value.timespan = [params.value.startDate, params.value.endDate]
+        const params = ref({})
+
+        params.value.surveyId = ref(props.surveyId).value
+        params.value.exportType = null
+        params.value.end = moment().format('YYYY-MM-DD')
+        params.value.start = moment().subtract(1, 'weeks').format('YYYY-MM-DD')
         params.value.demo = true
 
-        const format = (date) => {
-            // from Date
-            const dayFrom = date[0].getDate()
-            const monthFrom = date[0].getMonth() + 1
-            const yearFrom = date[0].getFullYear()
-            // until Date
-            const dayTil = date[1].getDate()
-            const monthTil = date[1].getMonth() + 1
-            const yearTil = date[1].getFullYear()
-
-            return `${dayFrom}.${monthFrom}.${yearFrom} - ${dayTil}.${monthTil}.${yearTil}`
-        }
-
         const exportStats = async (execute = false) => {
-            return await SURVEY_STATS_SERVICE.exportStats(params)
-            /* return await SURVEY_STATS_SERVICE.exportStats({
-                surveyId: props.surveyId,
-                start: dayjs(params.value.timespan.value[0]).format(
-                    'YYYY-MM-DD',
-                ),
-                end: dayjs(params.value.timespan.value[1]).format('YYYY-MM-DD'),
-                demo: params.value.demo,
+            statsExportData.value = await SURVEY_STATS_SERVICE.exportStats(
+                { ...params.value },
                 execute,
-            })*/
+            )
         }
+
+        const downloadExport = async () => {
+            if (statsExportData.value.hash) {
+                const downloadFile = await SURVEY_STATS_SERVICE.downloadExport(
+                    props.surveyId,
+                    statsExportData.value,
+                )
+
+                const linkSource = `data:${statsExportData.value.mime};base64,${downloadFile}`
+                const downloadLink = document.createElement('a')
+                const fileName = statsExportData.value.filename
+
+                downloadLink.href = linkSource
+                downloadLink.download = fileName
+                downloadLink.click()
+            }
+        }
+
+        const validations = computed({
+            get: () => {
+                return {
+                    start: {
+                        required,
+                        dateFormat,
+                        maxDate: maxDate(params.value.end),
+                    },
+                    end: {
+                        required,
+                        dateFormat,
+                        minDate: minDate(params.value.start),
+                    },
+                    demo: { required },
+                    exportType: { validExportType },
+                }
+            },
+            set: () => {},
+        })
+
+        const v$ = useVuelidate(validations, params.value)
+
+        watch(
+            () => params.value,
+            () => {
+                if (!v$.value.$invalid) {
+                    exportStats(false)
+                }
+            },
+            { deep: true, immediate: true },
+        )
 
         return {
             t,
             modalIsOpen,
             closeModal,
             params,
-            format,
             exportStats,
+            statsExportData,
+            v$,
+            moment,
+            validations,
+            exportTypes,
+            downloadExport,
         }
     },
 }

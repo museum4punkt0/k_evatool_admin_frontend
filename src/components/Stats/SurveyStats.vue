@@ -166,10 +166,11 @@ separator=" to "
             ></step-results-modal>
             <div class="footer"></div>
 
-            <!--            <survey-stats-export-modal
+            <survey-stats-export-modal
+                v-if="surveyId"
                 v-model:open="exportModalOpen"
                 :survey-id="surveyId"
-            />-->
+            />
         </main>
     </div>
 </template>
