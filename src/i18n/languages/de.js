@@ -78,6 +78,8 @@ export default {
     new_user: 'Neuer Benutzer',
     none_selected: 'Nicht ausgewählt',
     notification_error_headline: 'Fehler',
+    notification_error_startstep_previous:
+        'Sorry, Startschritt kann nicht gesetzt werden. Der Schritt hat bereits Vorgängerschritte.',
     notification_info_headline: 'Information',
     notification_success_headline: 'Erfolg',
     notification_success_survey_element_added:

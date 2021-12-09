@@ -2,15 +2,14 @@
     <data-viewer class="mt-3" :data="validator" />
     <h3 v-if="surveyElementId > 0">{{ t('elements', 1) }}</h3>
     <h3 v-else>Neues Element</h3>
-    <label for="name" class="capitalize">{{ t('names', 1) }}</label>
     <form-input
         v-model:value="surveyElement.name"
         class="mt-1"
         :invalid="validator.name.$invalid"
         type="text"
         :placeholder="t('names', 1)"
-        :label="t('timestamps', 1)"
-        name="timecode"
+        :label="t('names', 1)"
+        name="name"
         autocomplete="off"
     />
     <!-- TODO: get default language -->

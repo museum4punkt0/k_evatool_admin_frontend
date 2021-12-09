@@ -520,7 +520,16 @@ export default {
         const saveSurveyStep = async () => {
             savingTimeBasedSteps.value = true
             surveyStep.timeBasedSteps = timeBasedSteps.value
-            await SURVEYS.saveSurveyStep(surveyStep, surveyStep.surveyId)
+            store.dispatch('surveys/saveSurveyStep', surveyStep)
+
+            // // TODO: dispatch action and let store handle save and update step
+            // const step = await SURVEYS.saveSurveyStep(
+            //     surveyStep,
+            //     surveyStep.surveyId,
+            // )
+            // console.log('saved survey step', step)
+            // store.dispatch('surveys/setSurveyStep', step)
+
             savingTimeBasedSteps.value = false
         }
 
@@ -585,10 +594,10 @@ export default {
 
         const isEditingTimeBasedStep = computed({
             get: () => {
-                console.log(
-                    timeBasedSteps.value,
-                    selectedTimeBasedStep.value.stepId,
-                )
+                // console.log(
+                //     timeBasedSteps.value,
+                //     selectedTimeBasedStep.value.stepId,
+                // )
                 return timeBasedSteps.value?.find(
                     (x) => x.stepId === selectedTimeBasedStep.value.stepId,
                 )
