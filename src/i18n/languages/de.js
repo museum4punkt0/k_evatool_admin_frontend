@@ -135,6 +135,7 @@ export default {
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',
     validation_snake_case: 'Nur Kleinbuchstaben und "_"',
     videos: 'Videos | Video | Video',
+    video_not_yet_selected: 'Noch kein Video ausgewählt',
     viewport_incompatible:
         'Bitte benutzen Sie ein Gerät mit einer höheren Auflösung!',
     welcome: 'Willkommen',

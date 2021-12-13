@@ -1,9 +1,11 @@
 <template>
-    <div v-if="paramsLocal.videoAssetId === -1">video not yet selected</div>
+    <div v-if="paramsLocal.videoAssetId === -1" class="mt-8">
+        {{ t('video_not_yet_selected') }}
+    </div>
     <video
         v-else
         :key="`videopreview_${paramsLocal.videoAssetId}`"
-        class="rounded"
+        class="rounded mt-8"
         controls
     >
         <source
@@ -17,7 +19,13 @@
             "
         />
     </video>
-    <button class="primary" @click="setAssetSelectorModalOpen(true)">
+    <div class="text-sm">
+        {{
+            assets.find((item) => item.id === paramsLocal.videoAssetId)
+                ?.filename
+        }}
+    </div>
+    <button class="primary mt-4" @click="setAssetSelectorModalOpen(true)">
         {{ t('action_select') }}
     </button>
     <asset-selector-modal
