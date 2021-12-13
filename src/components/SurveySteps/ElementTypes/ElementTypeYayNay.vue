@@ -14,8 +14,21 @@
         v-model:text="paramsLocal.question[language.code]"
         class="my-3"
     />
+    <draggable v-model="paramsLocal.assetIds" class="flex flex-row mt-8 mb-3">
+        <template #item="{ element }">
+            <img
+                :key="`asset-${element}`"
+                class="rounded w-1/6 mr-3"
+                :src="assets.find((item) => item.id === element)?.urls.original"
+                @click="setAssetSelectorModalOpen(true)"
+            />
+        </template>
+    </draggable>
+    <button class="primary" @click="setAssetSelectorModalOpen(true)">
+        {{ t('button_choose_assets') }}
+    </button>
 
-    <div class="grid grid-cols-12 gap-4">
+    <div class="grid grid-cols-12 gap-4 mt-8">
         <form-input
             v-for="language in store.state.languages.languages.filter(
                 (item) => item.code === selectedLanguage.code,
@@ -52,19 +65,7 @@
             name="falseValue"
         />
     </div>
-    <draggable v-model="paramsLocal.assetIds" class="flex flex-row mt-3 mb-3">
-        <template #item="{ element }">
-            <img
-                :key="`asset-${element}`"
-                class="rounded w-1/6 mr-3"
-                :src="assets.find((item) => item.id === element)?.urls.original"
-                @click="setAssetSelectorModalOpen(true)"
-            />
-        </template>
-    </draggable>
-    <button class="primary" @click="setAssetSelectorModalOpen(true)">
-        {{ t('button_choose_assets') }}
-    </button>
+
     <asset-selector-modal
         :is-open="assetSelectorModalOpen"
         :selected-assets="paramsLocal.assetIds"
