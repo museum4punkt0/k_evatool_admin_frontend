@@ -8,7 +8,7 @@ export default {
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',
     action_confirm: 'Bestätigen',
-    action_copy_live_link: 'Live Link in die Zwischenablage kopieren',
+    action_copy_live_link: 'Link zur Umfrage in die Zwischenablage kopieren',
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
     action_export: 'Exportieren',

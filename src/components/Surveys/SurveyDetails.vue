@@ -8,8 +8,18 @@
         type="text"
         :label="t('names', 1)"
     />
+
+    <div class="mt-3">
+        <label>Url</label>
+        <div class="flex">
+            <span class="flex-grow">
+                {{ `${previewUrl}/#/?survey=${survey?.slug}` }}
+            </span>
+            <PencilIcon class="h-5 w-5" @click="setShowSlug(!showSlug)" />
+        </div>
+    </div>
     <form-input
-        v-if="survey.id"
+        v-if="showSlug && survey.id"
         v-model:value="survey.slug"
         name="slug"
         class="mt-3"
@@ -32,7 +42,7 @@
     />
     <!-- <label for="description">{{ t('descriptions', 1) }}</label> -->
     <!-- <tiny-mce v-model:text="survey.description" name="description" /> -->
-    <div class="flex flex-row">
+    <div class="flex flex-row mt-8">
         <action-button
             :action-text="t('action_cancel')"
             class="mr-2"
@@ -67,10 +77,19 @@ import DataViewer from '../Common/DataViewer.vue'
 import FormInput from '../Forms/FormInput.vue'
 import FormCheckbox from '../Forms/FormCheckbox.vue'
 import TinyMce from '../Common/TinyMce.vue'
+import { useState } from '../../composables/state'
+import { PencilIcon } from '@heroicons/vue/outline'
 
 export default {
     name: 'SurveyDetails',
-    components: { FormCheckbox, FormInput, ActionButton, DataViewer, TinyMce },
+    components: {
+        FormCheckbox,
+        FormInput,
+        ActionButton,
+        DataViewer,
+        TinyMce,
+        PencilIcon,
+    },
     props: {
         surveyId: { type: Number, default: -1 },
         resetAfterSave: { type: Boolean, default: true },
@@ -84,6 +103,8 @@ export default {
         })
         const surveyTitle = ref(t('new_survey'))
         const surveySaving = ref(false)
+        const previewUrl = `${import.meta.env.VITE_PREVIEW_URL}`
+        const [showSlug, setShowSlug] = useState(false)
 
         watch(
             () => props.surveyId,
@@ -135,6 +156,9 @@ export default {
             store,
             surveySaving,
             cancel,
+            previewUrl,
+            showSlug,
+            setShowSlug,
         }
     },
     validations: {
