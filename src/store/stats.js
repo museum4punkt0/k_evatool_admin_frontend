@@ -1,4 +1,4 @@
-import SURVEYSTATS_SERVICE from '../services/surveyStatsService'
+import SURVEY_STATS_SERVICE from '../services/surveyStatsService'
 import SURVEY_SERVICE from '../services/surveyService'
 
 const initialState = {
@@ -30,7 +30,7 @@ export default {
     },
     actions: {
         async getStats({ commit }, { surveyId, start, end, demo }) {
-            const stats = await SURVEYSTATS_SERVICE.getStats(
+            const stats = await SURVEY_STATS_SERVICE.getStats(
                 surveyId,
                 start,
                 end,
@@ -49,7 +49,7 @@ export default {
                 dispatch('clearResults')
                 page = 1
             }
-            const results = await SURVEYSTATS_SERVICE.getStatsList(
+            const results = await SURVEY_STATS_SERVICE.getStatsList(
                 surveyId,
                 start,
                 end,
@@ -72,7 +72,7 @@ export default {
             commit('setSurveySteps', surveySteps)
         },
         async getStatsTrend({ commit }, surveyId) {
-            const trend = await SURVEYSTATS_SERVICE.getStatsTrend(surveyId)
+            const trend = await SURVEY_STATS_SERVICE.getStatsTrend(surveyId)
             commit('setTrend', trend)
         },
     },

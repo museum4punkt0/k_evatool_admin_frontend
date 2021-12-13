@@ -55,4 +55,43 @@ export default {
                 return error.response
             })
     },
+    async exportStats(params, execute = false) {
+        if (execute) {
+            params.execute = true
+        } else {
+            delete params.exportType
+        }
+        let url = `evaluation-tool/surveys/${params.surveyId}/stats-export`
+
+        return axios
+            .post(url, params)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    async downloadExport(surveyId, params) {
+        let url = `evaluation-tool/surveys/${surveyId}/stats-download`
+
+        console.log(params)
+
+        const payload = {
+            filehash: params.hash,
+            filename: params.filename,
+        }
+
+        console.log(url)
+        console.log(payload)
+
+        return axios
+            .post(url, payload)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }
