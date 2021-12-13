@@ -37,6 +37,13 @@
             :label="t('binary_negative_label') + ' (' + language.title + ')'"
         />
     </div>
+    <!-- <button
+        class="mt-8 text-blue-800"
+        @click="setShowSystemValues(!showSystemValues)"
+    >
+        Werte/Bedeutungen ändern
+    </button> -->
+    <!-- <div v-if="showSystemValues" class="grid grid-cols-12 gap-4"> -->
     <div class="grid grid-cols-12 gap-4">
         <form-input
             v-model:value="paramsLocal.trueValue"
@@ -59,6 +66,7 @@
 import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
+import { useState } from '../../../composables/state'
 import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
@@ -82,6 +90,7 @@ export default {
         const selectedLanguage = ref(
             store.state.languages.languages.find((lang) => lang.default),
         )
+        const [showSystemValues, setShowSystemValues] = useState(false)
 
         const paramsLocal = computed({
             get: () => props.params,
@@ -153,6 +162,8 @@ export default {
             selectedLanguage,
             setSelectedLanguage,
             tinyMceKey,
+            showSystemValues,
+            setShowSystemValues,
         }
     },
 }
