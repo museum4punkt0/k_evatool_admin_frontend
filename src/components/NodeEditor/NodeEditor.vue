@@ -3,8 +3,6 @@
         ref="nodeEditor"
         class="node-editor-wrap relative bg-blue-300 rounded-lg"
         @mousemove="onMouseMove"
-        @mouseup.prevent.stop="onMouseUp"
-        @mouseleave="onMouseUp"
     >
         <div class="zoom-menu m-1 fixed bg-gray-500 bg-opacity-50 rounded-lg">
             <button
@@ -83,13 +81,16 @@
                 <div
                     class="node-content flex-grow"
                     @mousedown.prevent.stop="onMouseDown(step, $event)"
-                    @click.prevent.stop="selectSurveyStep(step.id)"
                 >
                     <div
                         class="pointer h-full flex-col items-center justify-center"
                     >
                         <div class="flex border-b-2">
                             <button
+                                v-if="
+                                    steps.find((item) => item.id === step.id)
+                                        ?.previousSteps.length === 0
+                                "
                                 class="w-10 pointer border-r-2"
                                 @click.prevent.stop="selectStart(step.id)"
                             >
@@ -168,7 +169,8 @@
                             <switch-horizontal-icon class="h-5 w-5" />
                         </span>
                     </button>
-                    <div
+                    <!--                    SKIP TOGGLE BUTTON / FUNCTION NOT IMPLEMENTED -->
+                    <!--                    <div
                         class="flex-1 pointer"
                         @click.prevent.stop="toggleSkippableStep(step.id)"
                     >
@@ -183,7 +185,15 @@
                                 }"
                             />
                         </div>
-                    </div>
+                    </div>-->
+                    <button
+                        class="flex-1 pointer"
+                        @click.prevent.stop="selectSurveyStep(step.id)"
+                    >
+                        <div class="flex h-full justify-center items-center">
+                            <PencilIcon class="h-4 w-4" />
+                        </div>
+                    </button>
                     <button
                         class="flex-1 pointer"
                         :class="{
@@ -447,7 +457,6 @@ export default {
         const selectSurveyStep = async (stepId) => {
             if (stepId !== store.state.surveys.surveyStepId) {
                 await deselectStep()
-                // Todo: Function is called everytime the button is clicked, even if disabled. Needs to be fixed.
                 await store.dispatch('surveys/setSurveyStepId', {
                     surveyId: props.surveyId,
                     surveyStepId: stepId,
@@ -460,7 +469,7 @@ export default {
         }
 
         /** MOUSEHANDLER **/
-        const onMouseDown = (step, e) => {
+        const onMouseDown = (step) => {
             draggedStep.value = step
         }
         const onMouseMove = (e) => {
@@ -481,6 +490,9 @@ export default {
 
         const onMouseUp = async () => {
             setCanvasSize()
+            if (store.state.surveys.surveyStepId !== -1) {
+                store.dispatch('surveys/unsetSurveyStepId')
+            }
             draggedStep.value = null
             debouncedAdminLayoutSaver()
         }
