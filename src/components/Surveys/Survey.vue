@@ -15,12 +15,14 @@
                     </span>
                 </div>
                 <div class="flex-grow items-center flex justify-end">
-                    <PencilIcon
-                        class="h-5 w-5 mr-2"
-                        @click="
-                            setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
-                        "
-                    />
+                    <button class="secondary mr-1">
+                        <PencilIcon
+                            class="h-5 w-5"
+                            @click="
+                                setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
+                            "
+                        />
+                    </button>
                     <button
                         class="secondary mr-1"
                         @click.prevent.stop="copyLiveLinkToClipboard"
