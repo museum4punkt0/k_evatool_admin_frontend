@@ -330,6 +330,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@popperjs/core@^2.9.2":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.0.tgz#6734f8ebc106a0860dff7f92bf90df193f0935d7"
+  integrity sha512-zrsUxjLOKAzdewIDRWy9nsV1GQsKBCWaGwsZQlCgr6/q+vjyZhFgqedLfFBuI9anTPEUT4APq9Mu0SZBTzIcGQ==
+
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@soda/friendly-errors-webpack-plugin/-/friendly-errors-webpack-plugin-1.8.1.tgz#4d4fbb1108993aaa362116247c3d18188a2c6c85"
@@ -2839,6 +2844,11 @@ dayjs@^1.10.4, dayjs@^1.10.7:
   version "1.10.7"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.7.tgz#2cf5f91add28116748440866a0a1d26f3a6ce468"
   integrity sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==
+
+debounce@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
+  integrity sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.9:
   version "2.6.9"
@@ -9265,6 +9275,14 @@ vue3-leaderline@^1.2.11:
   version "1.2.11"
   resolved "https://registry.yarnpkg.com/vue3-leaderline/-/vue3-leaderline-1.2.11.tgz#c3f9fac28363e30c861a3704c6e3b0c11ec9f5c3"
   integrity sha512-VeVpCchNR7p67wULGsHrwwdxLix25qGuw1fMrKjCrLEl+QDvW1PSCI1UsRLRuJ8tMNO5TrAta5fmURErPetQXA==
+
+vue3-popper@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/vue3-popper/-/vue3-popper-1.4.1.tgz#4fb4c67928acff0f671709a07ae7af6723f8e6c5"
+  integrity sha512-pmct5vumtvbK8MmUs4oFY+3Al1glU34QXWcIPK4WJhRo/Kp85kxD0j70cNofNBqHYwhY5D7xJ6Yhkwf/5x9w7Q==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+    debounce "^1.2.1"
 
 vue3-styled-components@^1.2.1:
   version "1.2.1"

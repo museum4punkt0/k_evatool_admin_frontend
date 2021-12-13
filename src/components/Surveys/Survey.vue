@@ -100,7 +100,6 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useState } from '../../composables/state'
-import Button from '../Common/Button.js'
 import SurveyElement from './SurveyElement.vue'
 import SurveyStep from './SurveyStep.vue'
 import SurveyDetails from './SurveyDetails.vue'
@@ -123,7 +122,6 @@ export default {
         TimeBasedStepsModal,
         SurveyDetails,
         SurveyStep,
-        Button,
         NodeEditor,
         NodeBrowser,
         EyeIcon,
