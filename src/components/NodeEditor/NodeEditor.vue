@@ -3,6 +3,8 @@
         ref="nodeEditor"
         class="node-editor-wrap relative bg-blue-300 rounded-lg"
         @mousemove="onMouseMove"
+        @mouseup="onMouseUp"
+        @mouseleave="onMouseUp"
     >
         <div class="zoom-menu m-1 fixed bg-gray-500 bg-opacity-50 rounded-lg">
             <button
@@ -489,11 +491,13 @@ export default {
         }, 2000)
 
         const onMouseUp = async () => {
-            setCanvasSize()
-            if (store.state.surveys.surveyStepId !== -1) {
-                store.dispatch('surveys/unsetSurveyStepId')
+            if (draggedStep.value) {
+                setCanvasSize()
+                if (store.state.surveys.surveyStepId !== -1) {
+                    store.dispatch('surveys/unsetSurveyStepId')
+                }
+                draggedStep.value = null
             }
-            draggedStep.value = null
             debouncedAdminLayoutSaver()
         }
 
