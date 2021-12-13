@@ -15,11 +15,11 @@
                 name="surveyStep"
             />
 
-            <form-toggle
+            <!-- <form-toggle
                 v-model:enabled="surveyStep.allowSkip"
                 class="mt-3 mb-3"
                 :label="t('allow_skip')"
-            />
+            /> -->
 
             <div class="flex flex-row">
                 <form-select
