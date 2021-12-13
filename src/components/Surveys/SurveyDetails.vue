@@ -172,7 +172,7 @@ export default {
             },
             languages: {
                 required,
-                minLength: minLength(0),
+                minLength: minLength(1),
             },
         },
     },
