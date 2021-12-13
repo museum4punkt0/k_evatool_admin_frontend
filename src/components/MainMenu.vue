@@ -16,18 +16,7 @@
                     v-for="item in sidebarNavigation"
                     :key="item.name"
                     :to="item.href"
-                    class="
-                        text-blue-100
-                        hover:bg-blue-800 hover:text-white
-                        group
-                        w-full
-                        p-3
-                        rounded-md
-                        flex flex-col
-                        items-center
-                        text-xs
-                        font-medium
-                    "
+                    class="text-blue-100 hover:bg-blue-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium"
                     :aria-current="item.current ? 'page' : undefined"
                 >
                     <component
@@ -68,15 +57,7 @@
                     leave-to="-translate-x-full"
                 >
                     <div
-                        class="
-                            relative
-                            max-w-xs
-                            w-full
-                            bg-blue-700
-                            pt-5
-                            pb-4
-                            flex-1 flex flex-col
-                        "
+                        class="relative max-w-xs w-full bg-blue-700 pt-5 pb-4 flex-1 flex flex-col"
                     >
                         <TransitionChild
                             as="template"
@@ -90,17 +71,7 @@
                             <div class="absolute top-1 right-0 -mr-14 p-1">
                                 <button
                                     type="button"
-                                    class="
-                                        h-12
-                                        w-12
-                                        rounded-full
-                                        flex
-                                        items-center
-                                        justify-center
-                                        focus:outline-none
-                                        focus:ring-2
-                                        focus:ring-white
-                                    "
+                                    class="h-12 w-12 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white"
                                     @click="mobileMenuOpen = false"
                                 >
                                     <XIcon
@@ -145,7 +116,9 @@
                                             ]"
                                             aria-hidden="true"
                                         />
-                                        <span>{{ item.name }}</span>
+                                        <span class="text-center">
+                                            {{ item.name }}
+                                        </span>
                                     </a>
                                 </div>
                             </nav>

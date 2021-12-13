@@ -65,8 +65,10 @@ export default {
     last_login: 'Letzter Login',
     loading_app: 'App wird geladen',
     login: 'Log-In',
-    max_selectable: 'Max. zu wählen',
-    min_selectable: 'Mind. zu wählen',
+    headline_selectable:
+        'Wieviele Auswahlmöglichkeiten müssen ausgewählt werden?',
+    max_selectable: 'Max',
+    min_selectable: 'Min',
     meanings: 'Bedeutungen | Bedeutung | Bedeutungen',
     meaning_middle_value: 'Bedeutung mittlerer Wert',
     meaning_lowest_value: 'Bedeutung kleinster Wert',

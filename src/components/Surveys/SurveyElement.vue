@@ -80,7 +80,7 @@
         />
     </div>
 
-    <div class="flex flex-row">
+    <div class="flex flex-row mt-8">
         <action-button
             color="secondary"
             class="mr-2 p-2"

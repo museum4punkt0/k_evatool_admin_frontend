@@ -60,6 +60,9 @@
         <PlusIcon class="mx-1 h-5 w-5 pointer" />
     </button>
 
+    <div class="mt-8">
+        {{ t('headline_selectable') }}
+    </div>
     <div class="grid grid-cols-2 gap-4">
         <form-input
             v-model:value="paramsLocal.minSelectable"
