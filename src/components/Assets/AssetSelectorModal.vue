@@ -101,7 +101,7 @@
                                             />
                                         </video>
                                         <button
-                                            class="mt-1 text-left break-all"
+                                            class="mt-1 text-ellipsis break-all text-left"
                                             @click="selectAsset(asset.id)"
                                         >
                                             <input

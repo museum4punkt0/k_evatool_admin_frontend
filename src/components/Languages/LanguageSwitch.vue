@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="rounded overflow-hidden flex flex-row">
+        <div class="rounded flex flex-row">
             <button
-                v-for="language in languages"
+                v-for="(language, index) in languages"
                 :key="language.id"
-                class="text-white px-2 py-1 text-sm flex-auto pointer"
+                class="text-white px-2 py-1 text-sm flex-auto pointer my-1"
                 :class="{
                     primary:
                         activeLanguage.code === language.code &&
@@ -18,6 +18,7 @@
                     'bg-red-700':
                         activeLanguage.code !== language.code &&
                         isInvalid.includes(language.code),
+                    'mr-1': languages.length - 1 !== index,
                 }"
                 @click="selectLanguage(language)"
             >

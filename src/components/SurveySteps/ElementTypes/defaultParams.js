@@ -65,6 +65,7 @@ export default (type, languages) => {
                 option['labels'][language.code] = ''
             })
             options.push(option)
+            options.push(option)
             return {
                 question,
                 minSelectable: 1,
