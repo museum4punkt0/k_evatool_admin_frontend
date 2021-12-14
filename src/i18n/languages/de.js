@@ -130,6 +130,8 @@ export default {
         'Zeitbasierte Schritte | Zeitbasierter Schritt | Zeitbasierte Schritte',
     titles: 'Titel | Titel | Titel',
     to: 'bis',
+    tooltip_set_start: 'Startelement festlegen',
+    tooltip_edit_step: 'Schritt bearbeiten',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',

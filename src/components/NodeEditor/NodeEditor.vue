@@ -96,22 +96,24 @@
                                 class="w-10 pointer border-r-2"
                                 @click.prevent.stop="selectStart(step.id)"
                             >
-                                <ToolTip content="Start festlegen">
-                                    <div
-                                        class="flex h-full justify-center items-center"
-                                    >
-                                        <StarIcon
-                                            :class="
-                                                steps?.find(
-                                                    (x) => x?.id === step?.id,
-                                                )?.isFirstStep
-                                                    ? 'text-yellow-400'
-                                                    : 'text-gray-400'
-                                            "
-                                            class="h-5 w-5"
-                                        />
-                                    </div>
-                                </ToolTip>
+                                <div
+                                    v-tippy="{
+                                        content: t('tooltip_set_start'),
+                                    }"
+                                    class="flex h-full justify-center items-center"
+                                    content="hello"
+                                >
+                                    <StarIcon
+                                        :class="
+                                            steps?.find(
+                                                (x) => x?.id === step?.id,
+                                            )?.isFirstStep
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-400'
+                                        "
+                                        class="h-5 w-5"
+                                    />
+                                </div>
                             </button>
                             <div
                                 class="flex-grow font-bold text-center p-2 break-all"
@@ -164,19 +166,18 @@
                             <ClockIcon class="h-5 w-5" />
                         </span>
                     </button>
-                    <ToolTip content="antwort abhaengige naechste Schritte">
-                        <button
-                            class="flex-1 disabled:opacity-25"
-                            :disabled="hasResultBasedNextStepsButton(step)"
-                            @click.prevent.stop="openResultBasedModal(step.id)"
-                        >
-                            <span
-                                class="flex h-full justify-center items-center"
-                            >
-                                <switch-horizontal-icon class="h-5 w-5" />
-                            </span>
-                        </button>
-                    </ToolTip>
+                    <button
+                        v-tippy="{
+                            content: t('tooltip_start_element'),
+                        }"
+                        class="flex-1 disabled:opacity-25"
+                        :disabled="hasResultBasedNextStepsButton(step)"
+                        @click.prevent.stop="openResultBasedModal(step.id)"
+                    >
+                        <span class="flex h-full justify-center items-center">
+                            <switch-horizontal-icon class="h-5 w-5" />
+                        </span>
+                    </button>
                     <!--                    SKIP TOGGLE BUTTON / FUNCTION NOT IMPLEMENTED -->
                     <!--                    <div
                         class="flex-1 pointer"
@@ -195,6 +196,9 @@
                         </div>
                     </div>-->
                     <button
+                        v-tippy="{
+                            content: t('tooltip_edit_step'),
+                        }"
                         class="flex-1 pointer"
                         @click.prevent.stop="selectSurveyStep(step.id)"
                     >
@@ -253,7 +257,6 @@ import { StarIcon } from '@heroicons/vue/solid'
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 import ResultBasedStepsModal from '../Surveys/resultBasedNextSteps/ResultBasedStepsModal.vue'
 import ElementContent from './ElementContent.vue'
-import ToolTip from '../Common/ToolTip.vue'
 
 import SURVEYS from '../../services/surveyService'
 
@@ -273,7 +276,6 @@ export default {
         ElementContent,
         ZoomInIcon,
         ZoomOutIcon,
-        ToolTip,
     },
     props: {
         steps: {
