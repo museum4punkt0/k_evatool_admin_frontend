@@ -40,6 +40,7 @@
             :label="t('emojis')"
         /> -->
         <VuemojiPicker
+            :i18n="i18nDe"
             :picker-style="pickerStyle"
             :is-dark="false"
             @emojiClick="handleEmojiClick"
@@ -76,6 +77,7 @@ import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import FormSelectEmoji from '../../Forms/FormSelectEmoji.vue'
 import { VuemojiPicker } from 'vuemoji-picker'
+import i18nDe from 'emoji-picker-element/i18n/de'
 
 import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
@@ -238,6 +240,7 @@ export default {
             tinyMceKey,
             handleEmojiClick,
             pickerStyle,
+            i18nDe,
         }
     },
 }
