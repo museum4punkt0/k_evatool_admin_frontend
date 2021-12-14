@@ -168,6 +168,11 @@ export default {
                         required,
                         between: between(3, 9),
                     },
+                    displayType: {
+                        required,
+                        isDisplayType: (value) =>
+                            ['grades', 'stars', 'neutral'].includes(value),
+                    },
                     meaningLowestValue: {
                         required,
                         minLength: minLength(1),
