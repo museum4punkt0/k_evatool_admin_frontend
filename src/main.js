@@ -45,7 +45,7 @@ app.use(
         defaultProps: {
             placement: 'auto-end',
             allowHTML: true,
-            delay: [1000, 0],
+            delay: [500, 0],
         }, // => Global default options * see all props
         popperOptions: {
             strategy: 'fixed',

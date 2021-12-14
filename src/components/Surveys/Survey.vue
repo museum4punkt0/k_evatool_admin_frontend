@@ -15,7 +15,12 @@
                     </span>
                 </div>
                 <div class="flex-grow items-center flex justify-end">
-                    <button class="secondary mr-1">
+                    <button
+                        v-tippy="{
+                            content: t('action_edit_survey_meta'),
+                        }"
+                        class="secondary mr-1"
+                    >
                         <PencilIcon
                             class="h-5 w-5"
                             @click="
@@ -24,38 +29,37 @@
                         />
                     </button>
                     <button
+                        v-tippy="{
+                            content: t('action_copy_live_link'),
+                        }"
                         class="secondary mr-1"
                         @click.prevent.stop="copyLiveLinkToClipboard"
                     >
                         <clipboard-copy-icon
-                            class="h-5 w-5 mr-2 pointer"
+                            class="h-5 w-5 pointer"
                             @click="
                                 setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
                             "
                         />
-                        {{ t('action_copy_live_link') }}
                     </button>
                     <button
+                        v-tippy="{
+                            content: t('action_show_results'),
+                        }"
                         class="secondary mr-1"
                         @click.prevent.stop="showSurveyResults(survey)"
                     >
-                        <ChartBarIcon class="mx-1 h-5 w-5 pointer" />
-                        {{ t('action_show_results') }}
+                        <ChartBarIcon class="h-5 w-5 pointer" />
                     </button>
                     <button
+                        v-tippy="{
+                            content: t('action_open_preview'),
+                        }"
                         class="secondary mr-1"
                         @click.prevent.stop="previewSurvey(survey)"
                     >
-                        <EyeIcon class="h-5 w-5 mr-2 pointer" />
-                        {{ t('action_open_preview') }}
+                        <EyeIcon class="h-5 w-5 pointer" />
                     </button>
-                    <!-- <button
-                        class="primary"
-                        :disabled="store.state.surveys.surveyStep"
-                        @click="newSurveyStep"
-                    >
-                        {{ t('action_add_survey_step') }}
-                    </button> -->
                 </div>
             </div>
 
