@@ -57,12 +57,14 @@ export default {
     filetype: 'Dateityp',
     finished_at: 'Beendet&nbsp;am',
     from: 'von',
+    headline_timebased_steps_modal: 'Video bearbeiten',
     hello: 'Hallo Welt!',
     hint_password_requirements: 'Mind. 12 Zeichen',
     id: 'ID',
     label_middle_value: 'Beschriftung mittlerer Wert',
     label_lowest_value: 'Beschriftung kleinster Wert',
     label_highest_value: 'Beschriftung größter Wert',
+    label_timestamp_value: 'Zeitpunkt im Video',
     language_default: 'Standardsprache',
     languages: 'Sprachen | Sprache | Sprachen',
     last_login: 'Letzter Login',
@@ -121,6 +123,11 @@ export default {
     stats_export: 'Statistik-Export',
     steps: 'Schritte | Schritt | Schritte',
     stops_video: 'Stoppt das Video',
+    sub_headline_add_timebase_step:
+        'Zeitbasierte Schritte zum Video hinzufügen',
+    sub_headline_change_timebase_step:
+        'Zeitbasierte Schritte zum Video bearbeiten',
+    sub_headline_trim_video: 'Video trimmen',
     success_confirm_password: 'Passwort erfolgreich gespeichert.',
     surveys: 'Umfragen | Umfrage | Umfragen',
     surveys_completed:
