@@ -24,7 +24,7 @@
                         :class="['h-6 w-6']"
                         aria-hidden="true"
                     />
-                    <span class="mt-2">{{ item.name }}</span>
+                    <span class="mt-2 text-center">{{ item.name }}</span>
                 </router-link>
             </div>
         </div>
