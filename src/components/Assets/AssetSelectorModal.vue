@@ -68,6 +68,9 @@
                                     class="w-1/4 p-4"
                                 >
                                     <div
+                                        v-tippy="{
+                                            content: asset.filename,
+                                        }"
                                         class="flex flex-col p-1 rounded"
                                         :class="
                                             selectedAssets.includes(asset.id)
