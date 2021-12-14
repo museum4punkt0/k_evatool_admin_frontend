@@ -14,7 +14,10 @@
         v-model:text="paramsLocal.question[language.code]"
         class="my-3"
     />
-    <draggable v-model="paramsLocal.assetIds" class="flex flex-row mt-8 mb-3">
+    <draggable
+        v-model="paramsLocal.assetIds"
+        class="flex flex-row mt-8 mb-3 overflow-x-scroll"
+    >
         <template #item="{ element }">
             <img
                 :key="`asset-${element}`"
