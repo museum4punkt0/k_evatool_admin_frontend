@@ -196,6 +196,15 @@ export default {
             },
         )
 
+        watch(
+            () => paramsLocal.value.displayType,
+            (value) => {
+                if (value === 'grades') {
+                    paramsLocal.value.numberOfStars = 6
+                }
+            },
+        )
+
         return {
             selectedLanguage,
             setSelectedLanguage,
