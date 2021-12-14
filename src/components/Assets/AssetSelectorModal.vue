@@ -101,17 +101,24 @@
                                             />
                                         </video>
                                         <button
-                                            class="mt-1"
-                                            :class="
-                                                selectedAssets.includes(
-                                                    asset.id,
-                                                )
-                                                    ? 'secondary'
-                                                    : 'primary'
-                                            "
+                                            class="mt-1 text-left"
                                             @click="selectAsset(asset.id)"
                                         >
-                                            {{ asset.filename }}
+                                            <input
+                                                type="checkbox"
+                                                :checked="
+                                                    selectedAssets.includes(
+                                                        asset.id,
+                                                    )
+                                                "
+                                            />
+
+                                            {{
+                                                asset.filename
+                                                    .split('.')
+                                                    .slice(0, -1)
+                                                    .join('.')
+                                            }}
                                         </button>
                                     </div>
                                 </div>
