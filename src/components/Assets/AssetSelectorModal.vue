@@ -105,12 +105,12 @@
                                             @click="selectAsset(asset.id)"
                                         >
                                             <input
+                                                type="checkbox"
                                                 :checked="
                                                     selectedAssets.includes(
                                                         asset.id,
                                                     )
                                                 "
-                                                type="checkbox"
                                             />
 
                                             {{
