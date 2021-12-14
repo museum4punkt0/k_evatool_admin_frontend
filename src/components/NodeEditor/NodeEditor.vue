@@ -98,7 +98,7 @@
                             >
                                 <div
                                     v-tippy="{
-                                        content: t('tooltip_set_start'),
+                                        content: t('tooltip_set_start_step'),
                                     }"
                                     class="flex h-full justify-center items-center"
                                     content="hello"
@@ -139,6 +139,9 @@
                 </div>
                 <div class="flex flex-col w-9 border-l">
                     <button
+                        v-tippy="{
+                            content: t('tooltip_set_previous_step'),
+                        }"
                         class="flex-1 w-8 pointer disabled:opacity-50"
                         :class="{
                             'bg-blue-200': step.id === selectedInput,
@@ -155,6 +158,9 @@
                     </button>
 
                     <button
+                        v-tippy="{
+                            content: t('tooltip_set_timebased_steps'),
+                        }"
                         class="flex-1 disabled:opacity-25"
                         :disabled="
                             steps.find((x) => x.id === step.id)
@@ -168,7 +174,7 @@
                     </button>
                     <button
                         v-tippy="{
-                            content: t('tooltip_start_element'),
+                            content: t('tooltip_set_resultbased_steps'),
                         }"
                         class="flex-1 disabled:opacity-25"
                         :disabled="hasResultBasedNextStepsButton(step)"
@@ -207,6 +213,9 @@
                         </div>
                     </button>
                     <button
+                        v-tippy="{
+                            content: t('tooltip_set_next_step'),
+                        }"
                         class="flex-1 pointer"
                         :class="{
                             'bg-blue-200': step.id === selectedOutput,
