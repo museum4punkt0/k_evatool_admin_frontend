@@ -51,12 +51,19 @@ export default {
     },
     emits: ['update:value'],
     setup(props, { emit }) {
-        const valueLocal = ref([])
+        const valueLocal = ref([...props.value])
 
         watch(
             () => valueLocal,
             () => {
                 emit('update:value', valueLocal)
+            },
+            { deep: true },
+        )
+        watch(
+            () => props.value,
+            () => {
+                valueLocal.value = props.value
             },
             { deep: true },
         )
