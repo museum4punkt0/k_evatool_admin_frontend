@@ -20,6 +20,19 @@
         class="mt-3"
         :label="t('number_of_stars')"
     />
+    <form-select
+        v-model:selected="paramsLocal.displayType"
+        class="mt-3"
+        :options="[
+            { name: t('star_rating_type_stars'), id: 'stars' },
+            { name: t('star_rating_type_grades'), id: 'grades' },
+            { name: t('star_rating_type_neutral'), id: 'neutral' },
+        ]"
+        :label="t('star_rating_display_types', 1)"
+        title-key="name"
+        value-key="id"
+        readonly
+    />
 
     <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
@@ -85,6 +98,7 @@ import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
 import FormInput from '../../Forms/FormInput.vue'
 import FormToggle from '../../Forms/FormToggle.vue'
+import FormSelect from '../../Forms/FormSelect.vue'
 import TinyMce from '../../Common/TinyMce.vue'
 import { useStore } from 'vuex'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
@@ -99,7 +113,7 @@ import {
 
 export default {
     name: 'ElementTypeStarRating',
-    components: { TinyMce, FormToggle, FormInput, LanguageSwitch },
+    components: { TinyMce, FormToggle, FormInput, FormSelect, LanguageSwitch },
     props: {
         params: {
             type: Object,
