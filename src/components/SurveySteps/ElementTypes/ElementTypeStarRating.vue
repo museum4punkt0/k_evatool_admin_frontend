@@ -12,6 +12,7 @@
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
+        :invalid="validateParams.question[language.code].$invalid"
     />
 
     <form-input
@@ -19,6 +20,7 @@
         name="numberOfStars"
         class="mt-3"
         :label="t('number_of_stars')"
+        :invalid="validateParams.numberOfStars.$invalid"
     />
     <form-select
         v-model:selected="paramsLocal.displayType"
@@ -32,8 +34,10 @@
         title-key="name"
         value-key="id"
         readonly
+        :invalid="validateParams.displayType.$invalid"
     />
 
+    <!-- validateParams.lowestValueLabel.$dirty && -->
     <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -41,9 +45,11 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.lowestValueLabel[language.code]"
-            name="meaningLowestValue"
+            name="lowestValueLabel"
             :label="t('label_lowest_value')"
             class="col-span-4"
+            :invalid="validateParams.lowestValueLabel[language.code].$invalid"
+            @change="() => validateParams.lowestValueLabel.$touch()"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -51,9 +57,10 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.middleValueLabel[language.code]"
-            name="meaningHighestValue"
+            name="middleValueLabel"
             :label="t('label_middle_value')"
             class="col-span-4"
+            :invalid="validateParams.middleValueLabel[language.code].$invalid"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -61,9 +68,10 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.highestValueLabel[language.code]"
-            name="meaningHighestValue"
+            name="highestValueLabel"
             :label="t('label_highest_value')"
             class="col-span-4"
+            :invalid="validateParams.highestValueLabel[language.code].$invalid"
         />
     </div>
 
@@ -74,6 +82,7 @@
                 name="meaningLowestValue"
                 :label="t('meaning_lowest_value')"
                 class="col-span-6"
+                :invalid="validateParams.meaningLowestValue.$invalid"
             />
             <p class="text-xs text-gray-500 ml-1 mt-1">
                 {{ t('validation_snake_case') }}
@@ -85,12 +94,24 @@
                 name="meaningHighestValue"
                 :label="t('meaning_highest_value')"
                 class="col-span-6"
+                :invalid="validateParams.meaningHighestValue.$invalid"
             />
             <p class="text-xs text-gray-500 ml-1 mt-1">
                 {{ t('validation_snake_case') }}
             </p>
         </div>
     </div>
+
+    <!-- <pre v-if="validateParams.$invalid">
+    {{
+            validateParams.$silentErrors.map((error) => {
+                return {
+                    property: error.$property,
+                    message: error.$message,
+                }
+            })
+        }}
+    </pre> -->
 </template>
 
 <script>
