@@ -33,30 +33,15 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <div
-                            class="
-                                inline-block
-                                max-w-2xl
-                                p-6
-                                my-8
-                                overflow-hidden
-                                text-left
-                                align-middle
-                                transition-all
-                                transform
-                                bg-white
-                                shadow-xl
-                                rounded-2xl
-                            "
+                            class="inline-block max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+                            :style="{
+                                minWidth: '60%',
+                            }"
                         >
                             <div class="flex justify-between">
                                 <DialogTitle
                                     as="h3"
-                                    class="
-                                        text-lg
-                                        font-medium
-                                        leading-6
-                                        text-gray-900 text-capitalize
-                                    "
+                                    class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
                                 >
                                     {{ t('assets', 2) }}
                                 </DialogTitle>
@@ -80,7 +65,7 @@
                                         )
                                     })"
                                     :key="'asset-' + asset.id"
-                                    class="w-1/2"
+                                    class="w-1/4 p-4"
                                 >
                                     <div
                                         class="flex flex-col p-1 rounded"
@@ -96,12 +81,7 @@
                                             "
                                             :src="asset.urls.original"
                                             alt="Avatar"
-                                            class="
-                                                object-cover
-                                                w-full
-                                                h-full
-                                                pointer
-                                            "
+                                            class="object-cover w-full h-full pointer"
                                             @click="selectAsset(asset.id)"
                                         />
 

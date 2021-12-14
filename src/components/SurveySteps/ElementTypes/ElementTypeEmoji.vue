@@ -33,7 +33,7 @@
         </table>
     </div>
 
-    <div class="p-2 bg-blue-200 rounded-lg mt-3">
+    <div class="p-2 rounded-lg mt-3">
         <!-- <form-select-emoji
             v-model:selected="selectedEmoji.type"
             name="emoji"
