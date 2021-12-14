@@ -101,16 +101,16 @@
                                             />
                                         </video>
                                         <button
-                                            class="mt-1 text-left"
+                                            class="mt-1 text-ellipsis break-all text-left"
                                             @click="selectAsset(asset.id)"
                                         >
                                             <input
-                                                type="checkbox"
                                                 :checked="
                                                     selectedAssets.includes(
                                                         asset.id,
                                                     )
                                                 "
+                                                type="checkbox"
                                             />
 
                                             {{
