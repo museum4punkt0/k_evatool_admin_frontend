@@ -40,7 +40,7 @@
                                     as="h3"
                                     class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
                                 >
-                                    {{ t('time_based_steps', 2) }}
+                                    {{ t('headline_timebased_steps_modal') }}
                                 </DialogTitle>
                                 <x-icon
                                     class="h-6 w-6 pointer"
@@ -62,13 +62,26 @@
                                 >
                                     <source
                                         :type="asset.mime"
-                                        :src="asset.urls.original"
+                                        :src="
+                                            asset.urls.original +
+                                            '#t=' +
+                                            convertTimecodeToSeconds(
+                                                selectedTimecodes.startTimecode,
+                                            ) +
+                                            ',' +
+                                            convertTimecodeToSeconds(
+                                                selectedTimecodes.stopTimecode,
+                                            )
+                                        "
                                     />
                                 </video>
 
                                 <div v-if="videoDuration" class="my-3">
-                                    <div class="flex">
-                                        <div class="flex mr-5 items-end">
+                                    <h4 class="my-2">
+                                        {{ t('sub_headline_trim_video') }}
+                                    </h4>
+                                    <div class="flex justify-between">
+                                        <div class="flex items-end">
                                             <form-input
                                                 v-model:value="
                                                     selectedTimecodes.startTimecode
@@ -194,6 +207,11 @@
                                                                 "
                                                                 class="h-5 w-5"
                                                             />
+                                                            <span v-else>
+                                                                {{
+                                                                    timeBasedStep.displayTime
+                                                                }}s
+                                                            </span>
                                                         </div>
                                                         <div
                                                             class="mx-1 pointer text-blue-800"
@@ -227,6 +245,25 @@
                                 </div>
 
                                 <div class="w-full bg-blue-200 p-2 rounded-lg">
+                                    <h4 class="mb-3">
+                                        {{
+                                            t(
+                                                isEditingTimeBasedStep
+                                                    ? 'sub_headline_change_timebase_step'
+                                                    : 'sub_headline_add_timebase_step',
+                                            )
+                                        }}
+                                    </h4>
+                                    <form-input
+                                        v-model:value="
+                                            selectedTimeBasedStep.timecode
+                                        "
+                                        :invalid="v$.timecode.$invalid"
+                                        class="mb-3"
+                                        :placeholder="t('timestamps', 1)"
+                                        :label="t('timestamps', 1)"
+                                        name="timecode"
+                                    />
                                     <form-select
                                         v-if="!isEditingTimeBasedStep"
                                         v-model:selected="
@@ -266,16 +303,6 @@
                                             }}
                                         </h2>
                                     </template>
-                                    <form-input
-                                        v-model:value="
-                                            selectedTimeBasedStep.timecode
-                                        "
-                                        :invalid="v$.timecode.$invalid"
-                                        class="mt-3"
-                                        :placeholder="t('timestamps', 1)"
-                                        :label="t('timestamps', 1)"
-                                        name="timecode"
-                                    />
                                     <form-input
                                         v-model:value="
                                             selectedTimeBasedStep.description
@@ -364,19 +391,14 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue'
-
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import FormToggle from '../Forms/FormToggle.vue'
 import { useI18n } from 'vue-i18n'
 import FormInput from '../Forms/FormInput.vue'
 import FormSelect from '../Forms/FormSelect.vue'
-
 import { v4 as uuidv4 } from 'uuid'
-
-import SURVEYS from '../../services/surveyService'
 import ASSETS from '../../services/assetService'
-
 import {
     PencilAltIcon,
     StopIcon,
@@ -706,6 +728,16 @@ export default {
             set: () => {},
         })
 
+        const convertTimecodeToSeconds = (timecode) => {
+            const timecodeParts = timecode.split(':')
+            let hours = parseInt(timecodeParts[0])
+            let minutes = parseInt(timecodeParts[1])
+            let seconds = parseInt(timecodeParts[2])
+            let ms = parseInt(timecodeParts[3])
+
+            return seconds + minutes * 60 + hours * 60 * 60 + '.' + ms
+        }
+
         return {
             v$: useVuelidate(validations, selectedTimeBasedStep, {
                 scope: 'timeBaseSteps',
@@ -724,6 +756,7 @@ export default {
             timeBasedSteps,
             initTimecodes,
             addTimeBasedStep,
+            convertTimecodeToSeconds,
             setTimecode,
             resetTimecode,
             deleteTimeBasedStep,
