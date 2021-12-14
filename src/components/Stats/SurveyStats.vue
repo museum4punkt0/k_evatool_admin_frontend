@@ -114,7 +114,7 @@ separator=" to "
                                 {{
                                     moment(result.lastResultTimestamp)
                                         .locale('de')
-                                        .format('LLLL')
+                                        .format('DD.MM.YYYY')
                                 }}
                                 <span
                                     v-if="store.state.users.user.admin"
