@@ -4,7 +4,9 @@
         :active-language="selectedLanguage"
         @select="setSelectedLanguage($event)"
     />
-    <label>{{ t('questions', 1) }}</label>
+    <label class="my-2">
+        {{ t('questions', 1) }} ({{ selectedLanguage.title }})
+    </label>
 
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
@@ -12,6 +14,7 @@
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
+        :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
     />
 
     <div class="grid grid-cols-1 divide-y divide-gray-300">
@@ -23,12 +26,17 @@
                 <div class="rounded flex flex-row">
                     <form-input
                         v-model:value="paramsLocal.options[index]['value']"
+                        :invalid="
+                            v$.options?.$each?.$response?.$data[index]?.value
+                                ?.$invalid
+                        "
                         :name="'system_value_' + index"
                         class="flex-auto rounded-tl-none"
                         :label="`${t('system_value')} ${index + 1}`"
                     />
                     <button
-                        class="danger flex-1 mt-6 rounded-tl-none:important"
+                        class="danger flex-1 mt-6 rounded-tl-none:important ml-1"
+                        :disabled="paramsLocal.options.length <= 2"
                         @click="removeOption(option, index)"
                     >
                         <TrashIcon class="mx-1 h-5 w-5 pointer" />
@@ -45,6 +53,10 @@
                         :key="'option_lang' + language.id"
                         v-model:value="
                             paramsLocal.options[index]['labels'][language.code]
+                        "
+                        :invalid="
+                            !v$.options?.$each?.$response?.$data[index]?.labels
+                                ?.validateLanguageLabel[language.code]
                         "
                         :name="'option_lang_' + index"
                         class="mt-3"
@@ -66,12 +78,14 @@
     <div class="grid grid-cols-2 gap-4">
         <form-input
             v-model:value="paramsLocal.minSelectable"
+            :invalid="v$.minSelectable.$invalid"
             class="mt-3"
             :label="t('min_selectable')"
             name="minSelectable"
         />
         <form-input
             v-model:value="paramsLocal.maxSelectable"
+            :invalid="v$.maxSelectable.$invalid"
             class="mt-3"
             :label="t('max_selectable')"
             name="maxSelectable"
@@ -84,8 +98,12 @@ import { useStore } from 'vuex'
 import FormInput from '../../Forms/FormInput.vue'
 import { useI18n } from 'vue-i18n'
 import { computed, ref, watch } from 'vue'
+import _ from 'lodash'
+
 import useVuelidate from '@vuelidate/core'
-import { required, between } from '@vuelidate/validators'
+import { required, between, helpers, maxValue } from '@vuelidate/validators'
+const snakeCaseValidator = helpers.regex(/^[a-z]+(?:[_][a-z]+)*$/)
+
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
@@ -93,7 +111,13 @@ import TinyMce from '../../Common/TinyMce.vue'
 
 export default {
     name: 'ElementTypeMultipleChoiceQuestion',
-    components: { TinyMce, LanguageSwitch, FormInput, TrashIcon, PlusIcon },
+    components: {
+        TinyMce,
+        LanguageSwitch,
+        FormInput,
+        TrashIcon,
+        PlusIcon,
+    },
     props: {
         params: {
             type: Object,
@@ -115,21 +139,24 @@ export default {
         })
 
         const addOption = () => {
-            // TODO: how to mutate computed property
+            const langObj = Object.fromEntries(
+                store.state.languages.languages.map((lang) => {
+                    return [[lang.code], '']
+                }),
+            )
             const newParams = {
                 ...paramsLocal.value,
                 options: [
                     ...paramsLocal.value.options,
                     {
                         value: '',
-                        labels: {},
+                        labels: langObj,
                     },
                 ],
             }
             emit('update:params', newParams)
         }
         const removeOption = (option, index) => {
-            // TODO: how to mutate computed property
             const options = [...paramsLocal.value.options]
             options.splice(index, 1)
             const newParams = {
@@ -143,12 +170,23 @@ export default {
             selectedLanguage.value = language
         }
 
+        const validateLanguageLabel = (object) => {
+            const newObject = Object.assign({}, object)
+            for (const [key, value] of Object.entries(object)) {
+                newObject[key] = !!value
+            }
+            return newObject
+        }
+
         const validations = computed({
             get: () => {
                 return {
                     minSelectable: {
                         required,
-                        between: between(1, paramsLocal.value.options.length),
+                        maxValue: maxValue(
+                            paramsLocal.value.options.length - 1,
+                        ),
+                        between: between(1, paramsLocal.value.maxSelectable),
                     },
                     maxSelectable: {
                         required,
@@ -157,41 +195,21 @@ export default {
                             paramsLocal.value.options.length,
                         ),
                     },
-                    options: {
+                    question: {
                         required,
-                        values: (options) => {
-                            let valid = true
-                            options.forEach((option) => {
-                                if (!option['value']) {
-                                    valid = false
-                                }
-                            })
-                            return valid
-                        },
-                        labels: (options) => {
-                            let valid = true
-                            options.forEach((option) => {
-                                if (!option['labels']) {
-                                    return false
-                                }
-                                // TODO: check published
-                                // if (
-                                //     !option['labels'].length !==
-                                //     store.state.languages.languages.length
-                                // ) {
-                                //     return false
-                                // }
-                                Object.entries(option['labels']).forEach(
-                                    (entry) => {
-                                        // TODO: check language key
-                                        if (entry[1].length === 0) {
-                                            valid = false
-                                        }
-                                    },
-                                )
-                            })
-                            return valid
-                        },
+                        validateLanguageLabel,
+                    },
+                    options: {
+                        $each: helpers.forEach({
+                            value: {
+                                required,
+                                snakeCaseValidator,
+                            },
+                            labels: {
+                                required,
+                                validateLanguageLabel,
+                            },
+                        }),
                     },
                 }
             },
@@ -200,12 +218,31 @@ export default {
         const paramsValidation = useVuelidate(validations, paramsLocal, {
             $scope: 'surveyElement',
         })
+
         watch(
-            () => paramsValidation.value.$invalid,
-            (invalid) => {
-                console.log('emitting isvalid', !invalid)
-                emit('isValid', !invalid)
+            () => _.cloneDeep(paramsLocal.value),
+            (currentValue) => {
+                let singleLangIsValid = false
+                const counterLangCount = 1 + currentValue.options.length
+                store.state.languages.languages.forEach((lang) => {
+                    let currentCount = 0
+                    if (currentValue.question[lang.code] !== '') {
+                        currentCount++
+                    }
+                    currentValue.options.forEach((option) => {
+                        if (option.labels[lang.code] !== '') {
+                            currentCount++
+                        }
+                    })
+                    if (parseInt(currentCount) === parseInt(counterLangCount)) {
+                        singleLangIsValid = true
+                    }
+                })
+                const isValid =
+                    singleLangIsValid && !paramsValidation.value.$invalid
+                emit('isValid', isValid)
             },
+            { immediate: true },
         )
 
         return {
