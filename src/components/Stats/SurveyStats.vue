@@ -45,7 +45,12 @@ separator=" to "
                         <tr>
                             <th>
                                 <div v-html="t('finished_at')"></div>
-                                <span class="text-xs text-gray-500">UUID</span>
+                                <span
+                                    v-if="store.state.users.user.admin"
+                                    class="text-xs text-gray-500"
+                                >
+                                    UUID
+                                </span>
                             </th>
                             <th>{{ t('duration') }}</th>
                             <th v-for="step in surveySteps" :key="step.id">
@@ -111,7 +116,10 @@ separator=" to "
                                         .locale('de')
                                         .format('LLLL')
                                 }}
-                                <span class="text-xs text-gray-500">
+                                <span
+                                    v-if="store.state.users.user.admin"
+                                    class="text-xs text-gray-500"
+                                >
                                     <br />
                                     {{ result.uuid }}
                                 </span>
