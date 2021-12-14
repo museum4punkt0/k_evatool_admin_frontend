@@ -1,18 +1,6 @@
 <template>
     <div
-        class="
-            flex
-            justify-between
-            items-center
-            mb-1
-            text-sm
-            bg-green-100
-            text-green-600
-            rounded-full
-            py-0.5
-            px-2
-            ml-2
-        "
+        class="flex justify-between items-center mb-1 text-sm bg-green-100 text-green-600 rounded-full py-0.5 px-2 ml-2 w-24"
     >
         <arrow-up-icon />
         <span>
