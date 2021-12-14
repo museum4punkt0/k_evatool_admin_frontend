@@ -124,7 +124,13 @@ separator=" to "
                                     {{ result.uuid }}
                                 </span>
                             </td>
-                            <td>{{ result.duration }}</td>
+                            <td>
+                                {{
+                                    moment
+                                        .utc(result.duration * 1000)
+                                        .format('HH:mm:ss')
+                                }}
+                            </td>
                             <td
                                 v-for="step in surveySteps"
                                 :key="result.uuid + '-' + step.id"
