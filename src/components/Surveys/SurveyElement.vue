@@ -1,7 +1,7 @@
 <template>
     <data-viewer class="mt-3" :data="validator" />
     <h3 v-if="surveyElementId > 0">{{ t('elements', 1) }}</h3>
-    <h3 v-else>Neues Element</h3>
+    <h3 v-else>{{ t('new_element') }}</h3>
     <form-input
         v-model:value="surveyElement.name"
         class="mt-1"
