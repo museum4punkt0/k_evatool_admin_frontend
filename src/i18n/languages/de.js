@@ -135,7 +135,7 @@ export default {
     survey_elements: 'Umfrage-Elemente | Umfrage-Element | Umfrage-Elemente',
     survey_step_has_result:
         'Dieser Schritt hat bereits {resultCount} Ergebnisse und kann daher nicht mehr gelöscht werden.',
-    system_value: 'Systemwert',
+    system_value: 'Schlüsselwert',
     timestamps: 'Zeiten | Zeit | Zeiten',
     timestamp_start: 'Startzeit',
     timestamp_stop: 'Stopzeit',
