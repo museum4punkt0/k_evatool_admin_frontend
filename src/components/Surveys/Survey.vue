@@ -20,13 +20,11 @@
                             content: t('action_edit_survey_meta'),
                         }"
                         class="secondary mr-1"
+                        @click="
+                            setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
+                        "
                     >
-                        <PencilIcon
-                            class="h-5 w-5"
-                            @click="
-                                setShowSurveyDetailsEdit(!showSurveyDetailsEdit)
-                            "
-                        />
+                        <PencilIcon class="h-5 w-5" />
                     </button>
                     <button
                         v-tippy="{
