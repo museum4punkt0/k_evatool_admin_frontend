@@ -169,4 +169,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+button.language {
+    padding: 2px 8px;
+}
+</style>

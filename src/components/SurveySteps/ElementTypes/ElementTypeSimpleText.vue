@@ -1,10 +1,4 @@
 <template>
-    <!-- <language-switch
-        class="mt-6"
-        :active-language="selectedLanguage"
-        @select="setSelectedLanguage($event)"
-    /> -->
-
     <div class="flex mt-8">
         <label class="flex-grow">{{ t('texts', 1) }}</label>
         <div class="languages flex">
