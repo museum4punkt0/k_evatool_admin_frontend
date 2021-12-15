@@ -59,6 +59,11 @@ export default {
                     scales: {
                         y: { beginAtZero: true },
                     },
+                    layout: {
+                        padding: {
+                            right: props.chartLabel === 'binary' ? 30 : 0,
+                        },
+                    },
                     plugins: {
                         legend: {
                             display:

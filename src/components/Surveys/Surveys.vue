@@ -93,16 +93,13 @@
                                     @click.prevent.stop="editSurvey(survey.id)"
                                 />
                                 <trash-icon
-                                    v-if="survey.surveyStepsCount > 0"
-                                    class="mx-1 h-5 w-5 text-gray-500 cursor-not-allowed"
-                                    @click.prevent.stop="null"
-                                />
-                                <trash-icon
-                                    v-else
-                                    class="mx-1 h-5 w-5 text-red-500 pointer"
-                                    @click.prevent.stop="
-                                        deleteSurvey(survey.id)
+                                    class="mx-1 h-5 w-5"
+                                    :class="
+                                        survey.surveyStepsCount > 0
+                                            ? 'text-gray-500 cursor-not-allowed'
+                                            : 'text-red-500 pointer'
                                     "
+                                    @click.prevent.stop="deleteSurvey(survey)"
                                 />
                                 <EyeIcon
                                     class="mx-1 h-5 w-5 pointer"
@@ -116,9 +113,14 @@
                                     "
                                 />
                                 <ChartBarIcon
-                                    class="mx-1 h-5 w-5 pointer"
+                                    class="mx-1 h-5 w-5"
+                                    :class="
+                                        survey.surveyResultsCount === 0
+                                            ? 'text-gray-500 cursor-not-allowed'
+                                            : 'pointer'
+                                    "
                                     @click.prevent.stop="
-                                        openSurveyStats(survey.id)
+                                        openSurveyStats(survey)
                                     "
                                 />
                             </td>
@@ -196,13 +198,15 @@ export default {
             await router.push('/surveys/' + surveyId)
         }
 
-        const deleteSurvey = async (surveyId) => {
-            const confirmSurveyDelete = confirm(t('confirm_delete_survey'))
-            isBusy.value = true
-            if (confirmSurveyDelete) {
-                await store.dispatch('surveys/deleteSurvey', surveyId)
+        const deleteSurvey = async (survey) => {
+            if (survey.surveyStepsCount === 0) {
+                const confirmSurveyDelete = confirm(t('confirm_delete_survey'))
+                isBusy.value = true
+                if (confirmSurveyDelete) {
+                    await store.dispatch('surveys/deleteSurvey', survey.id)
+                }
+                isBusy.value = false
             }
-            isBusy.value = false
         }
 
         const previewSurvey = (surveyPreview) => {
@@ -221,8 +225,10 @@ export default {
             await store.dispatch('surveys/publishSurvey', surveyId)
         }
 
-        const openSurveyStats = async (surveyId) => {
-            await router.push('/stats/' + surveyId)
+        const openSurveyStats = async (survey) => {
+            if (survey.surveyResultsCount > 0) {
+                await router.push('/stats/' + survey.id)
+            }
         }
 
         const duplicateSurvey = async (surveyId) => {

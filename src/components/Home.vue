@@ -7,29 +7,12 @@
             </h1>
             <div class="grid grid-cols-3 grid-flow-row gap-4 mt-5">
                 <dashboard-tile
+                    v-for="menuElement in menuElements"
+                    :key="'element_name_' + menuElement.name"
                     class="w-full"
-                    :title="t('surveys', 2)"
-                    route="/surveys"
-                />
-                <dashboard-tile
-                    class="w-full"
-                    :title="t('survey_elements', 2)"
-                    route="/survey-elements"
-                />
-                <dashboard-tile
-                    class="w-full"
-                    :title="t('assets', 2)"
-                    route="/assets"
-                />
-                <dashboard-tile
-                    class="w-full"
-                    :title="t('users', 2)"
-                    route="/users"
-                />
-                <dashboard-tile
-                    class="w-full"
-                    :title="t('languages', 2)"
-                    route="/languages"
+                    :title="menuElement.name"
+                    :icon="menuElement.icon"
+                    :route="menuElement.href"
                 />
             </div>
         </main>
@@ -41,13 +24,55 @@
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import DashboardTile from './Dashboard/DashboardTile.vue'
+import {
+    ChartBarIcon,
+    GlobeAltIcon,
+    HomeIcon,
+    PhotographIcon,
+    PresentationChartLineIcon,
+    UsersIcon,
+    ViewGridIcon,
+} from '@heroicons/vue/outline'
 
 export default {
     components: { DashboardTile },
     setup() {
         const store = useStore()
         const { t } = useI18n()
-        return { store, t }
+
+        const menuElements = [
+            {
+                name: t('surveys', 2),
+                href: '/surveys',
+                icon: PresentationChartLineIcon,
+            },
+            {
+                name: t('elements', 2),
+                href: '/survey-elements',
+                icon: ViewGridIcon,
+            },
+            {
+                name: t('assets', 2),
+                href: '/assets',
+                icon: PhotographIcon,
+            },
+            {
+                name: t('languages', 2),
+                href: '/languages',
+                icon: GlobeAltIcon,
+            },
+            {
+                name: t('users', 2),
+                href: '/users',
+                icon: UsersIcon,
+            },
+            {
+                name: t('stats', 2),
+                href: '/stats',
+                icon: ChartBarIcon,
+            },
+        ]
+        return { menuElements, store, t }
     },
 }
 </script>
