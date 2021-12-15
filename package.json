@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.500",
+    "version": "1.0.502",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -32,7 +32,6 @@
         "ms-to-timecode": "^0.1.2",
         "uuid": "^8.3.2",
         "vue": "^3.0.5",
-        "vue-chart-3": "^3.0.3",
         "vue-i18n": "^9.1.9",
         "vue-router": "4",
         "vue-tippy": "^6.0.0-alpha.37",

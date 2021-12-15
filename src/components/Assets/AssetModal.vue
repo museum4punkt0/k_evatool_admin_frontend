@@ -50,22 +50,13 @@
 
                             <div class="mt-2">
                                 <video
-                                    v-if="
-                                        asset.mime === 'video/mp4' ||
-                                        asset.mime === 'video/quicktime'
-                                    "
+                                    v-if="asset.mime.includes('video')"
                                     :src="asset.urls?.original"
                                     autoplay
                                     controls
                                 />
                                 <img
-                                    v-else-if="
-                                        [
-                                            'image/png',
-                                            'image/jpg',
-                                            'image/jpeg',
-                                        ].includes(asset.mime)
-                                    "
+                                    v-else-if="asset.mime.includes('image')"
                                     :src="asset.urls?.original"
                                 />
                                 <template v-else>
