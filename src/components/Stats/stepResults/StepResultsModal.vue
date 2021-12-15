@@ -33,9 +33,11 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <div
-                            class="inline-block w-full max-w-xl p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+                            class="inline-block w-full max-w-xl my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
                         >
-                            <div class="flex justify-between">
+                            <div
+                                class="bg-gray-200 rounded-t-2xl p-6 flex justify-between"
+                            >
                                 <DialogTitle
                                     as="h3"
                                     class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
@@ -50,7 +52,7 @@
                                 />
                             </div>
 
-                            <div class="mt-2">
+                            <div class="mt-6 px-6 pb-6">
                                 <!--                                <pre>{{ surveyStepId }}</pre>-->
                                 <pre
                                     v-if="
@@ -75,17 +77,12 @@
                                         )
                                     "
                                 />
-
                                 <yay-nay-results
                                     v-else-if="
                                         surveyStepList.elementType === 'yayNay'
                                     "
                                     :chart-label="surveyStepList.elementType"
-                                    :labels="
-                                        Array.from(
-                                            surveyStepList.results.timespan.results.images.keys(),
-                                        )
-                                    "
+                                    :labels="getImageLabels"
                                     :datasets="getDatasets(surveyStepList)"
                                 />
                                 <text-analysis-results
@@ -180,13 +177,40 @@ export default {
             'multipleChoice',
         ]
 
+        const assets = computed({
+            get: () => store.state.assets.assets,
+        })
+
         const modalIsOpen = computed({
             get: () => props.isOpen,
             set: (val) => emit('update:is-open', val),
         })
 
+        const getImageLabels = computed({
+            get: () => {
+                let images = []
+                props.surveyStepList?.elementParams?.assetIds?.forEach((x) =>
+                    images.push(
+                        assets.value.find((item) => item.id === x)?.urls
+                            .original,
+                    ),
+                )
+                return images
+            },
+        })
+
         const getChartLabels = computed({
             get: () => {
+                if (props.surveyStepList?.elementParams?.emojis) {
+                    const keys = Object.keys(
+                        props.surveyStepList.results.timespan.results,
+                    )
+                    return keys.map((x) => {
+                        return props.surveyStepList.elementParams.emojis.find(
+                            (y) => x === y.meaning,
+                        )?.type
+                    })
+                }
                 if (props.surveyStepList?.elementParams?.emojis) {
                     const keys = Object.keys(
                         props.surveyStepList.results.timespan.results,
@@ -203,55 +227,52 @@ export default {
             },
         })
 
+        const closeModal = () => {
+            modalIsOpen.value = false
+        }
+
         const getDatasets = (surveyStepList) => {
-            if (surveyStepList.elementType === 'yayNay') {
-                const colors = ['rgb(29, 78, 216)', 'rgb(255, 78, 216)']
-                const datasets = []
-                const keys = []
-                surveyStepList.results.timespan.results.images.forEach(
-                    (image) => {
-                        Object.keys(image).forEach((key) => {
-                            if (!keys.includes(key)) {
-                                keys.push(key)
-                            }
-                        })
-                    },
-                )
-                keys.forEach((key, index) => {
-                    const data = []
-
-                    datasets.push({
-                        label: key,
-                        data,
-                        borderColor: colors[index],
-                        backgroundColor: colors[index],
-                    })
+            const colors = ['rgb(29, 78, 216)', 'rgb(255, 78, 216)']
+            const datasets = []
+            const keys = []
+            surveyStepList.results.timespan.results.images.forEach((image) => {
+                Object.keys(image).forEach((key) => {
+                    if (!keys.includes(key)) {
+                        keys.push(key)
+                    }
                 })
+            })
+            keys.forEach((key, index) => {
+                const data = []
 
-                surveyStepList.results.timespan.results.images.forEach(
-                    (image) => {
-                        Object.entries(image).forEach((entry) => {
-                            datasets
-                                .find((d) => d.label === entry[0])
-                                .data.push(entry[1])
-                        })
-                    },
-                )
-                return datasets
-            }
-            return []
+                datasets.push({
+                    label: key,
+                    data,
+                    borderColor: colors[index],
+                    backgroundColor: colors[index],
+                })
+            })
+
+            surveyStepList.results.timespan.results.images.forEach((image) => {
+                Object.entries(image).forEach((entry) => {
+                    datasets
+                        .find((d) => d.label === entry[0])
+                        .data.push(entry[1])
+                })
+            })
+            return datasets
         }
 
         return {
+            assets,
             modalIsOpen,
             store,
             t,
             barChart,
-            closeModal() {
-                modalIsOpen.value = false
-            },
+            closeModal,
             getDatasets,
             getChartLabels,
+            getImageLabels,
         }
     },
 }
