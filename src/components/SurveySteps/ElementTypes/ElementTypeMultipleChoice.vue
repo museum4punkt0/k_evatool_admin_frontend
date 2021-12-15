@@ -17,7 +17,7 @@
                     primary: language.code === selectedLanguage.code,
                     secondary: language.code !== selectedLanguage.code,
                 }"
-                @click="$emit('languageSelect', language)"
+                @click="setSelectedLanguage(language)"
             >
                 {{ language.code }}
             </button>
