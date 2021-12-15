@@ -1,11 +1,21 @@
 <template>
-    <language-switch
-        class="mt-6"
-        :active-language="selectedLanguage"
-        @select="setSelectedLanguage($event)"
-    />
-    <label>{{ t('questions', 1) }}</label>
-
+    <div class="flex mt-8">
+        <label class="flex-grow">{{ t('questions', 1) }}</label>
+        <div class="languages flex">
+            <button
+                v-for="language in store.state.languages.languages"
+                :key="language.code"
+                class="language"
+                :class="{
+                    primary: language.code === selectedLanguage.code,
+                    secondary: language.code !== selectedLanguage.code,
+                }"
+                @click="setSelectedLanguage(language)"
+            >
+                {{ language.code }}
+            </button>
+        </div>
+    </div>
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
@@ -49,6 +59,9 @@
             :label="t('label_lowest_value')"
             class="col-span-4"
             :invalid="validateParams.lowestValueLabel[language.code].$invalid"
+            :languages="store.state.languages.languages"
+            :active-language="selectedLanguage"
+            @languageSelect="setSelectedLanguage($event)"
             @change="() => validateParams.lowestValueLabel.$touch()"
         />
         <form-input
@@ -61,6 +74,9 @@
             :label="t('label_middle_value')"
             class="col-span-4"
             :invalid="validateParams.middleValueLabel[language.code].$invalid"
+            :languages="store.state.languages.languages"
+            :active-language="selectedLanguage"
+            @languageSelect="setSelectedLanguage($event)"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -72,6 +88,9 @@
             :label="t('label_highest_value')"
             class="col-span-4"
             :invalid="validateParams.highestValueLabel[language.code].$invalid"
+            :languages="store.state.languages.languages"
+            :active-language="selectedLanguage"
+            @languageSelect="setSelectedLanguage($event)"
         />
     </div>
 
@@ -244,4 +263,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+button.language {
+    padding: 2px 8px;
+}
+</style>
