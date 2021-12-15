@@ -151,6 +151,10 @@ export default {
     tooltip_set_previous_step: 'Vorgaengerschritt setzen',
     tooltip_set_timebased_steps: 'Zeitbasierte Schritte setzen',
     tooltip_set_resultbased_steps: 'Antwortabhaengige Schritte setzen',
+    tooltip_survey_details_languages:
+        'Umfrage in folgenden Sprachen verfügabar machen',
+    tooltip_survey_details_slug:
+        'Nutzer-lesbare, eindeutige suchmaschienenfreundliche ID, Teil der URL',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',
