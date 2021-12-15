@@ -43,29 +43,27 @@
                 {{ `Option ${index + 1}` }}
             </div>
             <div class="py-3 flex flex-col">
-                <div>
-                    <form-input
-                        v-for="language in store.state.languages.languages.filter(
-                            (item) => item.code === selectedLanguage.code,
-                        )"
-                        :key="'option_lang' + language.id"
-                        v-model:value="
-                            paramsLocal.options[index]['labels'][language.code]
-                        "
-                        :languages="store.state.languages.languages"
-                        :active-language="selectedLanguage"
-                        :invalid="
-                            !v$.options?.$each?.$response?.$data[index]?.labels
-                                ?.validateLanguageLabel[language.code]
-                        "
-                        :name="'option_lang_' + index"
-                        :label="`${t('display_value')} ${index + 1} (${
-                            language.title
-                        })`"
-                        @languageSelect="setSelectedLanguage($event)"
-                    />
-                </div>
-                <div class="rounded flex flex-row">
+                <form-input
+                    v-for="language in store.state.languages.languages.filter(
+                        (item) => item.code === selectedLanguage.code,
+                    )"
+                    :key="'option_lang' + language.id"
+                    v-model:value="
+                        paramsLocal.options[index]['labels'][language.code]
+                    "
+                    :languages="store.state.languages.languages"
+                    :active-language="selectedLanguage"
+                    :invalid="
+                        !v$.options?.$each?.$response?.$data[index]?.labels
+                            ?.validateLanguageLabel[language.code]
+                    "
+                    :name="'option_lang_' + index"
+                    :label="`${t('display_value')} ${index + 1} (${
+                        language.title
+                    })`"
+                    @languageSelect="setSelectedLanguage($event)"
+                />
+                <div class="flex flex-row items-end">
                     <form-input
                         v-model:value="paramsLocal.options[index]['value']"
                         :invalid="
@@ -157,6 +155,8 @@ export default {
         const selectedLanguage = ref(
             store.state.languages.languages.find((lang) => lang.default),
         )
+
+        console.log(props.params)
 
         const paramsLocal = computed({
             get: () => props.params,
