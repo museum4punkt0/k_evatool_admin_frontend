@@ -1,14 +1,13 @@
 <template>
-    <bar-chart v-bind="barChartProps" />
+    <canvas ref="chartRef" width="400" height="400" />
 </template>
 
 <script>
-import { BarChart, useBarChart } from 'vue-chart-3'
-import { computed } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+import Chart from 'chart.js/auto'
 
 export default {
     name: 'YayNayResults',
-    components: { BarChart },
     props: {
         chartLabel: {
             type: String,
@@ -33,18 +32,33 @@ export default {
         },
     },
     setup(props) {
-        const chartData = computed(() => ({
-            labels: props.labels,
-            datasets: props.datasets,
-        }))
+        let chart
+        const chartRef = ref(null)
 
-        const { barChartProps, barChartRef } = useBarChart({
-            chartData,
+        onMounted(() => {
+            chart = new Chart(chartRef.value, {
+                type: 'bar',
+                data: {
+                    labels: props.labels,
+                    datasets: props.datasets,
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            })
+        })
+
+        onUnmounted(() => {
+            chart.destroy()
         })
 
         return {
-            barChartProps,
-            barChartRef,
+            chartRef,
+            chart,
         }
     },
 }
