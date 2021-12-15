@@ -88,8 +88,7 @@
                     {{ t('validation_snake_case') }}
                 </p>
                 <p class="text-xs text-gray-500 ml-1 mt-1">
-                    sprachunabhängiger Schlüsselwert - zur internen Speicherung,
-                    Auswertung und Export
+                    {{ t('system_value_explaination') }}
                 </p>
             </div>
         </div>

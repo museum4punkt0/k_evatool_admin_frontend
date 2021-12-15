@@ -136,6 +136,8 @@ export default {
     survey_step_has_result:
         'Dieser Schritt hat bereits {resultCount} Ergebnisse und kann daher nicht mehr gelöscht werden.',
     system_value: 'Schlüsselwert',
+    system_value_explaination:
+        'sprachunabhängiger Schlüsselwert - zur internen Speicherung, Auswertung und Export',
     timestamps: 'Zeiten | Zeit | Zeiten',
     timestamp_start: 'Startzeit',
     timestamp_stop: 'Stopzeit',
