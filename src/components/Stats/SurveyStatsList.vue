@@ -38,6 +38,7 @@
                             <th>ID</th>
                             <th>{{ t('names', 1) }}</th>
                             <th>#&nbsp;{{ t('steps', 2) }}</th>
+                            <th>{{ t('answers_total') }}</th>
                             <th>
                                 <span class="sr-only">Edit</span>
                             </th>
@@ -62,6 +63,9 @@
                             </td>
                             <td>
                                 {{ survey.surveyStepsCount }}
+                            </td>
+                            <td>
+                                {{ survey.surveyResultsCount }}
                             </td>
                             <td class="px-6 py-4 flex flex-row">
                                 <EyeIcon
