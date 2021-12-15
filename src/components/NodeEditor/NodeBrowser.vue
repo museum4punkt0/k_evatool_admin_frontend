@@ -1,84 +1,65 @@
 <template>
-    <div class="bg-gray-200 p-4">
-        <div class="flex mb-3 justify-between items-center">
-            <h2>{{ t('elements', 2) }}</h2>
-            <div class="justify-between items-center flex">
-                <button
-                    v-if="!showSurveyElementForm"
-                    class="primary"
-                    @click="setShowSurveyElementForm(true)"
-                >
-                    {{ t('action_new_survey_element') }}
-                </button>
-            </div>
-        </div>
-
-        <survey-element
-            v-if="showSurveyElementForm"
-            @saved="onElementCreated($event)"
-            @cancel="setShowSurveyElementForm(false)"
-        ></survey-element>
-        <div v-if="!showSurveyElementForm">
-            <form-input
-                v-model:value="elementSearchQuery"
-                name="name"
-                type="text"
-                :label="t('search', 1)"
-            />
-            <div
-                v-for="element in surveyElements
-                    .filter(filter)
-                    .sort((a, b) => b.createdAt - a.createdAt)"
-                :key="element.id"
-                class="
-                    p-0
-                    rounded-lg
-                    border-0
-                    bg-white
-                    shadow
-                    overflow-hidden
-                    h-full
-                    flex flex-col
-                    overflow-y-auto
-                    mt-4
-                "
+    <div class="flex mb-3 justify-between items-center">
+        <h2>{{ t('elements', 2) }}</h2>
+        <div class="justify-between items-center flex">
+            <button
+                v-if="!showSurveyElementForm"
+                class="primary"
+                @click="setShowSurveyElementForm(true)"
             >
-                <element-content :element="element"></element-content>
-                <div class="w-full border-t">
-                    <div class="flex flex-row">
-                        <action-button
-                            class="p-1 m-2 flex-grow"
-                            color="secondary"
-                            :action-text="t('action_add_to_survey')"
-                            @execute="addElementToSurvey(element)"
-                        />
-                        <action-button
-                            class="p-1 m-2"
-                            color="secondary"
-                            @execute="editElement(element)"
-                        >
-                            <span
-                                class="flex h-full justify-center items-center"
-                            >
-                                <PencilIcon class="h-5 w-5" />
-                                <span v-if="element.surveyStepsCount > 1">
-                                    (!)
-                                </span>
-                            </span>
-                        </action-button>
-                        <action-button
-                            class="p-1 m-2 disabled:opacity-25"
-                            color="danger"
-                            :disabled="element.surveyStepsCount > 0"
-                            @execute="deleteElement(element)"
-                        >
-                            <span
-                                class="flex h-full justify-center items-center"
-                            >
-                                <TrashIcon class="h-5 w-5" />
-                            </span>
-                        </action-button>
-                    </div>
+                {{ t('action_new_survey_element') }}
+            </button>
+        </div>
+    </div>
+
+    <survey-element
+        v-if="showSurveyElementForm"
+        @saved="onElementCreated($event)"
+        @cancel="setShowSurveyElementForm(false)"
+    ></survey-element>
+    <div v-if="!showSurveyElementForm">
+        <form-input
+            v-model:value="elementSearchQuery"
+            name="name"
+            type="text"
+            :label="t('search', 1)"
+        />
+        <div
+            v-for="element in surveyElements
+                .filter(filter)
+                .sort((a, b) => b.createdAt - a.createdAt)"
+            :key="element.id"
+            class="p-0 rounded-lg border-0 bg-white shadow overflow-hidden h-full flex flex-col overflow-y-auto mt-4"
+        >
+            <element-content :element="element"></element-content>
+            <div class="w-full border-t">
+                <div class="flex flex-row">
+                    <action-button
+                        class="p-1 m-2 flex-grow"
+                        color="secondary"
+                        :action-text="t('action_add_to_survey')"
+                        @execute="addElementToSurvey(element)"
+                    />
+                    <action-button
+                        class="p-1 m-2"
+                        color="secondary"
+                        @execute="editElement(element)"
+                    >
+                        <span class="flex h-full justify-center items-center">
+                            <PencilIcon class="h-5 w-5" />
+                            <span v-if="element.surveyStepsCount > 1">(!)</span>
+                        </span>
+                    </action-button>
+                    <action-button
+                        class="p-1 m-2 disabled:opacity-25"
+                        color="danger"
+                        :disabled="element.surveyStepsCount > 0"
+                        @execute="deleteElement(element)"
+                    >
+                        <span class="flex h-full justify-center items-center">
+                            <TrashIcon class="h-5 w-5" />
+                        </span>
+                    </action-button>
                 </div>
             </div>
         </div>
