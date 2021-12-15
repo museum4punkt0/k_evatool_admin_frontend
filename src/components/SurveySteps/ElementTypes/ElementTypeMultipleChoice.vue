@@ -1,12 +1,28 @@
 <template>
-    <language-switch
+    <!-- <language-switch
         class="mt-6"
         :active-language="selectedLanguage"
         @select="setSelectedLanguage($event)"
-    />
-    <label class="my-2">
-        {{ t('questions', 1) }} ({{ selectedLanguage.title }})
-    </label>
+    /> -->
+    <div class="flex mt-8">
+        <label class="flex-grow">
+            {{ t('questions', 1) }} ({{ selectedLanguage.title }})
+        </label>
+        <div class="languages flex">
+            <button
+                v-for="language in store.state.languages.languages"
+                :key="language.code"
+                class="language"
+                :class="{
+                    primary: language.code === selectedLanguage.code,
+                    secondary: language.code !== selectedLanguage.code,
+                }"
+                @click="setSelectedLanguage(language)"
+            >
+                {{ language.code }}
+            </button>
+        </div>
+    </div>
 
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
@@ -17,12 +33,38 @@
         :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
     />
 
-    <div class="grid grid-cols-1 divide-y divide-gray-300">
+    <div class="grid grid-cols-1">
         <div
             v-for="(option, index) in paramsLocal.options"
             :key="`option_${index}`"
+            class="option mt-8"
         >
+            <div class="title font-bold">
+                {{ `Option ${index + 1}` }}
+            </div>
             <div class="py-3 flex flex-col">
+                <div>
+                    <form-input
+                        v-for="language in store.state.languages.languages.filter(
+                            (item) => item.code === selectedLanguage.code,
+                        )"
+                        :key="'option_lang' + language.id"
+                        v-model:value="
+                            paramsLocal.options[index]['labels'][language.code]
+                        "
+                        :languages="store.state.languages.languages"
+                        :active-language="selectedLanguage"
+                        :invalid="
+                            !v$.options?.$each?.$response?.$data[index]?.labels
+                                ?.validateLanguageLabel[language.code]
+                        "
+                        :name="'option_lang_' + index"
+                        :label="`${t('display_value')} ${index + 1} (${
+                            language.title
+                        })`"
+                        @languageSelect="setSelectedLanguage($event)"
+                    />
+                </div>
                 <div class="rounded flex flex-row">
                     <form-input
                         v-model:value="paramsLocal.options[index]['value']"
@@ -31,7 +73,7 @@
                                 ?.$invalid
                         "
                         :name="'system_value_' + index"
-                        class="flex-auto rounded-tl-none"
+                        class="flex-auto rounded-tl-none mt-3"
                         :label="`${t('system_value')} ${index + 1}`"
                     />
                     <button
@@ -45,26 +87,9 @@
                 <p class="text-xs text-gray-500 ml-1 mt-1">
                     {{ t('validation_snake_case') }}
                 </p>
-                <div>
-                    <form-input
-                        v-for="language in store.state.languages.languages.filter(
-                            (item) => item.code === selectedLanguage.code,
-                        )"
-                        :key="'option_lang' + language.id"
-                        v-model:value="
-                            paramsLocal.options[index]['labels'][language.code]
-                        "
-                        :invalid="
-                            !v$.options?.$each?.$response?.$data[index]?.labels
-                                ?.validateLanguageLabel[language.code]
-                        "
-                        :name="'option_lang_' + index"
-                        class="mt-3"
-                        :label="`${t('display_value')} ${index + 1} (${
-                            language.title
-                        })`"
-                    />
-                </div>
+                <p class="text-xs text-gray-500 ml-1 mt-1">
+                    {{ t('system_value_explaination') }}
+                </p>
             </div>
         </div>
     </div>
@@ -260,4 +285,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+button.language {
+    padding: 2px 8px;
+}
+</style>

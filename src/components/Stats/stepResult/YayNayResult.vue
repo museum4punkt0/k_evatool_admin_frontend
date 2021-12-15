@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div class="flex overflow-x-scroll">
         <div v-for="(image, index) in result?.value?.images" :key="index">
             <div class="mr-2">
                 <small>{{ image.value }}</small>
@@ -40,6 +40,6 @@ export default {
 <style scoped>
 img {
     max-width: 40px;
-    max-height: 40px;
+    height: 40px;
 }
 </style>

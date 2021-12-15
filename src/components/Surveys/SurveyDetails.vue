@@ -15,12 +15,18 @@
             <span class="flex-grow">
                 {{ `${previewUrl}/#/?survey=${survey?.slug}` }}
             </span>
-            <PencilIcon class="h-5 w-5" @click="setShowSlug(!showSlug)" />
+            <PencilIcon
+                class="h-5 w-5 cursor-pointer"
+                @click="setShowSlug(!showSlug)"
+            />
         </div>
     </div>
     <form-input
-        v-if="showSlug && survey.id"
+        v-if="showSlug"
         v-model:value="survey.slug"
+        v-tippy="{
+            content: t('tooltip_survey_details_slug'),
+        }"
         name="slug"
         class="mt-3"
         type="text"
@@ -28,6 +34,9 @@
     />
     <form-checkbox
         v-model:value="survey.languages"
+        v-tippy="{
+            content: t('tooltip_survey_details_languages'),
+        }"
         :options="store.state.languages.languages"
         name="language"
         class="mt-3"

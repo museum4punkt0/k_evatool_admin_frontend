@@ -1,11 +1,22 @@
 <template>
     <div>
-        <language-switch
-            class="mt-6"
-            :active-language="selectedLanguage"
-            @select="setSelectedLanguage($event)"
-        />
-        <label>{{ t('questions', 1) }}</label>
+        <div class="flex mt-8">
+            <label class="flex-grow">{{ t('questions', 1) }}</label>
+            <div class="languages flex">
+                <button
+                    v-for="language in store.state.languages.languages"
+                    :key="language.code"
+                    class="language"
+                    :class="{
+                        primary: language.code === selectedLanguage.code,
+                        secondary: language.code !== selectedLanguage.code,
+                    }"
+                    @click="setSelectedLanguage(language)"
+                >
+                    {{ language.code }}
+                </button>
+            </div>
+        </div>
         <tiny-mce
             v-for="language in store.state.languages.languages.filter(
                 (item) => item.code === selectedLanguage.code,
@@ -97,4 +108,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+button.language {
+    padding: 2px 8px;
+}
+</style>

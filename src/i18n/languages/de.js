@@ -25,10 +25,10 @@ export default {
     allow_skip: 'Überspringen erlauben',
     answers_total: 'Antworten gesamt',
     assets: 'Medien | Medium | Medien',
-    binary_positive: 'Positiver Systemwert',
-    binary_negative: 'Negativer Systemwert',
-    binary_positive_label: 'Positive Beschriftung',
-    binary_negative_label: 'Negative Beschriftung',
+    binary_positive: 'Positiver Schlüsselwert',
+    binary_negative: 'Negativer Schlüsselwert',
+    binary_positive_label: 'Positive Anzeigewert',
+    binary_negative_label: 'Negative Anzeigewert',
     button_choose_assets: 'Bilder auswählen',
     confirm_delete_asset: 'Wollen Sie die Datei wirklich löschen?',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
@@ -135,7 +135,9 @@ export default {
     survey_elements: 'Umfrage-Elemente | Umfrage-Element | Umfrage-Elemente',
     survey_step_has_result:
         'Dieser Schritt hat bereits {resultCount} Ergebnisse und kann daher nicht mehr gelöscht werden.',
-    system_value: 'Systemwert',
+    system_value: 'Schlüsselwert',
+    system_value_explaination:
+        'sprachunabhängiger Schlüsselwert - zur internen Speicherung, Auswertung und Export',
     timestamps: 'Zeiten | Zeit | Zeiten',
     timestamp_start: 'Startzeit',
     timestamp_stop: 'Stopzeit',
@@ -149,6 +151,10 @@ export default {
     tooltip_set_previous_step: 'Vorgaengerschritt setzen',
     tooltip_set_timebased_steps: 'Zeitbasierte Schritte setzen',
     tooltip_set_resultbased_steps: 'Antwortabhaengige Schritte setzen',
+    tooltip_survey_details_languages:
+        'Umfrage in folgenden Sprachen verfügabar machen',
+    tooltip_survey_details_slug:
+        'Nutzer-lesbare, eindeutige suchmaschienenfreundliche ID, Teil der URL',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',
@@ -158,8 +164,8 @@ export default {
     viewport_incompatible:
         'Bitte benutzen Sie ein Gerät mit einer höheren Auflösung!',
     welcome: 'Willkommen',
-    yaynay_positive: 'Positiver Systemwert',
-    yaynay_negative: 'Negativer Systemwert',
-    yaynay_positive_label: 'Positive Beschriftung',
-    yaynay_negative_label: 'Negative Beschriftung',
+    yaynay_positive: 'Positiver Schlüsselwert',
+    yaynay_negative: 'Negativer Schlüsselwert',
+    yaynay_positive_label: 'Positiver Anzeigewert',
+    yaynay_negative_label: 'Negativer Anzeigewert',
 }
