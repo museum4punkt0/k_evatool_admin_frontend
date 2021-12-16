@@ -17,6 +17,10 @@
                 </button>
             </div>
         </div>
+        <!-- <pre>
+
+        {{ v$ }}
+        </pre> -->
         <tiny-mce
             v-for="language in store.state.languages.languages.filter(
                 (item) => item.code === selectedLanguage.code,

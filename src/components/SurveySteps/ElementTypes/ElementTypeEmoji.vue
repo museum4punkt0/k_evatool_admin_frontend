@@ -22,6 +22,7 @@
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
+        :invalid="validateParams.question[language.code].$invalid"
     />
 
     <div v-if="paramsLocal.emojis.length > 0" class="table-wrap mt-3">
