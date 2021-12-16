@@ -3,19 +3,19 @@
         <button
             class="mr-2"
             :class="{
-                primary: language === 'de',
-                secondary: language !== 'de',
+                primary: languageCode === 'de',
+                secondary: languageCode !== 'de',
             }"
-            @click="setLanguage('de')"
+            @click="setLanguageCode('de')"
         >
             deutsch
         </button>
         <button
             :class="{
-                primary: language === 'en',
-                secondary: language !== 'en',
+                primary: languageCode === 'en',
+                secondary: languageCode !== 'en',
             }"
-            @click="setLanguage('en')"
+            @click="setLanguageCode('en')"
         >
             english
         </button>
@@ -33,17 +33,16 @@ export default {
         const store = useStore()
         const i18n = useI18n()
         const { t } = i18n
-        const language = computed(() => store.state.language)
+        const languageCode = computed(() => store.state.languageCode)
 
-        const setLanguage = (language) => {
-            console.log(language, t)
-            i18n.locale.value = language
-            store.dispatch('setLanguage', language)
+        const setLanguageCode = (languageCode) => {
+            i18n.locale.value = languageCode
+            store.dispatch('setLanguageCode', languageCode)
         }
         return {
             store,
-            language,
-            setLanguage,
+            languageCode,
+            setLanguageCode,
             i18n,
             t,
         }

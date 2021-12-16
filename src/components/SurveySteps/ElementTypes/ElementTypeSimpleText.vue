@@ -22,6 +22,7 @@
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.text[language.code]"
+        :invalid="v$.text[language.code].$invalid"
     />
 </template>
 

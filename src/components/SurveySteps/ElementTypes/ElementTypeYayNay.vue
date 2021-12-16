@@ -53,6 +53,7 @@
             :label="t('yaynay_positive_label') + ' (' + language.title + ')'"
             :languages="store.state.languages.languages"
             :active-language="selectedLanguage"
+            :invalid="validateParams.trueLabel[language.code].$invalid"
             @languageSelect="setSelectedLanguage($event)"
         />
         <form-input
@@ -65,6 +66,7 @@
             class="mt-3 col-span-6"
             :label="t('yaynay_negative_label') + ' (' + language.title + ')'"
             :languages="store.state.languages.languages"
+            :invalid="validateParams.falseLabel[language.code].$invalid"
             :active-language="selectedLanguage"
             @languageSelect="setSelectedLanguage($event)"
         />
@@ -76,12 +78,14 @@
             class="mt-3 col-span-6"
             :label="t('yaynay_positive')"
             name="trueValue"
+            :invalid="validateParams.trueValue.$invalid"
         />
         <form-input
             v-model:value="paramsLocal.falseValue"
             class="mt-3 col-span-6"
             :label="t('yaynay_negative')"
             name="falseValue"
+            :invalid="validateParams.falseValue.$invalid"
         />
     </div>
 

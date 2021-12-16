@@ -27,7 +27,7 @@ export default {
                 (elementType) => elementType.key === key,
             )
             if (elementType) {
-                const language = rootState.language
+                const language = rootState.languageCode
                 return elementType.descriptions.title[language]
             }
             return key
