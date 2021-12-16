@@ -1,9 +1,9 @@
 <template>
     <!-- <language-switch
-        class="mt-6"
-        :active-language="selectedLanguage"
-        @select="setSelectedLanguage($event)"
-    /> -->
+  class="mt-6"
+  :active-language="selectedLanguage"
+  @select="setSelectedLanguage($event)"
+/> -->
     <div class="flex mt-8">
         <label class="flex-grow">
             {{ t('questions', 1) }} ({{ selectedLanguage.title }})
@@ -125,6 +125,7 @@ import _ from 'lodash'
 
 import useVuelidate from '@vuelidate/core'
 import { required, between, helpers, maxValue } from '@vuelidate/validators'
+
 const snakeCaseValidator = helpers.regex(/^[a-z]+(?:[_][a-z]+)*$/)
 
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
@@ -182,6 +183,29 @@ export default {
             emit('update:params', newParams)
         }
         const removeOption = (option, index) => {
+            let confirmDeleteOption = false
+            // check if the key value is set/not empty
+            if (option.value) {
+                confirmDeleteOption = true
+            }
+            // check if labels are set/not empty
+            let labels = Object.keys(option.labels)
+            labels.forEach((lang) => {
+                if (option.labels[lang]) {
+                    confirmDeleteOption = true
+                }
+            })
+            if (confirmDeleteOption) {
+                if (confirm(t('confirm_delete_option'))) {
+                    deleteOption(index)
+                } else {
+                    console.log('cancel')
+                }
+            } else {
+                deleteOption(index)
+            }
+        }
+        const deleteOption = (index) => {
             const options = [...paramsLocal.value.options]
             options.splice(index, 1)
             const newParams = {
@@ -279,6 +303,7 @@ export default {
             setSelectedLanguage,
             addOption,
             removeOption,
+            deleteOption,
             tinyMceKey,
         }
     },

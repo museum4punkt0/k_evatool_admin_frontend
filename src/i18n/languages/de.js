@@ -36,6 +36,7 @@ export default {
     confirm_delete_survey_element: 'Element wirklich löschen?',
     confirm_delete_survey_step: 'Schritt wirklich löschen?',
     confirm_delete_emoji: 'Emoji wirklich löschen?',
+    confirm_delete_option: 'Möchten Sie diese Option wirklich löschen?',
     confirm_send_invitation: 'Einladung an Benutzer senden?',
     confirm_invitation: 'Einladung annehmen',
     confirm_reset_survey_element:

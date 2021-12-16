@@ -2,6 +2,7 @@ export default {
     action_cancel: 'cancel',
     action_save: 'save',
     assets: 'assets | asset | assets',
+    confirm_delete_option: 'Are you sure you want to delete this Option?',
     hello: 'hello world!',
     filename: 'filename',
     filesize: 'filesize',
