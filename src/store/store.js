@@ -26,14 +26,16 @@ export default createStore({
     state: {
         debug: import.meta.env.VITE_DEBUG === 'true',
         app: null,
-        language: 'de',
+        languageCode: localStorage.getItem('languageCode')
+            ? localStorage.getItem('languageCode')
+            : 'de',
     },
     mutations: {
         setApp(state, app) {
             state.app = app
         },
-        setLanguage(state, language) {
-            state.language = language
+        setLanguageCode(state, languageCode) {
+            state.languageCode = languageCode
         },
     },
     actions: {
@@ -41,8 +43,9 @@ export default createStore({
             const app = await APP.getApp()
             commit('setApp', app)
         },
-        async setLanguage({ commit }, language) {
-            commit('setLanguage', language)
+        async setLanguageCode({ commit }, languageCode) {
+            localStorage.setItem('languageCode', languageCode)
+            commit('setLanguageCode', languageCode)
         },
     },
 })

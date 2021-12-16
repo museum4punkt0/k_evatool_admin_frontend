@@ -2,7 +2,9 @@ import surveyLanguagesService from '../services/surveyLanguageService'
 
 const initialState = {
     languages: [],
-    language: null,
+    language: localStorage.getItem('language')
+        ? JSON.parse(localStorage.getItem('language'))
+        : null,
     defaultLanguage: null,
     secondaryLanguages: [],
 }
@@ -26,6 +28,10 @@ export default {
         async getLanguages({ commit }) {
             const languages = await surveyLanguagesService.getLanguages()
             commit('setLanguages', languages.data)
+        },
+        async setLanguage({ commit }, language) {
+            commit('setLanguage', language)
+            localStorage.setItem('language', JSON.stringify(language))
         },
     },
     getters: {},
