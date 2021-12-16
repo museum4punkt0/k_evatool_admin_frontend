@@ -1,6 +1,7 @@
 <template>
     <div>
         <button
+            class="mr-2"
             :class="{
                 primary: language === 'de',
                 secondary: language !== 'de',
@@ -30,17 +31,20 @@ export default {
     components: {},
     setup() {
         const store = useStore()
-        const { t } = useI18n()
+        const i18n = useI18n()
+        const { t } = i18n
         const language = computed(() => store.state.language)
 
         const setLanguage = (language) => {
             console.log(language, t)
-            //     store.dispatch('setLanguage', language)
+            i18n.locale.value = language
+            store.dispatch('setLanguage', language)
         }
         return {
             store,
             language,
             setLanguage,
+            i18n,
             t,
         }
     },

@@ -7,30 +7,12 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <header class="w-full">
                 <div
-                    class="
-                        relative
-                        z-5
-                        flex-shrink-0
-                        h-16
-                        bg-white
-                        border-b border-gray-200
-                        shadow-sm
-                        flex
-                    "
+                    class="relative z-5 flex-shrink-0 h-16 bg-white border-b border-gray-200 shadow-sm flex"
                 >
                     <button
                         v-if="store.state.users.user"
                         type="button"
-                        class="
-                            border-r border-gray-200
-                            px-4
-                            text-gray-500
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-inset
-                            focus:ring-blue-500
-                            md:hidden
-                        "
+                        class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 md:hidden"
                         @click="mobileMenuOpen = true"
                     >
                         <span class="sr-only">Open sidebar</span>
@@ -96,13 +78,7 @@
                             </form>-->
                         </div>
                         <div
-                            class="
-                                ml-2
-                                flex
-                                items-center
-                                space-x-4
-                                sm:ml-6 sm:space-x-6
-                            "
+                            class="ml-2 flex items-center space-x-4 sm:ml-6 sm:space-x-6"
                         >
                             <!-- Profile dropdown -->
                             <Menu as="div" class="relative flex-shrink-0">
@@ -139,19 +115,7 @@
                                     leave-to-class="transform opacity-0 scale-95"
                                 >
                                     <MenuItems
-                                        class="
-                                            origin-top-right
-                                            absolute
-                                            right-0
-                                            mt-2
-                                            w-48
-                                            rounded-md
-                                            shadow-lg
-                                            py-1
-                                            bg-white
-                                            ring-1 ring-black ring-opacity-5
-                                            focus:outline-none
-                                        "
+                                        class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                                     >
                                         <MenuItem
                                             v-for="item in userNavigation"
@@ -175,21 +139,10 @@
                             <span class="text-xs text-gray-500">
                                 {{ version }}
                             </span>
-                            <!--                            <language-switch></language-switch>-->
+                            <language-switch></language-switch>
                             <button
                                 type="button"
-                                class="
-                                    secondary
-                                    flex
-                                    p-2
-                                    px-4
-                                    rounded-full
-                                    items-center
-                                    justify-center
-                                    focus:outline-none
-                                    focus:ring-2
-                                    focus:ring-offset-2
-                                "
+                                class="secondary flex p-2 px-4 rounded-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2"
                                 @click="logoutUser"
                             >
                                 <span class="text-sm mr-2">Logout</span>
@@ -210,14 +163,7 @@
                     <!-- Primary column -->
                     <section
                         aria-labelledby="primary-heading"
-                        class="
-                            min-w-0
-                            flex-1
-                            h-full
-                            flex flex-col
-                            overflow-scroll
-                            lg:order-last
-                        "
+                        class="min-w-0 flex-1 h-full flex flex-col overflow-scroll lg:order-last"
                     >
                         <router-view v-if="!loadingApp" />
                         <div v-else class="p-3 text-3xl">
@@ -231,18 +177,7 @@
     <notifications></notifications>
     <div
         v-if="viewportIncompatible"
-        class="
-            absolute
-            top-0
-            left-0
-            h-screen
-            w-screen
-            bg-gray-100
-            flex flex-col
-            justify-center
-            items-center
-            p-12
-        "
+        class="absolute top-0 left-0 h-screen w-screen bg-gray-100 flex flex-col justify-center items-center p-12"
     >
         <exclamation-icon class="m-3 h-20 w-20 text-red-600" />
         <h1 class="text-red-600 text-center">
