@@ -116,9 +116,10 @@
                                             ]"
                                             aria-hidden="true"
                                         />
-                                        <span class="text-center">
-                                            {{ item.name }}
-                                        </span>
+                                        <span
+                                            class="text-center"
+                                            v-html="item.name"
+                                        />
                                     </a>
                                 </div>
                             </nav>
@@ -145,13 +146,13 @@ import {
 } from '@headlessui/vue'
 
 import {
+    ChartBarIcon,
     HomeIcon,
     PhotographIcon,
     ViewGridIcon,
     PresentationChartLineIcon,
     UsersIcon,
     GlobeAltIcon,
-    // ChartPieIcon,
 } from '@heroicons/vue/outline'
 
 import { XIcon } from '@heroicons/vue/outline'
@@ -162,6 +163,7 @@ import { useI18n } from 'vue-i18n'
 export default {
     name: 'MainMenu',
     components: {
+        ChartBarIcon,
         TransitionRoot,
         TransitionChild,
         XIcon,
@@ -188,14 +190,26 @@ export default {
                 href: '/survey-elements',
                 icon: ViewGridIcon,
             },
-            { name: t('assets', 2), href: '/assets', icon: PhotographIcon },
+            {
+                name: t('assets', 2),
+                href: '/assets',
+                icon: PhotographIcon,
+            },
             {
                 name: t('languages', 2),
                 href: '/languages',
                 icon: GlobeAltIcon,
             },
-            { name: t('users', 2), href: '/users', icon: UsersIcon },
-            // { name: t('results', 2), href: '/stats', icon: ChartPieIcon },
+            {
+                name: t('users', 2),
+                href: '/users',
+                icon: UsersIcon,
+            },
+            {
+                name: t('stats', 2),
+                href: '/stats',
+                icon: ChartBarIcon,
+            },
         ]
 
         return {

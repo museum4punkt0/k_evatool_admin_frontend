@@ -1,10 +1,13 @@
 <template>
-    <canvas ref="chartRef" width="400" height="400" />
+    <div class="type-bar-chart">
+        <canvas ref="chartRef" width="400" :height="getChartHeight" />
+    </div>
 </template>
 
 <script>
 import Chart from 'chart.js/auto'
-import { onMounted, onUnmounted, ref } from 'vue'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 export default {
     name: 'TypeBarChart',
@@ -31,13 +34,19 @@ export default {
         let chart
         const chartRef = ref(null)
 
+        const getChartHeight = computed(() => {
+            return props.chartLabel === 'binary' ? 150 : 400
+        })
+
         onMounted(() => {
             chart = new Chart(chartRef.value, {
+                plugins: [ChartDataLabels],
                 type: 'bar',
                 data: {
                     labels: props.labels,
                     datasets: [
                         {
+                            barPercentage: 0.45,
                             label: props.chartLabel,
                             data: props.values,
                             backgroundColor: props.colors,
@@ -48,8 +57,39 @@ export default {
                 options: {
                     indexAxis: props.chartLabel === 'binary' ? 'y' : 'x',
                     scales: {
-                        y: {
-                            beginAtZero: true,
+                        y: { beginAtZero: true },
+                    },
+                    layout: {
+                        padding: {
+                            right: props.chartLabel === 'binary' ? 30 : 0,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display:
+                                props.chartLabel === 'binary' ? false : true,
+                        },
+                        tooltip: {
+                            enabled: false,
+                        },
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                let sum = 0
+                                let dataArr = ctx.chart.data.datasets[0].data
+                                dataArr.map((data) => {
+                                    sum += data
+                                })
+                                let percentage =
+                                    ((value * 100) / sum).toFixed(0) + '%'
+                                return percentage
+                            },
+                            color: props.colors,
+                            align: 'end',
+                            anchor: 'end',
+                            padding: 5,
+                            font: {
+                                weight: 'bold',
+                            },
                         },
                     },
                 },
@@ -61,11 +101,17 @@ export default {
         })
 
         return {
-            chartRef,
             chart,
+            chartRef,
+            getChartHeight,
         }
     },
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.type-bar-chart {
+    width: 100%;
+    height: auto;
+}
+</style>

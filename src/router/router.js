@@ -15,6 +15,7 @@ import Login from '../components/Login.vue'
 
 import Users from '../components/Users/Users.vue'
 
+import SurveyStatsList from '../components/Stats/SurveyStatsList.vue'
 import SurveyStats from '../components/Stats/SurveyStats.vue'
 import SurveyStat from '../components/Stats/SurveyStat.vue'
 
@@ -36,6 +37,7 @@ const routes = [
 
     { name: 'languages', path: '/languages', component: ListLanguages },
 
+    { path: '/stats/', component: SurveyStatsList },
     { path: '/stats/:survey_id', component: SurveyStats },
     { path: '/stats/:survey_id/:step_id', component: SurveyStat },
 

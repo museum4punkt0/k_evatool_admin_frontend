@@ -49,7 +49,7 @@ export default {
     emojis: 'Emojis | Emoji | Emojis',
     error_emoji_already_in_use: 'Emoji oder Bedeutung wird bereits verwendet',
     email: 'E-Mail',
-    elements: 'Umfragenelemente | Umfragenelement | Umfragenelemente',
+    elements: 'Umfragen-elemente | Umfragen-element | Umfragen-elemente',
     end: 'Ende',
     export_type: 'Export-Format',
     filename: 'Dateiname',

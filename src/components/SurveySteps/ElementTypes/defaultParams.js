@@ -18,6 +18,14 @@ const createDefaultQuestion = (languages) => {
     return question
 }
 
+const createDefaultLabel = (languages) => {
+    const labels = {}
+    languages.forEach((language) => {
+        labels[language.code] = ''
+    })
+    return labels
+}
+
 const createTrueLabel = (language) => {
     switch (language.code) {
         case 'de':
@@ -57,15 +65,11 @@ export default (type, languages) => {
             }
         }
         case TYPES.MULTIPLECHOICE: {
-            const question = {}
-            const options = []
-            const option = { value: 'value', labels: {} }
-            languages.forEach((language) => {
-                question[language.code] = ''
-                option['labels'][language.code] = ''
-            })
-            options.push(option)
-            options.push(option)
+            const question = createDefaultQuestion(languages)
+            const options = [
+                { value: 'value_one', labels: createDefaultLabel(languages) },
+                { value: 'value_two', labels: createDefaultLabel(languages) },
+            ]
             return {
                 question,
                 minSelectable: 1,
