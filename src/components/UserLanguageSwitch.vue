@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{ languageCode }}
         <button
             class="mr-2"
             :class="{
