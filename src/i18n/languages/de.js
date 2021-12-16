@@ -150,9 +150,13 @@ export default {
     tooltip_set_next_step: 'Folgeschritt setzen',
     tooltip_set_previous_step: 'Vorgaengerschritt setzen',
     tooltip_set_timebased_steps: 'Zeitbasierte Schritte setzen',
-    tooltip_set_resultbased_steps: 'Antwortabhaengige Schritte setzen',
+    tooltip_set_timebased_steps_disabled:
+        'Zeitbasierte Schritte sind nur bei Videos verfügbar',
+    tooltip_set_resultbased_steps: 'Antwortabhängige Schritte setzen',
+    tooltip_set_resultbased_steps_disabled:
+        'Antwortabhängige Schritte sind für diesen Elementtyp mit diesen Optionen nicht verfügbar, z.B. Multiple Choice mit mehr als einer verpflichtenden Antwortmöglichkeit',
     tooltip_survey_details_languages:
-        'Umfrage in folgenden Sprachen verfügabar machen',
+        'Umfrage in folgenden Sprachen verfügbar machen',
     tooltip_survey_details_slug:
         'Nutzer-lesbare, eindeutige suchmaschienenfreundliche ID, Teil der URL',
     types: 'Typen | Typ | Typen',

@@ -157,33 +157,50 @@
                         </div>
                     </button>
 
-                    <button
+                    <div
                         v-tippy="{
-                            content: t('tooltip_set_timebased_steps'),
+                            content: hasTimeBasedNextStepsButton(step)
+                                ? t('tooltip_set_timebased_steps')
+                                : t('tooltip_set_timebased_steps_disabled'),
                         }"
-                        class="flex-1 disabled:opacity-25"
-                        :disabled="
-                            steps.find((x) => x.id === step.id)
-                                ?.surveyElementType !== 'video'
-                        "
-                        @click.prevent.stop="openTimeBasedModal(step.id)"
+                        class="text-center"
                     >
-                        <span class="flex h-full justify-center items-center">
-                            <ClockIcon class="h-5 w-5" />
-                        </span>
-                    </button>
-                    <button
+                        <button
+                            class="flex-1 disabled:opacity-25"
+                            :disabled="
+                                steps.find((x) => x.id === step.id)
+                                    ?.surveyElementType !== 'video'
+                            "
+                            @click.prevent.stop="openTimeBasedModal(step.id)"
+                        >
+                            <span
+                                class="flex h-full justify-center items-center"
+                            >
+                                <ClockIcon class="h-5 w-5" />
+                            </span>
+                        </button>
+                    </div>
+
+                    <div
                         v-tippy="{
-                            content: t('tooltip_set_resultbased_steps'),
+                            content: !hasResultBasedNextStepsButton(step)
+                                ? t('tooltip_set_resultbased_steps')
+                                : t('tooltip_set_resultbased_steps_disabled'),
                         }"
-                        class="flex-1 disabled:opacity-25"
-                        :disabled="hasResultBasedNextStepsButton(step)"
-                        @click.prevent.stop="openResultBasedModal(step.id)"
+                        class="text-center"
                     >
-                        <span class="flex h-full justify-center items-center">
-                            <switch-horizontal-icon class="h-5 w-5" />
-                        </span>
-                    </button>
+                        <button
+                            class="flex-1 disabled:opacity-25"
+                            :disabled="hasResultBasedNextStepsButton(step)"
+                            @click.prevent.stop="openResultBasedModal(step.id)"
+                        >
+                            <span
+                                class="flex h-full justify-center items-center"
+                            >
+                                <switch-horizontal-icon class="h-5 w-5" />
+                            </span>
+                        </button>
+                    </div>
                     <!--                    SKIP TOGGLE BUTTON / FUNCTION NOT IMPLEMENTED -->
                     <!--                    <div
                         class="flex-1 pointer"
@@ -706,6 +723,12 @@ export default {
                 }) != null
             )
         }
+        const hasTimeBasedNextStepsButton = (step) => {
+            return (
+                props.steps.find((x) => x.id === step.id)?.surveyElementType ===
+                'video'
+            )
+        }
         const zoom = (zoomfactor) => {
             if (zoomfactor < 0 && zoomFactor.value > 0.5) {
                 zoomFactor.value = parseFloat(
@@ -762,6 +785,7 @@ export default {
             getStepElementPosition,
             hasNextAndPreviousSockets,
             hasResultBasedNextStepsButton,
+            hasTimeBasedNextStepsButton,
             height,
             nodeCanvas,
             nodeEditor,
