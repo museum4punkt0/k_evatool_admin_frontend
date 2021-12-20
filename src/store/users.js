@@ -53,7 +53,7 @@ export default {
             if (localStorage.getItem('evaToken')) {
                 commit('setToken', localStorage.getItem('evaToken'))
                 const user = await USERS.checkLogin()
-                if (user.id) {
+                if (user?.id) {
                     commit('setUser', user)
                     return user
                 }
