@@ -21,6 +21,7 @@
             <input
                 :id="name"
                 v-model="valueLocal"
+                :readonly="readonly"
                 :class="invalid ? 'invalid' : ''"
                 :type="type"
                 :name="name"
@@ -71,6 +72,10 @@ export default {
             default: '',
         },
         invalid: {
+            type: Boolean,
+            default: false,
+        },
+        readonly: {
             type: Boolean,
             default: false,
         },

@@ -22,9 +22,12 @@
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
-        :invalid="validateParams.question[language.code].$invalid"
+        :invalid="
+            !validateParams.question?.validateLanguageLabel?.$response[
+                language.code
+            ]
+        "
     />
-
     <div v-if="paramsLocal.emojis.length > 0" class="table-wrap mt-3">
         <table>
             <thead>
@@ -44,30 +47,40 @@
         </table>
     </div>
 
-    <div class="p-2 rounded-lg mt-3">
+    <div class="rounded-lg mt-3">
         <!-- <form-select-emoji
             v-model:selected="selectedEmoji.type"
             name="emoji"
             :label="t('emojis')"
         /> -->
         <VuemojiPicker
+            v-if="showEmojiPicker"
+            class="vuemoji-picker"
             :i18n="i18nDe"
             :picker-style="pickerStyle"
             :is-dark="false"
             @emojiClick="handleEmojiClick"
         />
+        <div class="mt-3 flex justify-between">
+            <form-input
+                v-model:value="selectedEmoji.type"
+                readonly
+                class="w-1/2"
+                name="type"
+                :invalid="validateEmoji.type.$invalid"
+                :label="t('type', 1)"
+                @click="toggleEmojiPicker"
+            />
+            <button class="primary self-end" @click="toggleEmojiPicker">
+                {{ t('action_pick_emoji') }}
+            </button>
+        </div>
 
-        <form-input
-            v-model:value="selectedEmoji.type"
-            class="mt-3"
-            name="type"
-            :label="t('type', 1)"
-            :helptext="t('validation_emoji_type')"
-        />
         <form-input
             v-model:value="selectedEmoji.meaning"
             class="mt-3"
             name="meaning"
+            :invalid="validateEmoji.meaning.$invalid"
             :label="t('meanings', 1)"
             :helptext="t('validation_emoji_meaning')"
         />
@@ -94,10 +107,10 @@ import { TrashIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
 import { minLength, maxLength, required, helpers } from '@vuelidate/validators'
 
-const meaningValidation = helpers.regex(/^[a-z][a-z0-9_]*$/)
-
+const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
 import useVuelidate from '@vuelidate/core'
 import TinyMce from '../../Common/TinyMce.vue'
+import _ from 'lodash'
 
 export default {
     name: 'ElementTypeEmoji',
@@ -120,6 +133,7 @@ export default {
         const store = useStore()
         const { t } = useI18n()
         const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
+        const showEmojiPicker = ref(false)
         const selectedEmoji = ref({
             type: '',
             meaning: '',
@@ -130,18 +144,23 @@ export default {
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
         }
+
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
 
-        const questionValidation = {}
-        store.state.languages.languages.forEach((language) => {
-            questionValidation[language.code] = {
-                required,
-                minLength: minLength(1),
+        function toggleEmojiPicker() {
+            showEmojiPicker.value = !showEmojiPicker.value
+        }
+
+        const validateLanguageLabel = (object) => {
+            const newObject = Object.assign({}, object)
+            for (const [key, value] of Object.entries(object)) {
+                newObject[key] = !!value
             }
-        })
+            return newObject
+        }
 
         const emojiValidation = () => {
             const valid = /\p{Extended_Pictographic}/u.test(
@@ -156,7 +175,7 @@ export default {
                     required,
                     minLength: minLength(1),
                     maxLength: maxLength(50),
-                    meaningValidation,
+                    snakeCaseValidator,
                 },
             }
         }
@@ -169,9 +188,11 @@ export default {
                             required,
                             $each: emojiValidation(),
                         },
-                        question: questionValidation,
+                        question: {
+                            required,
+                            validateLanguageLabel,
+                        },
                     },
-
                     selectedEmoji: emojiValidation(),
                 }
             },
@@ -214,21 +235,36 @@ export default {
         )
 
         watch(
-            () => validateParams.value.$invalid,
-            (invalid) => {
-                emit('isValid', !invalid)
+            () => _.cloneDeep(paramsLocal.value),
+            (currentValue) => {
+                let singleLangIsValid = false
+                const counterLangCount = 1
+                store.state.languages.languages.forEach((lang) => {
+                    let currentCount = 0
+                    if (currentValue.question[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (parseInt(currentCount) === parseInt(counterLangCount)) {
+                        singleLangIsValid = true
+                    }
+                })
+                const isValid =
+                    singleLangIsValid && !validateParams.value.$invalid
+                emit('isValid', isValid)
             },
+            { immediate: true },
         )
 
         const deleteEmoji = (index) => {
-            const confirmDelete = confirm(t('confirm_delete_time_based_step'))
+            const confirmDelete = confirm(t('confirm_delete_emoji'))
             if (confirmDelete) {
                 paramsLocal.value.emojis.splice(index, 1)
             }
         }
         const handleEmojiClick = (emoji) => {
-            console.log(emoji.unicode)
+            // console.log(emoji.unicode)
             // do something
+            showEmojiPicker.value = false
             selectedEmoji.value.type = emoji.unicode
         }
 
@@ -246,6 +282,8 @@ export default {
             deleteEmoji,
             selectedLanguage,
             setSelectedLanguage,
+            toggleEmojiPicker,
+            showEmojiPicker,
             validateParams,
             validateEmoji,
             tinyMceKey,
@@ -257,8 +295,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 button.language {
     padding: 2px 8px;
+}
+.vuemoji-picker {
+    position: absolute;
+    transform: translateX(-105%);
 }
 </style>
