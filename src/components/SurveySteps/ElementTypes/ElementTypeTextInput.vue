@@ -27,6 +27,9 @@
             )"
             :key="'lang' + language.id"
             v-model:text="paramsLocal.question[language.code]"
+            :invalid="
+                !v$.question?.validateLanguageLabel?.$response[language.code]
+            "
         />
     </div>
 </template>
@@ -41,6 +44,7 @@ import { required } from '@vuelidate/validators'
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import TinyMce from '../../Common/TinyMce.vue'
+import _ from 'lodash'
 
 export default {
     name: 'ElementTypeMultipleChoiceQuestion',
@@ -66,22 +70,21 @@ export default {
         const setSelectedLanguage = (language) => {
             selectedLanguage.value = language
         }
-        const existsInAllLanguages = (value) => {
-            let valid = true
-            Object.entries(value).forEach((entry) => {
-                // TODO: check language key
-                if (!entry[1] || entry[1].length === 0) {
-                    valid = false
-                }
-            })
-            return valid
+
+        const validateLanguageLabel = (object) => {
+            const newObject = Object.assign({}, object)
+            for (const [key, value] of Object.entries(object)) {
+                newObject[key] = !!value && value.length < 300
+            }
+            return newObject
         }
+
         const validations = computed({
             get: () => {
                 return {
                     question: {
                         required,
-                        existsInAllLanguages,
+                        validateLanguageLabel,
                     },
                 }
             },
@@ -93,10 +96,24 @@ export default {
         })
 
         watch(
-            () => paramsValidation.value.$invalid,
-            (invalid) => {
-                emit('isValid', !invalid)
+            () => _.cloneDeep(paramsLocal.value),
+            (currentValue) => {
+                let singleLangIsValid = false
+                const counterLangCount = 1
+                store.state.languages.languages.forEach((lang) => {
+                    let currentCount = 0
+                    if (currentValue.question[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (parseInt(currentCount) === parseInt(counterLangCount)) {
+                        singleLangIsValid = true
+                    }
+                })
+                const isValid =
+                    singleLangIsValid && !paramsValidation.value.$invalid
+                emit('isValid', isValid)
             },
+            { immediate: true },
         )
 
         return {
