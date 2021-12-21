@@ -126,7 +126,7 @@ import _ from 'lodash'
 import useVuelidate from '@vuelidate/core'
 import { required, between, helpers, maxValue } from '@vuelidate/validators'
 
-const snakeCaseValidator = helpers.regex(/^[a-z]+(?:[_][a-z]+)*$/)
+const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
 
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 

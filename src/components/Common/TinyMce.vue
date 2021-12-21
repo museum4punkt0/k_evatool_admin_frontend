@@ -13,7 +13,8 @@
                     'print preview anchor insertdatetime media',
                     'paste code help wordcount table',
                 ],
-                toolbar: 'undo redo | bold italic | bullist numlist ',
+                toolbar: 'undo redo | bold italic',
+                paste_as_text: true,
             }"
         ></editor>
     </div>

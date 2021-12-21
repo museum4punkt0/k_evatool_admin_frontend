@@ -48,11 +48,6 @@
     </div>
 
     <div class="rounded-lg mt-3">
-        <!-- <form-select-emoji
-            v-model:selected="selectedEmoji.type"
-            name="emoji"
-            :label="t('emojis')"
-        /> -->
         <VuemojiPicker
             v-if="showEmojiPicker"
             class="vuemoji-picker"
@@ -132,7 +127,6 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const showEmojiPicker = ref(false)
         const selectedEmoji = ref({
             type: '',
@@ -157,7 +151,7 @@ export default {
         const validateLanguageLabel = (object) => {
             const newObject = Object.assign({}, object)
             for (const [key, value] of Object.entries(object)) {
-                newObject[key] = !!value
+                newObject[key] = !!value && value.length < 300
             }
             return newObject
         }
@@ -174,7 +168,7 @@ export default {
                 meaning: {
                     required,
                     minLength: minLength(1),
-                    maxLength: maxLength(50),
+                    maxLength: maxLength(20),
                     snakeCaseValidator,
                 },
             }
@@ -205,8 +199,9 @@ export default {
             if (
                 paramsLocal.value.emojis.findIndex(
                     (x) =>
-                        x.type.trim() === selectedEmoji.value.type.trim() ||
-                        x.meaning.trim() === selectedEmoji.value.meaning.trim(),
+                        x.type?.trim() === selectedEmoji.value.type.trim() ||
+                        x.meaning?.trim() ===
+                            selectedEmoji.value.meaning.trim(),
                 ) >= 0
             ) {
                 execute = false
@@ -286,7 +281,6 @@ export default {
             showEmojiPicker,
             validateParams,
             validateEmoji,
-            tinyMceKey,
             handleEmojiClick,
             pickerStyle,
             i18nDe,
