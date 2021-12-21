@@ -1,28 +1,12 @@
 <template>
-    <div class="flex mt-8">
-        <label class="flex-grow">{{ t('texts', 1) }}</label>
-        <div class="languages flex">
-            <button
-                v-for="language in store.state.languages.languages"
-                :key="language.code"
-                class="language"
-                :class="{
-                    primary: language.code === selectedLanguage.code,
-                    secondary: language.code !== selectedLanguage.code,
-                }"
-                @click="setSelectedLanguage(language)"
-            >
-                {{ language.code }}
-            </button>
-        </div>
-    </div>
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.text[language.code]"
-        :invalid="v$.text[language.code].$invalid"
+        :label="t('texts', 1)"
+        :invalid="!v$.text?.validateLanguageLabel?.$response[language.code]"
     />
 </template>
 
@@ -30,15 +14,13 @@
 import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import FormInput from '../../Forms/FormInput.vue'
-import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import useVuelidate from '@vuelidate/core'
-import { minLength, required } from '@vuelidate/validators'
 import TinyMce from '../../Common/TinyMce.vue'
+import _ from 'lodash'
 
 export default {
     name: 'ElementTypeSimpleText',
-    components: { TinyMce, FormInput, LanguageSwitch },
+    components: { TinyMce },
     props: {
         params: {
             type: Object,
@@ -49,30 +31,33 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
-        const selectedLanguage = ref(
-            store.state.languages.languages.find((lang) => lang.default),
-        )
-        const setSelectedLanguage = (language) => {
-            selectedLanguage.value = language
-        }
 
-        const textValidation = {}
-        store.state.languages.languages.forEach((language) => {
-            textValidation[language.code] = {
-                required,
-                minLength: minLength(1),
+        const selectedLanguage = ref(store.state.languages.maintainLanguage)
+        watch(
+            () => store.state.languages.maintainLanguage,
+            (value) => {
+                selectedLanguage.value = value
+            },
+        )
+
+        const validateLanguageLabel = (object) => {
+            const newObject = Object.assign({}, object)
+            for (const [key, value] of Object.entries(object)) {
+                newObject[key] = !!value && value.length < 300
             }
-        })
+            return newObject
+        }
 
         const validations = computed({
             get: () => {
                 return {
-                    text: textValidation,
+                    text: {
+                        validateLanguageLabel,
+                    },
                 }
             },
             set: (val) => emit('update:params', val),
@@ -83,20 +68,32 @@ export default {
         })
 
         watch(
-            () => paramsValidation.value.$invalid,
-            (invalid) => {
-                emit('isValid', !invalid)
+            () => _.cloneDeep(paramsLocal.value),
+            (currentValue) => {
+                let singleLangIsValid = false
+                const counterLangCount = 1
+                store.state.languages.languages.forEach((lang) => {
+                    let currentCount = 0
+                    if (currentValue.text[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (parseInt(currentCount) === parseInt(counterLangCount)) {
+                        singleLangIsValid = true
+                    }
+                })
+                const isValid =
+                    singleLangIsValid && !paramsValidation.value.$invalid
+                emit('isValid', isValid)
             },
+            { immediate: true },
         )
 
         return {
             selectedLanguage,
-            setSelectedLanguage,
             paramsLocal,
             store,
             t,
             v$: paramsValidation,
-            tinyMceKey,
         }
     },
 }

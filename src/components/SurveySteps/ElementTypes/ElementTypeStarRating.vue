@@ -1,27 +1,11 @@
 <template>
-    <div class="flex mt-8">
-        <label class="flex-grow">{{ t('questions', 1) }}</label>
-        <div class="languages flex">
-            <button
-                v-for="language in store.state.languages.languages"
-                :key="language.code"
-                class="language"
-                :class="{
-                    primary: language.code === selectedLanguage.code,
-                    secondary: language.code !== selectedLanguage.code,
-                }"
-                @click="setSelectedLanguage(language)"
-            >
-                {{ language.code }}
-            </button>
-        </div>
-    </div>
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
+        :label="t('questions', 1)"
         :invalid="validateParams.question[language.code].$invalid"
     />
 
@@ -55,14 +39,12 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.lowestValueLabel[language.code]"
+            language-switch
             name="lowestValueLabel"
             :label="t('label_lowest_value')"
-            class="col-span-4"
+            class="xl:col-span-6 col-span-12"
             :invalid="validateParams.lowestValueLabel[language.code].$invalid"
             :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
-            @change="() => validateParams.lowestValueLabel.$touch()"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -70,13 +52,11 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.middleValueLabel[language.code]"
+            language-switch
             name="middleValueLabel"
             :label="t('label_middle_value')"
-            class="col-span-4"
+            class="xl:col-span-6 col-span-12"
             :invalid="validateParams.middleValueLabel[language.code].$invalid"
-            :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -84,16 +64,13 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.highestValueLabel[language.code]"
+            language-switch
             name="highestValueLabel"
             :label="t('label_highest_value')"
-            class="col-span-4"
+            class="xl:col-span-6 col-span-12"
             :invalid="validateParams.highestValueLabel[language.code].$invalid"
-            :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
         />
     </div>
-
     <div class="flex flex-row mt-3">
         <div class="mr-3">
             <form-input
@@ -120,17 +97,6 @@
             </p>
         </div>
     </div>
-
-    <!-- <pre v-if="validateParams.$invalid">
-    {{
-            validateParams.$silentErrors.map((error) => {
-                return {
-                    property: error.$property,
-                    message: error.$message,
-                }
-            })
-        }}
-    </pre> -->
 </template>
 
 <script>
@@ -141,8 +107,8 @@ import FormToggle from '../../Forms/FormToggle.vue'
 import FormSelect from '../../Forms/FormSelect.vue'
 import TinyMce from '../../Common/TinyMce.vue'
 import { useStore } from 'vuex'
-import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import useVuelidate from '@vuelidate/core'
+const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
 import {
     required,
     between,
@@ -153,7 +119,7 @@ import {
 
 export default {
     name: 'ElementTypeStarRating',
-    components: { TinyMce, FormToggle, FormInput, FormSelect, LanguageSwitch },
+    components: { TinyMce, FormToggle, FormInput, FormSelect },
     props: {
         params: {
             type: Object,
@@ -164,19 +130,18 @@ export default {
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
 
-        const selectedLanguage = ref(
-            store.state.languages.languages.find((lang) => lang.default),
+        const selectedLanguage = ref(store.state.languages.maintainLanguage)
+        watch(
+            () => store.state.languages.maintainLanguage,
+            (value) => {
+                selectedLanguage.value = value
+            },
         )
-
-        const setSelectedLanguage = (language) => {
-            selectedLanguage.value = language
-        }
 
         const questionValidation = {}
         store.state.languages.languages.forEach((language) => {
@@ -196,7 +161,6 @@ export default {
             }
         })
 
-        const meaningValidation = helpers.regex(/^[a-z][a-z0-9_]*$/)
         const validations = computed({
             get: () => {
                 return {
@@ -217,13 +181,13 @@ export default {
                         required,
                         minLength: minLength(1),
                         maxLength: maxLength(20),
-                        meaningValidation,
+                        snakeCaseValidator,
                     },
                     meaningHighestValue: {
                         required,
                         minLength: minLength(1),
                         maxLength: maxLength(20),
-                        meaningValidation,
+                        snakeCaseValidator,
                     },
                 }
             },
@@ -252,19 +216,11 @@ export default {
 
         return {
             selectedLanguage,
-            setSelectedLanguage,
             paramsLocal,
             t,
             store,
             validateParams,
-            tinyMceKey,
         }
     },
 }
 </script>
-
-<style scoped>
-button.language {
-    padding: 2px 8px;
-}
-</style>

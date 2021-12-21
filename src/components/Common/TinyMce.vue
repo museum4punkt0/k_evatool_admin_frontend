@@ -1,4 +1,8 @@
 <template>
+    <div class="flex">
+        <label class="flex-grow">{{ label }}</label>
+        <language-switch-small />
+    </div>
     <div :class="invalid ? 'invalid' : ''">
         <editor
             v-model="textLocal"
@@ -23,11 +27,16 @@
 <script>
 import Editor from '@tinymce/tinymce-vue'
 import { computed } from 'vue'
+import LanguageSwitchSmall from '../../components/Languages/LanguageSwitchSmall.vue'
 
 export default {
     name: 'TinyMce',
-    components: { Editor },
+    components: { LanguageSwitchSmall, Editor },
     props: {
+        label: {
+            type: String,
+            default: '',
+        },
         text: {
             type: String,
             default: '',

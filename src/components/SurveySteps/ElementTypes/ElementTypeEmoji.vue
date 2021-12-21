@@ -1,27 +1,11 @@
 <template>
-    <div class="flex mt-8">
-        <label class="flex-grow">{{ t('questions', 1) }}</label>
-        <div class="languages flex">
-            <button
-                v-for="language in store.state.languages.languages"
-                :key="language.code"
-                class="language"
-                :class="{
-                    primary: language.code === selectedLanguage.code,
-                    secondary: language.code !== selectedLanguage.code,
-                }"
-                @click="setSelectedLanguage(language)"
-            >
-                {{ language.code }}
-            </button>
-        </div>
-    </div>
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
+        :label="t('questions', 1)"
         :invalid="
             !validateParams.question?.validateLanguageLabel?.$response[
                 language.code
@@ -63,7 +47,7 @@
                 class="w-1/2"
                 name="type"
                 :invalid="validateEmoji.type.$invalid"
-                :label="t('type', 1)"
+                :label="t('types', 1)"
                 @click="toggleEmojiPicker"
             />
             <button class="primary self-end" @click="toggleEmojiPicker">
@@ -132,12 +116,14 @@ export default {
             type: '',
             meaning: '',
         })
-        const selectedLanguage = ref(
-            store.state.languages.languages.find((lang) => lang.default),
+
+        const selectedLanguage = ref(store.state.languages.maintainLanguage)
+        watch(
+            () => store.state.languages.maintainLanguage,
+            (value) => {
+                selectedLanguage.value = value
+            },
         )
-        const setSelectedLanguage = (language) => {
-            selectedLanguage.value = language
-        }
 
         const paramsLocal = computed({
             get: () => props.params,
@@ -276,7 +262,6 @@ export default {
             addEmoji,
             deleteEmoji,
             selectedLanguage,
-            setSelectedLanguage,
             toggleEmojiPicker,
             showEmojiPicker,
             validateParams,
@@ -290,9 +275,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button.language {
-    padding: 2px 8px;
-}
 .vuemoji-picker {
     position: absolute;
     transform: translateX(-105%);

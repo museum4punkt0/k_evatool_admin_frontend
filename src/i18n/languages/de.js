@@ -140,6 +140,7 @@ export default {
     system_value: 'Schlüsselwert',
     system_value_explaination:
         'sprachunabhängiger Schlüsselwert - zur internen Speicherung, Auswertung und Export',
+    texts: 'Anzeigetexte | Anzeigetext | Anzeigetexte',
     timestamps: 'Zeiten | Zeit | Zeiten',
     timestamp_start: 'Startzeit',
     timestamp_stop: 'Stopzeit',

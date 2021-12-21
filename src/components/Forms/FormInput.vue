@@ -2,20 +2,7 @@
     <div>
         <div class="flex">
             <label :for="name" class="flex-grow">{{ label }}</label>
-            <div class="languages flex">
-                <button
-                    v-for="language in languages"
-                    :key="language.code"
-                    class="language"
-                    :class="{
-                        primary: language.code === activeLanguage.code,
-                        secondary: language.code !== activeLanguage.code,
-                    }"
-                    @click="$emit('languageSelect', language)"
-                >
-                    {{ language.code }}
-                </button>
-            </div>
+            <language-switch-small v-if="languageSwitch" />
         </div>
         <div class="mt-1">
             <input
@@ -32,23 +19,16 @@
         <p v-if="helptext" class="text-gray-500 text-xs mt-1 ml-1">
             {{ helptext }}
         </p>
-        <!-- <template v-if="typeof helptext === Array">
-            <p
-                v-for="(text, index) in helptext"
-                :key="`helptext_${index}`"
-                class="text-gray-500 text-xs mt-1 ml-1"
-            >
-                {{ text }}
-            </p>
-        </template> -->
     </div>
 </template>
 
 <script>
 import { computed } from 'vue'
+import LanguageSwitchSmall from '../../components/Languages/LanguageSwitchSmall.vue'
 
 export default {
     name: 'FormInput',
+    components: { LanguageSwitchSmall },
     props: {
         name: {
             type: String,
@@ -87,17 +67,12 @@ export default {
             type: String,
             default: 'text',
         },
-        languages: {
-            type: Array,
-            default: () => [],
-        },
-        activeLanguage: {
-            type: Object,
-            required: false,
-            default: () => null,
+        languageSwitch: {
+            type: Boolean,
+            default: false,
         },
     },
-    emits: ['update:value', 'languageSelect'],
+    emits: ['update:value'],
     setup(props, { emit }) {
         const valueLocal = computed({
             get: () => props.value,
@@ -111,8 +86,4 @@ export default {
 }
 </script>
 
-<style scoped>
-button.language {
-    padding: 2px 8px;
-}
-</style>
+<style scoped></style>

@@ -1,28 +1,12 @@
 <template>
-    <div class="flex mt-8">
-        <label class="flex-grow">{{ t('questions', 1) }}</label>
-        <div class="languages flex">
-            <button
-                v-for="language in store.state.languages.languages"
-                :key="language.code"
-                class="language"
-                :class="{
-                    primary: language.code === selectedLanguage.code,
-                    secondary: language.code !== selectedLanguage.code,
-                }"
-                @click="setSelectedLanguage(language)"
-            >
-                {{ language.code }}
-            </button>
-        </div>
-    </div>
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
-        :invalid="v$.question.$invalid"
+        :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
+        :label="t('questions', 1)"
     />
     <div class="grid grid-cols-12 gap-4">
         <form-input
@@ -31,13 +15,13 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.trueLabel[language.code]"
-            :invalid="v$.trueLabel.$invalid"
+            language-switch
+            :invalid="
+                !v$.trueLabel.validateLanguageLabel.$response[language.code]
+            "
             :name="'lang' + language.id"
             class="mt-3 col-span-6"
             :label="t('binary_positive_label') + ' (' + language.title + ')'"
-            :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -45,22 +29,16 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.falseLabel[language.code]"
-            :invalid="v$.falseLabel.$invalid"
+            language-switch
+            :invalid="
+                !v$.falseLabel.validateLanguageLabel.$response[language.code]
+            "
             :name="'lang' + language.id"
             class="mt-3 col-span-6"
             :label="t('binary_negative_label') + ' (' + language.title + ')'"
-            :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
         />
+        <pre>{{}}</pre>
     </div>
-    <!-- <button
-        class="mt-8 text-blue-800"
-        @click="setShowSystemValues(!showSystemValues)"
-    >
-        Werte/Bedeutungen ändern
-    </button> -->
-    <!-- <div v-if="showSystemValues" class="grid grid-cols-12 gap-4"> -->
     <div class="grid grid-cols-12 gap-4">
         <form-input
             v-model:value="paramsLocal.trueValue"
@@ -89,6 +67,7 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import TinyMce from '../../Common/TinyMce.vue'
+import _ from 'lodash'
 
 export default {
     name: 'ElementTypeBinaryQuestion',
@@ -103,10 +82,15 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
-        const selectedLanguage = ref(
-            store.state.languages.languages.find((lang) => lang.default),
+
+        const selectedLanguage = ref(store.state.languages.maintainLanguage)
+        watch(
+            () => store.state.languages.maintainLanguage,
+            (value) => {
+                selectedLanguage.value = value
+            },
         )
+
         const [showSystemValues, setShowSystemValues] = useState(false)
 
         const paramsLocal = computed({
@@ -114,28 +98,18 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        const existsInAllLanguages = (value) => {
-            let valid = true
-            Object.entries(value).forEach((entry) => {
-                // TODO: check language key
-                if (!entry[1] || entry[1].length === 0) {
-                    valid = false
-                }
-            })
-            return valid
+        const validateLanguageLabel = (object) => {
+            const newObject = Object.assign({}, object)
+            for (const [key, value] of Object.entries(object)) {
+                newObject[key] = !!value
+            }
+            return newObject
         }
         const validations = computed({
             get: () => {
                 return {
-                    question: (params) => {
-                        let valid = true
-                        Object.entries(params?.question).forEach((entry) => {
-                            // TODO: check language key
-                            if (!entry[1] || entry[1].length === 0) {
-                                valid = false
-                            }
-                        })
-                        return valid
+                    question: {
+                        validateLanguageLabel,
                     },
                     trueValue: {
                         required,
@@ -146,11 +120,11 @@ export default {
                     // TODO: check if lables are different
                     trueLabel: {
                         required,
-                        existsInAllLanguages,
+                        validateLanguageLabel,
                     },
                     falseLabel: {
                         required,
-                        existsInAllLanguages,
+                        validateLanguageLabel,
                     },
                 }
             },
@@ -161,15 +135,31 @@ export default {
             $scope: 'surveyElement',
         })
         watch(
-            () => paramsValidation.value.$invalid,
-            (invalid) => {
-                emit('isValid', !invalid)
+            () => _.cloneDeep(paramsLocal.value),
+            (currentValue) => {
+                let singleLangIsValid = false
+                const counterLangCount = 3
+                store.state.languages.languages.forEach((lang) => {
+                    let currentCount = 0
+                    if (currentValue.question[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.falseLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.trueLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (parseInt(currentCount) === parseInt(counterLangCount)) {
+                        singleLangIsValid = true
+                    }
+                })
+                const isValid =
+                    singleLangIsValid && !paramsValidation.value.$invalid
+                emit('isValid', isValid)
             },
+            { immediate: true },
         )
-
-        const setSelectedLanguage = (language) => {
-            selectedLanguage.value = language
-        }
 
         return {
             store,
@@ -177,8 +167,6 @@ export default {
             t,
             v$: paramsValidation,
             selectedLanguage,
-            setSelectedLanguage,
-            tinyMceKey,
             showSystemValues,
             setShowSystemValues,
         }
