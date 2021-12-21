@@ -48,11 +48,6 @@
     </div>
 
     <div class="rounded-lg mt-3">
-        <!-- <form-select-emoji
-            v-model:selected="selectedEmoji.type"
-            name="emoji"
-            :label="t('emojis')"
-        /> -->
         <VuemojiPicker
             v-if="showEmojiPicker"
             class="vuemoji-picker"
@@ -173,7 +168,7 @@ export default {
                 meaning: {
                     required,
                     minLength: minLength(1),
-                    maxLength: maxLength(50),
+                    maxLength: maxLength(20),
                     snakeCaseValidator,
                 },
             }
