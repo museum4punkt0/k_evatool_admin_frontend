@@ -7,6 +7,10 @@
         "eslint-plugin-vue": {
             "versions": ">7",
             "reason": "Breaking change"
+        },
+        "tailwindcss": {
+            "versions": ">2",
+            "reason": "Breaking change"
         }
     }
 }
