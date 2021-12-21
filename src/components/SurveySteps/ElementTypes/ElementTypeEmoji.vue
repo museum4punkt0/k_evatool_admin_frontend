@@ -132,7 +132,6 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const showEmojiPicker = ref(false)
         const selectedEmoji = ref({
             type: '',
@@ -157,7 +156,7 @@ export default {
         const validateLanguageLabel = (object) => {
             const newObject = Object.assign({}, object)
             for (const [key, value] of Object.entries(object)) {
-                newObject[key] = !!value
+                newObject[key] = !!value && value.length < 300
             }
             return newObject
         }
@@ -205,8 +204,9 @@ export default {
             if (
                 paramsLocal.value.emojis.findIndex(
                     (x) =>
-                        x.type.trim() === selectedEmoji.value.type.trim() ||
-                        x.meaning.trim() === selectedEmoji.value.meaning.trim(),
+                        x.type?.trim() === selectedEmoji.value.type.trim() ||
+                        x.meaning?.trim() ===
+                            selectedEmoji.value.meaning.trim(),
                 ) >= 0
             ) {
                 execute = false
@@ -286,7 +286,6 @@ export default {
             showEmojiPicker,
             validateParams,
             validateEmoji,
-            tinyMceKey,
             handleEmojiClick,
             pickerStyle,
             i18nDe,
