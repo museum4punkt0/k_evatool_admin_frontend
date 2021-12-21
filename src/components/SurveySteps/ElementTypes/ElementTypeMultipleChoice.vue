@@ -190,10 +190,6 @@ export default {
             emit('update:params', newParams)
         }
 
-        const setSelectedLanguage = (language) => {
-            selectedLanguage.value = language
-        }
-
         const validateLanguageLabel = (object) => {
             const newObject = Object.assign({}, object)
             for (const [key, value] of Object.entries(object)) {

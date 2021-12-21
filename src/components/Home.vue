@@ -27,7 +27,6 @@ import DashboardTile from './Dashboard/DashboardTile.vue'
 import {
     ChartBarIcon,
     GlobeAltIcon,
-    HomeIcon,
     PhotographIcon,
     PresentationChartLineIcon,
     UsersIcon,
