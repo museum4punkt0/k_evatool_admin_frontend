@@ -48,7 +48,7 @@ export default {
         const validateLanguageLabel = (object) => {
             const newObject = Object.assign({}, object)
             for (const [key, value] of Object.entries(object)) {
-                newObject[key] = !!value && value.length < 300
+                newObject[key] = !!value && value.length < 1500
             }
             return newObject
         }

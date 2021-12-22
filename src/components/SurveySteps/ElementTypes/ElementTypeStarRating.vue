@@ -6,7 +6,7 @@
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
         :label="t('questions', 1)"
-        :invalid="validateParams.question[language.code].$invalid"
+        :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
     />
 
     <form-input
@@ -14,7 +14,7 @@
         name="numberOfStars"
         class="mt-3"
         :label="t('number_of_stars')"
-        :invalid="validateParams.numberOfStars.$invalid"
+        :invalid="v$.numberOfStars.$invalid"
     />
     <form-select
         v-model:selected="paramsLocal.displayType"
@@ -28,10 +28,8 @@
         title-key="name"
         value-key="id"
         readonly
-        :invalid="validateParams.displayType.$invalid"
+        :invalid="v$.displayType.$invalid"
     />
-
-    <!-- validateParams.lowestValueLabel.$dirty && -->
     <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -43,7 +41,11 @@
             name="lowestValueLabel"
             :label="t('label_lowest_value')"
             class="xl:col-span-6 col-span-12"
-            :invalid="validateParams.lowestValueLabel[language.code].$invalid"
+            :invalid="
+                !v$.lowestValueLabel?.validateLanguageLabel?.$response[
+                    language.code
+                ]
+            "
             :languages="store.state.languages.languages"
         />
         <form-input
@@ -56,7 +58,11 @@
             name="middleValueLabel"
             :label="t('label_middle_value')"
             class="xl:col-span-6 col-span-12"
-            :invalid="validateParams.middleValueLabel[language.code].$invalid"
+            :invalid="
+                !v$.middleValueLabel?.validateLanguageLabel?.$response[
+                    language.code
+                ]
+            "
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -68,7 +74,11 @@
             name="highestValueLabel"
             :label="t('label_highest_value')"
             class="xl:col-span-6 col-span-12"
-            :invalid="validateParams.highestValueLabel[language.code].$invalid"
+            :invalid="
+                !v$.highestValueLabel?.validateLanguageLabel?.$response[
+                    language.code
+                ]
+            "
         />
     </div>
     <div class="flex flex-row mt-3">
@@ -78,7 +88,7 @@
                 name="meaningLowestValue"
                 :label="t('meaning_lowest_value')"
                 class="col-span-6"
-                :invalid="validateParams.meaningLowestValue.$invalid"
+                :invalid="v$.meaningLowestValue.$invalid"
             />
             <p class="text-xs text-gray-500 ml-1 mt-1">
                 {{ t('validation_snake_case') }}
@@ -90,7 +100,7 @@
                 name="meaningHighestValue"
                 :label="t('meaning_highest_value')"
                 class="col-span-6"
-                :invalid="validateParams.meaningHighestValue.$invalid"
+                :invalid="v$.meaningHighestValue.$invalid"
             />
             <p class="text-xs text-gray-500 ml-1 mt-1">
                 {{ t('validation_snake_case') }}
@@ -116,6 +126,7 @@ import {
     maxLength,
     helpers,
 } from '@vuelidate/validators'
+import _ from 'lodash'
 
 export default {
     name: 'ElementTypeStarRating',
@@ -161,13 +172,21 @@ export default {
             }
         })
 
+        const validateLanguageLabel = (object) => {
+            const newObject = Object.assign({}, object)
+            for (const [key, value] of Object.entries(object)) {
+                newObject[key] = !!value && value.length < 1500
+            }
+            return newObject
+        }
+
         const validations = computed({
             get: () => {
                 return {
-                    question: questionValidation,
-                    lowestValueLabel: labelValidation,
-                    middleValueLabel: labelValidation,
-                    highestValueLabel: labelValidation,
+                    question: { validateLanguageLabel },
+                    lowestValueLabel: { validateLanguageLabel },
+                    middleValueLabel: { validateLanguageLabel },
+                    highestValueLabel: { validateLanguageLabel },
                     numberOfStars: {
                         required,
                         between: between(3, 9),
@@ -194,15 +213,45 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
-        const validateParams = useVuelidate(validations, paramsLocal.value, {
+        const paramsValidation = useVuelidate(validations, paramsLocal.value, {
             $scope: 'surveyElement',
         })
 
         watch(
-            () => validateParams.value.$invalid,
+            () => paramsValidation.value.$invalid,
             (invalid) => {
                 emit('isValid', !invalid)
             },
+        )
+
+        watch(
+            () => _.cloneDeep(paramsLocal.value),
+            (currentValue) => {
+                let singleLangIsValid = false
+                const counterLangCount = 4
+                store.state.languages.languages.forEach((lang) => {
+                    let currentCount = 0
+                    if (currentValue.question[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.lowestValueLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.middleValueLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.highestValueLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (parseInt(currentCount) === parseInt(counterLangCount)) {
+                        singleLangIsValid = true
+                    }
+                })
+                const isValid =
+                    singleLangIsValid && !paramsValidation.value.$invalid
+                emit('isValid', isValid)
+            },
+            { immediate: true },
         )
 
         watch(
@@ -219,7 +268,7 @@ export default {
             paramsLocal,
             t,
             store,
-            validateParams,
+            v$: paramsValidation,
         }
     },
 }
