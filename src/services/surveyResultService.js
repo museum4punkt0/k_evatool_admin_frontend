@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
     async getSurveySteps(surveyId) {
-        const url = 'evaluation-tool/surveys/' + surveyId + '/results'
+        const url = 'evaluation-tool/surveys/' + surveyId + '/results?all'
         return axios
             .get(url)
             .then((response) => {
@@ -13,7 +13,12 @@ export default {
             })
     },
     async getSurveyStepResults(surveyId, stepId) {
-        const url = 'evaluation-tool/surveys/' + surveyId + '/results/' + stepId
+        const url =
+            'evaluation-tool/surveys/' +
+            surveyId +
+            '/results/' +
+            stepId +
+            '?all'
         return axios
             .get(url)
             .then((response) => {
