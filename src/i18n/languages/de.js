@@ -42,7 +42,6 @@ export default {
     confirm_invitation: 'Einladung annehmen',
     confirm_reset_survey_element:
         'Sie haben nicht gespeicherte Änderungen, wollen Sie diese zurücksetzen?',
-    commentable: 'kommentierbar',
     descriptions: 'Beschreibungen | Beschreibung | Beschreibungen',
     display_time: 'Anzeigedauer',
     display_value: 'Anzeigewert',
