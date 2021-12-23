@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.541",
+    "version": "1.0.542",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -54,7 +54,7 @@
         "@vue/eslint-config-standard": "^6.1.0",
         "autoprefixer": "^10.4.0",
         "babel-eslint": "^10.1.0",
-        "cypress": "^9.1.1",
+        "cypress": "^9.2.0",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-import": "^2.25.3",
@@ -67,7 +67,7 @@
         "prettier": "^2.5.1",
         "sass": "^1.45.1",
         "tailwindcss": "^2.2.19",
-        "vite": "^2.7.4",
+        "vite": "^2.7.6",
         "vite-plugin-vue-env": "^1.0.5"
     }
 }
