@@ -1,4 +1,6 @@
 <template>
+    <!--    <pre>{{ v$ }}</pre>
+    <pre>{{ l$ }}</pre>-->
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
@@ -6,7 +8,7 @@
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
         :label="t('questions', 1)"
-        :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
+        :invalid="!l$.question?.validateLanguageLabel?.$response[language.code]"
     />
 
     <form-input
@@ -42,7 +44,7 @@
             :label="t('label_lowest_value')"
             class="xl:col-span-6 col-span-12"
             :invalid="
-                !v$.lowestValueLabel?.validateLanguageLabel?.$response[
+                !l$.lowestValueLabel?.validateLanguageLabel?.$response[
                     language.code
                 ]
             "
@@ -59,7 +61,7 @@
             :label="t('label_middle_value')"
             class="xl:col-span-6 col-span-12"
             :invalid="
-                !v$.middleValueLabel?.validateLanguageLabel?.$response[
+                !l$.middleValueLabel?.validateLanguageLabel?.$response[
                     language.code
                 ]
             "
@@ -75,7 +77,7 @@
             :label="t('label_highest_value')"
             class="xl:col-span-6 col-span-12"
             :invalid="
-                !v$.highestValueLabel?.validateLanguageLabel?.$response[
+                !l$.highestValueLabel?.validateLanguageLabel?.$response[
                     language.code
                 ]
             "
@@ -157,17 +159,13 @@ export default {
         const questionValidation = {}
         store.state.languages.languages.forEach((language) => {
             questionValidation[language.code] = {
-                required,
-                minLength: minLength(1),
-                maxLength: maxLength(200),
+                maxLength: maxLength(1500),
             }
         })
 
         const labelValidation = {}
         store.state.languages.languages.forEach((language) => {
             labelValidation[language.code] = {
-                required,
-                minLength: minLength(1),
                 maxLength: maxLength(20),
             }
         })
@@ -180,13 +178,25 @@ export default {
             return newObject
         }
 
-        const validations = computed({
+        const languangeLabelvalidation = computed({
             get: () => {
                 return {
                     question: { validateLanguageLabel },
                     lowestValueLabel: { validateLanguageLabel },
                     middleValueLabel: { validateLanguageLabel },
                     highestValueLabel: { validateLanguageLabel },
+                }
+            },
+            set: (val) => emit('update:params', val),
+        })
+
+        const validations = computed({
+            get: () => {
+                return {
+                    question: questionValidation,
+                    lowestValueLabel: labelValidation,
+                    middleValueLabel: labelValidation,
+                    highestValueLabel: labelValidation,
                     numberOfStars: {
                         required,
                         between: between(3, 9),
@@ -217,10 +227,11 @@ export default {
             $scope: 'surveyElement',
         })
 
-        watch(
-            () => paramsValidation.value.$invalid,
-            (invalid) => {
-                emit('isValid', !invalid)
+        const languageValidation = useVuelidate(
+            languangeLabelvalidation,
+            paramsLocal.value,
+            {
+                $scope: 'surveyElementLanguage',
             },
         )
 
@@ -269,6 +280,7 @@ export default {
             t,
             store,
             v$: paramsValidation,
+            l$: languageValidation,
         }
     },
 }
