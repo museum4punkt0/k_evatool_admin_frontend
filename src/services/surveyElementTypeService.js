@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
     getElementTypes() {
-        const url = 'evaluation-tool/survey-element-types'
+        const url = 'evaluation-tool/survey-element-types?all'
         return axios
             .get(url)
             .then((response) => {

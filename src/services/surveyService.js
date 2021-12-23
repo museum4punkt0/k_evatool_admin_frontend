@@ -97,7 +97,7 @@ export default {
     },
 
     async getSurveys(payload = null) {
-        let url = 'evaluation-tool/surveys'
+        let url = 'evaluation-tool/surveys?all'
         if (payload?.deleted) {
             url += '?deleted'
         }
