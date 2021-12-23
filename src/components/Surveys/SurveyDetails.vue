@@ -9,7 +9,7 @@
         :label="t('names', 1)"
     />
 
-    <div class="mt-3">
+    <div v-if="survey.id" class="mt-3">
         <label>Url</label>
         <div class="flex">
             <span class="flex-grow">
