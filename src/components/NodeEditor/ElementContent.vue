@@ -29,12 +29,21 @@
                     element.surveyElementType === 'simpleText' &&
                     element?.params?.text
                 "
-                v-html="element.params.text[defaultLanguage.code]"
+                v-html="
+                    element.params.text[store.state.languageCode]
+                        ? element.params.text[store.state.languageCode]
+                        : element.params.text[defaultLanguage.code]
+                "
             ></div>
             <div
                 v-else-if="element.params?.question !== null"
-                v-html="element.params.question[defaultLanguage.code]"
+                v-html="
+                    element.params.question[store.state.languageCode]
+                        ? element.params.question[store.state.languageCode]
+                        : element.params.question[defaultLanguage.code]
+                "
             ></div>
+            <pre>{{}}</pre>
         </div>
     </div>
 </template>
