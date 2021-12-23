@@ -6,6 +6,7 @@
         class="mt-3"
         name="name"
         type="text"
+        :invalid="v$.survey.name.$invalid"
         :label="t('names', 1)"
     />
 
@@ -13,7 +14,11 @@
         <label>Url</label>
         <div class="flex">
             <span class="flex-grow">
-                {{ `${previewUrl}/#/?survey=${survey?.slug}` }}
+                {{
+                    `${previewUrl}/#/?survey=${
+                        survey?.slug ? survey?.slug : ''
+                    }`
+                }}
             </span>
             <PencilIcon
                 class="h-5 w-5 cursor-pointer"
@@ -27,6 +32,7 @@
         v-tippy="{
             content: t('tooltip_survey_details_slug'),
         }"
+        :invalid="v$.survey.slug.$invalid"
         name="slug"
         class="mt-3"
         type="text"
@@ -38,6 +44,7 @@
             content: t('tooltip_survey_details_languages'),
         }"
         :options="store.state.languages.languages"
+        :invalid="v$.survey.languages.$invalid"
         name="language"
         class="mt-3"
         :label="t('languages', store.state.languages.languages.length)"
@@ -73,13 +80,14 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 
 import SURVEYS from '../../services/surveyService'
 import useVuelidate from '@vuelidate/core'
-import { maxLength, minLength, required } from '@vuelidate/validators'
+import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
+const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
 
 import ActionButton from '../Common/ActionButton.vue'
 import DataViewer from '../Common/DataViewer.vue'
@@ -174,10 +182,13 @@ export default {
         survey: {
             name: {
                 required,
-                minLength: minLength(1),
+                minLength: minLength(3),
+                maxLength: maxLength(100),
             },
             slug: {
+                minLength: minLength(3),
                 maxLength: maxLength(100),
+                snakeCaseValidator,
             },
             languages: {
                 required,
