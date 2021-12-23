@@ -170,6 +170,8 @@ export default {
     video_not_yet_selected: 'Noch kein Video ausgewählt',
     viewport_incompatible:
         'Bitte benutzen Sie ein Gerät mit einer höheren Auflösung!',
+    warning_cannot_delete_if_first_step:
+        'Kann nicht gelöscht werden, da es sich um den Startpunkt der Umfrage handelt.',
     welcome: 'Willkommen',
     yaynay_positive: 'Positiver Schlüsselwert',
     yaynay_negative: 'Negativer Schlüsselwert',

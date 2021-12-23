@@ -7,7 +7,7 @@
             </span>
         </h1>
 
-        <div v-if="surveyStep">
+        <div v-if="surveyStep" class="mt-3">
             <form-input
                 v-model:value="surveyStep.name"
                 :placeholder="t('optional_name')"
@@ -21,7 +21,7 @@
                 :label="t('allow_skip')"
             /> -->
 
-            <div class="flex flex-row">
+            <div class="flex flex-row mt-4">
                 <form-select
                     v-model:selected="surveyStep.surveyElementId"
                     :options="surveyElements"
@@ -41,7 +41,7 @@
                 </action-button>
             </div>
 
-            <div class="flex flex-row">
+            <div class="flex flex-row mt-2">
                 <action-button
                     class="mr-2"
                     color="secondary"
@@ -50,16 +50,26 @@
                     @execute="cancel"
                 />
 
-                <action-button
-                    v-if="surveyStep.id"
-                    color="danger"
-                    :disabled="surveyStep.resultCount > 0"
-                    :executing="deletingSurveyStep"
-                    class="mr-2"
-                    @execute="deleteSurveyStep"
+                <div
+                    v-tippy="{
+                        content: surveyStep.isFirstStep
+                            ? t('warning_cannot_delete_if_first_step')
+                            : null,
+                    }"
                 >
-                    <TrashIcon class="h-5 w-5" />
-                </action-button>
+                    <action-button
+                        v-if="surveyStep.id"
+                        color="danger"
+                        :disabled="
+                            surveyStep.resultCount > 0 || surveyStep.isFirstStep
+                        "
+                        :executing="deletingSurveyStep"
+                        class="mr-2"
+                        @execute="deleteSurveyStep"
+                    >
+                        <TrashIcon class="h-5 w-5" />
+                    </action-button>
+                </div>
                 <action-button
                     :executing="savingSurveyStep"
                     :disabled="v$.surveyStep.$invalid"

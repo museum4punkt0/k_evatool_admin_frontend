@@ -9,6 +9,7 @@ export default {
     languages: 'languages | language | languages',
     names: 'names | name | names',
     none_selected: 'none selected',
+    optional_name: 'Optional name',
     participants: 'Participants | Participant | Participants',
     steps: 'steps | step | steps',
     survey: 'surveys | survey | surveys',
@@ -16,4 +17,6 @@ export default {
         'Completed surveys | Completed survey | Completed surveys',
     titles: 'titles | title | titles',
     types: 'types | type | types',
+    warning_cannot_delete_if_first_step:
+        "Cannot be deleted as this step is the survey's starting point.",
 }

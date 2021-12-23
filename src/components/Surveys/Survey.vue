@@ -115,7 +115,7 @@ import {
     PencilIcon,
     ClipboardCopyIcon,
 } from '@heroicons/vue/outline'
-import { TYPES as NOTIFICATIONTYPES } from '../../store/notifications'
+import { TYPES as NOTIFICATION_TYPES } from '../../store/notifications'
 
 export default {
     components: {
@@ -196,7 +196,7 @@ export default {
             navigator.clipboard.writeText(text).then(
                 function () {
                     store.dispatch('notifications/add', {
-                        type: NOTIFICATIONTYPES.SUCCESS,
+                        type: NOTIFICATION_TYPES.SUCCESS,
                         message: 'notification_success_survey_link_copied',
                     })
                 },
