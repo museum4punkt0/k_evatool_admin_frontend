@@ -1,7 +1,7 @@
 <template>
     <div>
         <label :for="name">{{ label }}</label>
-        <div class="mt-2">
+        <div class="mt-2" :class="invalid ? 'bg-red-200' : ''">
             <div
                 v-for="(option, index) in options"
                 :key="'checkbox_option_' + index"
@@ -47,6 +47,10 @@ export default {
         helptext: {
             type: String,
             default: '',
+        },
+        invalid: {
+            type: Boolean,
+            default: false,
         },
     },
     emits: ['update:value'],
