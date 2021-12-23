@@ -25,7 +25,12 @@ axios.interceptors.response.use(
         return response
     },
     (error) => {
-        alert(error)
+        alert(
+            JSON.stringify(error.response.data) +
+                error.response.config.url +
+                error.response.config.data +
+                error,
+        )
     },
 )
 

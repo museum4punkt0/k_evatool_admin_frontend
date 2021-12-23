@@ -1,28 +1,12 @@
 <template>
-    <div class="flex mt-8">
-        <label class="flex-grow">{{ t('questions', 1) }}</label>
-        <div class="languages flex">
-            <button
-                v-for="language in store.state.languages.languages"
-                :key="language.code"
-                class="language"
-                :class="{
-                    primary: language.code === selectedLanguage.code,
-                    secondary: language.code !== selectedLanguage.code,
-                }"
-                @click="setSelectedLanguage(language)"
-            >
-                {{ language.code }}
-            </button>
-        </div>
-    </div>
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
         )"
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
-        :invalid="validateParams.question[language.code].$invalid"
+        :label="t('questions', 1)"
+        :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
     />
 
     <form-input
@@ -30,7 +14,7 @@
         name="numberOfStars"
         class="mt-3"
         :label="t('number_of_stars')"
-        :invalid="validateParams.numberOfStars.$invalid"
+        :invalid="v$.numberOfStars.$invalid"
     />
     <form-select
         v-model:selected="paramsLocal.displayType"
@@ -44,10 +28,8 @@
         title-key="name"
         value-key="id"
         readonly
-        :invalid="validateParams.displayType.$invalid"
+        :invalid="v$.displayType.$invalid"
     />
-
-    <!-- validateParams.lowestValueLabel.$dirty && -->
     <div class="grid grid-cols-12 gap-4 mt-3">
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -55,14 +37,16 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.lowestValueLabel[language.code]"
+            language-switch
             name="lowestValueLabel"
             :label="t('label_lowest_value')"
-            class="col-span-4"
-            :invalid="validateParams.lowestValueLabel[language.code].$invalid"
+            class="xl:col-span-6 col-span-12"
+            :invalid="
+                !v$.lowestValueLabel?.validateLanguageLabel?.$response[
+                    language.code
+                ]
+            "
             :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
-            @change="() => validateParams.lowestValueLabel.$touch()"
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -70,13 +54,15 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.middleValueLabel[language.code]"
+            language-switch
             name="middleValueLabel"
             :label="t('label_middle_value')"
-            class="col-span-4"
-            :invalid="validateParams.middleValueLabel[language.code].$invalid"
-            :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
+            class="xl:col-span-6 col-span-12"
+            :invalid="
+                !v$.middleValueLabel?.validateLanguageLabel?.$response[
+                    language.code
+                ]
+            "
         />
         <form-input
             v-for="language in store.state.languages.languages.filter(
@@ -84,16 +70,17 @@
             )"
             :key="'lang' + language.id"
             v-model:value="paramsLocal.highestValueLabel[language.code]"
+            language-switch
             name="highestValueLabel"
             :label="t('label_highest_value')"
-            class="col-span-4"
-            :invalid="validateParams.highestValueLabel[language.code].$invalid"
-            :languages="store.state.languages.languages"
-            :active-language="selectedLanguage"
-            @languageSelect="setSelectedLanguage($event)"
+            class="xl:col-span-6 col-span-12"
+            :invalid="
+                !v$.highestValueLabel?.validateLanguageLabel?.$response[
+                    language.code
+                ]
+            "
         />
     </div>
-
     <div class="flex flex-row mt-3">
         <div class="mr-3">
             <form-input
@@ -101,7 +88,7 @@
                 name="meaningLowestValue"
                 :label="t('meaning_lowest_value')"
                 class="col-span-6"
-                :invalid="validateParams.meaningLowestValue.$invalid"
+                :invalid="v$.meaningLowestValue.$invalid"
             />
             <p class="text-xs text-gray-500 ml-1 mt-1">
                 {{ t('validation_snake_case') }}
@@ -113,24 +100,13 @@
                 name="meaningHighestValue"
                 :label="t('meaning_highest_value')"
                 class="col-span-6"
-                :invalid="validateParams.meaningHighestValue.$invalid"
+                :invalid="v$.meaningHighestValue.$invalid"
             />
             <p class="text-xs text-gray-500 ml-1 mt-1">
                 {{ t('validation_snake_case') }}
             </p>
         </div>
     </div>
-
-    <!-- <pre v-if="validateParams.$invalid">
-    {{
-            validateParams.$silentErrors.map((error) => {
-                return {
-                    property: error.$property,
-                    message: error.$message,
-                }
-            })
-        }}
-    </pre> -->
 </template>
 
 <script>
@@ -141,8 +117,8 @@ import FormToggle from '../../Forms/FormToggle.vue'
 import FormSelect from '../../Forms/FormSelect.vue'
 import TinyMce from '../../Common/TinyMce.vue'
 import { useStore } from 'vuex'
-import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
 import useVuelidate from '@vuelidate/core'
+const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
 import {
     required,
     between,
@@ -150,10 +126,11 @@ import {
     maxLength,
     helpers,
 } from '@vuelidate/validators'
+import _ from 'lodash'
 
 export default {
     name: 'ElementTypeStarRating',
-    components: { TinyMce, FormToggle, FormInput, FormSelect, LanguageSwitch },
+    components: { TinyMce, FormToggle, FormInput, FormSelect },
     props: {
         params: {
             type: Object,
@@ -164,19 +141,18 @@ export default {
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
         const paramsLocal = computed({
             get: () => props.params,
             set: (val) => emit('update:params', val),
         })
 
-        const selectedLanguage = ref(
-            store.state.languages.languages.find((lang) => lang.default),
+        const selectedLanguage = ref(store.state.languages.maintainLanguage)
+        watch(
+            () => store.state.languages.maintainLanguage,
+            (value) => {
+                selectedLanguage.value = value
+            },
         )
-
-        const setSelectedLanguage = (language) => {
-            selectedLanguage.value = language
-        }
 
         const questionValidation = {}
         store.state.languages.languages.forEach((language) => {
@@ -196,14 +172,21 @@ export default {
             }
         })
 
-        const meaningValidation = helpers.regex(/^[a-z][a-z0-9_]*$/)
+        const validateLanguageLabel = (object) => {
+            const newObject = Object.assign({}, object)
+            for (const [key, value] of Object.entries(object)) {
+                newObject[key] = !!value && value.length < 1500
+            }
+            return newObject
+        }
+
         const validations = computed({
             get: () => {
                 return {
-                    question: questionValidation,
-                    lowestValueLabel: labelValidation,
-                    middleValueLabel: labelValidation,
-                    highestValueLabel: labelValidation,
+                    question: { validateLanguageLabel },
+                    lowestValueLabel: { validateLanguageLabel },
+                    middleValueLabel: { validateLanguageLabel },
+                    highestValueLabel: { validateLanguageLabel },
                     numberOfStars: {
                         required,
                         between: between(3, 9),
@@ -217,28 +200,58 @@ export default {
                         required,
                         minLength: minLength(1),
                         maxLength: maxLength(20),
-                        meaningValidation,
+                        snakeCaseValidator,
                     },
                     meaningHighestValue: {
                         required,
                         minLength: minLength(1),
                         maxLength: maxLength(20),
-                        meaningValidation,
+                        snakeCaseValidator,
                     },
                 }
             },
             set: (val) => emit('update:params', val),
         })
 
-        const validateParams = useVuelidate(validations, paramsLocal.value, {
+        const paramsValidation = useVuelidate(validations, paramsLocal.value, {
             $scope: 'surveyElement',
         })
 
         watch(
-            () => validateParams.value.$invalid,
+            () => paramsValidation.value.$invalid,
             (invalid) => {
                 emit('isValid', !invalid)
             },
+        )
+
+        watch(
+            () => _.cloneDeep(paramsLocal.value),
+            (currentValue) => {
+                let singleLangIsValid = false
+                const counterLangCount = 4
+                store.state.languages.languages.forEach((lang) => {
+                    let currentCount = 0
+                    if (currentValue.question[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.lowestValueLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.middleValueLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (currentValue.highestValueLabel[lang.code] !== '') {
+                        currentCount++
+                    }
+                    if (parseInt(currentCount) === parseInt(counterLangCount)) {
+                        singleLangIsValid = true
+                    }
+                })
+                const isValid =
+                    singleLangIsValid && !paramsValidation.value.$invalid
+                emit('isValid', isValid)
+            },
+            { immediate: true },
         )
 
         watch(
@@ -252,19 +265,11 @@ export default {
 
         return {
             selectedLanguage,
-            setSelectedLanguage,
             paramsLocal,
             t,
             store,
-            validateParams,
-            tinyMceKey,
+            v$: paramsValidation,
         }
     },
 }
 </script>
-
-<style scoped>
-button.language {
-    padding: 2px 8px;
-}
-</style>

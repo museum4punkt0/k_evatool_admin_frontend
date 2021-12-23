@@ -5,6 +5,7 @@ export default {
     action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
     action_add_to_survey: 'Zu Umfrage hinzufügen',
     action_add_emoji: 'Emoji hinzufügen',
+    action_pick_emoji: 'Emoji auswählen',
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',
     action_confirm: 'Bestätigen',
@@ -139,6 +140,7 @@ export default {
     system_value: 'Schlüsselwert',
     system_value_explaination:
         'sprachunabhängiger Schlüsselwert - zur internen Speicherung, Auswertung und Export',
+    texts: 'Anzeigetexte | Anzeigetext | Anzeigetexte',
     timestamps: 'Zeiten | Zeit | Zeiten',
     timestamp_start: 'Startzeit',
     timestamp_stop: 'Stopzeit',
