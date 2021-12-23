@@ -134,7 +134,6 @@ export default {
     },
     emits: ['update:params', 'update:params-valid', 'isValid'],
     setup(props, { emit }) {
-        console.log(props.params)
         const store = useStore()
         const { t } = useI18n()
 
