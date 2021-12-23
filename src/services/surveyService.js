@@ -124,7 +124,7 @@ export default {
     },
 
     async getSurveySteps(surveyId) {
-        let url = 'evaluation-tool/surveys/' + surveyId + '/steps'
+        let url = 'evaluation-tool/surveys/' + surveyId + '/steps?all'
         return axios
             .get(url)
             .then((response) => {
