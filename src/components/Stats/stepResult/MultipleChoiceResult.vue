@@ -1,5 +1,16 @@
 <template>
-    <div>{{ result?.value?.selected.join(', ') }}</div>
+    <div>
+        {{
+            result?.value?.selected
+                .map((opt) => {
+                    if (opt.comment) {
+                        return opt.value + ': ' + opt.comment
+                    }
+                    return opt.value
+                })
+                .join(', ')
+        }}
+    </div>
 </template>
 
 <script>
