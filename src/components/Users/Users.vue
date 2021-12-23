@@ -1,6 +1,9 @@
 <template>
     <div class="flex flex-grow overflow-hidden">
-        <main class="flex h-full w-full flex-col p-3">
+        <main
+            class="flex h-full flex-col p-3"
+            :class="showSideBar ? 'w-2/3' : 'w-full'"
+        >
             <div class="flex flex-row">
                 <h1
                     v-if="
