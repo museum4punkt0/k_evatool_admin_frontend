@@ -163,10 +163,10 @@
                                 ? t('tooltip_set_timebased_steps')
                                 : t('tooltip_set_timebased_steps_disabled'),
                         }"
-                        class="text-center"
+                        class="flex flex-1 justify-center w-8"
                     >
                         <button
-                            class="flex-1 disabled:opacity-25"
+                            class="disabled:opacity-25"
                             :disabled="
                                 steps.find((x) => x.id === step.id)
                                     ?.surveyElementType !== 'video'
@@ -187,7 +187,7 @@
                                 ? t('tooltip_set_resultbased_steps')
                                 : t('tooltip_set_resultbased_steps_disabled'),
                         }"
-                        class="text-center"
+                        class="flex flex-1 justify-center w-8"
                     >
                         <button
                             class="flex-1 disabled:opacity-25"
@@ -222,7 +222,7 @@
                         v-tippy="{
                             content: t('tooltip_edit_step'),
                         }"
-                        class="flex-1 pointer"
+                        class="flex-1 w-8 pointer"
                         @click.prevent.stop="selectSurveyStep(step.id)"
                     >
                         <div class="flex h-full justify-center items-center">
@@ -233,7 +233,7 @@
                         v-tippy="{
                             content: t('tooltip_set_next_step'),
                         }"
-                        class="flex-1 pointer"
+                        class="flex-1 w-8 pointer"
                         :class="{
                             'bg-blue-200': step.id === selectedOutput,
                             'opacity-50': hasNextAndPreviousSockets(step),
