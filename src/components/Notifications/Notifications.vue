@@ -6,18 +6,7 @@
         <div
             v-for="notification in notifications"
             :key="notification.id"
-            class="
-                my-2
-                flex
-                w-full
-                max-w-sm
-                mx-auto
-                overflow-hidden
-                bg-white
-                rounded-lg
-                shadow-md
-                pointer
-            "
+            class="my-2 flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md pointer"
             @click="onRemove(notification)"
         >
             <div

@@ -1,4 +1,8 @@
 <template>
+    <div class="flex">
+        <label class="flex-grow">{{ label }}</label>
+        <language-switch-small />
+    </div>
     <div :class="invalid ? 'invalid' : ''">
         <editor
             v-model="textLocal"
@@ -13,7 +17,8 @@
                     'print preview anchor insertdatetime media',
                     'paste code help wordcount table',
                 ],
-                toolbar: 'undo redo | bold italic | bullist numlist ',
+                toolbar: 'undo redo | bold italic',
+                paste_as_text: true,
             }"
         ></editor>
     </div>
@@ -22,11 +27,16 @@
 <script>
 import Editor from '@tinymce/tinymce-vue'
 import { computed } from 'vue'
+import LanguageSwitchSmall from '../../components/Languages/LanguageSwitchSmall.vue'
 
 export default {
     name: 'TinyMce',
-    components: { Editor },
+    components: { LanguageSwitchSmall, Editor },
     props: {
+        label: {
+            type: String,
+            default: '',
+        },
         text: {
             type: String,
             default: '',

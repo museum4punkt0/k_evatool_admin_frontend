@@ -50,6 +50,10 @@ export default {
         return axios
             .get('users/check-login')
             .then((response) => {
+                // return null for unauthenticated user
+                if (response.data === 'Unauthenticated.') {
+                    return null
+                }
                 return response.data
             })
             .catch((error) => {

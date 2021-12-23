@@ -6,3 +6,4 @@ dist-ssr
 .idea
 cypress/screenshots
 cypress/videos
+/local_scripts/

@@ -585,7 +585,7 @@ export default {
             }
         }
 
-        const updateStepParams = async (stepId, params) => {
+        const updateStepParams = async () => {
             // await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
             // refreshSteps()
         }

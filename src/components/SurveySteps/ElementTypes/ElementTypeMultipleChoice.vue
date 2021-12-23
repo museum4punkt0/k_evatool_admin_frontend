@@ -1,29 +1,4 @@
 <template>
-    <!-- <language-switch
-  class="mt-6"
-  :active-language="selectedLanguage"
-  @select="setSelectedLanguage($event)"
-/> -->
-    <div class="flex mt-8">
-        <label class="flex-grow">
-            {{ t('questions', 1) }} ({{ selectedLanguage.title }})
-        </label>
-        <div class="languages flex">
-            <button
-                v-for="language in store.state.languages.languages"
-                :key="language.code"
-                class="language"
-                :class="{
-                    primary: language.code === selectedLanguage.code,
-                    secondary: language.code !== selectedLanguage.code,
-                }"
-                @click="setSelectedLanguage(language)"
-            >
-                {{ language.code }}
-            </button>
-        </div>
-    </div>
-
     <tiny-mce
         v-for="language in store.state.languages.languages.filter(
             (item) => item.code === selectedLanguage.code,
@@ -31,6 +6,7 @@
         :key="'lang' + language.id"
         v-model:text="paramsLocal.question[language.code]"
         :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
+        :label="t('questions', 1) + ' ' + language.title"
     />
 
     <div class="grid grid-cols-1">
@@ -51,8 +27,7 @@
                     v-model:value="
                         paramsLocal.options[index]['labels'][language.code]
                     "
-                    :languages="store.state.languages.languages"
-                    :active-language="selectedLanguage"
+                    language-switch
                     :invalid="
                         !v$.options?.$each?.$response?.$data[index]?.labels
                             ?.validateLanguageLabel[language.code]
@@ -61,7 +36,6 @@
                     :label="`${t('display_value')} ${index + 1} (${
                         language.title
                     })`"
-                    @languageSelect="setSelectedLanguage($event)"
                 />
                 <div class="flex flex-row items-end">
                     <form-input
@@ -125,8 +99,7 @@ import _ from 'lodash'
 
 import useVuelidate from '@vuelidate/core'
 import { required, between, helpers, maxValue } from '@vuelidate/validators'
-
-const snakeCaseValidator = helpers.regex(/^[a-z]+(?:[_][a-z]+)*$/)
+const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
 
 import { TrashIcon, PlusIcon } from '@heroicons/vue/outline'
 
@@ -152,12 +125,14 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
-        const selectedLanguage = ref(
-            store.state.languages.languages.find((lang) => lang.default),
-        )
 
-        console.log(props.params)
+        const selectedLanguage = ref(store.state.languages.maintainLanguage)
+        watch(
+            () => store.state.languages.maintainLanguage,
+            (value) => {
+                selectedLanguage.value = value
+            },
+        )
 
         const paramsLocal = computed({
             get: () => props.params,
@@ -215,14 +190,10 @@ export default {
             emit('update:params', newParams)
         }
 
-        const setSelectedLanguage = (language) => {
-            selectedLanguage.value = language
-        }
-
         const validateLanguageLabel = (object) => {
             const newObject = Object.assign({}, object)
             for (const [key, value] of Object.entries(object)) {
-                newObject[key] = !!value
+                newObject[key] = !!value && value.length < 1500
             }
             return newObject
         }
@@ -245,7 +216,6 @@ export default {
                         ),
                     },
                     question: {
-                        required,
                         validateLanguageLabel,
                     },
                     options: {
@@ -300,11 +270,9 @@ export default {
             t,
             v$: paramsValidation,
             selectedLanguage,
-            setSelectedLanguage,
             addOption,
             removeOption,
             deleteOption,
-            tinyMceKey,
         }
     },
 }
