@@ -62,17 +62,6 @@
                 <p class="text-xs text-gray-500 ml-1 mt-1">
                     {{ t('system_value_explaination') }}
                 </p>
-                <div class="flex flex-row items-end">
-                    <input
-                        type="checkbox"
-                        class="form-checkbox rounded"
-                        :checked="paramsLocal.options[index].commentable"
-                        @change="commentableChange(option, $event)"
-                    />
-                    <label class="inline-flex items-center pointer-events-none">
-                        <span class="ml-2">{{ t('commentable') }}</span>
-                    </label>
-                </div>
             </div>
         </div>
     </div>
@@ -134,7 +123,6 @@ export default {
     },
     emits: ['update:params', 'update:params-valid', 'isValid'],
     setup(props, { emit }) {
-        console.log(props.params)
         const store = useStore()
         const { t } = useI18n()
 
@@ -164,7 +152,6 @@ export default {
                     {
                         value: '',
                         labels: langObj,
-                        commentable: false,
                     },
                 ],
             }
@@ -277,14 +264,6 @@ export default {
             { immediate: true },
         )
 
-        const commentableChange = (option, event) => {
-            const checked = event.target.checked
-            const index = paramsLocal.value.options.findIndex(
-                (o) => o.value === option.value,
-            )
-            paramsLocal.value.options[index].commentable = checked
-        }
-
         return {
             store,
             paramsLocal,
@@ -294,7 +273,6 @@ export default {
             addOption,
             removeOption,
             deleteOption,
-            commentableChange,
         }
     },
 }

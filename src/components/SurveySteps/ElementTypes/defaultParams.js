@@ -67,16 +67,8 @@ export default (type, languages) => {
         case TYPES.MULTIPLECHOICE: {
             const question = createDefaultQuestion(languages)
             const options = [
-                {
-                    value: 'value_one',
-                    commentable: false,
-                    labels: createDefaultLabel(languages),
-                },
-                {
-                    value: 'value_two',
-                    commentable: false,
-                    labels: createDefaultLabel(languages),
-                },
+                { value: 'value_one', labels: createDefaultLabel(languages) },
+                { value: 'value_two', labels: createDefaultLabel(languages) },
             ]
             return {
                 question,
