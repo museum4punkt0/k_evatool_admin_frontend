@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.550",
+    "version": "1.0.551",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -22,10 +22,10 @@
         "@uppy/tus": "^2.1.2",
         "@uppy/vue": "^0.4.5",
         "@vue/cli-service": "^4.5.15",
-        "@vuelidate/core": "^2.0.0-alpha.32",
-        "@vuelidate/validators": "^2.0.0-alpha.25",
+        "@vuelidate/core": "^2.0.0-alpha.33",
+        "@vuelidate/validators": "^2.0.0-alpha.26",
         "axios": "^0.24.0",
-        "chart.js": "^3.6.2",
+        "chart.js": "^3.7.0",
         "chartjs-plugin-datalabels": "^2.0.0",
         "dayjs": "^1.10.7",
         "lodash": "^4.17.21",
@@ -36,7 +36,7 @@
         "vue-i18n": "^9.1.9",
         "vue-router": "4",
         "vue-tippy": "^6.0.0-alpha.37",
-        "vue3-date-time-picker": "^2.4.3",
+        "vue3-date-time-picker": "^2.4.4",
         "vue3-leaderline": "^1.2.11",
         "vue3-styled-components": "^1.2.1",
         "vuedraggable": "^4.1.0",
@@ -50,7 +50,7 @@
         "@vitejs/plugin-vue": "^2.0.1",
         "@vue/cli-plugin-eslint": "~4.5.15",
         "@vue/compiler-sfc": "^3.2.26",
-        "@vue/eslint-config-prettier": "^6.0.0",
+        "@vue/eslint-config-prettier": "^7.0.0",
         "@vue/eslint-config-standard": "^6.1.0",
         "autoprefixer": "^10.4.0",
         "babel-eslint": "^10.1.0",
@@ -67,7 +67,7 @@
         "prettier": "^2.5.1",
         "sass": "^1.45.1",
         "tailwindcss": "^2.2.19",
-        "vite": "^2.7.6",
+        "vite": "^2.7.9",
         "vite-plugin-vue-env": "^1.0.5"
     }
 }
