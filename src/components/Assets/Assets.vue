@@ -47,7 +47,9 @@
                             <th>{{ t('filename') }}</th>
                             <th>{{ t('filetype') }}</th>
                             <th>{{ t('filesize') }}</th>
-                            <th>{{ t('survey_elements', 2) }}</th>
+                            <th class="text-center">
+                                {{ t('survey_elements', 2) }}
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -90,7 +92,11 @@
                             <td>
                                 {{ asset.sizeHuman }}
                             </td>
-                            <td>{{ asset.surveyElements }}</td>
+                            <td class="text-center">
+                                <template v-if="asset.surveyElements">
+                                    {{ asset.surveyElements }}
+                                </template>
+                            </td>
                             <td class="px-6 py-4 flex flex-row">
                                 <!-- TODO: DISABLE DELETE IF IN USE -->
                                 <!--
