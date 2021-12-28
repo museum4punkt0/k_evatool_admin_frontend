@@ -47,6 +47,7 @@
                             <th>{{ t('filename') }}</th>
                             <th>{{ t('filetype') }}</th>
                             <th>{{ t('filesize') }}</th>
+                            <th>{{ t('survey_elements', 2) }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -59,12 +60,17 @@
                                     assetRefs['asset' + i] = el
                                 }
                             "
-                            @click="openAssetModal(asset.id)"
                         >
-                            <td class="text-lg">
+                            <td
+                                class="text-lg"
+                                @click.prevent.stop="openAssetModal(asset.id)"
+                            >
                                 {{ asset.id }}
                             </td>
-                            <td class="m-0 p-0">
+                            <td
+                                class="m-0 p-0 pointer"
+                                @click.prevent.stop="openAssetModal(asset.id)"
+                            >
                                 <img
                                     v-if="asset.urls.thumbnail"
                                     class="max-h-8 max-w-16"
@@ -84,6 +90,7 @@
                             <td>
                                 {{ asset.sizeHuman }}
                             </td>
+                            <td>{{ asset.surveyElements }}</td>
                             <td class="px-6 py-4 flex flex-row">
                                 <!-- TODO: DISABLE DELETE IF IN USE -->
                                 <!--
@@ -99,10 +106,15 @@
                                         @click.prevent.stop="null"
                                     />
                                     -->
-                                <trash-icon
-                                    class="mx-1 h-5 w-5 text-red-500 pointer"
+                                <button
+                                    :disabled="asset.surveyElements > 0"
+                                    class="disabled:opacity-50"
                                     @click.prevent.stop="deleteAsset(asset.id)"
-                                />
+                                >
+                                    <trash-icon
+                                        class="mx-1 h-5 w-5 text-red-500"
+                                    />
+                                </button>
                                 <EyeIcon
                                     class="mx-1 h-5 w-5 pointer"
                                     @click.prevent.stop="
