@@ -136,8 +136,11 @@
                                 </transition>
                             </Menu>
 
-                            <span class="text-xs text-gray-500">
-                                {{ version }}
+                            <span class="text-xs text-gray-500 text-right">
+                                Admin-App: {{ version }}
+                                <br />
+                                Backend:
+                                {{ store.state.app.packageVersion }}
                             </span>
                             <language-switch></language-switch>
                             <button
