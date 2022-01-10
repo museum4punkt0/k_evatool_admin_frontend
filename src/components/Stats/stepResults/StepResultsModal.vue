@@ -70,13 +70,9 @@
                                     "
                                     :chart-label="surveyStepList.elementType"
                                     :labels="getChartLabels"
-                                    :values="
-                                        Object.values(
-                                            surveyStepList.results.timespan
-                                                .results,
-                                        )
-                                    "
+                                    :values="getChartValues"
                                 />
+
                                 <yay-nay-results
                                     v-else-if="
                                         surveyStepList.elementType === 'yayNay'
@@ -202,26 +198,34 @@ export default {
         const getChartLabels = computed({
             get: () => {
                 if (props.surveyStepList?.elementParams?.emojis) {
-                    const keys = Object.keys(
-                        props.surveyStepList.results.timespan.results,
+                    return props.surveyStepList?.elementParams?.emojis.map(
+                        (emoji) => emoji.type,
                     )
-                    return keys.map((x) => {
-                        return props.surveyStepList.elementParams.emojis.find(
-                            (y) => x === y.meaning,
-                        )?.type
-                    })
-                }
-                if (props.surveyStepList?.elementParams?.emojis) {
-                    const keys = Object.keys(
-                        props.surveyStepList.results.timespan.results,
-                    )
-                    return keys.map((x) => {
-                        return props.surveyStepList.elementParams.emojis.find(
-                            (y) => x === y.meaning,
-                        )?.type
-                    })
+                    // const keys = Object.keys(
+                    //     props.surveyStepList.results.timespan.results,
+                    // )
+                    // return keys.map((x) => {
+                    //     return props.surveyStepList.elementParams.emojis.find(
+                    //         (y) => x === y.meaning,
+                    //     )?.type
+                    // })
                 }
                 return Object.keys(
+                    props.surveyStepList.results.timespan.results,
+                )
+            },
+        })
+        const getChartValues = computed({
+            get: () => {
+                if (props.surveyStepList?.elementParams?.emojis) {
+                    return props.surveyStepList.elementParams.emojis.map(
+                        (emoji) =>
+                            props.surveyStepList.results.timespan.results[
+                                emoji.meaning
+                            ],
+                    )
+                }
+                return Object.values(
                     props.surveyStepList.results.timespan.results,
                 )
             },
@@ -272,6 +276,7 @@ export default {
             closeModal,
             getDatasets,
             getChartLabels,
+            getChartValues,
             getImageLabels,
         }
     },
