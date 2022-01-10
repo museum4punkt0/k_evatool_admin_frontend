@@ -1,7 +1,8 @@
 <template>
     <div class="flex flex-col w-full">
         <div v-if="result?.value?.rating" class="flex w-full justify-startmb-3">
-            <button
+            {{ result.value.rating }}
+            <!-- <button
                 v-for="i in parseInt(stars)"
                 :key="i"
                 type="button"
@@ -15,7 +16,7 @@
                             : 'text-grey',
                     ]"
                 />
-            </button>
+            </button> -->
         </div>
     </div>
     <!--    {{ result }}-->
