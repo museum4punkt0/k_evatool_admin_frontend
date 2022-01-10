@@ -252,7 +252,7 @@ export default {
             ),
         )
 
-        store.dispatch('stats/getStatsTrend', surveyId)
+        store.dispatch('stats/getStatsTrend', { surveyId, demo: demo.value })
 
         store.dispatch('stats/getStats', {
             surveyId,

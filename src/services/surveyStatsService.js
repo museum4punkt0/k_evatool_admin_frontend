@@ -45,9 +45,13 @@ export default {
                 return error.response
             })
     },
-    async getStatsTrend(surveyId) {
+    async getStatsTrend(surveyId, demo) {
         return axios
-            .get(`evaluation-tool/surveys/${surveyId}/stats-trend`)
+            .get(
+                `evaluation-tool/surveys/${surveyId}/stats-trend?${
+                    demo ? 'demo=1' : ''
+                }`,
+            )
             .then((response) => {
                 return response.data
             })

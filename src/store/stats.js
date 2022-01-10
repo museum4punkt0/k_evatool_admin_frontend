@@ -71,8 +71,11 @@ export default {
             const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
             commit('setSurveySteps', surveySteps)
         },
-        async getStatsTrend({ commit }, surveyId) {
-            const trend = await SURVEY_STATS_SERVICE.getStatsTrend(surveyId)
+        async getStatsTrend({ commit }, { surveyId, demo }) {
+            const trend = await SURVEY_STATS_SERVICE.getStatsTrend(
+                surveyId,
+                demo,
+            )
             commit('setTrend', trend)
         },
     },
