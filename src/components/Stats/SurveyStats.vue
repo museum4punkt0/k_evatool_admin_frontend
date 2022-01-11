@@ -283,6 +283,10 @@ export default {
                     end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
                     demo: demo.value,
                 })
+                store.dispatch('stats/getStatsTrend', {
+                    surveyId,
+                    demo: demo.value,
+                })
             },
         )
         watch(
@@ -298,6 +302,10 @@ export default {
                     surveyId,
                     start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
                     end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                    demo: demo.value,
+                })
+                store.dispatch('stats/getStatsTrend', {
+                    surveyId,
                     demo: demo.value,
                 })
             },
