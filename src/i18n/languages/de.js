@@ -24,6 +24,7 @@ export default {
     allow_changing_answer: 'Ändern der Antwort erlauben',
     allow_half_steps: 'Halbe Schritte erlauben (z.B. 3,5)',
     allow_skip: 'Überspringen erlauben',
+    answers: 'Antworten | Antwort | Antworten',
     answers_total: 'Antworten gesamt',
     assets: 'Medien | Medium | Medien',
     binary_positive: 'Positiver Schlüsselwert',

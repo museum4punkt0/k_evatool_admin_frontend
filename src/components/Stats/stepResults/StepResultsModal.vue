@@ -42,8 +42,9 @@
                                     as="h3"
                                     class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
                                     v-html="
-                                        surveyStepList?.elementParams?.question
-                                            ?.de
+                                        surveyStepList?.elementParams?.question[
+                                            store.state.languageCode
+                                        ]
                                     "
                                 ></DialogTitle>
                                 <x-icon
@@ -78,6 +79,7 @@
                                         surveyStepList.elementType === 'yayNay'
                                     "
                                     :chart-label="surveyStepList.elementType"
+                                    :chart-legend="surveyStepList.elementParams"
                                     :labels="getImageLabels"
                                     :datasets="getDatasets(surveyStepList)"
                                 />
@@ -198,17 +200,29 @@ export default {
         const getChartLabels = computed({
             get: () => {
                 if (props.surveyStepList?.elementParams?.emojis) {
-                    return props.surveyStepList?.elementParams?.emojis.map(
+                    return props.surveyStepList.elementParams.emojis.map(
                         (emoji) => emoji.type,
                     )
-                    // const keys = Object.keys(
-                    //     props.surveyStepList.results.timespan.results,
-                    // )
-                    // return keys.map((x) => {
-                    //     return props.surveyStepList.elementParams.emojis.find(
-                    //         (y) => x === y.meaning,
-                    //     )?.type
-                    // })
+                }
+                if (props.surveyStepList?.elementParams?.options) {
+                    return props.surveyStepList?.elementParams?.options.map(
+                        (option) => option.labels[store.state.languageCode],
+                    )
+                }
+                const trueAndFalseLabel = ['binary', 'yayNay']
+                if (
+                    trueAndFalseLabel.includes(
+                        props.surveyStepList?.elementType,
+                    )
+                ) {
+                    return [
+                        props.surveyStepList?.elementParams.trueLabel[
+                            store.state.languageCode
+                        ],
+                        props.surveyStepList?.elementParams.falseLabel[
+                            store.state.languageCode
+                        ],
+                    ]
                 }
                 return Object.keys(
                     props.surveyStepList.results.timespan.results,
