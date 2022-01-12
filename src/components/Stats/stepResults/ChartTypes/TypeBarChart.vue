@@ -119,9 +119,7 @@ export default {
                     layout: {
                         padding: {
                             right: props.chartLabel === 'binary' ? 50 : 0,
-                        },
-                        margin: {
-                            top: props.chartLabel === 'binary' ? 0 : 50,
+                            top: props.chartLabel === 'binary' ? 0 : 20,
                         },
                     },
                     plugins: {

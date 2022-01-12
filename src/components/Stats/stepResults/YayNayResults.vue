@@ -190,7 +190,7 @@ export default {
                         },
                     },
                     layout: {
-                        padding: { bottom: 150 },
+                        padding: { bottom: 150, top: 20 },
                     },
                     plugins: {
                         htmlLegend: {
