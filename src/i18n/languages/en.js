@@ -11,6 +11,7 @@ export default {
     none_selected: 'none selected',
     optional_name: 'Optional name',
     participants: 'Participants | Participant | Participants',
+    show_demo_data_only: 'Show demo data only',
     steps: 'steps | step | steps',
     survey: 'surveys | survey | surveys',
     surveys_completed:

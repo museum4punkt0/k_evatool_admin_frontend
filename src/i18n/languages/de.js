@@ -114,6 +114,7 @@ export default {
         'Antwortabhängige Schritte | Antwortabhängiger Schritt | Antwortabhängige Schritte',
     search: 'Suche',
     filter: 'Filter',
+    show_demo_data_only: 'Nur Demodaten anzeigen',
     slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',

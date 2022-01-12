@@ -5,13 +5,14 @@
                 v-if="store.state.stats.trend"
                 :trend="store.state.stats.trend"
             />
+            <h1 class="mb-5">
+                {{ t('stats', 1) }}
+                <strong>{{ store.state.surveys.survey?.name }}</strong>
+            </h1>
             <div class="flex flex-row">
                 <!-- {{ store.state.surveyResults }} -->
-                <h1>
-                    {{ t('stats', 1) }}
-                    <strong>{{ store.state.surveys.survey?.name }}</strong>
-                </h1>
-                <div class="flex-1 flex flex-row justify-end ml-4">
+
+                <div class="flex-1 flex flex-row justify-end items-center">
                     <!-- <litepie-datepicker
 v-model="timeSpan"
 :formatter="formatter"
@@ -30,10 +31,10 @@ separator=" to "
                     />
                     <form-toggle
                         v-model:enabled="demo"
-                        :label="'demo'"
+                        :label="t('show_demo_data_only')"
                         class="ml-3"
                     />
-                    <button class="primary ml-3 mr-3" @click="openExportModal">
+                    <button class="primary ml-3" @click="openExportModal">
                         {{ t('action_export') }}
                     </button>
                 </div>
@@ -233,7 +234,7 @@ export default {
             new Date().setDate(endDate.getDate() - 30 * 6),
         )
         timeSpan.value = [startDate, endDate]
-        const demo = ref(true)
+        const demo = ref(false)
         const formatter = ref({
             date: 'YYYY-MM-DD',
         })
