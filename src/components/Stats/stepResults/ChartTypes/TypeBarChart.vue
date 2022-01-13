@@ -8,6 +8,7 @@
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'TypeBarChart',
@@ -31,6 +32,8 @@ export default {
         },
     },
     setup(props) {
+        const { t } = useI18n()
+
         let chart
         const chartRef = ref(null)
 
@@ -71,7 +74,7 @@ export default {
                     const tooltipText = document.createElement('p')
                     answers.forEach((value) => {
                         const text = document.createTextNode(
-                            value + ' Antworten',
+                            value + ' ' + t('answers', value),
                         )
                         tooltipText.appendChild(text)
                     })
@@ -118,7 +121,7 @@ export default {
                     },
                     layout: {
                         padding: {
-                            right: props.chartLabel === 'binary' ? 50 : 0,
+                            right: props.chartLabel === 'binary' ? 55 : 0,
                             top: props.chartLabel === 'binary' ? 0 : 20,
                         },
                     },

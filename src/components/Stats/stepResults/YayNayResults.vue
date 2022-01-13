@@ -8,6 +8,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'YayNayResults',
@@ -36,6 +37,7 @@ export default {
     },
     setup(props) {
         const store = useStore()
+        const { t } = useI18n()
 
         let chart
         const chartRef = ref(null)
@@ -147,7 +149,7 @@ export default {
                     const tooltipText = document.createElement('p')
                     answers.forEach((value) => {
                         const text = document.createTextNode(
-                            value + ' Antworten',
+                            value + ' ' + t('answers', value),
                         )
                         tooltipText.appendChild(text)
                     })

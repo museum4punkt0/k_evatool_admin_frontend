@@ -236,7 +236,11 @@ export default {
                         (emoji) =>
                             props.surveyStepList.results.timespan.results[
                                 emoji.meaning
-                            ],
+                            ]
+                                ? props.surveyStepList.results.timespan.results[
+                                      emoji.meaning
+                                  ]
+                                : 0,
                     )
                 }
                 return Object.values(

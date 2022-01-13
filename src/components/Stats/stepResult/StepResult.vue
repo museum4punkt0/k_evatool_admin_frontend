@@ -5,10 +5,12 @@
     />
     <binary-result
         v-else-if="step.surveyElementType === 'binary'"
+        :params="stepParams"
         :result="result"
     />
     <multiple-choice-result
         v-else-if="step.surveyElementType === 'multipleChoice'"
+        :params="stepParams.options"
         :result="result"
     />
     <star-rating-result

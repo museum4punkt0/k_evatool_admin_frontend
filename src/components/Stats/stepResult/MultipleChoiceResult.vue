@@ -3,10 +3,12 @@
         {{
             result?.value?.selected
                 .map((opt) => {
+                    const value = params.find((x) => x.value === opt.value)
+                        .labels[store.state.languageCode]
                     if (opt.comment) {
-                        return opt.value + ': ' + opt.comment
+                        return value + ': ' + opt.comment
                     }
-                    return opt.value
+                    return value
                 })
                 .join(', ')
         }}
@@ -14,6 +16,8 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+
 export default {
     name: 'MultipleChoiceResult',
     props: {
@@ -21,9 +25,16 @@ export default {
             type: Object,
             required: true,
         },
+        params: {
+            type: Object,
+            required: true,
+        },
     },
     setup() {
-        return {}
+        const store = useStore()
+        return {
+            store,
+        }
     },
 }
 </script>
