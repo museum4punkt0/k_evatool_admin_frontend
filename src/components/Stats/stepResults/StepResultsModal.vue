@@ -71,7 +71,12 @@
                                     "
                                     :chart-label="surveyStepList.elementType"
                                     :labels="getChartLabels"
-                                    :values="getChartValues"
+                                    :values="
+                                        Object.values(
+                                            surveyStepList.results.timespan
+                                                .results,
+                                        )
+                                    "
                                 />
 
                                 <yay-nay-results
@@ -229,25 +234,6 @@ export default {
                 )
             },
         })
-        const getChartValues = computed({
-            get: () => {
-                if (props.surveyStepList?.elementParams?.emojis) {
-                    return props.surveyStepList.elementParams.emojis.map(
-                        (emoji) =>
-                            props.surveyStepList.results.timespan.results[
-                                emoji.meaning
-                            ]
-                                ? props.surveyStepList.results.timespan.results[
-                                      emoji.meaning
-                                  ]
-                                : 0,
-                    )
-                }
-                return Object.values(
-                    props.surveyStepList.results.timespan.results,
-                )
-            },
-        })
 
         const closeModal = () => {
             modalIsOpen.value = false
@@ -257,13 +243,8 @@ export default {
             const colors = ['rgb(29, 78, 216)', 'rgb(255, 78, 216)']
             const datasets = []
             const keys = []
-            surveyStepList.results.timespan.results.images.forEach((image) => {
-                Object.keys(image).forEach((key) => {
-                    if (!keys.includes(key)) {
-                        keys.push(key)
-                    }
-                })
-            })
+            keys.push(surveyStepList.elementParams.trueValue)
+            keys.push(surveyStepList.elementParams.falseValue)
             keys.forEach((key, index) => {
                 const data = []
 
@@ -274,12 +255,9 @@ export default {
                     backgroundColor: colors[index],
                 })
             })
-
-            surveyStepList.results.timespan.results.images.forEach((image) => {
-                Object.entries(image).forEach((entry) => {
-                    datasets
-                        .find((d) => d.label === entry[0])
-                        .data.push(entry[1])
+            datasets.forEach((set) => {
+                surveyStepList.results.timespan.results.forEach((result) => {
+                    set.data.push(result[set.label])
                 })
             })
             return datasets
@@ -294,7 +272,6 @@ export default {
             closeModal,
             getDatasets,
             getChartLabels,
-            getChartValues,
             getImageLabels,
         }
     },

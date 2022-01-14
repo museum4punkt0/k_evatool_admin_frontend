@@ -32,6 +32,7 @@
     />
     <yay-nay-result
         v-else-if="step.surveyElementType === 'yayNay'"
+        :params="stepParams"
         :result="result"
     />
     <video-result
