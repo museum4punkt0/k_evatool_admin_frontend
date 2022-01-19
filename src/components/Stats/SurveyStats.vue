@@ -74,13 +74,20 @@ separator=" to "
                                                 (element) =>
                                                     element.id ===
                                                     step.surveyElementId,
-                                            )?.params.question?.de
+                                            )?.params.question?.de ||
+                                            store.state.surveyElements?.surveyElements.find(
+                                                (element) =>
+                                                    element.id ===
+                                                    step.surveyElementId,
+                                            )?.params.text?.de
                                         "
                                     ></span>
                                     <external-link-icon
                                         v-if="
                                             step.surveyElementType !==
-                                            'textInput'
+                                                'textInput' &&
+                                            step.surveyElementType !==
+                                                'simpleText'
                                         "
                                         class="mx-1 h-5 w-5 pointer"
                                         @click.prevent.stop="
@@ -247,10 +254,12 @@ export default {
 
         const surveyId = parseInt(route.params.survey_id)
 
-        const surveySteps = computed(() =>
-            store.state.stats.surveySteps.filter(
-                (step) => step.surveyElementType !== 'simpleText',
-            ),
+        const surveySteps = computed(
+            () =>
+                /*store.state.stats.surveySteps.filter(
+          (step) => step.surveyElementType !== 'simpleText',
+      ),*/
+                store.state.stats.surveySteps,
         )
 
         store.dispatch('stats/getStatsTrend', { surveyId, demo: demo.value })
@@ -267,6 +276,7 @@ export default {
             end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
             demo: demo.value,
         })
+
         store.dispatch('stats/getSurveySteps', surveyId)
 
         watch(
