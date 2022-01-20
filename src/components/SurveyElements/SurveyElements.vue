@@ -48,6 +48,13 @@
                             <th>{{ t('types', 1) }}</th>
                             <th># {{ t('steps', 2) }}</th>
                             <th># {{ t('surveys', 2) }}</th>
+                            <th>
+                                # {{ t('results', 2) }}
+                                <br />
+                                <span class="text-xs text-gray-600">
+                                    live / demo
+                                </span>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -84,6 +91,10 @@
                                 <template v-if="surveyElement.surveysCount > 0">
                                     {{ surveyElement.surveysCount }}
                                 </template>
+                            </td>
+                            <td class="text-sm">
+                                {{ surveyElement.resultCount }} /
+                                {{ surveyElement.demoResultCount }}
                             </td>
                             <td class="px-6 py-4 flex flex-row justify-end">
                                 <pencil-alt-icon
