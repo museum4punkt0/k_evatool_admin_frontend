@@ -68,8 +68,8 @@ separator=" to "
                                     ></external-link-icon>
                                 </div>
                                 <div v-else class="flex whitespace-nowrap">
-                                    <span
-                                        v-html="
+                                    <survey-stats-cell
+                                        :content="
                                             store.state.surveyElements?.surveyElements.find(
                                                 (element) =>
                                                     element.id ===
@@ -81,7 +81,7 @@ separator=" to "
                                                     step.surveyElementId,
                                             )?.params.text?.de
                                         "
-                                    ></span>
+                                    />
                                     <external-link-icon
                                         v-if="
                                             step.surveyElementType !==
@@ -93,7 +93,7 @@ separator=" to "
                                         @click.prevent.stop="
                                             showStepResults(step.id)
                                         "
-                                    ></external-link-icon>
+                                    />
                                 </div>
                                 <div>
                                     <span
@@ -217,10 +217,12 @@ import StepResultsModal from './stepResults/StepResultsModal.vue'
 import SURVEY_STATS_SERVICE from '../../services/surveyStatsService'
 
 import 'vue3-date-time-picker/dist/main.css'
+import SurveyStatsCell from '@/components/Stats/SurveyStatsCell.vue'
 
 export default {
     name: 'SurveyStats',
     components: {
+        SurveyStatsCell,
         SurveyStatsExportModal,
         SurveyStatsTrend,
         EyeIcon,
