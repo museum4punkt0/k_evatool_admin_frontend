@@ -51,6 +51,13 @@
                             <th>Status</th>
                             <th>#&nbsp;{{ t('steps', 2) }}</th>
                             <th>
+                                #&nbsp;{{ t('results', 2) }}
+                                <br />
+                                <span class="text-xs text-gray-600">
+                                    live / demo
+                                </span>
+                            </th>
+                            <th>
                                 <span class="sr-only">Edit</span>
                             </th>
                         </tr>
@@ -89,6 +96,10 @@
                             </td>
                             <td>
                                 {{ survey.surveyStepsCount }}
+                            </td>
+                            <td>
+                                {{ survey.surveyResultsCount }} /
+                                {{ survey.surveyDemoResultsCount }}
                             </td>
                             <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon
