@@ -74,7 +74,7 @@
 
                                 <form-toggle
                                     v-model:enabled="params.demo"
-                                    label="Demo"
+                                    :label="t('use_demo_data_only')"
                                 />
 
                                 <form-select
@@ -104,11 +104,16 @@
                                                 class="primary"
                                                 :disabled="
                                                     statsExportData?.totalResults ===
-                                                        0 || v$.$invalid
+                                                        0 ||
+                                                    v$.$invalid ||
+                                                    isExporting
                                                 "
                                                 @click="exportStats(true)"
                                             >
                                                 {{ t('action_export') }}
+                                                <loader
+                                                    v-if="isExporting"
+                                                ></loader>
                                             </button>
                                             <button
                                                 class="link ml-4"
@@ -153,6 +158,8 @@ import FormToggle from '../Forms/FormToggle.vue'
 import useVuelidate from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
 import FormSelect from '../Forms/FormSelect.vue'
+import { useState } from '../../composables/state'
+import Loader from '../../components/Common/Loader.vue'
 
 const dateFormat = helpers.regex(
     /^\d{4}-(02-(0[1-9]|[12][0-9])|(0[469]|11)-(0[1-9]|[12][0-9]|30)|(0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))$/,
@@ -193,6 +200,7 @@ export default {
         DialogTitle,
         XIcon,
         Datepicker,
+        Loader,
     },
     props: {
         open: {
@@ -217,6 +225,8 @@ export default {
             modalIsOpen.value = false
         }
 
+        const [isExporting, setIsExporting] = useState(false)
+
         const statsExportData = ref({})
 
         const params = ref({})
@@ -228,10 +238,12 @@ export default {
         params.value.demo = true
 
         const exportStats = async (execute = false) => {
+            setIsExporting(true)
             statsExportData.value = await SURVEY_STATS_SERVICE.exportStats(
                 { ...params.value },
                 execute,
             )
+            setIsExporting(false)
         }
 
         const downloadExport = async () => {
@@ -295,6 +307,7 @@ export default {
             validations,
             exportTypes,
             downloadExport,
+            isExporting,
         }
     },
 }
