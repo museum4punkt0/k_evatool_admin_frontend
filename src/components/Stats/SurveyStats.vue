@@ -1,18 +1,23 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex flex-col flex-1 overflow-y-auto p-3">
-            <survey-stats-trend
-                v-if="store.state.stats.trend"
-                :trend="store.state.stats.trend"
-            />
-            <h1 class="mb-5">
-                {{ t('stats', 1) }}
-                <strong>{{ store.state.surveys.survey?.name }}</strong>
-            </h1>
             <div class="flex flex-row">
+                <h1 class="mb-5">
+                    {{ t('stats', 1) }}:
+                    <strong>{{ store.state.surveys.survey?.name }}</strong>
+                </h1>
                 <!-- {{ store.state.surveyResults }} -->
 
                 <div class="flex-1 flex flex-row justify-end items-center">
+                    <button
+                        v-tippy="{
+                            content: t('action_edit_survey'),
+                        }"
+                        class="secondary mr-1"
+                        @click="editSurvey(store.state.surveys.survey)"
+                    >
+                        <PencilIcon class="h-5 w-5" />
+                    </button>
                     <!-- <litepie-datepicker
 v-model="timeSpan"
 :formatter="formatter"
@@ -39,6 +44,10 @@ separator=" to "
                     </button>
                 </div>
             </div>
+            <survey-stats-trend
+                v-if="store.state.stats.trend"
+                :trend="store.state.stats.trend"
+            />
 
             <div v-if="surveySteps.length > 0" class="table-wrap mt-3">
                 <table class="table-fixed">
@@ -198,11 +207,11 @@ separator=" to "
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { EyeIcon, ExternalLinkIcon } from '@heroicons/vue/outline'
+import { EyeIcon, ExternalLinkIcon, PencilIcon } from '@heroicons/vue/outline'
 import Datepicker from 'vue3-date-time-picker'
 import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
@@ -227,6 +236,7 @@ export default {
         SurveyStatsTrend,
         EyeIcon,
         ExternalLinkIcon,
+        PencilIcon,
         FormToggle,
         StepResult,
         StepDetailResultModal,
@@ -236,6 +246,7 @@ export default {
     setup() {
         const { t } = useI18n()
         const route = useRoute()
+        const router = useRouter()
         const store = useStore()
         const timeSpan = ref(null)
         const endDate = new Date()
@@ -254,7 +265,15 @@ export default {
         const selectedSurveyStepId = ref(-1)
         const selectedSurveyStepList = ref({})
 
+        onMounted(async () => {
+            const surveyId = parseInt(route.params.survey_id)
+            // console.log(surveyId)
+            await store.dispatch('surveys/setSurveyId', surveyId)
+            await store.dispatch('surveys/getSurvey', surveyId)
+        })
         const surveyId = parseInt(route.params.survey_id)
+        // await store.dispatch('surveys/setSurveyId', surveyId.value)
+        // await store.dispatch('surveys/getSurvey', surveyId.value)
 
         const surveySteps = computed(
             () =>
@@ -371,6 +390,10 @@ export default {
             exportModalOpen.value = true
         }
 
+        const editSurvey = (survey) => {
+            router.push(`/surveys/${survey.id}`)
+        }
+
         return {
             surveyId,
             t,
@@ -391,6 +414,7 @@ export default {
             showStepDetailResult,
             openExportModal,
             exportModalOpen,
+            editSurvey,
         }
     },
 }

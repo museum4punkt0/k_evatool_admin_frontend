@@ -13,6 +13,7 @@ export default {
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
     action_edit_survey_meta: 'Umfrage Meta Daten bearbeiten',
+    action_edit_survey: 'Umfrage bearbeiten',
     action_export: 'Exportieren',
     action_new_survey_element: 'Neues Umfrage-Element',
     action_new_user: 'Neuer Nutzer',
