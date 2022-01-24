@@ -205,9 +205,21 @@
                                                                 v-if="
                                                                     timeBasedStep.stopsVideo
                                                                 "
+                                                                v-tippy="{
+                                                                    content: t(
+                                                                        'tooltip_time_based_steps_modal_stop_icon',
+                                                                    ),
+                                                                }"
                                                                 class="h-5 w-5"
                                                             />
-                                                            <span v-else>
+                                                            <span
+                                                                v-else
+                                                                v-tippy="{
+                                                                    content: t(
+                                                                        'tooltip_time_based_steps_modal_stop_time',
+                                                                    ),
+                                                                }"
+                                                            >
                                                                 {{
                                                                     timeBasedStep.displayTime
                                                                 }}s

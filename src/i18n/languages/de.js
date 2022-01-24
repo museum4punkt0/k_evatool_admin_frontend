@@ -170,6 +170,10 @@ export default {
         'Umfrage in folgenden Sprachen verfügbar machen',
     tooltip_survey_details_slug:
         'Nutzer-lesbare, eindeutige suchmaschienenfreundliche ID, Teil der URL',
+    tooltip_time_based_steps_modal_stop_icon:
+        'Video wird bei Anzeige der Frage angehalten.',
+    tooltip_time_based_steps_modal_stop_time:
+        'Frage wird für die angezeigte Zeit geöffnet.',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',
