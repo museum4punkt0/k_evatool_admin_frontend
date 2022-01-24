@@ -25,12 +25,13 @@ axios.interceptors.response.use(
         return response
     },
     (error) => {
-        alert(
-            JSON.stringify(error.response.data) +
-                error.response.config.url +
-                error.response.config.data +
-                error,
-        )
+        let message = 'Bitte wenden Sie sich an den Administrator.\n'
+        message += 'Am besten mit einem Screenshot.\n\n'
+        message += `data: ${JSON.stringify(error.response.data)}\n`
+        message += `config.url: ${error.response.config.url}\n`
+        message += `config.data: ${error.response.config.data}\n`
+        message += `error: ${error}\n`
+        alert(message)
     },
 )
 
