@@ -74,7 +74,7 @@
 
                                 <form-toggle
                                     v-model:enabled="params.demo"
-                                    label="Demo"
+                                    :label="t('use_demo_data_only')"
                                 />
 
                                 <form-select

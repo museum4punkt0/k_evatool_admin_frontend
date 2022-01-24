@@ -117,6 +117,7 @@ export default {
     search: 'Suche',
     filter: 'Filter',
     show_demo_data_only: 'Nur Demodaten anzeigen',
+    use_demo_data_only: 'Nur Demodaten verwenden',
     slugs: 'Slugs | Slug | Slugs',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',
