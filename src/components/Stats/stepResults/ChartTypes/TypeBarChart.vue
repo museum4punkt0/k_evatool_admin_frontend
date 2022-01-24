@@ -72,16 +72,29 @@ export default {
                 if (tooltip.body) {
                     const answers = tooltip.dataPoints.map((data) => data.raw)
                     const tooltipText = document.createElement('p')
+
                     answers.forEach((value) => {
-                        const text = document.createTextNode(
+                        let text = document.createTextNode(
                             value + ' ' + t('answers', value),
                         )
                         tooltipText.appendChild(text)
                     })
+
+                    let sum = 0
+                    console.log(tooltip.dataPoints[0].dataset.data)
+                    tooltip.dataPoints[0].dataset.data.map((data) => {
+                        sum += data
+                    })
+                    const tooltipSum = document.createElement('p')
+                    tooltipSum.appendChild(
+                        document.createTextNode('n = ' + sum),
+                    )
+
                     while (tooltipEl?.firstChild) {
                         tooltipEl.firstChild.remove()
                     }
                     tooltipEl.appendChild(tooltipText)
+                    tooltipEl.appendChild(tooltipSum)
                 }
 
                 const { offsetLeft: positionX, offsetTop: positionY } =
