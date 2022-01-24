@@ -128,8 +128,11 @@
                                     @click="saveResultsContent"
                                 >
                                     <animated-loader v-if="isSaving" />
-                                    <span v-else>
+                                    <span v-else class="flex">
                                         {{ t('action_save_result_content') }}
+                                        <download-icon
+                                            class="ml-3 h-6 w-6 pointer"
+                                        />
                                     </span>
                                 </button>
                             </div>
@@ -152,7 +155,12 @@ import {
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
-import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
+import {
+    DownloadIcon,
+    StopIcon,
+    TrashIcon,
+    XIcon,
+} from '@heroicons/vue/outline'
 import TypeBarChart from './ChartTypes/TypeBarChart.vue'
 import YayNayResults from './YayNayResults.vue'
 import TextAnalysisResults from './TextAnalysisResults.vue'
@@ -172,6 +180,7 @@ export default {
         Dialog,
         DialogOverlay,
         DialogTitle,
+        DownloadIcon,
         TrashIcon,
         StopIcon,
         XIcon,
@@ -296,7 +305,6 @@ export default {
                 return
             }
             isSaving.value = true
-
             const fileName =
                 t('stats') +
                 '_id' +
