@@ -6,6 +6,7 @@
         class=""
         v-html="shortenQuestion()"
     />
+    <!--    <span>{{ content }}</span>-->
 </template>
 
 <script>
@@ -22,15 +23,18 @@ export default {
     setup(props) {
         const showToolTip = ref(false)
 
+        function htmlDecode(input) {
+            const doc = new DOMParser().parseFromString(input, 'text/html')
+            return doc.documentElement.textContent
+        }
+
         function shortenQuestion() {
             const maxStringLength = 24
-            const newString = props.content
-                .replace(/(<p[^>]+?>|<p>|<\/p>|<br \/>)/g, '')
-                .replace(/(&nbsp;)/g, ' ')
+            const newString = htmlDecode(props.content)
 
             if (newString.length > maxStringLength) {
                 showToolTip.value = true
-                return newString.substring(0, 24) + '...'
+                return newString.substring(0, maxStringLength) + '...'
             }
             return newString
         }
