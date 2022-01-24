@@ -104,7 +104,9 @@
                                                 class="primary"
                                                 :disabled="
                                                     statsExportData?.totalResults ===
-                                                        0 || v$.$invalid
+                                                        0 ||
+                                                    v$.$invalid ||
+                                                    isExporting
                                                 "
                                                 @click="exportStats(true)"
                                             >
