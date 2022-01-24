@@ -41,11 +41,7 @@
                                 <DialogTitle
                                     as="h3"
                                     class="text-lg font-medium leading-6 text-gray-900 text-capitalize"
-                                    v-html="
-                                        surveyStepList?.elementParams?.question[
-                                            store.state.languageCode
-                                        ]
-                                    "
+                                    v-html="t('stats')"
                                 ></DialogTitle>
                                 <x-icon
                                     class="h-6 w-6 pointer"
@@ -53,8 +49,16 @@
                                 />
                             </div>
 
-                            <div class="mt-6 px-6 pb-6">
+                            <div id="results-content" class="mt-6 px-6 pb-6">
                                 <!--                                <pre>{{ surveyStepId }}</pre>-->
+                                <h3
+                                    class="mb-3"
+                                    v-html="
+                                        surveyStepList?.elementParams?.question[
+                                            store.state.languageCode
+                                        ]
+                                    "
+                                />
                                 <pre
                                     v-if="
                                         surveyStepList.results?.timespan.results
@@ -110,6 +114,25 @@
                                     "
                                 />
                             </div>
+                            <div
+                                class="flex bg-gray-200 rounded-b-2xl py-3 px-4 justify-end"
+                            >
+                                <button
+                                    v-tippy="{
+                                        content: t(
+                                            'tooltip_save_result_content',
+                                        ),
+                                    }"
+                                    :disabled="isSaving"
+                                    class="primary"
+                                    @click="saveResultsContent"
+                                >
+                                    <animated-loader v-if="isSaving" />
+                                    <span v-else>
+                                        {{ t('action_save_result_content') }}
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </TransitionChild>
                 </div>
@@ -128,17 +151,21 @@ import {
 } from '@headlessui/vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { StopIcon, TrashIcon, XIcon } from '@heroicons/vue/outline'
 import TypeBarChart from './ChartTypes/TypeBarChart.vue'
 import YayNayResults from './YayNayResults.vue'
 import TextAnalysisResults from './TextAnalysisResults.vue'
 import VideoResults from './VideoResults.vue'
 import VideoResult from '../stepResult/VideoResult.vue'
+import { saveAs } from 'file-saver'
+import html2canvas from 'html2canvas'
+import AnimatedLoader from '@/components/Common/AnimatedLoader.vue'
 
 export default {
     name: 'AssetModal',
     components: {
+        AnimatedLoader,
         TypeBarChart,
         TransitionRoot,
         TransitionChild,
@@ -171,6 +198,7 @@ export default {
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
+        const isSaving = ref(false)
 
         const barChart = [
             'simpleText',
@@ -263,6 +291,33 @@ export default {
             return datasets
         }
 
+        function saveResultsContent() {
+            if (isSaving.value) {
+                return
+            }
+            isSaving.value = true
+
+            const fileName =
+                t('stats') +
+                '_id' +
+                props.surveyStepId +
+                '_' +
+                props.surveyStepList?.results?.timespan?.start +
+                '_' +
+                props.surveyStepList?.results?.timespan?.end +
+                '.png'
+            const resultsCanvas = document.getElementById('results-content')
+            html2canvas(resultsCanvas, {
+                allowTaint: true,
+                scale: 2,
+            }).then((canvas) => {
+                canvas.toBlob((blob) => {
+                    saveAs(blob, fileName)
+                    isSaving.value = false
+                })
+            })
+        }
+
         return {
             assets,
             modalIsOpen,
@@ -273,6 +328,8 @@ export default {
             getDatasets,
             getChartLabels,
             getImageLabels,
+            isSaving,
+            saveResultsContent,
         }
     },
 }

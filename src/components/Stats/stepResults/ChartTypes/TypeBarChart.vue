@@ -81,7 +81,6 @@ export default {
                     })
 
                     let sum = 0
-                    console.log(tooltip.dataPoints[0].dataset.data)
                     tooltip.dataPoints[0].dataset.data.map((data) => {
                         sum += data
                     })
@@ -138,6 +137,7 @@ export default {
                             top: props.chartLabel === 'binary' ? 0 : 20,
                         },
                     },
+                    devicePixelRatio: 4,
                     plugins: {
                         legend: {
                             display: false,
@@ -184,7 +184,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .type-bar-chart {
     width: 100%;
     height: auto;

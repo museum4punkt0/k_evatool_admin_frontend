@@ -19,6 +19,7 @@ export default {
     action_new_user: 'Neuer Nutzer',
     action_open_preview: 'Vorschau öffnen',
     action_reload: 'Neu laden',
+    action_save_result_content: 'PNG-Export',
     action_select: 'Auswählen',
     action_show_results: 'Resultate anzeigen',
     action_save: 'Speichern',
@@ -154,6 +155,8 @@ export default {
     to: 'bis',
     tooltip_set_start_step: 'Startelement festlegen',
     tooltip_edit_step: 'Schritt bearbeiten',
+    tooltip_save_result_content:
+        'Speichert die angezeigte Auswertung als PNG ab.',
     tooltip_set_next_step: 'Folgeschritt setzen',
     tooltip_set_previous_step: 'Vorgaengerschritt setzen',
     tooltip_set_timebased_steps: 'Zeitbasierte Schritte setzen',
