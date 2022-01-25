@@ -33,6 +33,7 @@ export default {
     binary_positive_label: 'Positive Anzeigewert',
     binary_negative_label: 'Negative Anzeigewert',
     button_choose_assets: 'Bilder auswählen',
+    config: 'Konfiguration',
     confirm_delete_asset: 'Wollen Sie die Datei wirklich löschen?',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     confirm_delete_survey: 'Umfrage wirklich löschen?',
