@@ -122,6 +122,7 @@ export default {
     show_demo_data_only: 'Nur Demodaten anzeigen',
     use_demo_data_only: 'Nur Demodaten verwenden',
     slugs: 'Slugs | Slug | Slugs',
+    speech_to_text_service: 'Speech-To-Text-Service',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',
     star_rating_display_types: 'Darstellung',

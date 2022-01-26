@@ -94,7 +94,7 @@
                                     >
                                         <hr class="mt-4 mb-2" />
                                         <h4>
-                                            {{ t('transcriptions', 1) }}
+                                            {{ t('speech_to_text_service') }}
                                             <small class="text-gray-600">
                                                 Status:
                                                 <strong>
@@ -235,9 +235,9 @@ export default {
     position: relative;
 }
 
-audio::-webkit-media-controls-play-button,
+/*audio::-webkit-media-controls-play-button,
 audio::-webkit-media-controls-panel {
     background-color: #e1effe;
     color: #1c64f2;
-}
+}*/
 </style>
