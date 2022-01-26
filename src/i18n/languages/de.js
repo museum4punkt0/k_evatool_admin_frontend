@@ -19,9 +19,11 @@ export default {
     action_new_user: 'Neuer Nutzer',
     action_open_preview: 'Vorschau öffnen',
     action_reload: 'Neu laden',
+    action_request_transcription: 'Transkription anfragen',
     action_save_result_content: 'PNG-Export',
     action_select: 'Auswählen',
     action_show_results: 'Resultate anzeigen',
+    action_show_audio: 'Audio anzeigen',
     action_save: 'Speichern',
     allow_changing_answer: 'Ändern der Antwort erlauben',
     allow_half_steps: 'Halbe Schritte erlauben (z.B. 3,5)',
@@ -129,6 +131,7 @@ export default {
     start: 'Start',
     stats: 'Auswertungen | Auswertung | Auswertungen',
     stats_export: 'Statistik-Export',
+    status_loading: 'Lädt gerade',
     steps: 'Schritte | Schritt | Schritte',
     stops_video: 'Stoppt das Video',
     sub_headline_add_timebase_step:
@@ -174,6 +177,7 @@ export default {
         'Video wird bei Anzeige der Frage angehalten.',
     tooltip_time_based_steps_modal_stop_time:
         'Frage wird für die angezeigte Zeit geöffnet.',
+    transcriptions: 'Transkriptionen | Transkription | Transkriptionen',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',

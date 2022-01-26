@@ -15,7 +15,7 @@ export default {
     },
     actions: {
         async getSurveySteps({ commit }, surveyId) {
-            const steps = await SURVEY_RESULTS.getSurveySteps(surveyId)
+            const steps = await SURVEY_RESULTS.getSurveyResults(surveyId)
             commit('setSurveySteps', steps.data)
         },
         async getSurveyStepResults({ commit }, { surveyId, stepId }) {

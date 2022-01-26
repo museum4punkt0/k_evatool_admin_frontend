@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default {
-    async getSurveySteps(surveyId) {
+    async getSurveyResults(surveyId) {
         const url = 'evaluation-tool/surveys/' + surveyId + '/results?all'
         return axios
             .get(url)
