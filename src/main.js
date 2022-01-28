@@ -7,7 +7,6 @@ import VueTippy from 'vue-tippy'
 
 // tailwind css
 import './index.css'
-
 import 'tippy.js/dist/tippy.css' // optional for styling
 
 // axios

@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.583",
+    "version": "1.0.584",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -30,6 +30,7 @@
         "dayjs": "^1.10.7",
         "file-saver": "^2.0.5",
         "html2canvas": "^1.4.1",
+        "litepie-datepicker": "^1.0.14",
         "lodash": "^4.17.21",
         "moment": "^2.29.1",
         "ms-to-timecode": "^0.1.2",
