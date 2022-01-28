@@ -91,6 +91,8 @@ export default {
     new_element: 'Neues Umfrage-Element',
     new_user: 'Neuer Benutzer',
     none_selected: 'Nicht ausgewählt',
+    notice_multiple_choice_results:
+        '"Die Prozentzahl bezieht sich auf die Anzahl der Datensätze, lässt aber keine Rückschlüsse auf die Anzahl der Befragten".',
     notification_error_headline: 'Fehler',
     notification_error_startstep_previous:
         'Sorry, Startschritt kann nicht gesetzt werden. Der Schritt hat bereits Vorgängerschritte.',
