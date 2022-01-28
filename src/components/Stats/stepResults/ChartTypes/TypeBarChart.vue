@@ -7,7 +7,7 @@
 <script>
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export default {
@@ -25,9 +25,17 @@ export default {
             type: Array,
             required: true,
         },
+        showCompare: {
+            type: Boolean,
+            default: false,
+        },
+        compareValues: {
+            type: Array,
+            default: () => [],
+        },
         colors: {
             type: Array,
-            default: () => ['rgb(29, 78, 216)'],
+            default: () => ['rgb(29, 78, 216)', 'rgb(212, 78, 216)'],
             required: false,
         },
     },
@@ -40,6 +48,27 @@ export default {
         const getChartHeight = computed(() => {
             return props.chartLabel === 'binary' ? 150 : 400
         })
+
+        watch(
+            () => props.showCompare,
+            () => {
+                if (props.showCompare) {
+                    chart.data.datasets.push({
+                        barPercentage: 0.45,
+                        label: props.chartLabel,
+                        data: props.compareValues,
+                        backgroundColor: props.colors[1],
+                        borderColor: props.colors[1],
+                    })
+                    chart.update()
+                } else {
+                    if (chart.data.datasets.length > 1) {
+                        chart.data.datasets.pop()
+                        chart.update()
+                    }
+                }
+            },
+        )
 
         onMounted(() => {
             const getOrCreateTooltip = (chart) => {
@@ -121,8 +150,8 @@ export default {
                             barPercentage: 0.45,
                             label: props.chartLabel,
                             data: props.values,
-                            backgroundColor: props.colors,
-                            borderColor: props.colors,
+                            backgroundColor: props.colors[0],
+                            borderColor: props.colors[0],
                         },
                     ],
                 },
@@ -158,7 +187,7 @@ export default {
                                     ((value * 100) / sum).toFixed(2) + '%'
                                 return percentage
                             },
-                            color: props.colors,
+                            color: props.colors[0],
                             align: 'end',
                             anchor: 'end',
                             padding: 5,

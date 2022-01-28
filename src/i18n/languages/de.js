@@ -77,6 +77,7 @@ export default {
     hello: 'Hallo Welt!',
     hint_password_requirements: 'Mind. 12 Zeichen',
     id: 'ID',
+    label_compare_with: 'Vergleich mit',
     label_middle_value: 'Beschriftung mittlerer Wert',
     label_lowest_value: 'Beschriftung kleinster Wert',
     label_highest_value: 'Beschriftung größter Wert',
