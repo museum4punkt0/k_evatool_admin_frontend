@@ -28,9 +28,16 @@
                     {{ t('action_export') }}
                 </button>
             </div>
-            <div class="w-1/3 flex flex-row justify-between items-center mb-5">
-                <date-picker v-model="timeSpanCompareWith" />
-                {{ timeSpanCompareWith }}
+            <div class="w-full flex flex-row justify-between items-center mb-5">
+                <!--                <div class="w-1/3">
+                    <date-picker v-model="timeSpanCompareWith" />
+                </div>
+                <p>
+                    {{ timeSpanCompareWith }}
+                </p>-->
+                <p>
+                    {{ timeSpan }}
+                </p>
             </div>
             <survey-stats-trend
                 v-if="store.state.stats.trend"
@@ -190,7 +197,6 @@
                 :survey-step-id="selectedSurveyStepId"
                 :survey-step-list="selectedSurveyStepList"
                 :survey-step-compare-list="selectedCompareStepResultsList"
-                :time-span-compare="timeSpanCompareWith"
             ></step-results-modal>
             <div class="footer"></div>
 
@@ -209,13 +215,11 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { EyeIcon, ExternalLinkIcon, PencilIcon } from '@heroicons/vue/outline'
-import Datepicker from 'vue3-date-time-picker'
-import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
 import moment from 'moment'
 import 'moment/locale/de'
-import LitepieDatepicker from 'litepie-datepicker'
 
+import FormToggle from '../Forms/FormToggle.vue'
 import DatePicker from '@/components/Common/DatePicker.vue'
 import StepDetailResultModal from './stepResult/detail/StepDetailResultModal.vue'
 import SurveyStatsExportModal from './SurveyStatsExportModal.vue'
@@ -231,11 +235,9 @@ export default {
     name: 'SurveyStats',
     components: {
         DatePicker,
-        Datepicker,
         EyeIcon,
         ExternalLinkIcon,
         FormToggle,
-        LitepieDatepicker,
         PencilIcon,
         StepResult,
         StepDetailResultModal,
@@ -258,7 +260,7 @@ export default {
             dayjs(startFrom).format(t('datepicker_date_formatter')),
             dayjs(endDate).format(t('datepicker_date_formatter')),
         ])
-        const timeSpanCompareWith = ref([])
+        // const timeSpanCompareWith = ref([])
         const selectedCompareStepResultsList = ref({})
 
         const demo = ref(false)
@@ -296,7 +298,8 @@ export default {
         )
         watch(
             () => timeSpan.value,
-            () => {
+            (value) => {
+                console.log(value)
                 if (timeSpan.value[0] && timeSpan.value[1]) {
                     setStartAndEndDateStats(
                         timeSpan.value[0],
@@ -353,8 +356,7 @@ export default {
                         ).format('YYYY-MM-DD'),
                         demo.value,
                     )
-                console.log(timeSpanCompareWith)
-                if (timeSpanCompareWith.value.length === 2) {
+                /*if (timeSpanCompareWith.value.length === 2) {
                     selectedCompareStepResultsList.value =
                         await SURVEY_STATS_SERVICE.getStatsStepList(
                             surveyId,
@@ -369,7 +371,8 @@ export default {
                             ).format('YYYY-MM-DD'),
                             demo.value,
                         )
-                }
+                    console.log(selectedCompareStepResultsList)
+                }*/
                 stepResultsModalIsOpen.value = true
                 selectedSurveyStepId.value = id
             }
@@ -403,7 +406,6 @@ export default {
             surveyId,
             t,
             store,
-            timeSpanCompareWith,
             timeSpan,
             demo,
             moment,
