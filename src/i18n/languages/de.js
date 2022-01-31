@@ -77,6 +77,7 @@ export default {
     hello: 'Hallo Welt!',
     hint_password_requirements: 'Mind. 12 Zeichen',
     id: 'ID',
+    label_compare_filter: 'Vergleichszeitraum',
     label_compare_with: 'Vergleich mit',
     label_middle_value: 'Beschriftung mittlerer Wert',
     label_lowest_value: 'Beschriftung kleinster Wert',
@@ -100,6 +101,7 @@ export default {
     new_element: 'Neues Umfrage-Element',
     new_user: 'Neuer Benutzer',
     none_selected: 'Nicht ausgewählt',
+    notice_filter_has_no_results: 'Keine vergleichs Ergebnisse vorhanden.',
     notice_multiple_choice_results:
         '"Die Prozentzahl bezieht sich auf die Anzahl der Datensätze, lässt aber keine Rückschlüsse auf die Anzahl der Befragten".',
     notification_error_headline: 'Fehler',

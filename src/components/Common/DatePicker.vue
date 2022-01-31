@@ -113,8 +113,9 @@ export default {
         watch(
             () => timeSpan.value,
             () => {
-                emit('update:modelValue', timeSpan)
+                emit('update:modelValue', timeSpan.value)
             },
+            { deep: true },
         )
 
         return {

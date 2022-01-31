@@ -59,6 +59,9 @@ export default {
                         data: props.compareValues,
                         backgroundColor: props.colors[1],
                         borderColor: props.colors[1],
+                        datalabels: {
+                            color: props.colors[1],
+                        },
                     })
                     chart.update()
                 } else {
@@ -152,6 +155,9 @@ export default {
                             data: props.values,
                             backgroundColor: props.colors[0],
                             borderColor: props.colors[0],
+                            datalabels: {
+                                color: props.colors[0],
+                            },
                         },
                     ],
                 },
@@ -183,17 +189,18 @@ export default {
                                 dataArr.map((data) => {
                                     sum += data
                                 })
-                                let percentage =
-                                    ((value * 100) / sum).toFixed(2) + '%'
-                                return percentage
+                                let percentage = (value * 100) / sum
+                                return percentage % 1 === 0
+                                    ? percentage + '%'
+                                    : percentage.toFixed(2) + '%'
                             },
-                            color: props.colors[0],
                             align: 'end',
                             anchor: 'end',
                             padding: 5,
                             font: {
                                 weight: 'bold',
                             },
+                            display: 'auto',
                         },
                     },
                 },

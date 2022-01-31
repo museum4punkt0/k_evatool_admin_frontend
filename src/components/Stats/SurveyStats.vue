@@ -18,26 +18,23 @@
                 </button>
             </div>
             <div class="w-full flex flex-row justify-between items-center mb-5">
-                <date-picker v-model="timeSpan" />
+                <div class="w-1/3">
+                    <date-picker v-model="timeSpan" />
+                </div>
                 <form-toggle
                     v-model:enabled="demo"
                     :label="t('show_demo_data_only')"
-                    class="ml-3 w-full"
+                    class="ml-3 flex-1"
                 />
                 <button class="primary" @click="openExportModal">
                     {{ t('action_export') }}
                 </button>
             </div>
-            <div class="w-full flex flex-row justify-between items-center mb-5">
-                <!--                <div class="w-1/3">
+            <div class="w-full flex flex-row items-center mb-5">
+                <div class="w-1/3 mr-3">
                     <date-picker v-model="timeSpanCompareWith" />
                 </div>
-                <p>
-                    {{ timeSpanCompareWith }}
-                </p>-->
-                <p>
-                    {{ timeSpan }}
-                </p>
+                <p v-html="t('label_compare_filter')"></p>
             </div>
             <survey-stats-trend
                 v-if="store.state.stats.trend"
@@ -197,6 +194,7 @@
                 :survey-step-id="selectedSurveyStepId"
                 :survey-step-list="selectedSurveyStepList"
                 :survey-step-compare-list="selectedCompareStepResultsList"
+                :time-span-compare="timeSpanCompareWith"
             ></step-results-modal>
             <div class="footer"></div>
 
@@ -260,7 +258,7 @@ export default {
             dayjs(startFrom).format(t('datepicker_date_formatter')),
             dayjs(endDate).format(t('datepicker_date_formatter')),
         ])
-        // const timeSpanCompareWith = ref([])
+        const timeSpanCompareWith = ref([])
         const selectedCompareStepResultsList = ref({})
 
         const demo = ref(false)
@@ -298,8 +296,7 @@ export default {
         )
         watch(
             () => timeSpan.value,
-            (value) => {
-                console.log(value)
+            () => {
                 if (timeSpan.value[0] && timeSpan.value[1]) {
                     setStartAndEndDateStats(
                         timeSpan.value[0],
@@ -308,6 +305,7 @@ export default {
                 }
                 getStatsTrend()
             },
+            { deep: true },
         )
 
         function setStartAndEndDateStats(start, end) {
@@ -356,7 +354,7 @@ export default {
                         ).format('YYYY-MM-DD'),
                         demo.value,
                     )
-                /*if (timeSpanCompareWith.value.length === 2) {
+                if (timeSpanCompareWith.value.length === 2) {
                     selectedCompareStepResultsList.value =
                         await SURVEY_STATS_SERVICE.getStatsStepList(
                             surveyId,
@@ -372,7 +370,7 @@ export default {
                             demo.value,
                         )
                     console.log(selectedCompareStepResultsList)
-                }*/
+                }
                 stepResultsModalIsOpen.value = true
                 selectedSurveyStepId.value = id
             }
@@ -407,6 +405,7 @@ export default {
             t,
             store,
             timeSpan,
+            timeSpanCompareWith,
             demo,
             moment,
             surveySteps,
