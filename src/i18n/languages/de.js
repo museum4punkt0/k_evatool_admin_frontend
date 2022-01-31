@@ -10,6 +10,11 @@ export default {
     action_close: 'Schließen',
     action_confirm: 'Bestätigen',
     action_copy_live_link: 'Link zur Umfrage in die Zwischenablage kopieren',
+    action_datepicker_currentMonth: 'Aktueller Monat',
+    action_datepicker_today: 'Heute',
+    action_datepicker_past: 'Vergangene ',
+    action_datepicker_pastMonth: 'Letzter Monat',
+    action_datepicker_yesterday: 'Gestern',
     action_delete: 'Löschen',
     action_edit_survey_element: 'Element bearbeiten',
     action_edit_survey_meta: 'Umfrage Meta Daten bearbeiten',
@@ -49,6 +54,9 @@ export default {
     confirm_reset_survey_element:
         'Sie haben nicht gespeicherte Änderungen, wollen Sie diese zurücksetzen?',
     commentable: 'kommentierbar',
+    datepicker_date_formatter: 'DD-MM-YYYY',
+    datepicker_date_separator: ' bis ',
+    days: 'Tage |Tag | Tage',
     descriptions: 'Beschreibungen | Beschreibung | Beschreibungen',
     display_time: 'Anzeigedauer',
     display_value: 'Anzeigewert',
@@ -92,6 +100,8 @@ export default {
     new_element: 'Neues Umfrage-Element',
     new_user: 'Neuer Benutzer',
     none_selected: 'Nicht ausgewählt',
+    notice_multiple_choice_results:
+        '"Die Prozentzahl bezieht sich auf die Anzahl der Datensätze, lässt aber keine Rückschlüsse auf die Anzahl der Befragten".',
     notification_error_headline: 'Fehler',
     notification_error_startstep_previous:
         'Sorry, Startschritt kann nicht gesetzt werden. Der Schritt hat bereits Vorgängerschritte.',

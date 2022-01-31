@@ -3,6 +3,8 @@ export default {
     action_save: 'save',
     assets: 'assets | asset | assets',
     confirm_delete_option: 'Are you sure you want to delete this Option?',
+    datepicker_date_formatter: 'YYYY-MM-DD',
+    datepicker_date_separator: ' to ',
     hello: 'hello world!',
     filename: 'filename',
     filesize: 'filesize',

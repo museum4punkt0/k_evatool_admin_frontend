@@ -1,48 +1,43 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
         <main class="flex flex-col flex-1 overflow-y-auto p-3">
-            <div class="flex flex-row">
-                <h1 class="mb-5">
+            <div class="flex content-center mb-5">
+                <h1 class="">
                     {{ t('stats', 1) }}:
                     <strong>{{ store.state.surveys.survey?.name }}</strong>
                 </h1>
                 <!-- {{ store.state.surveyResults }} -->
-
-                <div class="flex-1 flex flex-row justify-end items-center">
-                    <button
-                        v-tippy="{
-                            content: t('action_edit_survey'),
-                        }"
-                        class="secondary mr-1"
-                        @click="editSurvey(store.state.surveys.survey)"
-                    >
-                        <PencilIcon class="h-5 w-5" />
-                    </button>
-                    <!-- <litepie-datepicker
-v-model="timeSpan"
-:formatter="formatter"
-separator=" to "
-></litepie-datepicker> -->
-                    <Datepicker
-                        v-model="timeSpan"
-                        range
-                        locale="de"
-                        cancel-text="abbrechen"
-                        select-text="auswählen"
-                        :enable-time-picker="false"
-                        :format="format"
-                        :preview-format="format"
-                        class="w-1/3"
-                    />
-                    <form-toggle
-                        v-model:enabled="demo"
-                        :label="t('show_demo_data_only')"
-                        class="ml-3"
-                    />
-                    <button class="primary ml-3" @click="openExportModal">
-                        {{ t('action_export') }}
-                    </button>
-                </div>
+                <button
+                    v-tippy="{
+                        content: t('action_edit_survey'),
+                    }"
+                    class="secondary ml-3"
+                    @click="editSurvey(store.state.surveys.survey)"
+                >
+                    <PencilIcon class="h-5 w-5" />
+                </button>
+            </div>
+            <div class="w-full flex flex-row justify-between items-center mb-5">
+                <litepie-datepicker
+                    v-model="timeSpan"
+                    :shortcuts="datepickerShortcuts"
+                    :auto-apply="false"
+                    overlay
+                    class="w-1/3"
+                    :options="datepickerOptions"
+                    :start-from="startFrom"
+                    :formatter="formatter"
+                    :disable-date="disableDate"
+                    :separator="t('datepicker_date_separator')"
+                />
+                <form-toggle
+                    v-model:enabled="demo"
+                    :label="t('show_demo_data_only')"
+                    class="ml-3 w-full"
+                />
+                <button class="primary" @click="openExportModal">
+                    {{ t('action_export') }}
+                </button>
             </div>
             <survey-stats-trend
                 v-if="store.state.stats.trend"
@@ -224,6 +219,7 @@ import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
 import moment from 'moment'
 import 'moment/locale/de'
+import LitepieDatepicker from 'litepie-datepicker'
 
 import StepDetailResultModal from './stepResult/detail/StepDetailResultModal.vue'
 import SurveyStatsExportModal from './SurveyStatsExportModal.vue'
@@ -231,39 +227,109 @@ import SurveyStatsTrend from './SurveyStatsTrend.vue'
 import StepResult from './stepResult/StepResult.vue'
 import StepResultsModal from './stepResults/StepResultsModal.vue'
 import SURVEY_STATS_SERVICE from '../../services/surveyStatsService'
+import SurveyStatsCell from '@/components/Stats/SurveyStatsCell.vue'
 
 import 'vue3-date-time-picker/dist/main.css'
-import SurveyStatsCell from '@/components/Stats/SurveyStatsCell.vue'
 
 export default {
     name: 'SurveyStats',
     components: {
-        SurveyStatsCell,
-        SurveyStatsExportModal,
-        SurveyStatsTrend,
+        Datepicker,
         EyeIcon,
         ExternalLinkIcon,
-        PencilIcon,
         FormToggle,
+        LitepieDatepicker,
+        PencilIcon,
         StepResult,
         StepDetailResultModal,
         StepResultsModal,
-        Datepicker,
+        SurveyStatsCell,
+        SurveyStatsExportModal,
+        SurveyStatsTrend,
     },
     setup() {
         const { t } = useI18n()
         const route = useRoute()
         const router = useRouter()
         const store = useStore()
-        const timeSpan = ref(null)
+
         const endDate = new Date()
-        const startDate = new Date(
+        const startFrom = new Date(
             new Date().setDate(endDate.getDate() - 30 * 6),
         )
-        timeSpan.value = [startDate, endDate]
+        const timeSpan = ref([
+            dayjs(startFrom).format(t('datepicker_date_formatter')),
+            dayjs(endDate).format(t('datepicker_date_formatter')),
+        ])
+        const datepickerOptions = ref({
+            footer: {
+                apply: t('action_select'),
+                cancel: t('action_cancel'),
+            },
+        })
+
+        const datepickerShortcuts = () => {
+            return [
+                {
+                    label: t('action_datepicker_today'),
+                    atClick: () => {
+                        const date = new Date()
+                        return [
+                            new Date(date.setDate(date.getDate())),
+                            new Date(),
+                        ]
+                    },
+                },
+                {
+                    label: t('action_datepicker_yesterday'),
+                    atClick: () => {
+                        const date = new Date()
+                        return [
+                            new Date(date.setDate(date.getDate() - 1)),
+                            date,
+                        ]
+                    },
+                },
+                {
+                    label: t('action_datepicker_past') + '7 ' + t('days', 2),
+                    atClick: () => {
+                        const date = new Date()
+                        return [
+                            new Date(new Date().setDate(date.getDate() - 6)),
+                            date,
+                        ]
+                    },
+                },
+                {
+                    label: t('action_datepicker_pastMonth'),
+                    atClick: () => {
+                        const date = new Date()
+                        return [
+                            new Date(
+                                date.getFullYear(),
+                                date.getMonth() - 1,
+                                1,
+                            ),
+                            new Date(date.getFullYear(), date.getMonth(), 0),
+                        ]
+                    },
+                },
+                {
+                    label: t('action_datepicker_currentMonth'),
+                    atClick: () => {
+                        const date = new Date()
+                        return [
+                            new Date(date.getFullYear(), date.getMonth(), 1),
+                            date,
+                        ]
+                    },
+                },
+            ]
+        }
+
         const demo = ref(false)
         const formatter = ref({
-            date: 'YYYY-MM-DD',
+            date: t('datepicker_date_formatter'),
         })
         const stepResultModalIsOpen = ref(false)
         const stepResultsModalIsOpen = ref(false)
@@ -271,84 +337,78 @@ export default {
         const selectedSurveyStep = ref(-1)
         const selectedSurveyStepId = ref(-1)
         const selectedSurveyStepList = ref({})
+        const surveyId = parseInt(route.params.survey_id)
 
         onMounted(async () => {
             const surveyId = parseInt(route.params.survey_id)
-            // console.log(surveyId)
             await store.dispatch('surveys/setSurveyId', surveyId)
             await store.dispatch('surveys/getSurvey', surveyId)
         })
-        const surveyId = parseInt(route.params.survey_id)
-        // await store.dispatch('surveys/setSurveyId', surveyId.value)
-        // await store.dispatch('surveys/getSurvey', surveyId.value)
 
-        const surveySteps = computed(
-            () =>
-                /*store.state.stats.surveySteps.filter(
-          (step) => step.surveyElementType !== 'simpleText',
-      ),*/
-                store.state.stats.surveySteps,
-        )
+        const surveySteps = computed(() => store.state.stats.surveySteps)
 
-        store.dispatch('stats/getStatsTrend', { surveyId, demo: demo.value })
-
-        store.dispatch('stats/getStats', {
-            surveyId,
-            start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
-            end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
-            demo: demo.value,
-        })
-        store.dispatch('stats/getStatsList', {
-            surveyId,
-            start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
-            end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
-            demo: demo.value,
-        })
-
+        getStatsTrend()
+        setStartAndEndDateStats(timeSpan.value[0], timeSpan.value[1])
         store.dispatch('stats/getSurveySteps', surveyId)
 
         watch(
             () => demo.value,
             () => {
-                store.dispatch('stats/getStats', {
-                    surveyId,
-                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
-                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
-                    demo: demo.value,
-                })
-                store.dispatch('stats/getStatsList', {
-                    surveyId,
-                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
-                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
-                    demo: demo.value,
-                })
-                store.dispatch('stats/getStatsTrend', {
-                    surveyId,
-                    demo: demo.value,
-                })
+                if (timeSpan.value[0] && timeSpan.value[1]) {
+                    setStartAndEndDateStats(
+                        timeSpan.value[0],
+                        timeSpan.value[1],
+                    )
+                }
+                getStatsTrend()
             },
         )
         watch(
             () => timeSpan.value,
             () => {
-                store.dispatch('stats/getStats', {
-                    surveyId,
-                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
-                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
-                    demo: demo.value,
-                })
-                store.dispatch('stats/getStatsList', {
-                    surveyId,
-                    start: dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
-                    end: dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
-                    demo: demo.value,
-                })
-                store.dispatch('stats/getStatsTrend', {
-                    surveyId,
-                    demo: demo.value,
-                })
+                if (timeSpan.value[0] && timeSpan.value[1]) {
+                    setStartAndEndDateStats(
+                        timeSpan.value[0],
+                        timeSpan.value[1],
+                    )
+                }
+                getStatsTrend()
             },
         )
+
+        function setStartAndEndDateStats(start, end) {
+            const startDate = dayjs(
+                start,
+                t('datepicker_date_formatter'),
+            ).format('YYYY-MM-DD')
+            const endDate = dayjs(end, t('datepicker_date_formatter')).format(
+                'YYYY-MM-DD',
+            )
+
+            store.dispatch('stats/getStats', {
+                surveyId,
+                start: startDate,
+                end: endDate,
+                demo: demo.value,
+            })
+            store.dispatch('stats/getStatsList', {
+                surveyId,
+                start: startDate,
+                end: endDate,
+                demo: demo.value,
+            })
+        }
+
+        function getStatsTrend() {
+            store.dispatch('stats/getStatsTrend', {
+                surveyId,
+                demo: demo.value,
+            })
+        }
+
+        const disableDate = (date) => {
+            return date > new Date()
+        }
 
         const showStepResults = async (id) => {
             if (id > -1) {
@@ -356,8 +416,14 @@ export default {
                     await SURVEY_STATS_SERVICE.getStatsStepList(
                         surveyId,
                         id,
-                        dayjs(timeSpan.value[0]).format('YYYY-MM-DD'),
-                        dayjs(timeSpan.value[1]).format('YYYY-MM-DD'),
+                        dayjs(
+                            timeSpan.value[0],
+                            t('datepicker_date_formatter'),
+                        ).format('YYYY-MM-DD'),
+                        dayjs(
+                            timeSpan.value[1],
+                            t('datepicker_date_formatter'),
+                        ).format('YYYY-MM-DD'),
                         demo.value,
                     )
                 stepResultsModalIsOpen.value = true
@@ -378,19 +444,6 @@ export default {
             // selectedSurveyStepId.value = id
         }
 
-        const format = (date) => {
-            // from Date
-            const dayFrom = date[0].getDate()
-            const monthFrom = date[0].getMonth() + 1
-            const yearFrom = date[0].getFullYear()
-            // until Date
-            const dayTil = date[1].getDate()
-            const monthTil = date[1].getMonth() + 1
-            const yearTil = date[1].getFullYear()
-
-            return `${dayFrom}.${monthFrom}.${yearFrom} - ${dayTil}.${monthTil}.${yearTil}`
-        }
-
         const exportModalOpen = ref(false)
 
         const openExportModal = () => {
@@ -406,10 +459,12 @@ export default {
             t,
             store,
             timeSpan,
-            formatter,
+            datepickerOptions,
+            datepickerShortcuts,
             demo,
+            disableDate,
             moment,
-            format,
+            formatter,
             surveySteps,
             stepResultModalIsOpen,
             stepResultsModalIsOpen,
@@ -419,6 +474,7 @@ export default {
             selectedSurveyStepList,
             selectedSurveyStepResult,
             showStepDetailResult,
+            startFrom,
             openExportModal,
             exportModalOpen,
             editSurvey,

@@ -113,6 +113,16 @@
                                         surveyStepList.results.timespan.results
                                     "
                                 />
+                                <p
+                                    v-if="
+                                        surveyStepList.elementType ===
+                                            'multipleChoice' &&
+                                        surveyStepList.elementParams
+                                            ?.maxSelectable > 1
+                                    "
+                                    class="text-xs mt-4"
+                                    v-html="t('notice_multiple_choice_results')"
+                                />
                             </div>
                             <div
                                 class="flex bg-gray-200 rounded-b-2xl py-3 px-4 justify-end"

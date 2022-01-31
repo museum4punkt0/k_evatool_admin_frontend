@@ -34,6 +34,26 @@ export default {
     setup: function (props) {
         const showToolTip = ref(false)
         const store = useStore()
+        const maxStringLength = 35
+
+        function htmlDecode(input) {
+            const doc = new DOMParser().parseFromString(input, 'text/html')
+            return doc.documentElement.textContent
+        }
+        function i18nLabel(labels) {
+            return labels[store.state.languageCode]
+                ? labels[store.state.languageCode]
+                : labels[0]
+        }
+        function shortenAnswer(input) {
+            const newString = htmlDecode(input)
+
+            if (newString.length > maxStringLength) {
+                setToolTipTrue()
+                return newString.substring(0, maxStringLength - 3) + '...'
+            }
+            return newString
+        }
 
         const getMappedArray = computed(() => {
             const params = _.cloneDeep(props.params)
@@ -52,31 +72,13 @@ export default {
                 .filter((x) => x)
         })
 
-        function i18nLabel(labels) {
-            return labels[store.state.languageCode]
-                ? labels[store.state.languageCode]
-                : labels[0]
-        }
-
         const values = computed(() => {
-            let longComment = ''
-
-            const results = getMappedArray.value
-            results.forEach((answer) => {
-                let label = i18nLabel(answer?.labels)
-                if (answer.comment && (label + answer.comment).length > 24) {
-                    longComment = answer.value
-                }
-            })
-            if (results.length > 3 || longComment) {
-                setToolTipTrue()
-                let showValues = _.cloneDeep(results.slice(2))
-                if (results.length > 3) {
-                    showValues.push({ value: '...' })
-                }
-                return showValues
+            let showValues = _.cloneDeep(getMappedArray.value)
+            if (showValues.length > 3) {
+                showValues = showValues.slice(0, 2)
+                showValues.push({ value: '...' })
             }
-            return results
+            return showValues
         })
 
         function commentLabel(opt) {
@@ -85,13 +87,9 @@ export default {
             )
 
             if (opt.comment) {
-                const fullComment = label + ': ' + opt.comment
-                if (fullComment.length > 24) {
-                    return fullComment.substring(0, 20) + ' ...'
-                }
-                return fullComment
+                return shortenAnswer(label + ': ' + opt.comment)
             }
-            return label
+            return shortenAnswer(label)
         }
 
         const toolTipValues = computed(() => {
