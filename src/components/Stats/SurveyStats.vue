@@ -122,7 +122,7 @@ separator=" to "
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-if="store.state.stats.results.length > 0">
                         <tr
                             v-for="result in store.state.stats.results"
                             :key="result.uuid"
@@ -180,6 +180,13 @@ separator=" to "
                                         ).params
                                     "
                                 ></step-result>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td :colspan="surveySteps.length + 4">
+                                {{ t('status_loading') }}
                             </td>
                         </tr>
                     </tbody>

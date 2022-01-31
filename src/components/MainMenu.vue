@@ -217,8 +217,8 @@ export default {
                 icon: ChartBarIcon,
             },
             {
-                name: t('config', 1),
-                href: '/config',
+                name: t('settings', 1),
+                href: '/settings',
                 icon: CogIcon,
                 admin: true,
             },

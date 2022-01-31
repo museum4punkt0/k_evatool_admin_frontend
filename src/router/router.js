@@ -6,7 +6,6 @@ import Survey from '../components/Surveys/Survey.vue'
 
 import ListLanguages from '../components/Languages/Languages.vue'
 
-import Settings from '../components/Settings.vue'
 import Assets from '../components/Assets/Assets.vue'
 
 import SurveyElements from '../components/SurveyElements/SurveyElements.vue'
@@ -20,7 +19,7 @@ import SurveyStats from '../components/Stats/SurveyStats.vue'
 import SurveyStat from '../components/Stats/SurveyStat.vue'
 
 import ConfirmInvitation from '../components/Users/ConfirmInvitation.vue'
-import Config from '../components/Config.vue'
+import Settings from '../components/Settings.vue'
 
 const routes = [
     { path: '/', component: Home },
@@ -44,14 +43,9 @@ const routes = [
 
     { path: '/assets', component: Assets },
 
-    { path: '/users/register', component: Settings },
-    { path: '/users/login', component: Settings },
-    { path: '/users/password-reset', component: Settings },
-    { path: '/user/logout', component: Settings },
-    { path: '/user/settings', component: Settings },
     { name: 'users', path: '/users', component: Users },
     { path: '/confirm-invitation', component: ConfirmInvitation },
-    { path: '/config', component: Config },
+    { path: '/settings', component: Settings },
     // { path: '*', redirect: '/' },
 ]
 

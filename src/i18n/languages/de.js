@@ -19,8 +19,11 @@ export default {
     action_new_user: 'Neuer Nutzer',
     action_open_preview: 'Vorschau öffnen',
     action_reload: 'Neu laden',
+    action_request_transcription: 'Transkription anfragen',
+    action_save_result_content: 'PNG-Export',
     action_select: 'Auswählen',
     action_show_results: 'Resultate anzeigen',
+    action_show_audio: 'Audio anzeigen',
     action_save: 'Speichern',
     allow_changing_answer: 'Ändern der Antwort erlauben',
     allow_half_steps: 'Halbe Schritte erlauben (z.B. 3,5)',
@@ -120,6 +123,7 @@ export default {
     show_demo_data_only: 'Nur Demodaten anzeigen',
     use_demo_data_only: 'Nur Demodaten verwenden',
     slugs: 'Slugs | Slug | Slugs',
+    speech_to_text_service: 'Speech-To-Text-Service',
     state_published: 'Veröffentlicht',
     state_unpublished: 'Nicht veröffentlicht',
     star_rating_display_types: 'Darstellung',
@@ -129,6 +133,7 @@ export default {
     start: 'Start',
     stats: 'Auswertungen | Auswertung | Auswertungen',
     stats_export: 'Statistik-Export',
+    status_loading: 'Lädt gerade',
     steps: 'Schritte | Schritt | Schritte',
     stops_video: 'Stoppt das Video',
     sub_headline_add_timebase_step:
@@ -156,6 +161,8 @@ export default {
     to: 'bis',
     tooltip_set_start_step: 'Startelement festlegen',
     tooltip_edit_step: 'Schritt bearbeiten',
+    tooltip_save_result_content:
+        'Speichert die angezeigte Auswertung als PNG ab.',
     tooltip_set_next_step: 'Folgeschritt setzen',
     tooltip_set_previous_step: 'Vorgaengerschritt setzen',
     tooltip_set_timebased_steps: 'Zeitbasierte Schritte setzen',
@@ -168,6 +175,11 @@ export default {
         'Umfrage in folgenden Sprachen verfügbar machen',
     tooltip_survey_details_slug:
         'Nutzer-lesbare, eindeutige suchmaschienenfreundliche ID, Teil der URL',
+    tooltip_time_based_steps_modal_stop_icon:
+        'Video wird bei Anzeige der Frage angehalten.',
+    tooltip_time_based_steps_modal_stop_time:
+        'Frage wird für die angezeigte Zeit geöffnet.',
+    transcriptions: 'Transkriptionen | Transkription | Transkriptionen',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',
     validation_emoji_meaning: 'Nur Kleinbuchstaben und "_"',

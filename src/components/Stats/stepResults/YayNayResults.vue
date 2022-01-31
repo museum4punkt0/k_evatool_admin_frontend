@@ -118,7 +118,7 @@ export default {
             // **//
             const getOrCreateTooltip = (chart) => {
                 let tooltipEl = document.getElementById('tooltip')
-                console.log(chart.canvas.parentNode)
+                // console.log(chart.canvas.parentNode)
 
                 if (!tooltipEl) {
                     tooltipEl = document.createElement('div')
@@ -194,6 +194,7 @@ export default {
                     layout: {
                         padding: { bottom: 150, top: 20 },
                     },
+                    devicePixelRatio: 4,
                     plugins: {
                         htmlLegend: {
                             // ID of the container to put the legend in
@@ -241,6 +242,7 @@ export default {
                             xAxis.ticks.forEach((value, index) => {
                                 let x = xAxis.getPixelForTick(index)
                                 let image = new Image()
+                                image.crossOrigin = 'anonymous'
                                 image.src = value.label
                                 ctx.drawImage(
                                     image,
