@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export default {
     saveSetting(setting) {
+        console.log(setting)
         let url = 'evaluation-tool/settings'
         let method = 'post'
         if (setting.id) {
@@ -23,7 +24,7 @@ export default {
         return axios
             .get(url)
             .then((response) => {
-                return response.data.data
+                return response.data
             })
             .catch((error) => {
                 return error

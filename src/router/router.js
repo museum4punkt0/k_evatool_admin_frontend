@@ -19,7 +19,8 @@ import SurveyStats from '../components/Stats/SurveyStats.vue'
 import SurveyStat from '../components/Stats/SurveyStat.vue'
 
 import ConfirmInvitation from '../components/Users/ConfirmInvitation.vue'
-import Settings from '../components/Settings.vue'
+import Settings from '../components/Settings/Settings.vue'
+import Setting from '../components/Settings/Setting.vue'
 
 const routes = [
     { path: '/', component: Home },
@@ -45,7 +46,9 @@ const routes = [
 
     { name: 'users', path: '/users', component: Users },
     { path: '/confirm-invitation', component: ConfirmInvitation },
+
     { path: '/settings', component: Settings },
+    { path: '/settings/:setting_id', component: Setting },
     // { path: '*', redirect: '/' },
 ]
 
