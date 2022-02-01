@@ -227,8 +227,6 @@ import StepResultsModal from './stepResults/StepResultsModal.vue'
 import SURVEY_STATS_SERVICE from '../../services/surveyStatsService'
 import SurveyStatsCell from '@/components/Stats/SurveyStatsCell.vue'
 
-import 'vue3-date-time-picker/dist/main.css'
-
 export default {
     name: 'SurveyStats',
     components: {
