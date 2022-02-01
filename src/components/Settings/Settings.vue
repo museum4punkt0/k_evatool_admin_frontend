@@ -16,7 +16,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th></th>
+                            <th># {{ t('surveys', 2) }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -27,7 +27,7 @@
                         >
                             <td>{{ setting.id }}</td>
                             <td>{{ setting.name }}</td>
-                            <td></td>
+                            <td>{{ setting.surveysCount }}</td>
                             <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon
                                     class="mx-1 h-5 w-5 pointer"
