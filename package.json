@@ -1,6 +1,6 @@
 {
     "name": "evaluation-tool-admin-frontend",
-    "version": "1.0.589",
+    "version": "1.0.591",
     "private": true,
     "scripts": {
         "serve": "vite build && vite preview",
@@ -39,9 +39,7 @@
         "vue-i18n": "^9.1.9",
         "vue-router": "4",
         "vue-tippy": "^6.0.0-alpha.37",
-        "vue3-date-time-picker": "^2.4.4",
         "vue3-leaderline": "^1.2.11",
-        "vue3-styled-components": "^1.2.1",
         "vuedraggable": "^4.1.0",
         "vuemoji-picker": "^0.0.7",
         "vuex": "^4.0.2",

@@ -59,6 +59,65 @@
                                         ]
                                     "
                                 />
+                                <template
+                                    v-if="
+                                        !['textInput', 'voiceInput'].includes(
+                                            surveyStepList.elementType,
+                                        ) && surveyStepList.results.timespan
+                                    "
+                                >
+                                    <div class="flex items-center">
+                                        <span
+                                            :style="
+                                                'background-color: ' +
+                                                colors[0] +
+                                                ';'
+                                            "
+                                            class="box-label mr-2"
+                                        />
+                                        <p>
+                                            {{
+                                                dayjs(
+                                                    surveyStepList.results
+                                                        .timespan.start,
+                                                ).format(
+                                                    t(
+                                                        'datepicker_date_formatter',
+                                                    ),
+                                                ) +
+                                                t('datepicker_date_separator') +
+                                                dayjs(
+                                                    surveyStepList.results
+                                                        .timespan.end,
+                                                ).format(
+                                                    t(
+                                                        'datepicker_date_formatter',
+                                                    ),
+                                                )
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div
+                                        v-if="compareWith"
+                                        class="flex items-center"
+                                    >
+                                        <span
+                                            :style="
+                                                'background-color: ' +
+                                                colors[1] +
+                                                ';'
+                                            "
+                                            class="box-label mr-2"
+                                        />
+                                        <p>
+                                            {{
+                                                timeSpanCompare[0] +
+                                                t('datepicker_date_separator') +
+                                                timeSpanCompare[1]
+                                            }}
+                                        </p>
+                                    </div>
+                                </template>
                                 <pre
                                     v-if="
                                         surveyStepList.results?.timespan.results
@@ -73,6 +132,7 @@
                                             surveyStepList.elementType,
                                         )
                                     "
+                                    :colors="colors"
                                     :chart-label="surveyStepList.elementType"
                                     :labels="getChartLabels"
                                     :values="
@@ -80,6 +140,16 @@
                                             surveyStepList.results.timespan
                                                 .results,
                                         )
+                                    "
+                                    :show-compare="compareWith"
+                                    :compare-values="
+                                        surveyStepCompareList.results?.timespan
+                                            ?.results
+                                            ? Object.values(
+                                                  surveyStepCompareList.results
+                                                      ?.timespan?.results,
+                                              )
+                                            : []
                                     "
                                 />
 
@@ -125,8 +195,51 @@
                                 />
                             </div>
                             <div
-                                class="flex bg-gray-200 rounded-b-2xl py-3 px-4 justify-end"
+                                v-if="
+                                    !['textInput', 'voiceInput'].includes(
+                                        surveyStepList.elementType,
+                                    )
+                                "
+                                class="flex w-full bg-gray-100 rounded-b-2xl py-3 px-4"
+                                :class="
+                                    timeSpanCompare.length > 0
+                                        ? 'justify-between'
+                                        : 'justify-end'
+                                "
                             >
+                                <div
+                                    v-if="timeSpanCompare.length > 0"
+                                    class="flex items-center mr-2"
+                                >
+                                    <template
+                                        v-if="
+                                            typeof surveyStepCompareList.results
+                                                ?.timespan?.results === 'object'
+                                        "
+                                    >
+                                        <p
+                                            class="text-xs whitespace-nowrap mr-2"
+                                        >
+                                            {{ t('label_compare_with') }}
+                                        </p>
+                                        <form-toggle
+                                            v-model:enabled="compareWith"
+                                            :label="''"
+                                            class=""
+                                        />
+                                    </template>
+                                    <template v-else>
+                                        <p
+                                            class="text-xs whitespace-nowrap mr-2"
+                                        >
+                                            {{
+                                                t(
+                                                    'notice_filter_has_no_results',
+                                                )
+                                            }}
+                                        </p>
+                                    </template>
+                                </div>
                                 <button
                                     v-tippy="{
                                         content: t(
@@ -155,6 +268,7 @@
 </template>
 
 <script>
+import tailwindColors from 'tailwindcss/colors'
 import {
     TransitionRoot,
     TransitionChild,
@@ -179,10 +293,13 @@ import VideoResult from '../stepResult/VideoResult.vue'
 import { saveAs } from 'file-saver'
 import html2canvas from 'html2canvas'
 import AnimatedLoader from '@/components/Common/AnimatedLoader.vue'
+import FormToggle from '@/components/Forms/FormToggle.vue'
+import dayjs from 'dayjs'
 
 export default {
     name: 'AssetModal',
     components: {
+        FormToggle,
         AnimatedLoader,
         TypeBarChart,
         TransitionRoot,
@@ -208,9 +325,17 @@ export default {
             type: Object,
             required: true,
         },
+        surveyStepCompareList: {
+            type: Object,
+            default: () => {},
+        },
         isOpen: {
             type: Boolean,
             default: false,
+        },
+        timeSpanCompare: {
+            type: Array,
+            default: () => [],
         },
     },
     emits: ['update:is-open'],
@@ -218,6 +343,7 @@ export default {
         const store = useStore()
         const { t } = useI18n()
         const isSaving = ref(false)
+        const compareWith = ref(false)
 
         const barChart = [
             'simpleText',
@@ -283,11 +409,12 @@ export default {
         })
 
         const closeModal = () => {
+            compareWith.value = false
             modalIsOpen.value = false
         }
 
+        const colors = [tailwindColors.green['600'], tailwindColors.red['700']]
         const getDatasets = (surveyStepList) => {
-            const colors = ['rgb(29, 78, 216)', 'rgb(255, 78, 216)']
             const datasets = []
             const keys = []
             keys.push(surveyStepList.elementParams.trueValue)
@@ -342,7 +469,10 @@ export default {
             store,
             t,
             barChart,
+            compareWith,
+            colors,
             closeModal,
+            dayjs,
             getDatasets,
             getChartLabels,
             getImageLabels,
@@ -353,4 +483,11 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.box-label {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+}
+</style>

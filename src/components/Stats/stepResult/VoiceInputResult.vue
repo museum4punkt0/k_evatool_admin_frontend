@@ -69,10 +69,16 @@
                                     <hr class="mt-4 mb-2" />
                                     <h4>{{ t('transcriptions', 1) }}</h4>
 
-                                    <input
+                                    <!-- <input
                                         v-model="manualTranscription"
                                         type="text"
-                                    />
+                                    /> -->
+                                    <textarea
+                                        v-model="manualTranscription"
+                                        rows="4"
+                                        cols="50"
+                                        class="w-full"
+                                    ></textarea>
 
                                     <button
                                         :disabled="

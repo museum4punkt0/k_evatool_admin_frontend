@@ -1,7 +1,12 @@
+const path = require('path')
 const colors = require('tailwindcss/colors')
 
 module.exports = {
-    purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+    purge: [
+        './index.html',
+        './src/**/*.{vue,js,ts,jsx,tsx}',
+        path.resolve(__dirname, './node_modules/litepie-datepicker/**/*.js'),
+    ],
     darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {

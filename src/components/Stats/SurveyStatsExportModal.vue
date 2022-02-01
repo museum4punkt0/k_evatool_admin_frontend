@@ -151,7 +151,6 @@ import {
 import { useI18n } from 'vue-i18n'
 import { XIcon } from '@heroicons/vue/outline'
 import { computed, ref, watch } from 'vue'
-import Datepicker from 'vue3-date-time-picker'
 import SURVEY_STATS_SERVICE from '../../services/surveyStatsService'
 import moment from 'moment'
 import FormToggle from '../Forms/FormToggle.vue'
@@ -199,7 +198,6 @@ export default {
         DialogOverlay,
         DialogTitle,
         XIcon,
-        Datepicker,
         Loader,
     },
     props: {
