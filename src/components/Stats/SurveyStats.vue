@@ -18,26 +18,23 @@
                 </button>
             </div>
             <div class="w-full flex flex-row justify-between items-center mb-5">
-                <litepie-datepicker
-                    v-model="timeSpan"
-                    :shortcuts="datepickerShortcuts"
-                    :auto-apply="false"
-                    overlay
-                    class="w-1/3"
-                    :options="datepickerOptions"
-                    :start-from="startFrom"
-                    :formatter="formatter"
-                    :disable-date="disableDate"
-                    :separator="t('datepicker_date_separator')"
-                />
+                <div class="w-1/3">
+                    <date-picker v-model="timeSpan" />
+                </div>
                 <form-toggle
                     v-model:enabled="demo"
                     :label="t('show_demo_data_only')"
-                    class="ml-3 w-full"
+                    class="ml-3 flex-1"
                 />
                 <button class="primary" @click="openExportModal">
                     {{ t('action_export') }}
                 </button>
+            </div>
+            <div class="w-full flex flex-row items-center mb-5">
+                <div class="w-1/3 mr-3">
+                    <date-picker v-model="timeSpanCompareWith" />
+                </div>
+                <p v-html="t('label_compare_filter')"></p>
             </div>
             <survey-stats-trend
                 v-if="store.state.stats.trend"
@@ -196,6 +193,8 @@
                 v-model:is-open="stepResultsModalIsOpen"
                 :survey-step-id="selectedSurveyStepId"
                 :survey-step-list="selectedSurveyStepList"
+                :survey-step-compare-list="selectedCompareStepResultsList"
+                :time-span-compare="timeSpanCompareWith"
             ></step-results-modal>
             <div class="footer"></div>
 
@@ -214,13 +213,12 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { EyeIcon, ExternalLinkIcon, PencilIcon } from '@heroicons/vue/outline'
-import Datepicker from 'vue3-date-time-picker'
-import FormToggle from '../Forms/FormToggle.vue'
 import dayjs from 'dayjs'
 import moment from 'moment'
 import 'moment/locale/de'
-import LitepieDatepicker from 'litepie-datepicker'
 
+import FormToggle from '../Forms/FormToggle.vue'
+import DatePicker from '@/components/Common/DatePicker.vue'
 import StepDetailResultModal from './stepResult/detail/StepDetailResultModal.vue'
 import SurveyStatsExportModal from './SurveyStatsExportModal.vue'
 import SurveyStatsTrend from './SurveyStatsTrend.vue'
@@ -234,11 +232,10 @@ import 'vue3-date-time-picker/dist/main.css'
 export default {
     name: 'SurveyStats',
     components: {
-        Datepicker,
+        DatePicker,
         EyeIcon,
         ExternalLinkIcon,
         FormToggle,
-        LitepieDatepicker,
         PencilIcon,
         StepResult,
         StepDetailResultModal,
@@ -261,76 +258,10 @@ export default {
             dayjs(startFrom).format(t('datepicker_date_formatter')),
             dayjs(endDate).format(t('datepicker_date_formatter')),
         ])
-        const datepickerOptions = ref({
-            footer: {
-                apply: t('action_select'),
-                cancel: t('action_cancel'),
-            },
-        })
-
-        const datepickerShortcuts = () => {
-            return [
-                {
-                    label: t('action_datepicker_today'),
-                    atClick: () => {
-                        const date = new Date()
-                        return [
-                            new Date(date.setDate(date.getDate())),
-                            new Date(),
-                        ]
-                    },
-                },
-                {
-                    label: t('action_datepicker_yesterday'),
-                    atClick: () => {
-                        const date = new Date()
-                        return [
-                            new Date(date.setDate(date.getDate() - 1)),
-                            date,
-                        ]
-                    },
-                },
-                {
-                    label: t('action_datepicker_past') + '7 ' + t('days', 2),
-                    atClick: () => {
-                        const date = new Date()
-                        return [
-                            new Date(new Date().setDate(date.getDate() - 6)),
-                            date,
-                        ]
-                    },
-                },
-                {
-                    label: t('action_datepicker_pastMonth'),
-                    atClick: () => {
-                        const date = new Date()
-                        return [
-                            new Date(
-                                date.getFullYear(),
-                                date.getMonth() - 1,
-                                1,
-                            ),
-                            new Date(date.getFullYear(), date.getMonth(), 0),
-                        ]
-                    },
-                },
-                {
-                    label: t('action_datepicker_currentMonth'),
-                    atClick: () => {
-                        const date = new Date()
-                        return [
-                            new Date(date.getFullYear(), date.getMonth(), 1),
-                            date,
-                        ]
-                    },
-                },
-            ]
-        }
+        const timeSpanCompareWith = ref([])
+        const selectedCompareStepResultsList = ref({})
 
         const demo = ref(false)
-        const formatter = ref({
-            date: t('datepicker_date_formatter'),
-        })
         const stepResultModalIsOpen = ref(false)
         const stepResultsModalIsOpen = ref(false)
         const selectedSurveyStepResult = ref(-1)
@@ -374,6 +305,7 @@ export default {
                 }
                 getStatsTrend()
             },
+            { deep: true },
         )
 
         function setStartAndEndDateStats(start, end) {
@@ -406,10 +338,6 @@ export default {
             })
         }
 
-        const disableDate = (date) => {
-            return date > new Date()
-        }
-
         const showStepResults = async (id) => {
             if (id > -1) {
                 selectedSurveyStepList.value =
@@ -426,10 +354,28 @@ export default {
                         ).format('YYYY-MM-DD'),
                         demo.value,
                     )
+                if (timeSpanCompareWith.value.length === 2) {
+                    selectedCompareStepResultsList.value =
+                        await SURVEY_STATS_SERVICE.getStatsStepList(
+                            surveyId,
+                            id,
+                            dayjs(
+                                timeSpanCompareWith.value[0],
+                                t('datepicker_date_formatter'),
+                            ).format('YYYY-MM-DD'),
+                            dayjs(
+                                timeSpanCompareWith.value[1],
+                                t('datepicker_date_formatter'),
+                            ).format('YYYY-MM-DD'),
+                            demo.value,
+                        )
+                    console.log(selectedCompareStepResultsList)
+                }
                 stepResultsModalIsOpen.value = true
                 selectedSurveyStepId.value = id
             }
         }
+
         const hasStepResultDetailView = (step) => {
             const elementTypesWithDetailView = ['yayNay', 'textInput']
             return elementTypesWithDetailView.includes(step.surveyElementType)
@@ -459,22 +405,19 @@ export default {
             t,
             store,
             timeSpan,
-            datepickerOptions,
-            datepickerShortcuts,
+            timeSpanCompareWith,
             demo,
-            disableDate,
             moment,
-            formatter,
             surveySteps,
             stepResultModalIsOpen,
             stepResultsModalIsOpen,
             showStepResults,
+            selectedCompareStepResultsList,
             selectedSurveyStep,
             selectedSurveyStepId,
             selectedSurveyStepList,
             selectedSurveyStepResult,
             showStepDetailResult,
-            startFrom,
             openExportModal,
             exportModalOpen,
             editSurvey,
