@@ -217,7 +217,7 @@ export default {
                 icon: ChartBarIcon,
             },
             {
-                name: t('settings', 1),
+                name: t('survey_settings', 2),
                 href: '/settings',
                 icon: CogIcon,
                 admin: true,

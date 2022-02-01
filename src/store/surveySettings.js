@@ -25,6 +25,7 @@ export default {
                 setting,
             )
             commit('setSetting', savedSetting)
+            return savedSetting
         },
     },
     getters: {},
