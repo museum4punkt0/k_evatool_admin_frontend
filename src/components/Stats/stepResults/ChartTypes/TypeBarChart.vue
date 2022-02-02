@@ -11,7 +11,7 @@
                         t('datepicker_date_formatter'),
                     ) +
                     t('datepicker_date_separator') +
-                    dayjs(tsurveyStepList?.results?.timespan?.end).format(
+                    dayjs(surveyStepList?.results?.timespan?.end).format(
                         t('datepicker_date_formatter'),
                     )
                 }}
@@ -81,33 +81,29 @@ export default {
     },
     setup(props) {
         const { t } = useI18n()
-
         let chart
         const chartRef = ref(null)
-
         const colors = [tailwindColors.blue['600'], tailwindColors.blue['400']]
+
         const getChartHeight = computed(() => {
             return props.chartLabel === 'binary' ? 150 : 400
+        })
+
+        const getChartData = computed(() => {
+            return props.surveyStepList?.results?.timespan?.results
         })
 
         function getDataLabels() {
             return {
                 formatter: (value, ctx) => {
-                    let sum = 0
-                    let dataArr
                     if (props.showCompare) {
-                        dataArr = ctx.chart.data.datasets.map((data) => {
-                            return data.data[ctx.dataIndex]
-                        })
-                        dataArr.map((data) => {
-                            sum += data
-                        })
-                    } else {
-                        dataArr = ctx.chart.data.datasets[ctx.datasetIndex].data
-                        dataArr.map((data) => {
-                            sum += data
-                        })
+                        return value + '%'
                     }
+                    let sum = 0
+                    let dataArr = ctx.chart.data.datasets[0].data
+                    dataArr.map((data) => {
+                        sum += data
+                    })
                     let percentage = (value * 100) / sum
                     return percentage % 1 === 0
                         ? percentage + '%'
@@ -123,24 +119,51 @@ export default {
             }
         }
 
+        function getData(dataArr) {
+            let sum = 0
+            dataArr.map((data) => {
+                sum += data
+            })
+            return dataArr.map((data) => {
+                let percentage = (data * 100) / sum
+                return percentage % 1 === 0 ? percentage : percentage.toFixed(2)
+            })
+        }
+
+        function pushDataset(data, index) {
+            chart.data.datasets.push({
+                barPercentage: 0.45,
+                label: props.chartLabel,
+                data: data,
+                backgroundColor: colors[index],
+                borderColor: colors[index],
+                datalabels: {
+                    color: colors[index],
+                },
+            })
+        }
+
         watch(
             () => props.showCompare,
             () => {
+                chart.data.datasets = []
                 if (props.showCompare) {
-                    chart.data.datasets.push({
-                        barPercentage: 0.45,
-                        label: props.chartLabel,
-                        data: props.compareValues,
-                        backgroundColor: colors[1],
-                        borderColor: colors[1],
-                        datalabels: {
-                            color: colors[1],
-                        },
-                    })
+                    pushDataset(
+                        getData(
+                            Object.values(
+                                props.surveyStepList.results.timespan.results,
+                            ),
+                        ),
+                        0,
+                    )
+                    pushDataset(getData(props.compareValues), 1)
                 } else {
-                    if (chart.data.datasets.length > 1) {
-                        chart.data.datasets.pop()
-                    }
+                    pushDataset(
+                        Object.values(
+                            props.surveyStepList.results.timespan.results,
+                        ),
+                        0,
+                    )
                 }
                 chart.options.plugins.datalabels = getDataLabels()
                 chart.update()
@@ -176,21 +199,53 @@ export default {
 
                 // Set Text
                 if (tooltip.body) {
-                    const answers = tooltip.dataPoints.map((data) => data.raw)
+                    const answers = props.showCompare
+                        ? tooltip.dataPoints.map((data) => data)
+                        : tooltip.dataPoints.map((data) => data.raw)
                     const tooltipText = document.createElement('p')
 
-                    answers.forEach((value) => {
-                        let text = document.createTextNode(
-                            value + ' ' + t('answers', value),
-                        )
-                        tooltipText.appendChild(text)
-                    })
+                    let datasetIndex
+                    if (props.showCompare) {
+                        answers.forEach((value) => {
+                            datasetIndex = value.datasetIndex
+                            const showValue =
+                                datasetIndex === 0
+                                    ? Object.values(getChartData.value)[
+                                          value.dataIndex
+                                      ]
+                                    : Object.values(props.compareValues)[
+                                          value.dataIndex
+                                      ]
+                            let text = document.createTextNode(
+                                showValue + ' ' + t('answers', showValue),
+                            )
+                            tooltipText.appendChild(text)
+                        })
+                    } else {
+                        answers.forEach((value) => {
+                            let text = document.createTextNode(
+                                value + ' ' + t('answers', value),
+                            )
+                            tooltipText.appendChild(text)
+                        })
+                    }
 
                     let sum = 0
-                    tooltip.dataPoints[0].dataset.data.map((data) => {
-                        sum += data
-                    })
                     const tooltipSum = document.createElement('p')
+
+                    if (props.showCompare) {
+                        const sumArr =
+                            datasetIndex === 0
+                                ? Object.values(getChartData.value)
+                                : Object.values(props.compareValues)
+                        sumArr.map((data) => {
+                            sum += data
+                        })
+                    } else {
+                        tooltip.dataPoints[0].dataset.data.map((data) => {
+                            sum += data
+                        })
+                    }
                     tooltipSum.appendChild(
                         document.createTextNode('n = ' + sum),
                     )
