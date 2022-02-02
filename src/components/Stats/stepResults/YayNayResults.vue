@@ -283,7 +283,7 @@ export default {
             cursor: pointer;
             display: flex;
             flex-direction: row;
-            margin-left: 10px;
+            margin-right: 10px;
             span {
                 display: inline-block;
                 height: 20px;

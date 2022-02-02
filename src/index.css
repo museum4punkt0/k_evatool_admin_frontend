@@ -107,3 +107,10 @@ aside {
 .node-selected {
     @apply ring-4 ring-blue-500;
 }
+
+.box-label {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+}

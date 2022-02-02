@@ -1,14 +1,55 @@
 <template>
     <div class="type-bar-chart">
+        <div class="flex items-center">
+            <span
+                :style="'background-color: ' + colors[0] + ';'"
+                class="box-label mr-2"
+            />
+            <p>
+                {{
+                    dayjs(surveyStepList?.results?.timespan?.start).format(
+                        t('datepicker_date_formatter'),
+                    ) +
+                    t('datepicker_date_separator') +
+                    dayjs(tsurveyStepList?.results?.timespan?.end).format(
+                        t('datepicker_date_formatter'),
+                    )
+                }}
+            </p>
+        </div>
+        <div v-if="showCompare" class="flex items-center">
+            <span
+                :style="'background-color: ' + colors[1] + ';'"
+                class="box-label mr-2"
+            />
+            <p>
+                {{
+                    compareTimeSpan[0] +
+                    t('datepicker_date_separator') +
+                    compareTimeSpan[1]
+                }}
+            </p>
+        </div>
         <canvas ref="chartRef" width="400" :height="getChartHeight" />
+        <p
+            v-if="
+                !showCompare &&
+                surveyStepList?.elementType === 'multipleChoice' &&
+                surveyStepList?.elementParams?.maxSelectable > 1
+            "
+            class="text-xs mt-4"
+            v-html="t('notice_multiple_choice_results')"
+        />
     </div>
 </template>
 
 <script>
+import tailwindColors from 'tailwindcss/colors'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import dayjs from 'dayjs'
 
 export default {
     name: 'TypeBarChart',
@@ -21,8 +62,8 @@ export default {
             type: Array,
             required: true,
         },
-        values: {
-            type: Array,
+        surveyStepList: {
+            type: Object,
             required: true,
         },
         showCompare: {
@@ -33,10 +74,9 @@ export default {
             type: Array,
             default: () => [],
         },
-        colors: {
+        compareTimeSpan: {
             type: Array,
-            default: () => ['rgb(29, 78, 216)', 'rgb(212, 78, 216)'],
-            required: false,
+            default: () => [],
         },
     },
     setup(props) {
@@ -45,9 +85,43 @@ export default {
         let chart
         const chartRef = ref(null)
 
+        const colors = [tailwindColors.blue['600'], tailwindColors.blue['400']]
         const getChartHeight = computed(() => {
             return props.chartLabel === 'binary' ? 150 : 400
         })
+
+        function getDataLabels() {
+            return {
+                formatter: (value, ctx) => {
+                    let sum = 0
+                    let dataArr
+                    if (props.showCompare) {
+                        dataArr = ctx.chart.data.datasets.map((data) => {
+                            return data.data[ctx.dataIndex]
+                        })
+                        dataArr.map((data) => {
+                            sum += data
+                        })
+                    } else {
+                        dataArr = ctx.chart.data.datasets[ctx.datasetIndex].data
+                        dataArr.map((data) => {
+                            sum += data
+                        })
+                    }
+                    let percentage = (value * 100) / sum
+                    return percentage % 1 === 0
+                        ? percentage + '%'
+                        : percentage.toFixed(2) + '%'
+                },
+                align: 'end',
+                anchor: 'end',
+                padding: 5,
+                font: {
+                    weight: 'bold',
+                },
+                display: 'auto',
+            }
+        }
 
         watch(
             () => props.showCompare,
@@ -57,19 +131,19 @@ export default {
                         barPercentage: 0.45,
                         label: props.chartLabel,
                         data: props.compareValues,
-                        backgroundColor: props.colors[1],
-                        borderColor: props.colors[1],
+                        backgroundColor: colors[1],
+                        borderColor: colors[1],
                         datalabels: {
-                            color: props.colors[1],
+                            color: colors[1],
                         },
                     })
-                    chart.update()
                 } else {
                     if (chart.data.datasets.length > 1) {
                         chart.data.datasets.pop()
-                        chart.update()
                     }
                 }
+                chart.options.plugins.datalabels = getDataLabels()
+                chart.update()
             },
         )
 
@@ -152,11 +226,13 @@ export default {
                         {
                             barPercentage: 0.45,
                             label: props.chartLabel,
-                            data: props.values,
-                            backgroundColor: props.colors[0],
-                            borderColor: props.colors[0],
+                            data: Object.values(
+                                props.surveyStepList.results.timespan.results,
+                            ),
+                            backgroundColor: colors[0],
+                            borderColor: colors[0],
                             datalabels: {
-                                color: props.colors[0],
+                                color: colors[0],
                             },
                         },
                     ],
@@ -182,26 +258,7 @@ export default {
                             position: 'nearest',
                             external: externalTooltipHandler,
                         },
-                        datalabels: {
-                            formatter: (value, ctx) => {
-                                let sum = 0
-                                let dataArr = ctx.chart.data.datasets[0].data
-                                dataArr.map((data) => {
-                                    sum += data
-                                })
-                                let percentage = (value * 100) / sum
-                                return percentage % 1 === 0
-                                    ? percentage + '%'
-                                    : percentage.toFixed(2) + '%'
-                            },
-                            align: 'end',
-                            anchor: 'end',
-                            padding: 5,
-                            font: {
-                                weight: 'bold',
-                            },
-                            display: 'auto',
-                        },
+                        datalabels: getDataLabels(),
                     },
                 },
             })
@@ -214,7 +271,10 @@ export default {
         return {
             chart,
             chartRef,
+            colors,
+            dayjs,
             getChartHeight,
+            t,
         }
     },
 }

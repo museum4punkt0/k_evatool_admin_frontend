@@ -367,7 +367,6 @@ export default {
                             ).format('YYYY-MM-DD'),
                             demo.value,
                         )
-                    console.log(selectedCompareStepResultsList)
                 }
                 stepResultsModalIsOpen.value = true
                 selectedSurveyStepId.value = id
