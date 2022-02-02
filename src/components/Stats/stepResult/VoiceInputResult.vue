@@ -170,6 +170,8 @@ import { useI18n } from 'vue-i18n'
 import TRANSCRIPTION_SERVICE from '../../../services/transcriptionService'
 import { useStore } from 'vuex'
 
+import _ from 'lodash'
+
 export default {
     name: 'VoiceInputResult',
     components: {
@@ -205,7 +207,14 @@ export default {
             transcription.value = await TRANSCRIPTION_SERVICE.getTranscription(
                 props.result.value.resultAssetId,
             )
+
             requestingTranscription.value = false
+        }
+
+        if (props.result.value.manualTranscription) {
+            manualTranscription.value = _.cloneDeep(
+                props.result.value.manualTranscription,
+            )
         }
 
         const saveManualTranscription = async () => {
