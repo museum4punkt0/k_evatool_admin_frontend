@@ -3,7 +3,7 @@ import axios from 'axios'
 export default {
     async getAssets(page = 1) {
         return axios
-            .get('evaluation-tool/assets?all&page=' + page)
+            .get('evaluation-tool/assets?all&type=survey&page=' + page)
             .then((response) => {
                 return response.data
             })
