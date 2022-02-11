@@ -29,27 +29,20 @@
                     element.surveyElementType === 'simpleText' &&
                     element?.params?.text
                 "
-                v-html="
-                    element.params.text[store.state.languageCode]
-                        ? element.params.text[store.state.languageCode]
-                        : element.params.text[defaultLanguage.code]
-                "
-            ></div>
+                v-tippy="tippyContent(element.params?.text)"
+                v-html="shortenQuestion(element.params.text)"
+            />
             <div
                 v-else-if="element.params?.question !== null"
-                v-html="
-                    element.params.question[store.state.languageCode]
-                        ? element.params.question[store.state.languageCode]
-                        : element.params.question[defaultLanguage.code]
-                "
-            ></div>
-            <pre>{{}}</pre>
+                v-tippy="tippyContent(element.params?.question)"
+                v-html="shortenQuestion(element.params.question)"
+            />
         </div>
     </div>
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import FormInput from '../Forms/FormInput.vue'
@@ -60,6 +53,9 @@ export default {
     props: { element: { type: Object, required: true } },
     setup() {
         const store = useStore()
+
+        const showToolTip = ref(false)
+
         const surveyElements = computed(
             () => store.state.surveyElements.surveyElements,
         )
@@ -79,11 +75,42 @@ export default {
             return assets.value.filter((x) => x.id === assetId)[0]
         }
 
+        function htmlDecode(input) {
+            const doc = new DOMParser().parseFromString(input, 'text/html')
+            return doc.documentElement.textContent
+        }
+
+        function shortenQuestion(text) {
+            const maxStringLength = 50
+            const newString = htmlDecode(i18n(text))
+
+            if (newString.length > maxStringLength) {
+                showToolTip.value = true
+                return newString.substring(0, maxStringLength) + '...'
+            }
+            return newString
+        }
+
+        function tippyContent(text) {
+            if (showToolTip.value) {
+                return i18n(text)
+            }
+            return null
+        }
+
+        function i18n(text) {
+            return text[store.state.languageCode]
+                ? text[store.state.languageCode]
+                : text[defaultLanguage.value.code]
+        }
+
         return {
             asset,
             assets,
             store,
+            shortenQuestion,
             t,
+            tippyContent,
             surveyElements,
             defaultLanguage,
             surveyElementTypes,

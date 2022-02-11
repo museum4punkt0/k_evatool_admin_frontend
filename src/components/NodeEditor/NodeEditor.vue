@@ -123,7 +123,6 @@
                                 }}
                             </div>
                         </div>
-
                         <element-content
                             :element="
                                 store.state.surveyElements.surveyElements.find(
@@ -134,7 +133,17 @@
                                 )
                             "
                             class="m-2"
-                        ></element-content>
+                        />
+                        <element-time-based-steps-preview
+                            v-if="
+                                steps?.find((x) => x?.id === step?.id)
+                                    .timeBasedSteps
+                            "
+                            :time-based-steps="
+                                steps?.find((x) => x?.id === step?.id)
+                                    .timeBasedSteps
+                            "
+                        />
                     </div>
                 </div>
                 <div class="flex flex-col w-9 border-l">
@@ -283,12 +292,14 @@ import { StarIcon } from '@heroicons/vue/solid'
 import TimeBasedStepsModal from '../Surveys/TimeBasedStepsModal.vue'
 import ResultBasedStepsModal from '../Surveys/resultBasedNextSteps/ResultBasedStepsModal.vue'
 import ElementContent from './ElementContent.vue'
+import ElementTimeBasedStepsPreview from './ElementTimeBasedStepsPreview.vue'
 
 import SURVEYS from '../../services/surveyService'
 
 export default {
     name: 'NodeEditor',
     components: {
+        ElementTimeBasedStepsPreview,
         TimeBasedStepsModal,
         ResultBasedStepsModal,
         Connection,
