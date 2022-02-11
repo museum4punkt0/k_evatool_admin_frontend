@@ -26,7 +26,10 @@
                     v-if="
                         surveyElements.find(
                             (x) => x.id === surveyStep.surveyElementId,
-                        ).resultCount === 0
+                        ).resultCount === 0 &&
+                        surveyElements.find(
+                            (x) => x.id === surveyStep.surveyElementId,
+                        ).demoResultCount === 0
                     "
                 >
                     <form-select
