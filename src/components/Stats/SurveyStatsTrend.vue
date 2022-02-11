@@ -5,7 +5,7 @@
 
             <br />
             <div class="flex justify-start items-end">
-                <div class="text-3xl font-medium text-blue-600 mr-5">
+                <div class="text-3xl font-medium text-blue-900 mr-5">
                     {{ trend.participants.total }}
                 </div>
                 <survey-stats-trend-tendency
@@ -22,7 +22,7 @@
             {{ t('surveys_completed') }}
             <br />
             <div class="flex justify-start items-end">
-                <div class="text-3xl font-medium text-blue-600 mr-5">
+                <div class="text-3xl font-medium text-blue-900 mr-5">
                     {{ trend.completedSurveys.total }}
                 </div>
                 <survey-stats-trend-tendency
@@ -40,7 +40,7 @@
             <br />
 
             <div class="flex justify-start items-end">
-                <div class="text-3xl font-medium text-blue-600 mr-5">
+                <div class="text-3xl font-medium text-blue-900 mr-5">
                     {{ trend.answers.total }}
                 </div>
                 <survey-stats-trend-tendency

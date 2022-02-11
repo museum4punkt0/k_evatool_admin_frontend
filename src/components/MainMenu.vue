@@ -1,5 +1,5 @@
 <template>
-    <div class="hidden w-28 bg-blue-700 overflow-y-auto md:block">
+    <div class="hidden w-28 bg-blue-900 overflow-y-auto md:block">
         <div class="w-full py-6 flex flex-col items-center">
             <div class="flex-shrink-0 flex items-center">
                 <img
@@ -57,7 +57,7 @@
                     leave-to="-translate-x-full"
                 >
                     <div
-                        class="relative max-w-xs w-full bg-blue-700 pt-5 pb-4 flex-1 flex flex-col"
+                        class="relative max-w-xs w-full bg-blue-900 pt-5 pb-4 flex-1 flex flex-col"
                     >
                         <TransitionChild
                             as="template"
