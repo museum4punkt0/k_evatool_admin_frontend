@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-grow overflow-hidden">
-        <main class="flex h-full w-full flex-col p-3">
+    <div class="flex flex-1 overflow-hidden">
+        <main class="flex h-full flex-col p-3 w-2/3">
             <div class="flex flex-row justify-between">
                 <!-- <h1 v-if="store.state.assets?.assets" class="mb-3">
                     {{ store.state.assets.assets.length }}

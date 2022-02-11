@@ -88,7 +88,9 @@
                                             step.surveyElementType !==
                                                 'textInput' &&
                                             step.surveyElementType !==
-                                                'simpleText'
+                                                'simpleText' &&
+                                            step.surveyElementType !==
+                                                'voiceInput'
                                         "
                                         class="mx-1 h-5 w-5 pointer"
                                         @click.prevent.stop="
