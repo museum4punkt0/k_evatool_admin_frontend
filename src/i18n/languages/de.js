@@ -101,6 +101,7 @@ export default {
     new_element: 'Neues Umfrage-Element',
     new_user: 'Neuer Benutzer',
     none_selected: 'Nicht ausgewählt',
+    notice_missing_languages: 'Fehlende Sprachen',
     notice_filter_has_no_results: 'Keine vergleichs Ergebnisse vorhanden.',
     notice_multiple_choice_results:
         '"Die Prozentzahl bezieht sich auf die Anzahl der Datensätze, lässt aber keine Rückschlüsse auf die Anzahl der Befragten".',

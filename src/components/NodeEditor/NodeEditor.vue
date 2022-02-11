@@ -124,6 +124,14 @@
                             </div>
                         </div>
                         <element-content
+                            v-if="
+                                store.state.surveyElements.surveyElements.find(
+                                    (element) =>
+                                        element.id ===
+                                        steps.find((x) => x.id === step.id)
+                                            ?.surveyElementId,
+                                )
+                            "
                             :element="
                                 store.state.surveyElements.surveyElements.find(
                                     (element) =>
@@ -275,7 +283,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { debounce } from 'lodash'
 import Connection from './Connection.vue'
-import { TYPES } from '../../store/notifications'
+import { TYPES } from '@/store/notifications'
 
 import {
     ArrowUpIcon,

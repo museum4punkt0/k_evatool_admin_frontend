@@ -38,6 +38,10 @@
                 v-html="shortenQuestion(element.params.question)"
             />
         </div>
+        <missing-languages
+            v-if="element.missingLanguages"
+            :missing-languages="element.missingLanguages"
+        />
     </div>
 </template>
 
@@ -47,9 +51,10 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import FormInput from '../Forms/FormInput.vue'
 import SurveyElement from '../Surveys/SurveyElement.vue'
+import MissingLanguages from '@/components/Common/MissingLanguages.vue'
 export default {
     name: 'ElementContent',
-    components: { FormInput, SurveyElement },
+    components: { MissingLanguages, FormInput, SurveyElement },
     props: { element: { type: Object, required: true } },
     setup() {
         const store = useStore()
