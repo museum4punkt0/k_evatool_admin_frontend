@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Listbox v-model="selectedLocal" as="div">
+        <Listbox v-model="selectedLocal" as="div" :disabled="disabled">
             <ListboxLabel class="block text-sm font-medium text-gray-700">
                 {{ label }}
             </ListboxLabel>
@@ -138,6 +138,7 @@ export default {
             type: Array,
             default: () => [],
         },
+        disabled: { type: Boolean, default: false },
     },
     emits: ['update:selected'],
     setup(props, { emit }) {

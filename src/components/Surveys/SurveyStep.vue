@@ -22,23 +22,41 @@
             /> -->
 
             <div class="flex flex-row mt-4">
-                <form-select
-                    v-model:selected="surveyStep.surveyElementId"
-                    :options="surveyElements"
-                    title-key="name"
-                    value-key="id"
-                    class="flex-1"
-                    :default-value="-1"
-                    :label="t('elements', 1)"
-                />
-                <action-button
-                    v-if="surveyStep.surveyElementId > 0"
-                    class="mt-6 ml-6"
-                    color="secondary"
-                    @execute="editSurveyElement"
+                <template
+                    v-if="
+                        surveyElements.find(
+                            (x) => x.id === surveyStep.surveyElementId,
+                        ).resultCount === 0
+                    "
                 >
-                    <PencilIcon class="h-5 w-5" />
-                </action-button>
+                    <form-select
+                        v-model:selected="surveyStep.surveyElementId"
+                        :options="surveyElements"
+                        title-key="name"
+                        value-key="id"
+                        class="flex-1"
+                        :default-value="-1"
+                        :label="t('elements', 1)"
+                    />
+                    <action-button
+                        v-if="surveyStep.surveyElementId > 0"
+                        class="mt-6 ml-6"
+                        color="secondary"
+                        @execute="editSurveyElement"
+                    >
+                        <PencilIcon class="h-5 w-5" />
+                    </action-button>
+                </template>
+                <div v-else class="flex flex-col">
+                    <label for="">{{ t('elements', 1) }}</label>
+                    <p class="px-3 py-2">
+                        {{
+                            surveyElements.find(
+                                (x) => x.id === surveyStep.surveyElementId,
+                            ).name
+                        }}
+                    </p>
+                </div>
             </div>
 
             <div class="flex flex-row mt-2">
