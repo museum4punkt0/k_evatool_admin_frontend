@@ -137,7 +137,7 @@
                         <element-time-based-steps-preview
                             v-if="
                                 steps?.find((x) => x?.id === step?.id)
-                                    .timeBasedSteps
+                                    ?.timeBasedSteps
                             "
                             :time-based-steps="
                                 steps?.find((x) => x?.id === step?.id)
