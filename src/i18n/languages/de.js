@@ -186,6 +186,7 @@ export default {
     tooltip_set_resultbased_steps: 'Antwortabhängige Schritte setzen',
     tooltip_set_resultbased_steps_disabled:
         'Antwortabhängige Schritte sind für diesen Elementtyp mit diesen Optionen nicht verfügbar, z.B. Multiple Choice mit mehr als einer verpflichtenden Antwortmöglichkeit',
+    tooltip_is_start_step: 'Dies ist das Startelement',
     tooltip_survey_details_languages:
         'Umfrage in folgenden Sprachen verfügbar machen',
     tooltip_survey_details_slug:

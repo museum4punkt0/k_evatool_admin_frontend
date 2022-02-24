@@ -98,7 +98,11 @@
                             >
                                 <div
                                     v-tippy="{
-                                        content: t('tooltip_set_start_step'),
+                                        content: steps?.find(
+                                            (x) => x?.id === step?.id,
+                                        )?.isFirstStep
+                                            ? t('tooltip_is_start_step')
+                                            : t('tooltip_set_start_step'),
                                     }"
                                     class="flex h-full justify-center items-center"
                                     content="hello"
