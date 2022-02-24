@@ -26,6 +26,7 @@
     <button class="primary mt-3" @click="setAssetSelectorModalOpen(true)">
         {{ t('button_choose_assets') }}
     </button>
+    <p class="text-xs mt-2">{{ t('notice_same_ratio_and_orientation') }}</p>
 
     <div class="grid grid-cols-12 gap-4 mt-8">
         <form-input

@@ -11,6 +11,8 @@ export default {
     languages: 'languages | language | languages',
     names: 'names | name | names',
     none_selected: 'none selected',
+    notice_same_ratio_and_orientation:
+        'All images should be of the same ratio and orientation',
     optional_name: 'Optional name',
     participants: 'Participants | Participant | Participants',
     show_demo_data_only: 'Show demo data only',
