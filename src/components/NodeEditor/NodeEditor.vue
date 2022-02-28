@@ -88,11 +88,13 @@
                         class="pointer h-full flex-col items-center justify-center"
                     >
                         <div class="flex border-b-2">
+                            <!--                        AUF KUNDENWUNSCH AUSKOMMENTIERT
+                            v-if="
+                            steps.find((item) => item.id === step.id)
+                            ?.previousSteps.length === 0
+                            "
+                            -->
                             <button
-                                v-if="
-                                    steps.find((item) => item.id === step.id)
-                                        ?.previousSteps.length === 0
-                                "
                                 class="w-10 pointer border-r-2"
                                 @click.prevent.stop="selectStart(step.id)"
                             >
@@ -590,22 +592,25 @@ export default {
         }
 
         const selectStart = async (stepId) => {
+            await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
+            refreshSteps()
+            /*
             const step = store.state.surveys.survey.steps.find(
                 (step) => step.id === stepId,
             )
-
             if (
                 (step && !step.previousSteps) ||
                 (step && step.previousSteps.length === 0)
-            ) {
                 await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
-                refreshSteps()
+            refreshSteps()
+            ) {
             } else {
                 store.dispatch('notifications/add', {
                     type: TYPES.ERROR,
                     message: 'notification_error_startstep_previous',
                 })
             }
+            */
         }
 
         const updateStepParams = async () => {
