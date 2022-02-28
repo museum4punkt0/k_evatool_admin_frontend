@@ -90,7 +90,10 @@
                                     class="pointer"
                                     :published="survey.published"
                                     @click.stop.prevent="
-                                        publishSurvey(survey.id)
+                                        publishSurvey(
+                                            survey.id,
+                                            survey.published,
+                                        )
                                     "
                                 />
                             </td>
@@ -235,8 +238,13 @@ export default {
                 .focus()
         }
 
-        const publishSurvey = async (surveyId) => {
-            await store.dispatch('surveys/publishSurvey', surveyId)
+        const publishSurvey = async (surveyId, published) => {
+            const confirmPublishOrUnpublish = published
+                ? confirm(t('confirm_unpublish_survey'))
+                : confirm(t('confirm_publish_survey'))
+            if (confirmPublishOrUnpublish) {
+                await store.dispatch('surveys/publishSurvey', surveyId)
+            }
         }
 
         const openSurveyStats = async (survey) => {
