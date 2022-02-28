@@ -289,7 +289,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { debounce } from 'lodash'
 import Connection from './Connection.vue'
-import { TYPES } from '@/store/notifications'
+// import { TYPES } from '@/store/notifications'
 
 import {
     ArrowUpIcon,

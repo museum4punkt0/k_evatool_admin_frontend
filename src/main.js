@@ -7,7 +7,6 @@ import VueTippy from 'vue-tippy'
 
 // tailwind css
 import './index.css'
-import 'tippy.js/dist/tippy.css' // optional for styling
 
 // axios
 import axios from 'axios'
@@ -44,9 +43,7 @@ app.use(
     VueTippy,
     // optional
     {
-        directive: 'tippy', // => v-tippy
-        component: 'tippy', // => <tippy/>
-        componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
+        directive: 'tippy',
         defaultProps: {
             placement: 'auto-end',
             allowHTML: true,

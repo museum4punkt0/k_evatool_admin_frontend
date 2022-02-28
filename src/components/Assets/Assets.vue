@@ -98,20 +98,6 @@
                                 </template>
                             </td>
                             <td class="px-6 py-4 flex flex-row">
-                                <!-- TODO: DISABLE DELETE IF IN USE -->
-                                <!--
-                                    <trash-icon
-                                        v-if="inUse > 0"
-                                        class="
-                                            mx-1
-                                            h-5
-                                            w-5
-                                            text-gray-500
-                                            cursor-not-allowed
-                                        "
-                                        @click.prevent.stop="null"
-                                    />
-                                    -->
                                 <button
                                     :disabled="asset.surveyElements > 0"
                                     class="disabled:opacity-50"
