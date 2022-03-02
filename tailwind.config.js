@@ -12,7 +12,7 @@ module.exports = {
         extend: {
             colors: {
                 'litepie-primary': colors.blue, // color system for light mode
-                'litepie-secondary': colors.coolGray, // color system for dark mode
+                'litepie-secondary': colors.gray, // color system for dark mode
                 blue: {
                     900: '#1c1cbe',
                 },

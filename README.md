@@ -1,17 +1,37 @@
-# evaluation tool admin frontend
+# EVA-Tool (Admin-Frontend)
 
-## dev
+## Inhaltsverzeichnis
+* [Kurzbeschreibung](#Kurzbeschreibung)
+* [Förderhinweis](#Förderhinweis)
+* [Architektur](#Architektur)
+* [Installation](#Installation)
+* [Benutzung](#Benutzung)
+* [Credits](#Credits)
+* [Lizenz](#Lizenz)
+
+## Kurzbeschreibung
+Beschreibungstext einfügen.
+
+## Förderhinweis
+Diese Website ist entstanden im Verbundprojekt museum4punkt0 – Digitale Strategien für das Museum der Zukunft, Teilprojekt EVA-Tool. Das Projekt museum4punkt0 wird gefördert durch die Beauftragte der Bundesregierung für Kultur und Medien aufgrund eines Beschlusses des Deutschen Bundestages. Weitere Informationen: www.museum4punkt0.de
+
+
+## Architektur
+![architecture diagram](./doc/architecture.svg)
+
+## Installation
 
 -   yarn install
 -   cp .env.local.example .env.local
 -   yarn dev
 
-## architecture
+## Benutzung
 
-![architecture diagram](./doc/architecture.svg)
+##Credits
+
+## Lizenz
 
 ## routes
-
 /surveys
 /surveys/new
 /surveys/:surveyId

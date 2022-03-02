@@ -45,7 +45,7 @@
                         <tr>
                             <th>ID</th>
                             <th>{{ t('names', 1) }}</th>
-                            <th>{{ t('types', 1) }}</th>
+                            <!--                            <th>{{ t('types', 1) }}</th>-->
                             <th># {{ t('steps', 2) }}</th>
                             <th># {{ t('surveys', 2) }}</th>
                             <th>
@@ -69,17 +69,23 @@
                             <td class="text-lg">{{ surveyElement.id }}</td>
                             <td>
                                 {{ surveyElement.name }}
-                                <!--                                <p class="text-sm text-gray-500">
-{{ surveyElement.description }}
-</p>-->
+                                <p class="text-sm text-gray-500">
+                                    {{ t('types', 1) }}:
+                                    {{
+                                        store.getters[
+                                            'elementTypes/getDisplayNameForKey'
+                                        ](surveyElement.surveyElementType)
+                                    }}
+                                </p>
                             </td>
-                            <td>
-                                {{
-                                    store.getters[
-                                        'elementTypes/getDisplayNameForKey'
-                                    ](surveyElement.surveyElementType)
-                                }}
-                            </td>
+                            <!--                            <td>-->
+                            <!--                                <missing-languages-->
+                            <!--                                    v-if="surveyElement.missingLanguages"-->
+                            <!--                                    :missing-languages="-->
+                            <!--                                        surveyElement.missingLanguages-->
+                            <!--                                    "-->
+                            <!--                                />-->
+                            <!--                            </td>-->
                             <td class="text-sm">
                                 <template
                                     v-if="surveyElement.surveyStepsCount > 0"
@@ -138,12 +144,14 @@ import { RefreshIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/outline'
 
 import SurveyElement from '../Surveys/SurveyElement.vue'
 import FormInput from '../Forms/FormInput.vue'
+import MissingLanguages from '@/components/Common/MissingLanguages.vue'
 
 import { searchForWordsInString } from '../../utils/search'
 
 export default {
     name: 'SurveyElements',
     components: {
+        MissingLanguages,
         FormInput,
         SurveyElement,
         RefreshIcon,
@@ -167,6 +175,15 @@ export default {
         const elementTypes = computed(
             () => store.state.elementTypes.elementTypes,
         )
+        const surveys = computed({
+            get: () => store.state.surveys.surveys,
+        })
+        const surveySteps = computed({
+            get: () => {
+                console.log(surveys.value.filter((x) => x.id === 1))
+                return surveys
+            },
+        })
 
         const getSurveyElements = () => {
             store.dispatch('surveyElements/getSurveyElements')
@@ -256,6 +273,7 @@ export default {
             editSurveyElement,
             deleteSurveyElement,
             store,
+            surveySteps,
             surveyElementId,
             resetSurveyElement,
             savedSurveyElement,

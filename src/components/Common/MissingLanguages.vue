@@ -2,20 +2,27 @@
     <div v-if="hasMissingLanguage" class="pt-2 px-2">
         <ExclamationIcon class="text-red-600 h-4 w-4 float-left mr-1.5" />
         <p class="text-red-600 text-xs">{{ t('notice_missing_languages') }}:</p>
-        <span
+        <p
             v-for="(missing, key) in missingLanguages"
             :key="'missingKey_' + missing"
+            class="text-xs"
         >
-            {{ key }}
             <span
-                v-for="lang in missing.find(
-                    (x) => x.surveyId == route.params.id,
-                ).codes"
-                :key="'missingLangKey_' + lang + missing"
+                v-if="missing.find((x) => x.surveyId == route.params.id)?.codes"
+                :key="
+                    'missingLangKey_' +
+                    lang +
+                    missing.find((x) => x.surveyId == route.params.id)?.codes
+                "
             >
-                {{ lang }}
+                {{ key }} :
+                <span>
+                    {{
+                        missing.find((x) => x.surveyId == route.params.id).codes
+                    }}
+                </span>
             </span>
-        </span>
+        </p>
     </div>
 </template>
 
