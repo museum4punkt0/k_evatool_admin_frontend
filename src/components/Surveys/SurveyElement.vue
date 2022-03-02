@@ -101,22 +101,22 @@
 
 <script>
 // element types
-import ElementTypeStarRating from '../SurveySteps/ElementTypes/ElementTypeStarRating.vue'
-import ElementTypeEmoji from '../SurveySteps/ElementTypes/ElementTypeEmoji.vue'
-import ElementTypeVideo from '../SurveySteps/ElementTypes/ElementTypeVideo.vue'
-import ElementTypeBinaryQuestion from '../SurveySteps/ElementTypes/ElementTypeBinaryQuestion.vue'
-import ElementTypeMultipleChoice from '../SurveySteps/ElementTypes/ElementTypeMultipleChoice.vue'
-import ElementTypeSimpleText from '../SurveySteps/ElementTypes/ElementTypeSimpleText.vue'
-import ElementTypeYayNay from '../SurveySteps/ElementTypes/ElementTypeYayNay.vue'
-import ElementTypeTextInput from '../SurveySteps/ElementTypes/ElementTypeTextInput.vue'
-import ElementTypeVoiceInput from '../SurveySteps/ElementTypes/ElementTypeVoiceInput.vue'
+import ElementTypeStarRating from '../SurveyElements/ElementTypes/ElementTypeStarRating.vue'
+import ElementTypeEmoji from '../SurveyElements/ElementTypes/ElementTypeEmoji.vue'
+import ElementTypeVideo from '../SurveyElements/ElementTypes/ElementTypeVideo.vue'
+import ElementTypeBinaryQuestion from '../SurveyElements/ElementTypes/ElementTypeBinaryQuestion.vue'
+import ElementTypeMultipleChoice from '../SurveyElements/ElementTypes/ElementTypeMultipleChoice.vue'
+import ElementTypeSimpleText from '../SurveyElements/ElementTypes/ElementTypeSimpleText.vue'
+import ElementTypeYayNay from '../SurveyElements/ElementTypes/ElementTypeYayNay.vue'
+import ElementTypeTextInput from '../SurveyElements/ElementTypes/ElementTypeTextInput.vue'
+import ElementTypeVoiceInput from '../SurveyElements/ElementTypes/ElementTypeVoiceInput.vue'
 import FormSelect from '../Forms/FormSelect.vue'
 import DataViewer from '../Common/DataViewer.vue'
 import ActionButton from '../Common/ActionButton.vue'
 
 import { onMounted, ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
-import defaultParamsCreator from '../SurveySteps/ElementTypes/defaultParams'
+import defaultParamsCreator from '../SurveyElements/ElementTypes/defaultParams'
 
 import SURVEY_ELEMENT_SERVICE from '../../services/surveyElementService'
 import useVuelidate from '@vuelidate/core'

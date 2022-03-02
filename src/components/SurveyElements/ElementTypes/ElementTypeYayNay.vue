@@ -88,7 +88,7 @@
 <script>
 import FormInput from '../../Forms/FormInput.vue'
 import LanguageSwitch from '../../Languages/LanguageSwitch.vue'
-import TinyMce from '../../../components/Common/TinyMce.vue'
+import TinyMce from '../../Common/TinyMce.vue'
 
 import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
