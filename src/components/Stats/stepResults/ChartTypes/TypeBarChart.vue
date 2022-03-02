@@ -115,7 +115,6 @@ export default {
                 font: {
                     weight: 'bold',
                 },
-                display: 'auto',
             }
         }
 
