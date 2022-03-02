@@ -45,7 +45,9 @@
                         <tr>
                             <th>ID</th>
                             <th>{{ t('names', 1) }}</th>
-                            <!--                            <th>{{ t('types', 1) }}</th>-->
+                            <th>
+                                <!--                                {{ t('types', 1) }}-->
+                            </th>
                             <th># {{ t('steps', 2) }}</th>
                             <th># {{ t('surveys', 2) }}</th>
                             <th>
@@ -78,14 +80,14 @@
                                     }}
                                 </p>
                             </td>
-                            <!--                            <td>-->
-                            <!--                                <missing-languages-->
-                            <!--                                    v-if="surveyElement.missingLanguages"-->
-                            <!--                                    :missing-languages="-->
-                            <!--                                        surveyElement.missingLanguages-->
-                            <!--                                    "-->
-                            <!--                                />-->
-                            <!--                            </td>-->
+                            <td>
+                                <missing-languages
+                                    v-if="surveyElement.missingLanguages"
+                                    :missing-languages="
+                                        surveyElement.missingLanguages
+                                    "
+                                />
+                            </td>
                             <td class="text-sm">
                                 <template
                                     v-if="surveyElement.surveyStepsCount > 0"

@@ -40,6 +40,7 @@
         </div>
         <missing-languages
             v-if="element.missingLanguages"
+            specific-survey
             :missing-languages="element.missingLanguages"
         />
     </div>
