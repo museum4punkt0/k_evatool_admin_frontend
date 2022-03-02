@@ -276,6 +276,7 @@ export default {
 
 <style lang="scss" scoped>
 .vuemoji-picker {
+    z-index: 10;
     position: absolute;
     transform: translateX(-105%);
 }
