@@ -1,10 +1,10 @@
 <template>
     <litepie-datepicker
         v-model="timeSpan"
+        :i18n="store.state.languageCode"
         trigger="open-datepicker"
         :shortcuts="datepickerShortcuts"
         :auto-apply="false"
-        overlay
         :options="datepickerOptions"
         :formatter="formatter"
         :disable-date="disableDate"
@@ -16,6 +16,7 @@
 import LitepieDatepicker from 'litepie-datepicker'
 import { onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 
 export default {
     name: 'DatePicker',
@@ -29,6 +30,7 @@ export default {
     emits: ['update:modelValue'],
     setup(props, { emit }) {
         const { t } = useI18n()
+        const store = useStore()
         const timeSpan = ref([])
         const datepickerOptions = ref({
             footer: {
@@ -104,6 +106,7 @@ export default {
 
         const formatter = ref({
             date: t('datepicker_date_formatter'),
+            month: t('datepicker_date_formatter'),
         })
 
         const disableDate = (date) => {
@@ -123,6 +126,7 @@ export default {
             datepickerShortcuts,
             disableDate,
             formatter,
+            store,
             t,
             timeSpan,
         }
