@@ -199,7 +199,7 @@ export default {
                     highestValueLabel: labelValidation,
                     numberOfStars: {
                         required,
-                        between: between(3, 9),
+                        between: between(3, 10),
                     },
                     displayType: {
                         required,

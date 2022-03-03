@@ -161,7 +161,7 @@ export default {
                 options: [
                     ...paramsLocal.value.options,
                     {
-                        value: '',
+                        value: `value_${paramsLocal.value.options.length + 1}`,
                         labels: langObj,
                         commentable: false,
                     },

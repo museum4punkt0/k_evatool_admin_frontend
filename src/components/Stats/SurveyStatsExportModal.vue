@@ -233,7 +233,7 @@ export default {
         params.value.exportType = null
         params.value.end = moment().format('YYYY-MM-DD')
         params.value.start = moment().subtract(1, 'weeks').format('YYYY-MM-DD')
-        params.value.demo = true
+        params.value.demo = false
 
         const exportStats = async (execute = false) => {
             setIsExporting(true)
