@@ -1,5 +1,9 @@
 <template>
-    <TransitionRoot appear :show="isOpen" as="template">
+    <TransitionRoot
+        appear
+        :show="isOpen"
+        as="template"
+        @afterLeave="afterLeaveToRemoveInfoInParent()">
         <Dialog as="div" @close="closeModal">
             <DialogOverlay class="fixed inset-0 bg-black opacity-70 z-10" />
             <div class="fixed inset-0 z-10 overflow-y-auto">
@@ -49,7 +53,11 @@
                                 />
                             </div>
 
-                            <div id="results-content" class="mt-6 px-6 pb-6">
+                            <div
+                                v-if="dataHasLoaded"
+                                id="results-content"
+                                class="mt-6 px-6 pb-6"
+                            >
                                 <!--                                <pre>{{ surveyStepId }}</pre>-->
                                 <h3
                                     class="mb-3"
@@ -121,10 +129,21 @@
                                 />
                             </div>
                             <div
+                                v-else
+                                class="w-full h-64 flex items-center justify-center flex-col">
+                                <div
+                                    :style="{ borderTopColor: 'transparent' }"
+                                    class="w-16 h-16 mb-6 border-4 border-blue-900 border-solid rounded-full animate-spin">
+                                </div>
+                                <p class="text-lg font-medium">
+                                    {{ t('status_loading') }}
+                                </p>
+                            </div>
+                            <div
                                 v-if="
                                     !['textInput', 'voiceInput'].includes(
                                         surveyStepList.elementType,
-                                    )
+                                    ) && dataHasLoaded
                                 "
                                 class="flex w-full bg-gray-100 rounded-b-2xl py-3 px-4"
                                 :class="
@@ -179,6 +198,7 @@
                                         content: t(
                                             'tooltip_save_result_content',
                                         ),
+                                        trigger: 'mouseenter',
                                     }"
                                     :disabled="isSaving"
                                     class="primary"
@@ -212,7 +232,7 @@ import {
 } from '@headlessui/vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
+import {computed, ref} from 'vue'
 import {
     DownloadIcon,
     StopIcon,
@@ -271,13 +291,22 @@ export default {
             type: Array,
             default: () => [],
         },
+        dataHasLoaded: {
+            type: Boolean,
+            required: true,
+        },
     },
-    emits: ['update:is-open'],
+    emits: [
+        'update:is-open',
+        'update:data-has-loaded',
+        'update:survey-step-list',
+    ],
     setup(props, { emit }) {
         const store = useStore()
         const { t } = useI18n()
         const isSaving = ref(false)
         const compareWith = ref(false)
+        const isClosing = ref(false)
 
         const barChart = [
             'simpleText',
@@ -293,8 +322,16 @@ export default {
 
         const modalIsOpen = computed({
             get: () => props.isOpen,
-            set: (val) => emit('update:is-open', val),
+            set: (val) => {
+                emit('update:is-open', val)
+            },
         })
+
+        const afterLeaveToRemoveInfoInParent = () => {
+            emit('update:data-has-loaded', false)
+            emit('update:survey-step-list', {})
+            isClosing.value = false
+        }
 
         const getImageLabels = computed({
             get: () => {
@@ -403,6 +440,7 @@ export default {
         }
 
         return {
+            afterLeaveToRemoveInfoInParent,
             assets,
             modalIsOpen,
             store,

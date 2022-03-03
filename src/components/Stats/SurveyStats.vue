@@ -193,6 +193,7 @@
             ></step-detail-result-modal>
             <step-results-modal
                 v-model:is-open="stepResultsModalIsOpen"
+                v-model:data-has-loaded="stepResultDataHasLoaded"
                 :survey-step-id="selectedSurveyStepId"
                 :survey-step-list="selectedSurveyStepList"
                 :survey-step-compare-list="selectedCompareStepResultsList"
@@ -264,6 +265,7 @@ export default {
         const demo = ref(false)
         const stepResultModalIsOpen = ref(false)
         const stepResultsModalIsOpen = ref(false)
+        const stepResultDataHasLoaded = ref(false)
         const selectedSurveyStepResult = ref(-1)
         const selectedSurveyStep = ref(-1)
         const selectedSurveyStepId = ref(-1)
@@ -339,6 +341,7 @@ export default {
         }
 
         const showStepResults = async (id) => {
+            stepResultsModalIsOpen.value = true
             if (id > -1) {
                 selectedSurveyStepList.value =
                     await SURVEY_STATS_SERVICE.getStatsStepList(
@@ -370,7 +373,7 @@ export default {
                             demo.value,
                         )
                 }
-                stepResultsModalIsOpen.value = true
+                stepResultDataHasLoaded.value = true
                 selectedSurveyStepId.value = id
             }
         }
@@ -416,6 +419,7 @@ export default {
             selectedSurveyStepId,
             selectedSurveyStepList,
             selectedSurveyStepResult,
+            stepResultDataHasLoaded,
             showStepDetailResult,
             openExportModal,
             exportModalOpen,
