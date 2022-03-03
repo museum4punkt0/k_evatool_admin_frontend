@@ -25,6 +25,14 @@
                     <ZoomOutIcon class="h-6 w-6" />
                 </div>
             </button>
+            <button
+                class="pointer disabled:opacity-50"
+                @click.prevent.stop="zoomToStartpoint()"
+            >
+                <div class="p-2 flex h-full justify-center items-center">
+                    <StarIcon class="h-6 w-6" />
+                </div>
+            </button>
         </div>
         <connection
             v-for="connection in connections"
@@ -770,6 +778,15 @@ export default {
             refreshSteps()
         }
 
+        const zoomToStartpoint = () => {
+            const indexOfFirst = props.steps.findIndex(x => x.isFirstStep === true)
+
+            nodeCanvas.value.children[indexOfFirst].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
+        }
+
         /** WATCHER **/
         watch(
             () => timeBasedModalIsOpen.value,
@@ -844,6 +861,7 @@ export default {
             width,
             zoom,
             zoomFactor,
+            zoomToStartpoint,
         }
     },
 }
