@@ -409,12 +409,23 @@ export default {
                             (x) => x.id === step.id,
                         )
                         if (index < 0) {
+                            let position = {}
+                            try {
+                                position.x =
+                                    props.adminLayout[
+                                        props.adminLayout.length - 1
+                                    ].position.x + (stepIndex * 250) - 250
+                                position.y =
+                                    props.adminLayout[
+                                        props.adminLayout.length - 1
+                                    ].position.y + 220
+                            } catch (e) {
+                                position.x = 150
+                                position.y = 150 + stepIndex * 220
+                            }
                             adminLayoutInit.push({
                                 id: step.id,
-                                position: {
-                                    x: 150,
-                                    y: 150 + stepIndex * 220,
-                                },
+                                position,
                             })
                         } else {
                             let stepFound = props.adminLayout.find(
@@ -552,6 +563,7 @@ export default {
                 draggedStep.value.position.y =
                     draggedStep.value.position.y +
                     e.movementY * (1 / zoomFactor.value)
+                moveCanvasToShowDragged()
             }
         }
 
@@ -562,12 +574,40 @@ export default {
         const onMouseUp = async () => {
             if (draggedStep.value) {
                 setCanvasSize()
+                //moveCanvasToShowDragged()
                 if (store.state.surveys.surveyStepId !== -1) {
                     store.dispatch('surveys/unsetSurveyStepId')
                 }
                 draggedStep.value = null
             }
             debouncedAdminLayoutSaver()
+        }
+
+        const moveCanvasToShowDragged = () => {
+            const indexToScrollTo = props.steps.findIndex(
+                (step) => step.id === draggedStep.value.id,
+            )
+
+            const bounding =
+                nodeCanvas.value.children[
+                    indexToScrollTo
+                ].getBoundingClientRect()
+
+            //automatisch moven, wenn feld in gewissem threshold zur border ist? Wie abbrechen?
+
+            if (
+                bounding.right - bounding.width / 2 >
+                nodeEditor.value.getBoundingClientRect().width
+            ) {
+                nodeEditor.value.scrollLeft = nodeEditor.value.scrollWidth
+            }
+
+            if (
+                bounding.bottom >
+                nodeEditor.value.getBoundingClientRect().height
+            ) {
+                nodeEditor.value.scrollTop = nodeEditor.value.scrollHeight
+            }
         }
 
         const deselectStep = () => {
@@ -779,11 +819,13 @@ export default {
         }
 
         const zoomToStartpoint = () => {
-            const indexOfFirst = props.steps.findIndex(x => x.isFirstStep === true)
+            const indexOfFirst = props.steps.findIndex(
+                (x) => x.isFirstStep === true,
+            )
 
             nodeCanvas.value.children[indexOfFirst].scrollIntoView({
                 behavior: 'smooth',
-                block: 'center'
+                block: 'center',
             })
         }
 
