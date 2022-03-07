@@ -135,6 +135,12 @@
                                 {{
                                     steps?.find((x) => x?.id === step?.id)?.name
                                 }}
+                                <span
+                                    v-if="store.state.users.user.admin"
+                                    class="text-xs"
+                                >
+                                    {{ step?.id }}
+                                </span>
                             </div>
                         </div>
                         <element-content
@@ -414,7 +420,9 @@ export default {
                                 position.x =
                                     props.adminLayout[
                                         props.adminLayout.length - 1
-                                    ].position.x + (stepIndex * 250) - 250
+                                    ].position.x +
+                                    stepIndex * 250 -
+                                    250
                                 position.y =
                                     props.adminLayout[
                                         props.adminLayout.length - 1
