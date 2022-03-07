@@ -282,20 +282,7 @@
                                             selectedTimeBasedStep.stepId
                                         "
                                         :invalid="v$.stepId.$invalid"
-                                        :options="
-                                            store.state.surveys?.survey?.steps
-                                                ?.filter(
-                                                    (item) =>
-                                                        item.surveyElementType !==
-                                                            'video' &&
-                                                        !timeBasedSteps?.find(
-                                                            (x) =>
-                                                                x.stepId ===
-                                                                item.id,
-                                                        ),
-                                                )
-                                                ?.map(mapStepsAlreadyInUse)
-                                        "
+                                        :options="timeBasedStepOptions"
                                         title-key="name"
                                         value-key="id"
                                         :default-value="-1"
@@ -507,6 +494,23 @@ export default {
         const modalIsOpen = computed({
             get: () => props.isOpen,
             set: (val) => emit('update:is-open', val),
+        })
+
+        const timeBasedStepOptions = computed({
+            get: () => {
+                return store.state.surveys?.survey?.steps
+                    ?.filter(
+                        (item) =>
+                            item.surveyElementType !== 'video' &&
+                            !timeBasedSteps.value?.find(
+                                (x) => x.stepId === item.id,
+                            ) &&
+                            item.previousStepsResultBased.length === 0 &&
+                            item.previousSteps.length === 0 &&
+                            !item.isFirstStep,
+                    )
+                    ?.map(mapStepsAlreadyInUse)
+            },
         })
 
         const selectedTimecodes = computed({
@@ -786,6 +790,7 @@ export default {
             mapStepsAlreadyInUse,
             videoDuration,
             videoCanPlay,
+            timeBasedStepOptions,
         }
     },
 }
