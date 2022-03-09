@@ -3,7 +3,8 @@
         appear
         :show="isOpen"
         as="template"
-        @afterLeave="afterLeaveToRemoveInfoInParent()">
+        @afterLeave="afterLeaveToRemoveInfoInParent()"
+    >
         <Dialog as="div" @close="closeModal">
             <DialogOverlay class="fixed inset-0 bg-black opacity-70 z-10" />
             <div class="fixed inset-0 z-10 overflow-y-auto">
@@ -130,11 +131,12 @@
                             </div>
                             <div
                                 v-else
-                                class="w-full h-64 flex items-center justify-center flex-col">
+                                class="w-full h-64 flex items-center justify-center flex-col"
+                            >
                                 <div
                                     :style="{ borderTopColor: 'transparent' }"
-                                    class="w-16 h-16 mb-6 border-4 border-blue-900 border-solid rounded-full animate-spin">
-                                </div>
+                                    class="w-16 h-16 mb-6 border-4 border-blue-900 border-solid rounded-full animate-spin"
+                                ></div>
                                 <p class="text-lg font-medium">
                                     {{ t('status_loading') }}
                                 </p>
@@ -232,7 +234,7 @@ import {
 } from '@headlessui/vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import {computed, ref} from 'vue'
+import { computed, ref } from 'vue'
 import {
     DownloadIcon,
     StopIcon,
@@ -245,7 +247,7 @@ import TextAnalysisResults from './TextAnalysisResults.vue'
 import VideoResults from './VideoResults.vue'
 import VideoResult from '../stepResult/VideoResult.vue'
 import { saveAs } from 'file-saver'
-import html2canvas from 'html2canvas'
+import { toBlob } from 'html-to-image'
 import AnimatedLoader from '@/components/Common/AnimatedLoader.vue'
 import FormToggle from '@/components/Forms/FormToggle.vue'
 import dayjs from 'dayjs'
@@ -428,14 +430,13 @@ export default {
                 props.surveyStepList?.results?.timespan?.end +
                 '.png'
             const resultsCanvas = document.getElementById('results-content')
-            html2canvas(resultsCanvas, {
-                allowTaint: true,
-                scale: 2,
-            }).then((canvas) => {
-                canvas.toBlob((blob) => {
-                    saveAs(blob, fileName)
-                    isSaving.value = false
-                })
+
+            toBlob(resultsCanvas, {
+                backgroundColor: '#ffffff',
+                height: resultsCanvas.offsetHeight + 30,
+            }).then((blob) => {
+                saveAs(blob, fileName)
+                isSaving.value = false
             })
         }
 
