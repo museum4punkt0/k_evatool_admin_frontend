@@ -357,7 +357,7 @@ export default {
         },
     },
     emits: ['updated'],
-    setup(props, { emit }) {
+    setup: function (props, { emit }) {
         /** NEEDED IMPORTS **/
         const store = useStore()
         const { t } = useI18n()
@@ -406,30 +406,33 @@ export default {
 
         const initAdminLayout = () => {
             const adminLayoutInit = []
-
             props.steps
                 .filter((x) => !x.parentStepId)
-                .forEach((step, stepIndex) => {
+                .forEach((step) => {
+                    const tmpPlaceArray = [...adminLayoutInit, ...props.adminLayout]
+
+                    tmpPlaceArray.sort((a, b) => {
+                        return a.id < b.id ? -1 : 1
+                    })
+
                     if (props.adminLayout) {
                         const index = props.adminLayout.findIndex(
                             (x) => x.id === step.id,
                         )
+
                         if (index < 0) {
                             let position = {}
                             try {
                                 position.x =
-                                    props.adminLayout[
-                                        props.adminLayout.length - 1
-                                    ].position.x +
-                                    stepIndex * 250 -
-                                    250
+                                    tmpPlaceArray[tmpPlaceArray.length - 1]
+                                        .position.x + 270
                                 position.y =
-                                    props.adminLayout[
-                                        props.adminLayout.length - 1
-                                    ].position.y + 220
+                                    tmpPlaceArray[
+                                        tmpPlaceArray.length - 1
+                                    ].position.y
                             } catch (e) {
                                 position.x = 150
-                                position.y = 150 + stepIndex * 220
+                                position.y = 150
                             }
                             adminLayoutInit.push({
                                 id: step.id,
@@ -444,16 +447,9 @@ export default {
                             )
                             adminLayoutInit.push(stepFound)
                         }
-                    } else {
-                        adminLayoutInit.push({
-                            id: step.id,
-                            position: {
-                                x: 150,
-                                y: 150 + stepIndex * 220,
-                            },
-                        })
                     }
                 })
+            console.log(adminLayoutInit)
             store.dispatch('surveys/setSurveyAdminLayout', adminLayoutInit)
         }
 
@@ -562,6 +558,7 @@ export default {
         const onMouseDown = (step) => {
             draggedStep.value = step
         }
+
         const onMouseMove = (e) => {
             if (draggedStep.value) {
                 draggedStep.value.position.x =
@@ -571,7 +568,14 @@ export default {
                 draggedStep.value.position.y =
                     draggedStep.value.position.y +
                     e.movementY * (1 / zoomFactor.value)
-                moveCanvasToShowDragged()
+
+                const indexToScrollTo = props.steps.findIndex(
+                    (step) => step.id === draggedStep.value.id,
+                )
+
+                const selectedChild = nodeCanvas.value.children[indexToScrollTo]
+
+                moveCanvasToShowDragged(selectedChild)
             }
         }
 
@@ -591,29 +595,24 @@ export default {
             debouncedAdminLayoutSaver()
         }
 
-        const moveCanvasToShowDragged = () => {
-            const indexToScrollTo = props.steps.findIndex(
-                (step) => step.id === draggedStep.value.id,
-            )
-
-            const bounding =
-                nodeCanvas.value.children[
-                    indexToScrollTo
-                ].getBoundingClientRect()
-
-            //automatisch moven, wenn feld in gewissem threshold zur border ist? Wie abbrechen?
-
+        const moveCanvasToShowDragged = (selectedChild) => {
             if (
-                bounding.right - bounding.width / 2 >
-                nodeEditor.value.getBoundingClientRect().width
+                selectedChild.offsetLeft +
+                    selectedChild.getBoundingClientRect().width >
+                    nodeEditor.value.scrollWidth &&
+                draggedStep.value
             ) {
+                width.value = nodeCanvas.value.scrollWidth
                 nodeEditor.value.scrollLeft = nodeEditor.value.scrollWidth
             }
 
             if (
-                bounding.bottom >
-                nodeEditor.value.getBoundingClientRect().height
+                selectedChild.offsetTop +
+                    selectedChild.getBoundingClientRect().height >
+                    nodeEditor.value.scrollHeight &&
+                draggedStep.value
             ) {
+                height.value = nodeCanvas.value.scrollHeight
                 nodeEditor.value.scrollTop = nodeEditor.value.scrollHeight
             }
         }
@@ -651,22 +650,22 @@ export default {
             await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
             refreshSteps()
             /*
-            const step = store.state.surveys.survey.steps.find(
-                (step) => step.id === stepId,
-            )
-            if (
-                (step && !step.previousSteps) ||
-                (step && step.previousSteps.length === 0)
-                await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
-            refreshSteps()
-            ) {
-            } else {
-                store.dispatch('notifications/add', {
-                    type: TYPES.ERROR,
-                    message: 'notification_error_startstep_previous',
-                })
-            }
-            */
+      const step = store.state.surveys.survey.steps.find(
+          (step) => step.id === stepId,
+      )
+      if (
+          (step && !step.previousSteps) ||
+          (step && step.previousSteps.length === 0)
+          await SURVEYS.surveyStepSetStartStep(props.surveyId, stepId)
+      refreshSteps()
+      ) {
+      } else {
+          store.dispatch('notifications/add', {
+              type: TYPES.ERROR,
+              message: 'notification_error_startstep_previous',
+          })
+      }
+      */
         }
 
         const updateStepParams = async () => {
@@ -773,9 +772,9 @@ export default {
                         ?.surveyElementType,
                 ) ||
                 /*
-                                    TODO: tooltip
-                                    multiple choice && min===max===1
-                                    */
+                              TODO: tooltip
+                              multiple choice && min===max===1
+                              */
                 (props.steps.find((x) => x.id === step.id)
                     ?.surveyElementType === 'multipleChoice' &&
                     !(
@@ -793,9 +792,9 @@ export default {
                         ).params.maxSelectable === 1
                     )) ||
                 /*
-                                    TODO: tooltip
-                                    is time based next step
-                                    */
+                              TODO: tooltip
+                              is time based next step
+                              */
                 props.steps.find((item) => {
                     let found = false
                     item.timeBasedSteps?.forEach((timeBasedStep) => {
