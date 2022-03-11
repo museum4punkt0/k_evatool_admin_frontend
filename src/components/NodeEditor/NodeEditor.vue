@@ -449,7 +449,6 @@ export default {
                         }
                     }
                 })
-            console.log(adminLayoutInit)
             store.dispatch('surveys/setSurveyAdminLayout', adminLayoutInit)
         }
 
