@@ -3,8 +3,14 @@
         <div class="mt-2 mb-6">
             <ul>
                 <li>
-                    {{ t('questions', 1) }}:
-                    {{ surveyElementParams?.question[language.code] }}
+                    <div class="flex flex-row gap-1">
+                        {{ t('questions', 1) }}:
+                        <span
+                            v-html="
+                                surveyElementParams?.question[language.code]
+                            "
+                        ></span>
+                    </div>
                 </li>
             </ul>
         </div>
