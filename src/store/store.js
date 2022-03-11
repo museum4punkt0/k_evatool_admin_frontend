@@ -29,10 +29,14 @@ export default createStore({
         languageCode: localStorage.getItem('languageCode')
             ? localStorage.getItem('languageCode')
             : 'de',
+        appInfo: null,
     },
     mutations: {
         setApp(state, app) {
             state.app = app
+        },
+        setAppInfo(state, appInfo) {
+            state.appInfo = appInfo
         },
         setLanguageCode(state, languageCode) {
             state.languageCode = languageCode
@@ -41,7 +45,12 @@ export default createStore({
     actions: {
         async getApp({ commit }) {
             const app = await APP.getApp()
-            commit('setApp', app)
+            if (app.status && app.status === 'warning') {
+                commit('setAppInfo', app)
+            } else {
+                commit('setApp', app)
+                commit('setAppInfo', { message: 'app ready', status: 'ready' })
+            }
         },
         async setLanguageCode({ commit }, languageCode) {
             localStorage.setItem('languageCode', languageCode)

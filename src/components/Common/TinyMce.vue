@@ -48,7 +48,7 @@ export default {
     },
     emits: ['update:text'],
     setup(props, { emit }) {
-        const tinyMceKey = 'c9kxwmlosfk0pm4jnj8j1pm8hzprlnt04hhftgpsnunje615'
+        const tinyMceKey = import.meta.env.VITE_TINY_MCE_API_KEY
         const textLocal = computed({
             get: () => props.text,
             set: (text) => emit('update:text', text),

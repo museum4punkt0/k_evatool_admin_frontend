@@ -6,6 +6,9 @@
                     {{ languages.length }}
                     {{ t('languages', languages.length) }}
                 </h1>
+                <button class="btn-primary">
+                    {{ t('action_add_language') }}
+                </button>
             </div>
             <div class="table-wrap">
                 <table class="table-fixed">

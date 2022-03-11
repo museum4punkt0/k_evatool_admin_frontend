@@ -5,6 +5,7 @@ export default {
     action_add_time_based_step: 'Zeitbasierten Schritt hinzufügen',
     action_add_to_survey: 'Zu Umfrage hinzufügen',
     action_add_emoji: 'Emoji hinzufügen',
+    action_add_language: 'Sprache hinzufügen',
     action_pick_emoji: 'Emoji auswählen',
     action_cancel: 'Abbrechen',
     action_close: 'Schließen',
