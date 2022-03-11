@@ -53,26 +53,67 @@
                                     active
                                         ? 'text-white bg-blue-600'
                                         : 'text-gray-900',
-                                    'cursor-default select-none relative py-2 pl-3 pr-9',
+                                    'cursor-default select-none relative py-2 pl-3 pr-9 flex',
                                 ]"
                             >
-                                <span
-                                    :class="[
-                                        selectedLocal2
-                                            ? 'font-semibold'
-                                            : 'font-normal',
-                                        'block truncate',
-                                        {
-                                            'opacity-50':
-                                                disabledValues.includes(
-                                                    option.id,
-                                                ),
-                                        },
-                                    ]"
-                                >
-                                    {{ option.title }}
-                                </span>
-
+                                <div class="flex flex-col gap-1">
+                                    <div
+                                        class="flex flex-row gap-2"
+                                    >
+                                        <span
+                                            :class="[
+                                                selectedLocal2
+                                                    ? 'font-semibold'
+                                                    : 'font-normal',
+                                                'block truncate',
+                                                {
+                                                    'opacity-50':
+                                                        disabledValues.includes(
+                                                            option.id,
+                                                        ),
+                                                },
+                                            ]"
+                                        >
+                                            {{ option.title }}
+                                        </span>
+                                        <span
+                                            v-if="
+                                                valueKey === 'id' &&
+                                                option.id !== -1 &&
+                                                option.id !== 'stars' &&
+                                                option.id !== 'grades' &&
+                                                option.id !== 'neutral'
+                                            "
+                                            :class="[
+                                                selectedLocal2
+                                                    ? 'font-semibold'
+                                                    : 'font-normal',
+                                                'block truncate text-xs align-bottom inline-block leading-5 opacity-50',
+                                                {
+                                                    'opacity-50':
+                                                        disabledValues.includes(
+                                                            option.id,
+                                                        ),
+                                                },
+                                            ]"
+                                        >
+                                            {{ getAdditional(option.id).type }}
+                                        </span>
+                                    </div>
+                                    <div
+                                        v-if="
+                                            option.surveyElementType !==
+                                                'video' &&
+                                            valueKey === 'id' &&
+                                            option.id !== -1 &&
+                                            option.id !== 'stars' &&
+                                            option.id !== 'grades' &&
+                                            option.id !== 'neutral'
+                                        "
+                                        class="text-xs"
+                                        v-html="getAdditional(option.id).desc"
+                                    ></div>
+                                </div>
                                 <span
                                     v-if="selectedLocal2"
                                     :class="[
@@ -105,6 +146,7 @@ import {
 } from '@headlessui/vue'
 
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
+import { useStore } from 'vuex'
 
 export default {
     name: 'FormSelect',
@@ -122,7 +164,7 @@ export default {
         label: { type: String, default: 'label' },
         titleKey: { type: String, default: 'title' },
         valueKey: { type: String, default: 'value' },
-        defaultValue: { type: [String, Number], default: null },
+        defaultValue: { type: [String, Number], default: -1 },
         defaultTitle: { type: String, default: 'Nicht ausgewählt' },
         titleGetter: { type: Function, default: null },
         useDefault: { type: Boolean, default: true },
@@ -142,6 +184,10 @@ export default {
     },
     emits: ['update:selected'],
     setup(props, { emit }) {
+        const store = useStore()
+
+        //TODO: fix display with <p> tag
+
         const localOptions = computed({
             get: () => {
                 const localOptions2 = [...props.options].map((option) => {
@@ -164,21 +210,154 @@ export default {
             },
         })
 
-        /*const localOptions = [...props.options].map((option) => {
-        return {
-            title: option[props.titleKey],
-            id: option[props.valueKey],
-        }
-    })*/
-
         const selectedLocal = computed({
             get: () => props.selected || props.defaultValue,
-            set: (val) => emit('update:selected', val),
+            set: (val) => {
+                console.log(val)
+                emit('update:selected', val)
+            },
         })
+
+        const getAdditional = (surveyElementId) => {
+            const idInOptions = props.options.find(
+                (e) => e.id === surveyElementId,
+            ).surveyElementId
+            const element = store.state.surveyElements.surveyElements.find(
+                (e) => e.id === idInOptions,
+            )
+
+            if (element?.surveyElementType !== 'video') {
+                const clearedString = shortenQuestion(
+                    getLangString(
+                        element?.params?.question
+                            ? element?.params?.question
+                            : element?.params?.text,
+                    ),
+                )
+
+                const type = getTypeDisplay(element?.surveyElementType)
+
+                return {
+                    desc: clearedString,
+                    type: type,
+                }
+            } else {
+                return {
+                    desc: '',
+                    name: '',
+                }
+            }
+        }
+
+        const getLangString = (obj) => {
+            try {
+                if (
+                    obj[store.state.languageCode] !== undefined &&
+                    obj !== undefined &&
+                    obj !== null
+                ) {
+                    return obj[store.state.languageCode]
+                } else {
+                    if (store.state.languageCode === 'en') {
+                        return obj?.de
+                    } else {
+                        return obj?.en
+                    }
+                }
+            } catch (e) {
+                return ''
+            }
+        }
+
+        const htmlDecode = (input) => {
+            const doc = new DOMParser().parseFromString(input, 'text/html')
+            return doc.documentElement.textContent
+        }
+
+        const shortenQuestion = (text) => {
+            const maxStringLength = 25
+            const newString = htmlDecode(text)
+
+            if (newString.length > maxStringLength) {
+                return newString.substring(0, maxStringLength) + '...'
+            }
+            return newString
+        }
+
+        const langPack = {
+            binary: {
+                de: 'Binäre Auswahl',
+                en: 'Binary selection',
+            },
+            emoji: {
+                de: 'Emojis',
+                en: 'Emojis',
+            },
+            multipleChoice: {
+                de: 'Muliple-Choice',
+                en: 'Muliple Choice',
+            },
+            simpleText: {
+                de: 'Infotext',
+                en: 'Informational text',
+            },
+            scales: {
+                de: 'Skalen',
+                en: 'Scales',
+            },
+            textInput: {
+                de: 'Freitext-Frage',
+                en: 'Text input',
+            },
+            video: {
+                de: 'Video',
+                en: 'Video',
+            },
+            voiceInput: {
+                de: 'Sprach-Eingabe',
+                en: 'Voice input',
+            },
+            yayNay: {
+                de: 'Bilder swipen',
+                en: 'Image swipe',
+            },
+        }
+
+        const getTypeDisplay = (type) => {
+            const displayLang = store.state.languageCode
+                ? store.state.languageCode
+                : 'de'
+
+            switch (type) {
+                case 'binary':
+                    return langPack.binary[displayLang]
+                case 'emoji':
+                    return langPack.emoji[displayLang]
+                case 'multipleChoice':
+                    return langPack.multipleChoice[displayLang]
+                case 'simpleText':
+                    return langPack.simpleText[displayLang]
+                case 'starRating':
+                    return langPack.scales[displayLang]
+                case 'textInput':
+                    return langPack.textInput[displayLang]
+                case 'video':
+                    return langPack.video[displayLang]
+                case 'voiceInput':
+                    return langPack.voiceInput[displayLang]
+                case 'yayNay':
+                    return langPack.yayNay[displayLang]
+                default:
+                    return ''
+            }
+        }
 
         return {
             selectedLocal,
             localOptions,
+            getAdditional,
+            shortenQuestion,
+            htmlDecode,
         }
     },
 }
