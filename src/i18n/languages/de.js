@@ -69,7 +69,7 @@ export default {
     emojis: 'Emojis | Emoji | Emojis',
     error_emoji_already_in_use: 'Emoji oder Bedeutung wird bereits verwendet',
     email: 'E-Mail',
-    elements: 'Umfragen-elemente | Umfragen-element | Umfragen-elemente',
+    elements: 'Umfragen-Elemente | Umfragen-Element | Umfragen-Elemente',
     end: 'Ende',
     export_type: 'Export-Format',
     filename: 'Dateiname',
@@ -199,6 +199,9 @@ export default {
         'Video wird bei Anzeige der Frage angehalten.',
     tooltip_time_based_steps_modal_stop_time:
         'Frage wird für die angezeigte Zeit geöffnet.',
+    tooltip_warning_cannot_edit_step_due_to_result:
+        'Element kann nicht verändert werden, da es bereits Ergebnisse enthält (evtl. auch in einer anderen' +
+        ' Umfrage)',
     transcriptions: 'Transkriptionen | Transkription | Transkriptionen',
     types: 'Typen | Typ | Typen',
     users: 'Benutzer | Benutzer | Benutzer',

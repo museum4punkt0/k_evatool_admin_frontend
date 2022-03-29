@@ -22,6 +22,16 @@
             /> -->
 
             <div class="flex flex-row mt-4">
+                <form-select
+                    v-model:selected="surveyStep.surveyElementId"
+                    :options="surveyElements"
+                    title-key="name"
+                    value-key="id"
+                    class="flex-1"
+                    :default-value="-1"
+                    :label="t('elements', 1)"
+                />
+
                 <template
                     v-if="
                         surveyElements.find(
@@ -29,15 +39,6 @@
                         )?.resultCount === 0
                     "
                 >
-                    <form-select
-                        v-model:selected="surveyStep.surveyElementId"
-                        :options="surveyElements"
-                        title-key="name"
-                        value-key="id"
-                        class="flex-1"
-                        :default-value="-1"
-                        :label="t('elements', 1)"
-                    />
                     <action-button
                         v-if="surveyStep.surveyElementId > 0"
                         class="mt-6 ml-6"
@@ -47,16 +48,31 @@
                         <PencilIcon class="h-5 w-5" />
                     </action-button>
                 </template>
-                <div v-else class="flex flex-col">
-                    <label for="">{{ t('elements', 1) }}</label>
-                    <p class="px-3 py-2">
+
+                <template v-else>
+                    <action-button
+                        v-if="surveyStep.surveyElementId > 0"
+                        v-tippy="
+                            t('tooltip_warning_cannot_edit_step_due_to_result')
+                        "
+                        class="mt-6 ml-6"
+                        color="secondary"
+                        @execute="cloneSurveyElement"
+                    >
+                        <DuplicateIcon class="h-5 w-5" />
+                    </action-button>
+                </template>
+
+                <!--                <div v-else class="flex flex-col">
+                    <label>{{ t('elements', 1) }}</label>
+                    <p class="px-0 py-2">
                         {{
                             surveyElements.find(
                                 (x) => x.id === surveyStep.surveyElementId,
                             )?.name
                         }}
                     </p>
-                </div>
+                </div>-->
             </div>
 
             <div class="flex flex-row mt-2">
@@ -145,7 +161,12 @@ import { useI18n } from 'vue-i18n'
 
 import SURVEY_SERVICE from '../../services/surveyService'
 import { useRoute } from 'vue-router'
-import { PencilIcon, TrashIcon, SaveIcon } from '@heroicons/vue/outline'
+import {
+    PencilIcon,
+    TrashIcon,
+    SaveIcon,
+    DuplicateIcon,
+} from '@heroicons/vue/outline'
 
 export default {
     name: 'SurveyStep',
@@ -159,6 +180,7 @@ export default {
         PencilIcon,
         TrashIcon,
         SaveIcon,
+        DuplicateIcon,
     },
     emits: ['saved', 'deleted', 'cancel'],
     setup(props, { emit }) {
@@ -267,6 +289,10 @@ export default {
             }
         }
 
+        const cloneSurveyElement = () => {
+            alert('Functionality not implemented yet!')
+        }
+
         return {
             v$: useVuelidate(),
             surveyStep,
@@ -275,6 +301,7 @@ export default {
             store,
             saveSurveyStep,
             editSurveyElement,
+            cloneSurveyElement,
             deleteSurveyStep,
             t,
             newSurveyElement,

@@ -21,6 +21,8 @@ export default {
     surveys_completed:
         'Completed surveys | Completed survey | Completed surveys',
     titles: 'titles | title | titles',
+    tooltip_warning_cannot_edit_step_due_to_result:
+        'Element cannot be edited as it contains live results (might be from another survey)',
     types: 'types | type | types',
     warning_cannot_delete_if_first_step:
         "Cannot be deleted as this step is the survey's starting point.",
