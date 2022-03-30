@@ -88,6 +88,8 @@ export default {
     label_highest_value: 'Beschriftung größter Wert',
     label_timestamp_value: 'Zeitpunkt im Video',
     language_default: 'Standardsprache',
+    language_english: 'English',
+    language_german: 'Deutsch',
     languages: 'Sprachen | Sprache | Sprachen',
     last_login: 'Letzter Login',
     loading_app: 'App wird geladen',

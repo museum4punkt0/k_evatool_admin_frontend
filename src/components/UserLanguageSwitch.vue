@@ -1,23 +1,24 @@
 <template>
     <div>
         <button
-            class="mr-2"
+            v-if="languageCode === 'en'"
             :class="{
                 primary: languageCode === 'de',
                 secondary: languageCode !== 'de',
             }"
             @click="setLanguageCode('de')"
         >
-            deutsch
+            {{ t('language_german') }}
         </button>
         <button
+            v-if="languageCode === 'de'"
             :class="{
                 primary: languageCode === 'en',
                 secondary: languageCode !== 'en',
             }"
             @click="setLanguageCode('en')"
         >
-            english
+            {{ t('language_english') }}
         </button>
     </div>
 </template>

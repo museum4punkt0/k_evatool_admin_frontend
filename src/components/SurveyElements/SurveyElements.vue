@@ -42,12 +42,10 @@
             <div class="table-wrap mt-3">
                 <table>
                     <thead>
-                        <tr>
+                        <tr class="capitalize">
                             <th>ID</th>
                             <th>{{ t('names', 1) }}</th>
-                            <th>
-                                <!--                                {{ t('types', 1) }}-->
-                            </th>
+                            <th></th>
                             <th># {{ t('steps', 2) }}</th>
                             <th># {{ t('surveys', 2) }}</th>
                             <th>
@@ -71,7 +69,7 @@
                             <td class="text-lg">{{ surveyElement.id }}</td>
                             <td>
                                 {{ surveyElement.name }}
-                                <p class="text-sm text-gray-500">
+                                <p class="text-sm text-gray-500 capitalize">
                                     {{ t('types', 1) }}:
                                     {{
                                         store.getters[

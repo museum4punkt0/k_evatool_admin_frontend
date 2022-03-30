@@ -9,6 +9,8 @@ export default {
     filename: 'filename',
     filesize: 'filesize',
     languages: 'languages | language | languages',
+    language_english: 'English',
+    language_german: 'Deutsch',
     names: 'names | name | names',
     none_selected: 'none selected',
     notice_same_ratio_and_orientation:

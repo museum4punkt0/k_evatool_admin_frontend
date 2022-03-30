@@ -2,10 +2,6 @@
     <div class="flex flex-1 overflow-hidden">
         <main class="flex h-full flex-col p-3 w-2/3">
             <div class="flex flex-row justify-between">
-                <!-- <h1 v-if="store.state.assets?.assets" class="mb-3">
-                    {{ store.state.assets.assets.length }}
-                    {{ t('assets', store.state.assets.assets.length) }}
-                </h1> -->
                 <h1
                     v-if="
                         filteredAssets.length > 0 &&
