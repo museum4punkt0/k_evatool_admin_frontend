@@ -143,6 +143,7 @@ export default {
     filter: 'Filter',
     show_demo_data_only: 'Nur Demodaten anzeigen',
     use_demo_data_only: 'Nur Demodaten verwenden',
+    single_step_access: 'Einzelzugriff',
     slugs: 'Slugs | Slug | Slugs',
     speech_to_text_service: 'Speech-To-Text-Service',
     state_published: 'Veröffentlicht',

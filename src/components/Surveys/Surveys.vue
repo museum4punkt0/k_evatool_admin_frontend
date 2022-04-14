@@ -48,6 +48,9 @@
                         <tr>
                             <th>ID</th>
                             <th>{{ t('names', 1) }}</th>
+                            <th class="justify-center">
+                                {{ t('single_step_access') }}
+                            </th>
                             <th>Status</th>
                             <th>#&nbsp;{{ t('steps', 2) }}</th>
                             <th>
@@ -84,6 +87,12 @@
                                 <div class="text-sm text-gray-500">
                                     {{ survey.description }}
                                 </div>
+                            </td>
+                            <td class="justify-center">
+                                <check-icon
+                                    v-if="survey.singleStepAccess"
+                                    class="h-5 w-5"
+                                />
                             </td>
                             <td>
                                 <published-state
@@ -161,6 +170,7 @@ import {
     TrashIcon,
     PencilAltIcon,
     EyeIcon,
+    CheckIcon,
     ChartBarIcon,
     DocumentDuplicateIcon,
 } from '@heroicons/vue/outline'
@@ -185,6 +195,7 @@ export default {
         SurveyDetails,
         TrashIcon,
         EyeIcon,
+        CheckIcon,
         PencilAltIcon,
         ChartBarIcon,
         DocumentDuplicateIcon,
