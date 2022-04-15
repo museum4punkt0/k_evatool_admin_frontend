@@ -38,6 +38,7 @@
         type="text"
         :label="t('slugs', 1)"
     />
+
     <form-checkbox
         v-model:value="survey.languages"
         v-tippy="{
@@ -58,6 +59,13 @@
     />
     <!-- <label for="description">{{ t('descriptions', 1) }}</label> -->
     <!-- <tiny-mce v-model:text="survey.description" name="description" /> -->
+
+    <form-toggle
+        v-model:enabled="survey.singleStepAccess"
+        class="mt-3"
+        :label="t('single_step_access')"
+    />
+
     <div class="flex flex-row mt-8">
         <action-button
             :action-text="t('action_cancel')"
@@ -96,10 +104,12 @@ import FormCheckbox from '../Forms/FormCheckbox.vue'
 import TinyMce from '../Common/TinyMce.vue'
 import { useState } from '../../composables/state'
 import { PencilIcon } from '@heroicons/vue/outline'
+import FormToggle from '../Forms/FormToggle.vue'
 
 export default {
     name: 'SurveyDetails',
     components: {
+        FormToggle,
         FormCheckbox,
         FormInput,
         ActionButton,
