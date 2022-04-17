@@ -122,8 +122,10 @@ export default {
         'Neues Umfrage-Element erstellt.<br> Es kann nun hinzugefügt werden.',
     notification_success_survey_step_added:
         'Neuer Umfrage-Schritt eingefügt.<br> Er kann nun verknüpft werden.',
+    notification_success_step_link_copied:
+        'Der Step-Link wurde erfolgreich in die Zwischenablage kopiert',
     notification_success_survey_link_copied:
-        'Yay, der Survey Link wurde erfolgreich in die Zwischenablage kopiert',
+        'Der Survey Link wurde erfolgreich in die Zwischenablage kopiert',
     notification_warning_headline: 'Achtung',
     number_of_results: 'Ergebnis-Anzahl',
     number_of_stars: 'Anzahl der Sterne',

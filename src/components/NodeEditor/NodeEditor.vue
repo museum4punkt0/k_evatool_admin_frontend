@@ -267,6 +267,24 @@
                         </div>
                     </button>
                     <button
+                        v-if="
+                            steps?.find((x) => x?.id === step?.id)?.singleAccess
+                        "
+                        v-tippy="{
+                            content: t('tooltip_direct_access_link'),
+                        }"
+                        class="flex-1 w-8 pointer"
+                        @click.prevent.stop="
+                            copyDirectAccessLink(
+                                steps?.find((x) => x?.id === step?.id)?.slug,
+                            )
+                        "
+                    >
+                        <div class="flex h-full justify-center items-center">
+                            <ExternalLinkIcon class="h-4 w-4" />
+                        </div>
+                    </button>
+                    <button
                         v-tippy="{
                             content: t('tooltip_set_next_step'),
                         }"
@@ -314,6 +332,7 @@ import {
     SwitchHorizontalIcon,
     ZoomInIcon,
     ZoomOutIcon,
+    ExternalLinkIcon,
 } from '@heroicons/vue/outline'
 import { StarIcon } from '@heroicons/vue/solid'
 
@@ -323,6 +342,7 @@ import ElementContent from './ElementContent.vue'
 import ElementTimeBasedStepsPreview from './ElementTimeBasedStepsPreview.vue'
 
 import SURVEYS from '../../services/surveyService'
+import { TYPES as NOTIFICATION_TYPES } from '../../store/notifications'
 
 export default {
     name: 'NodeEditor',
@@ -338,6 +358,7 @@ export default {
         FastForwardIcon,
         StarIcon,
         SwitchHorizontalIcon,
+        ExternalLinkIcon,
         ElementContent,
         ZoomInIcon,
         ZoomOutIcon,
@@ -409,7 +430,10 @@ export default {
             props.steps
                 .filter((x) => !x.parentStepId)
                 .forEach((step) => {
-                    const tmpPlaceArray = [...adminLayoutInit, ...props.adminLayout]
+                    const tmpPlaceArray = [
+                        ...adminLayoutInit,
+                        ...props.adminLayout,
+                    ]
 
                     tmpPlaceArray.sort((a, b) => {
                         return a.id < b.id ? -1 : 1
@@ -835,6 +859,21 @@ export default {
             })
         }
 
+        const copyDirectAccessLink = (slug) => {
+            const text = `${import.meta.env.VITE_PREVIEW_URL}/#/?step=${slug}`
+            navigator.clipboard
+                .writeText(text)
+                .then(() => {
+                    store.dispatch('notifications/add', {
+                        type: NOTIFICATION_TYPES.SUCCESS,
+                        message: 'notification_success_step_link_copied',
+                    })
+                })
+                .catch((err) => {
+                    console.error('Async: Could not copy text: ', err)
+                })
+        }
+
         /** WATCHER **/
         watch(
             () => timeBasedModalIsOpen.value,
@@ -910,6 +949,7 @@ export default {
             zoom,
             zoomFactor,
             zoomToStartpoint,
+            copyDirectAccessLink,
         }
     },
 }
