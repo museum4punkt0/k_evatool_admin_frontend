@@ -36,8 +36,9 @@ export default {
     },
     props: {
         icon: {
-            type: String,
-            default: '',
+            type: Function,
+            default: () => {},
+            required: true,
         },
         title: {
             type: String,
