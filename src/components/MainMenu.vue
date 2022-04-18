@@ -12,20 +12,24 @@
                 v-if="store.state.users.user"
                 class="flex-1 mt-6 w-full px-2 space-y-1"
             >
-                <router-link
-                    v-for="item in sidebarNavigation"
-                    :key="item.name"
-                    :to="item.href"
-                    class="text-blue-100 hover:bg-blue-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium"
-                    :aria-current="item.current ? 'page' : undefined"
-                >
-                    <component
-                        :is="item.icon"
-                        :class="['h-6 w-6']"
-                        aria-hidden="true"
-                    />
-                    <span class="mt-2 text-center">{{ item.name }}</span>
-                </router-link>
+                <template v-for="item in sidebarNavigation" :key="item.name">
+                    <router-link
+                        v-if="
+                            !item.admin ||
+                            (item.admin && store.state.users.user.admin)
+                        "
+                        :to="item.href"
+                        class="text-blue-100 hover:bg-blue-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium"
+                        :aria-current="item.current ? 'page' : undefined"
+                    >
+                        <component
+                            :is="item.icon"
+                            :class="['h-6 w-6']"
+                            aria-hidden="true"
+                        />
+                        <span class="mt-2 text-center">{{ item.name }}</span>
+                    </router-link>
+                </template>
             </div>
         </div>
     </div>
@@ -153,9 +157,10 @@ import {
     PresentationChartLineIcon,
     UsersIcon,
     GlobeAltIcon,
+    CogIcon,
+    XIcon,
 } from '@heroicons/vue/outline'
 
-import { XIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -164,6 +169,7 @@ export default {
     name: 'MainMenu',
     components: {
         ChartBarIcon,
+        CogIcon,
         TransitionRoot,
         TransitionChild,
         XIcon,
@@ -209,6 +215,12 @@ export default {
                 name: t('stats', 2),
                 href: '/stats',
                 icon: ChartBarIcon,
+            },
+            {
+                name: t('survey_settings', 2),
+                href: '/settings',
+                icon: CogIcon,
+                admin: true,
             },
         ]
 

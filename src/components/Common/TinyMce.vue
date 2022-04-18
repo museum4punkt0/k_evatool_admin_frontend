@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
         <label class="flex-grow">{{ label }}</label>
-        <language-switch-small />
+        <language-switch-small v-if="languageSwitch" />
     </div>
     <div :class="invalid ? 'invalid' : ''">
         <editor
@@ -42,6 +42,10 @@ export default {
             default: '',
         },
         invalid: {
+            type: Boolean,
+            default: false,
+        },
+        languageSwitch: {
             type: Boolean,
             default: false,
         },
