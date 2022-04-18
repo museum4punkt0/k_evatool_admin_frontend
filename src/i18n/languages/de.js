@@ -184,6 +184,7 @@ export default {
     titles: 'Titel | Titel | Titel',
     to: 'bis',
     tooltip_set_start_step: 'Startelement festlegen',
+    tooltip_direct_access_link: 'Direktlink in Zwischenablage kopieren',
     tooltip_edit_step: 'Schritt bearbeiten',
     tooltip_save_result_content:
         'Speichert die angezeigte Auswertung als PNG ab.',
