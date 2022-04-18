@@ -27,6 +27,12 @@ export default {
             commit('setSetting', savedSetting)
             return savedSetting
         },
+        async deleteSetting({ commit }, settingId) {
+            const deletedSetting = await surveySettingsService.deleteSetting(
+                settingId,
+            )
+            commit('setSetting', deletedSetting)
+        },
     },
     getters: {},
 }

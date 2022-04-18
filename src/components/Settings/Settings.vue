@@ -27,12 +27,19 @@
                         >
                             <td>{{ setting.id }}</td>
                             <td>{{ setting.name }}</td>
-                            <td>{{ setting.surveysCount }}</td>
+                            <td>{{ setting.surveyCount }}</td>
                             <td class="px-6 py-4 flex flex-row">
                                 <PencilAltIcon
                                     class="mx-1 h-5 w-5 pointer"
                                     @click.prevent.stop="
                                         editSetting(setting.id)
+                                    "
+                                />
+                                <TrashIcon
+                                    v-if="setting.surveyCount === 0"
+                                    class="mx-1 h-5 w-5 pointer"
+                                    @click.prevent.stop="
+                                        deleteSetting(setting.id)
                                     "
                                 />
                             </td>
@@ -46,7 +53,7 @@
 
 <script>
 import PublishedState from '../Common/PublishedState.vue'
-import { CheckIcon, PencilAltIcon } from '@heroicons/vue/outline'
+import { CheckIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/outline'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -57,6 +64,7 @@ export default {
         PublishedState,
         CheckIcon,
         PencilAltIcon,
+        TrashIcon,
     },
     setup() {
         const store = useStore()
@@ -73,6 +81,13 @@ export default {
             router.push('/settings/' + settingId)
         }
 
+        const deleteSetting = (settingId) => {
+            const confirmDelete = confirm(t('confirm_delete_setting'))
+            if (confirmDelete) {
+                store.dispatch('surveySettings/deleteSetting', settingId)
+            }
+        }
+
         const newSetting = () => {
             router.push('/settings/0')
         }
@@ -82,6 +97,7 @@ export default {
             store,
             t,
             editSetting,
+            deleteSetting,
             newSetting,
         }
     },

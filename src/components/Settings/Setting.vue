@@ -30,17 +30,26 @@
                 name="name"
                 :label="t('names', 1)"
             />
-
             <template v-if="settingId > 0">
                 <hr class="mt-5 my-4" />
                 <language-switch-small />
 
-                <form-input
-                    v-model:value="setting.setting.companyName[language]"
-                    class="mb-4"
-                    :label="t('settings_company_name')"
-                    name="companyName"
-                />
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <form-input
+                        v-model:value="setting.setting.companyName[language]"
+                        class="mb-4"
+                        :label="t('settings_company_name')"
+                        name="companyName"
+                    />
+
+                    <form-input
+                        v-model:value="setting.setting.pageTitle[language]"
+                        class="mb-4"
+                        :label="t('settings_page_title')"
+                        name="pageTitle"
+                    />
+                </div>
+
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <tiny-mce
@@ -49,9 +58,7 @@
                         />
 
                         <form-input
-                            v-model:value="
-                                setting.setting.imprintLink[language]
-                            "
+                            v-model:value="setting.setting.imprintLink"
                             class="mt-4"
                             :label="t('settings_imprint_url')"
                             name="imprintLink"
@@ -65,9 +72,7 @@
                         />
 
                         <form-input
-                            v-model:value="
-                                setting.setting.privacyLink[language]
-                            "
+                            v-model:value="setting.setting.privacyLink"
                             class="mt-4"
                             :label="t('settings_privacy_url')"
                             name="privacyLink"
@@ -102,7 +107,7 @@
         </main>
         <aside class="text-xs">
             <pre v-if="store.state.users?.user?.admin" class="mt-6">{{
-                setting
+                savedSetting
             }}</pre>
         </aside>
     </div>
@@ -120,6 +125,7 @@ import { useRoute, useRouter } from 'vue-router'
 import settingsService from '../../services/settingsService'
 import LanguageSwitchSmall from '../Languages/LanguageSwitchSmall.vue'
 import Uploader from '../Forms/Uploader.vue'
+import _ from 'lodash'
 
 export default {
     name: 'Login',
@@ -139,18 +145,31 @@ export default {
 
         const settingId = ref(route.params.setting_id)
         const setting = ref(null)
+        const savedSetting = ref(null)
 
-        const getKeys = () => {
+        const languages = store.state.languages.languages
+        const emptyLanguageObject = {}
+        languages.map((lang) => {
+            emptyLanguageObject[lang.code] = '123'
+        })
+
+        const getLanguageBasedKeys = () => {
             return {
-                companyName: {},
-                imprint: {},
-                imprintLink: {},
-                privacy: {},
-                privacyLink: {},
-                surveySocialDescription: {},
-                // logoImage: null,
-                // logoAsset: null,
-                // backgroundImage: null,
+                companyName: { ...emptyLanguageObject },
+                pageTitle: { ...emptyLanguageObject },
+                imprint: { ...emptyLanguageObject },
+                privacy: { ...emptyLanguageObject },
+                surveySocialDescription: { ...emptyLanguageObject },
+            }
+        }
+
+        const getNeutralKeys = () => {
+            return {
+                imprintLink: '',
+                privacyLink: '',
+                logoImage: null,
+                logoAsset: null,
+                backgroundImage: null,
             }
         }
 
@@ -172,10 +191,27 @@ export default {
                 setting.value = await settingsService.getSetting(
                     settingId.value,
                 )
-                const keys = getKeys()
-                Object.keys(setting.value.setting).forEach((value) => {
-                    if (!setting.value[value]) {
-                        setting.value.setting[value] = keys[value]
+
+                savedSetting.value = _.cloneDeep(setting.value)
+
+                // set language based default values
+                const languageBasedKeys = getLanguageBasedKeys()
+                Object.keys(languageBasedKeys).forEach((key) => {
+                    if (!setting.value.setting[key]) {
+                        setting.value.setting[key] = languageBasedKeys[key]
+                    }
+                    languages.forEach((lang) => {
+                        if (!setting.value.setting[key][lang.code]) {
+                            setting.value.setting[key][lang.code] = ''
+                        }
+                    })
+                })
+
+                // set neutral default values
+                const neutralKeys = getNeutralKeys()
+                Object.keys(neutralKeys).forEach((key) => {
+                    if (!setting.value.setting[key]) {
+                        setting.value.setting[key] = neutralKeys[key]
                     }
                 })
             } else {
@@ -207,8 +243,9 @@ export default {
             if (savedSetting.id && parseInt(settingId.value) === 0) {
                 settingId.value = savedSetting.id
                 await router.push('/settings/' + savedSetting.id)
-                await getSetting()
             }
+
+            await getSetting()
 
             isSaving.value = false
         }
@@ -229,6 +266,7 @@ export default {
             saveSetting,
             language,
             isSaving,
+            savedSetting,
             logoMetaPayload,
             iconMetaPayload,
             backgroundMetaPayload,
