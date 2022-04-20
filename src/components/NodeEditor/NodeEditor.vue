@@ -1,11 +1,17 @@
 <template>
     <div
         ref="nodeEditor"
-        class="node-editor-wrap relative bg-blue-300 rounded-lg"
+        class="node-editor-wrap relative bg-blue-300 rounded-lg overflow-auto"
         @mousemove="onMouseMove"
         @mouseup="onMouseUp"
         @mouseleave="onMouseUp"
     >
+        <div
+            v-if="archivedRef"
+            ref="maxLength"
+            class="w-full h-full absolute opacity-0 bg-black z-10"
+            @mousedown="handleClickInArchive"
+        ></div>
         <div class="zoom-menu m-1 fixed bg-gray-500 bg-opacity-50 rounded-lg">
             <button
                 class="pointer disabled:opacity-50"
@@ -304,6 +310,19 @@
             </div>
         </div>
     </div>
+    <div
+        ref="infoToast"
+        class="shadow-lg w-auto p-4 h-auto bg-white absolute bottom-0 left-8 rounded-lg translate-y-28 flex flex-row gap-3 z-10 items-center"
+        @click="endAnimation"
+    >
+        <ExclamationCircleIcon class="w-7 h-7" />
+        <div class="flex flex-col gap-2">
+            <p class="text-black">{{ $t('archive_no_edit') }}</p>
+            <div class="h-[1px] w-full bg-black"></div>
+            <p class="text-xs">{{ $t('archive_explanation') }}</p>
+        </div>
+    </div>
+
     <time-based-steps-modal
         v-if="timeBasedModalStepId > 0 && timeBasedModalIsOpen"
         v-model:is-open="timeBasedModalIsOpen"
@@ -316,7 +335,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch, toRef, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { debounce } from 'lodash'
@@ -327,6 +346,7 @@ import {
     ArrowUpIcon,
     ArrowDownIcon,
     ClockIcon,
+    ExclamationCircleIcon,
     PencilIcon,
     FastForwardIcon,
     SwitchHorizontalIcon,
@@ -354,6 +374,7 @@ export default {
         ClockIcon,
         ArrowUpIcon,
         ArrowDownIcon,
+        ExclamationCircleIcon,
         PencilIcon,
         FastForwardIcon,
         StarIcon,
@@ -376,6 +397,10 @@ export default {
             type: Number,
             default: -1,
         },
+        archived: {
+            type: Boolean,
+            required: true,
+        },
     },
     emits: ['updated'],
     setup: function (props, { emit }) {
@@ -396,9 +421,14 @@ export default {
         const stepTimecodes = ref({})
         const nodeEditor = ref(null)
         const nodeCanvas = ref(null)
+        const maxLength = ref(null)
         const height = ref(0)
         const width = ref(0)
         const zoomFactor = ref(1)
+        const infoToast = ref(null)
+        const animationRef = ref(null)
+
+        const archivedRef = toRef(props, 'archived')
 
         /** COMPUTED PROPERTIES **/
         const surveyStepId = computed(() => store.state.surveys.surveyStepId)
@@ -561,6 +591,25 @@ export default {
         const setCanvasSize = () => {
             height.value = nodeCanvas.value.scrollHeight
             width.value = nodeCanvas.value.scrollWidth
+
+            if (archivedRef.value) {
+                nextTick(() => {
+                    maxLength.value.style.height =
+                        Math.max(
+                            height.value,
+                            parseInt(
+                                nodeEditor.value.getBoundingClientRect().height,
+                            ),
+                        ) + 'px'
+                    maxLength.value.style.width =
+                        Math.max(
+                            width.value,
+                            parseInt(
+                                nodeEditor.value.getBoundingClientRect().width,
+                            ),
+                        ) + 'px'
+                })
+            }
         }
 
         const selectSurveyStep = async (stepId) => {
@@ -874,6 +923,34 @@ export default {
                 })
         }
 
+        const handleClickInArchive = () => {
+            if (animationRef.value === null) {
+                animationRef.value = infoToast.value.animate(
+                    [
+                        { transform: 'translateY(5vh)', opacity: 0 },
+                        {
+                            transform: 'translateY(-5vh)',
+                            opacity: 1,
+                            offset: 0.1,
+                        },
+                        {
+                            transform: 'translateY(-5vh)',
+                            opacity: 1,
+                            offset: 0.9,
+                        },
+                        { transform: 'translateY(5vh)', opacity: 0 },
+                    ],
+                    {
+                        fill: 'forwards',
+                        duration: 8000,
+                    },
+                )
+                animationRef.value.onfinish = () => (animationRef.value = null)
+            }
+        }
+
+        const endAnimation = () => animationRef.value.reverse()
+
         /** WATCHER **/
         watch(
             () => timeBasedModalIsOpen.value,
@@ -908,17 +985,29 @@ export default {
             },
             { deep: true },
         )
+        watch(
+            () => archivedRef.value,
+            () => {
+                setCanvasSize()
+                console.log(archivedRef.value)
+            },
+        )
 
         return {
+            archivedRef,
             connections,
             defaultLanguage,
             deselectStep,
             draggedStep,
+            endAnimation,
+            handleClickInArchive,
             getStepElementPosition,
             hasNextAndPreviousSockets,
             hasResultBasedNextStepsButton,
             hasTimeBasedNextStepsButton,
             height,
+            infoToast,
+            maxLength,
             nodeCanvas,
             nodeEditor,
             onMouseDown,
@@ -959,7 +1048,6 @@ export default {
 .node-editor-wrap {
     width: 100%;
     height: 100%;
-    overflow: auto;
 }
 .node-canvas {
     z-index: 3;

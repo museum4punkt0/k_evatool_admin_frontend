@@ -235,4 +235,8 @@ export default {
     yaynay_negative: 'Negativer Schlüsselwert',
     yaynay_positive_label: 'Positiver Anzeigewert',
     yaynay_negative_label: 'Negativer Anzeigewert',
+    archive: 'Diese Umfrage archivieren',
+    archive_no_edit: 'Eine archivierte Umfrage kann nicht bearbeitet werden',
+    archive_explanation:
+        'Um die Umfrage zu bearbeiten, stellen Sie sie wieder her',
 }

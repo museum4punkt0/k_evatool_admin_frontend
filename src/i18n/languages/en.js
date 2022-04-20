@@ -28,4 +28,7 @@ export default {
     types: 'types | type | types',
     warning_cannot_delete_if_first_step:
         "Cannot be deleted as this step is the survey's starting point.",
+    archive: 'Archive this survey',
+    archive_no_edit: "You cannot edit a survey while it's archived",
+    archive_explanation: 'To edit this survey, unarchive ir',
 }

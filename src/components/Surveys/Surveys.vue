@@ -66,91 +66,11 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr
+                        <SurveyRow
                             v-for="survey in surveys.filter(filter)"
-                            :key="'survey_row_' + survey.id"
-                            @click.prevent.stop="editSurvey(survey.id)"
-                        >
-                            <td class="text-lg">
-                                {{ survey.id }}
-                            </td>
-                            <td>
-                                <div class="text text-gray-900">
-                                    {{ survey.name }}
-                                    <!--                                    <p
-                                        v-if="store.state.users.user.admin"
-                                        class="text-xs text-gray-500"
-                                    >
-                                        {{ survey.slug }}
-                                    </p>-->
-                                </div>
-                                <div class="text-sm text-gray-500">
-                                    {{ survey.description }}
-                                </div>
-                            </td>
-                            <td class="justify-center">
-                                <check-icon
-                                    v-if="survey.singleStepAccess"
-                                    class="h-5 w-5"
-                                />
-                            </td>
-                            <td>
-                                <published-state
-                                    class="pointer"
-                                    :published="survey.published"
-                                    @click.stop.prevent="
-                                        publishSurvey(
-                                            survey.id,
-                                            survey.published,
-                                        )
-                                    "
-                                />
-                            </td>
-                            <td>
-                                {{ survey.surveyStepsCount }}
-                            </td>
-                            <td>
-                                {{ survey.surveyResultsCount }} /
-                                {{ survey.surveyDemoResultsCount }}
-                            </td>
-                            <td class="px-6 py-4 flex flex-row">
-                                <PencilAltIcon
-                                    class="mx-1 h-5 w-5 pointer"
-                                    @click.prevent.stop="editSurvey(survey.id)"
-                                />
-                                <trash-icon
-                                    class="mx-1 h-5 w-5"
-                                    :class="
-                                        survey.surveyStepsCount > 0
-                                            ? 'text-gray-500 cursor-not-allowed'
-                                            : 'text-red-500 pointer'
-                                    "
-                                    @click.prevent.stop="deleteSurvey(survey)"
-                                />
-                                <EyeIcon
-                                    class="mx-1 h-5 w-5 pointer"
-                                    @click.prevent.stop="previewSurvey(survey)"
-                                />
-                                <DocumentDuplicateIcon
-                                    v-if="store.state.users.user.admin"
-                                    class="mx-1 h-5 w-5 pointer"
-                                    @click.prevent.stop="
-                                        duplicateSurvey(survey.id)
-                                    "
-                                />
-                                <ChartBarIcon
-                                    class="mx-1 h-5 w-5"
-                                    :class="
-                                        survey.surveyResultsCount === 0
-                                            ? 'text-gray-500 cursor-not-allowed'
-                                            : 'pointer'
-                                    "
-                                    @click.prevent.stop="
-                                        openSurveyStats(survey)
-                                    "
-                                />
-                            </td>
-                        </tr>
+                            :key="'survey_' + survey.id"
+                            :survey="survey"
+                        />
                     </tbody>
                 </table>
             </div>
@@ -170,42 +90,40 @@ import {
     TrashIcon,
     PencilAltIcon,
     EyeIcon,
-    CheckIcon,
     ChartBarIcon,
     DocumentDuplicateIcon,
 } from '@heroicons/vue/outline'
-import { useRouter } from 'vue-router'
 
-import SurveyDetails from './SurveyDetails.vue'
 import { computed, ref, watch } from 'vue'
 import PublishedState from '../Common/PublishedState.vue'
 import { useState } from '../../composables/state'
 
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import FormInput from '../Forms/FormInput.vue'
 
 import { searchForWordsInString } from '../../utils/search'
+
+import FormInput from '../Forms/FormInput.vue'
+import SurveyDetails from './SurveyDetails.vue'
+import SurveyRow from './SurveyRow.vue'
 
 export default {
     name: 'SurveysList',
     components: {
+        SurveyRow,
         FormInput,
         PublishedState,
         SurveyDetails,
         TrashIcon,
         EyeIcon,
-        CheckIcon,
         PencilAltIcon,
         ChartBarIcon,
         DocumentDuplicateIcon,
     },
     setup() {
-        const router = useRouter()
         const store = useStore()
         const { t } = useI18n()
         const surveyId = ref(-1)
-        const isBusy = ref(false)
         const [showSurveyDetailsEdit, setShowSurveyDetailsEdit] =
             useState(false)
 
@@ -220,58 +138,6 @@ export default {
         const surveySaved = () => {
             setShowSurveyDetailsEdit(false)
             store.dispatch('surveys/getSurveys')
-        }
-
-        const editSurvey = async (surveyId) => {
-            await router.push('/surveys/' + surveyId)
-        }
-
-        const deleteSurvey = async (survey) => {
-            if (survey.surveyStepsCount === 0) {
-                const confirmSurveyDelete = confirm(t('confirm_delete_survey'))
-                isBusy.value = true
-                if (confirmSurveyDelete) {
-                    await store.dispatch('surveys/deleteSurvey', survey.id)
-                }
-                isBusy.value = false
-            }
-        }
-
-        const previewSurvey = (surveyPreview) => {
-            window
-                .open(
-                    import.meta.env.VITE_PREVIEW_URL +
-                        '/#/?survey=' +
-                        surveyPreview.slug +
-                        '&demo=true',
-                    '_blank',
-                )
-                .focus()
-        }
-
-        const publishSurvey = async (surveyId, published) => {
-            const confirmPublishOrUnpublish = published
-                ? confirm(t('confirm_unpublish_survey'))
-                : confirm(t('confirm_publish_survey'))
-            if (confirmPublishOrUnpublish) {
-                await store.dispatch('surveys/publishSurvey', surveyId)
-            }
-        }
-
-        const openSurveyStats = async (survey) => {
-            if (survey.surveyResultsCount > 0) {
-                await router.push('/stats/' + survey.id)
-            }
-        }
-
-        const duplicateSurvey = async (surveyId) => {
-            const confirmSurveyDuplicate = confirm(
-                t('confirm_duplicate_survey'),
-            )
-
-            if (confirmSurveyDuplicate) {
-                await store.dispatch('surveys/duplicateSurvey', surveyId)
-            }
         }
 
         const filter = (survey) => {
@@ -293,12 +159,6 @@ export default {
             surveys,
             surveyId,
             t,
-            deleteSurvey,
-            editSurvey,
-            previewSurvey,
-            openSurveyStats,
-            duplicateSurvey,
-            publishSurvey,
             surveySaved,
             showSurveyDetailsEdit,
             setShowSurveyDetailsEdit,

@@ -53,7 +53,7 @@
                                     active
                                         ? 'text-white bg-blue-600'
                                         : 'text-gray-900',
-                                    'cursor-default select-none relative py-2 pl-3 pr-9 flex',
+                                    'cursor-default select-none relative py-2 pl-3 pr-9',
                                 ]"
                             >
                                 <div class="flex flex-col gap-1">
