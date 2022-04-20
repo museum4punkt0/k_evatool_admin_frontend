@@ -597,16 +597,14 @@ export default {
                     maxLength.value.style.height =
                         Math.max(
                             height.value,
-                            parseInt(
-                                nodeEditor.value.getBoundingClientRect().height,
-                            ),
+                            nodeEditor.value.offsetHeight -
+                                nodeEditor.value.clientHeight,
                         ) + 'px'
                     maxLength.value.style.width =
                         Math.max(
                             width.value,
-                            parseInt(
-                                nodeEditor.value.getBoundingClientRect().width,
-                            ),
+                            nodeEditor.value.offsetWidth -
+                                nodeEditor.value.clientWidth,
                         ) + 'px'
                 })
             }
