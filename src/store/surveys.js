@@ -131,6 +131,10 @@ export default {
             await SURVEY_SERVICE.publishSurvey(surveyId)
             await dispatch('getSurveys')
         },
+        async archiveSurvey({ dispatch }, surveyId) {
+            await SURVEY_SERVICE.archiveSurvey(surveyId)
+            await dispatch('getSurveys')
+        },
         async saveSurveyStep({ commit, state, dispatch }, data) {
             const savedSurveyStep = await SURVEY_SERVICE.saveSurveyStep(
                 data,

@@ -56,6 +56,19 @@ export default {
             })
     },
 
+    archiveSurvey(surveyId) {
+        const url = 'evaluation-tool/surveys/' + surveyId + '/archive'
+
+        return axios
+            .post(url)
+            .then((response) => {
+                return response.data.data
+            })
+            .catch((error) => {
+                return error
+            })
+    },
+
     saveSurveyStep(data, surveyId) {
         let url = 'evaluation-tool/surveys/' + surveyId + '/steps'
         let method = 'POST'

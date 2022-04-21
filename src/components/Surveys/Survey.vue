@@ -1,8 +1,11 @@
 <template>
     <div class="flex-1 flex items-stretch overflow-hidden">
-        <main ref="container" class="flex flex-1 flex-col overflow-y-auto p-3">
+        <main
+            ref="container"
+            class="flex flex-1 flex-col overflow-y-hidden p-3"
+        >
             <div class="flex mb-3 items-center">
-                <div flex flex-column>
+                <div class="flex flex-column">
                     <h1>
                         {{ t('surveys', 1) }}:
                         <strong>
@@ -58,15 +61,40 @@
                     >
                         <EyeIcon class="h-5 w-5 pointer" />
                     </button>
+                    <button
+                        v-tippy="{
+                            content: t('archive'),
+                        }"
+                        :class="archived ? 'primary' : 'secondary'"
+                        class="mr-1"
+                        @click.prevent.stop="archive(survey.id)"
+                    >
+                        <ArchiveIcon class="h-5 w-5 pointer" />
+                    </button>
+                    <!--FormToggle
+                        label="archive"
+                        :enabled="Boolean(archived)"
+                        @click="archive(survey.id)"
+                    /-->
                 </div>
             </div>
 
-            <node-editor
-                v-if="survey?.steps"
-                :steps="survey.steps"
-                :admin-layout="survey.adminLayout"
-                :survey-id="surveyId"
-            />
+            <div class="w-full h-full relative">
+                <!--p
+                    v-if="archived && noteIsOpen"
+                    class="absolute z-10 inline-flex bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-20 justify-center items-center bg-white rounded-lg mb-10 border-black border-2"
+                    @click="noteIsOpen = false"
+                >
+                    {{ $t('archive_no_edit') }}
+                </p-->
+                <node-editor
+                    v-if="survey?.steps"
+                    :steps="survey.steps"
+                    :archived="Boolean(archived)"
+                    :admin-layout="survey.adminLayout"
+                    :survey-id="surveyId"
+                />
+            </div>
         </main>
         <aside>
             <survey-details
@@ -114,11 +142,15 @@ import {
     EyeIcon,
     PencilIcon,
     ClipboardCopyIcon,
+    ArchiveIcon,
 } from '@heroicons/vue/outline'
 import { TYPES as NOTIFICATION_TYPES } from '../../store/notifications'
+import FormToggle from '../Forms/FormToggle.vue'
 
 export default {
     components: {
+        FormToggle,
+        ArchiveIcon,
         ChartBarIcon,
         SurveyElement,
         TimeBasedStepsModal,
@@ -142,17 +174,25 @@ export default {
         const surveyId = ref(parseInt(route.params.id))
         const survey = computed(() => store.state.surveys.survey)
         const container = ref(null)
+        const noteIsOpen = ref(true)
+        const archived = ref(null)
 
         const previewUrl = `${import.meta.env.VITE_PREVIEW_URL}`
 
-        onMounted(() => {
-            store.dispatch('surveys/setSurveyId', surveyId.value)
+        onMounted(async () => {
+            await store.dispatch('surveys/setSurveyId', surveyId.value)
             container.value.addEventListener('scroll', onScroll)
+            archived.value = survey.value.archived
         })
 
         onBeforeUnmount(() => {
             container.value.removeEventListener('scroll', onScroll)
         })
+
+        const archive = async (surveyId) => {
+            archived.value = !archived.value
+            await store.dispatch('surveys/archiveSurvey', surveyId)
+        }
 
         const newSurveyStep = () => {
             store.dispatch('surveys/setSurveyStepId', {
@@ -207,13 +247,16 @@ export default {
         }
 
         return {
+            archived,
             id,
             container,
             nodeEditor,
+            noteIsOpen,
             survey,
             nodeComponent: Node,
             store,
             surveyId,
+            archive,
             newSurveyStep,
             t,
             surveySaved,
@@ -229,4 +272,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped></style>
