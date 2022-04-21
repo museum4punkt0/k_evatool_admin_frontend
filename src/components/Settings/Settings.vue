@@ -81,10 +81,11 @@ export default {
             router.push('/settings/' + settingId)
         }
 
-        const deleteSetting = (settingId) => {
+        const deleteSetting = async (settingId) => {
             const confirmDelete = confirm(t('confirm_delete_setting'))
             if (confirmDelete) {
-                store.dispatch('surveySettings/deleteSetting', settingId)
+                await store.dispatch('surveySettings/deleteSetting', settingId)
+                await store.dispatch('surveySettings/getSettings')
             }
         }
 

@@ -168,7 +168,7 @@ export default {
                 imprintLink: '',
                 privacyLink: '',
                 logoImage: null,
-                logoAsset: null,
+                iconImage: null,
                 backgroundImage: null,
             }
         }
@@ -217,7 +217,6 @@ export default {
             } else {
                 setting.value = {
                     name: '',
-                    setting: getKeys(),
                 }
             }
         }

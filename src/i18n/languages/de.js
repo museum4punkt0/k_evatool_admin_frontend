@@ -23,6 +23,7 @@ export default {
     action_export: 'Exportieren',
     action_new_survey_element: 'Neues Umfrage-Element',
     action_new_user: 'Neuer Nutzer',
+    action_new: 'Neu',
     action_open_preview: 'Vorschau öffnen',
     action_reload: 'Neu laden',
     action_request_transcription: 'Transkription anfragen',
