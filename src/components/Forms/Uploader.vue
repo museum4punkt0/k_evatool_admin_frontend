@@ -7,7 +7,7 @@ import { Dashboard } from '@uppy/vue'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 import Uppy from '@uppy/core'
-import Tus from '@uppy/tus'
+import XHRUpload from '@uppy/xhr-upload'
 import German from '@uppy/locales/lib/de_DE'
 
 import { computed } from 'vue'
@@ -44,13 +44,19 @@ export default {
                     store.dispatch('assets/getAssets')
                 })
 
-                uppy.use(Tus, {
-                    endpoint: import.meta.env.VITE_TUS_URL,
-                    retryDelays: [0, 1000, 3000, 5000],
-                    removeFingerprintOnSuccess: true,
-                    uploadDataDuringCreation: false,
-                    chunkSize: 1000000,
-                    metaFields: { ...metaPayload },
+                const endpoint =
+                    import.meta.env.VITE_API_BASE_URL_API +
+                    '/evaluation-tool/settings-asset'
+
+                console.log(localStorage.getItem('evaToken'))
+
+                uppy.use(XHRUpload, {
+                    endpoint,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'evaToken',
+                        )}`,
+                    },
                 })
 
                 return uppy
