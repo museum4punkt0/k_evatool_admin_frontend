@@ -20,6 +20,10 @@ export default {
     props: {
         type: { type: String, default: 'surveyAsset', required: true },
         meta: { type: Object, default: () => {} },
+        endpoint: { type: String, default: '', required: true },
+        maxFileSize: { type: Number, default: null },
+        maxFiles: { type: Number, default: null },
+        mimeType: { type: Array, default: null },
     },
     setup(props) {
         const store = useStore()
@@ -32,9 +36,16 @@ export default {
                 const uppy = new Uppy({
                     autoProceed: true,
                     locale: German,
+                    meta: { assetMeta: JSON.stringify(metaPayload) },
+                    restrictions: {
+                        maxFileSize: props.maxFileSize,
+                        maxNumberOfFiles: props.maxFiles,
+                        allowedFileTypes: props.mimeType,
+                    },
                 })
 
-                uppy.on('upload-success', () => {
+                uppy.on('upload-success', (file, response) => {
+                    console.log(response)
                     // Todo: Remove file from list after upload
                     // this.uppy.removeFile(file.id)
                 })
@@ -44,14 +55,8 @@ export default {
                     store.dispatch('assets/getAssets')
                 })
 
-                const endpoint =
-                    import.meta.env.VITE_API_BASE_URL_API +
-                    '/evaluation-tool/settings-asset'
-
-                console.log(localStorage.getItem('evaToken'))
-
                 uppy.use(XHRUpload, {
-                    endpoint,
+                    endpoint: props.endpoint,
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem(
                             'evaToken',

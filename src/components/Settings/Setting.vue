@@ -83,17 +83,32 @@
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div>
                         <h3>Logo</h3>
-                        <uploader type="settingAsset" :meta="logoMetaPayload" />
+                        <uploader
+                            type="settingAsset"
+                            :meta="logoMetaPayload"
+                            :endpoint="uploaderEndpoint"
+                            :max-files="1"
+                            :mime-type="['image/*']"
+                        />
                     </div>
                     <div>
                         <h3>Icon</h3>
-                        <uploader type="settingAsset" :meta="iconMetaPayload" />
+                        <uploader
+                            type="settingAsset"
+                            :meta="iconMetaPayload"
+                            :endpoint="uploaderEndpoint"
+                            :max-files="1"
+                            :mime-type="['image/*']"
+                        />
                     </div>
                     <div>
                         <h3>Background</h3>
                         <uploader
                             type="settingAsset"
                             :meta="backgroundMetaPayload"
+                            :endpoint="uploaderEndpoint"
+                            :max-files="1"
+                            :mime-type="['image/*']"
                         />
                     </div>
                 </div>
@@ -255,6 +270,12 @@ export default {
         const iconMetaPayload = { subType: 'icon' }
         const backgroundMetaPayload = { subType: 'background' }
 
+        const uploaderEndpoint =
+            import.meta.env.VITE_API_BASE_URL_API +
+            '/evaluation-tool/settings/' +
+            settingId.value +
+            '/settings-asset'
+
         return {
             store,
             t,
@@ -269,6 +290,7 @@ export default {
             logoMetaPayload,
             iconMetaPayload,
             backgroundMetaPayload,
+            uploaderEndpoint,
         }
     },
 }
