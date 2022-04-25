@@ -89,6 +89,7 @@
                             :endpoint="uploaderEndpoint"
                             :max-files="1"
                             :mime-type="['image/*']"
+                            @success="refreshSetting"
                         />
                     </div>
                     <div>
@@ -99,6 +100,7 @@
                             :endpoint="uploaderEndpoint"
                             :max-files="1"
                             :mime-type="['image/*']"
+                            @success="refreshSetting"
                         />
                     </div>
                     <div>
@@ -109,6 +111,7 @@
                             :endpoint="uploaderEndpoint"
                             :max-files="1"
                             :mime-type="['image/*']"
+                            @success="refreshSetting"
                         />
                     </div>
                 </div>
@@ -264,6 +267,12 @@ export default {
             isSaving.value = false
         }
 
+        // refresh setting data after successful asset upload
+        const refreshSetting = (response) => {
+            savedSetting.value = response.data
+            setting.value = response.data
+        }
+
         const validation = useVuelidate(rules, setting)
 
         const logoMetaPayload = { subType: 'logo' }
@@ -291,6 +300,7 @@ export default {
             iconMetaPayload,
             backgroundMetaPayload,
             uploaderEndpoint,
+            refreshSetting,
         }
     },
 }

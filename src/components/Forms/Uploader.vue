@@ -25,9 +25,8 @@ export default {
         maxFiles: { type: Number, default: null },
         mimeType: { type: Array, default: null },
     },
-    setup(props) {
-        const store = useStore()
-
+    emits: ['success'],
+    setup(props, ctx) {
         const metaPayload = _.cloneDeep(props.meta)
         metaPayload.type = _.cloneDeep(props.type)
 
@@ -45,15 +44,10 @@ export default {
                 })
 
                 uppy.on('upload-success', (file, response) => {
-                    console.log(response)
-                    // Todo: Remove file from list after upload
-                    // this.uppy.removeFile(file.id)
+                    ctx.emit('success', response.body)
                 })
 
-                uppy.on('complete', () => {
-                    console.log('complete')
-                    store.dispatch('assets/getAssets')
-                })
+                uppy.on('complete', () => {})
 
                 uppy.use(XHRUpload, {
                     endpoint: props.endpoint,
