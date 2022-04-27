@@ -89,6 +89,10 @@
                             :endpoint="uploaderEndpoint"
                             :max-files="1"
                             :mime-type="['image/*']"
+                            :min-width="100"
+                            :max-width="400"
+                            :min-height="100"
+                            :max-height="400"
                             @success="refreshSetting"
                         />
                     </div>
@@ -99,6 +103,11 @@
                             :meta="iconMetaPayload"
                             :endpoint="uploaderEndpoint"
                             :max-files="1"
+                            :min-width="256"
+                            :max-width="1024"
+                            :min-height="256"
+                            :max-height="1024"
+                            :ratio="1"
                             :mime-type="['image/*']"
                             @success="refreshSetting"
                         />
@@ -110,17 +119,23 @@
                             :meta="backgroundMetaPayload"
                             :endpoint="uploaderEndpoint"
                             :max-files="1"
+                            :min-width="1920"
+                            :max-width="3840"
+                            :min-height="1080"
+                            :max-height="2160"
                             :mime-type="['image/*']"
                             @success="refreshSetting"
                         />
                     </div>
                 </div>
-                <tiny-mce
-                    v-model:text="
-                        setting.setting.surveySocialDescription[language]
-                    "
-                    :label="t('settings_social_description')"
-                />
+                <div class="pb-5">
+                    <tiny-mce
+                        v-model:text="
+                            setting.setting.surveySocialDescription[language]
+                        "
+                        :label="t('settings_social_description')"
+                    />
+                </div>
             </template>
         </main>
         <aside class="text-xs">
