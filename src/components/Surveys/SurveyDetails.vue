@@ -50,6 +50,19 @@
         class="mt-3"
         :label="t('languages', store.state.languages.languages.length)"
     />
+
+    <form-select
+        v-model:selected="survey.settingId"
+        :options="survey.availableSettings"
+        title-key="name"
+        value-key="id"
+        name="settingId"
+        class="mt-3"
+        :default-value="-1"
+        :label="t('survey_settings')"
+        :invalid="v$.survey.settingId.$invalid"
+    />
+
     <form-input
         v-model:value="survey.description"
         class="mt-3"
@@ -94,7 +107,13 @@ import { useStore } from 'vuex'
 
 import SURVEYS from '../../services/surveyService'
 import useVuelidate from '@vuelidate/core'
-import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
+import {
+    helpers,
+    maxLength,
+    minLength,
+    minValue,
+    required,
+} from '@vuelidate/validators'
 const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
 
 import ActionButton from '../Common/ActionButton.vue'
@@ -102,9 +121,10 @@ import DataViewer from '../Common/DataViewer.vue'
 import FormInput from '../Forms/FormInput.vue'
 import FormCheckbox from '../Forms/FormCheckbox.vue'
 import TinyMce from '../Common/TinyMce.vue'
-import { useState } from '../../composables/state'
+import { useState } from '@/composables/state'
 import { PencilIcon } from '@heroicons/vue/outline'
 import FormToggle from '../Forms/FormToggle.vue'
+import FormSelect from '../Forms/FormSelect.vue'
 
 export default {
     name: 'SurveyDetails',
@@ -112,6 +132,7 @@ export default {
         FormToggle,
         FormCheckbox,
         FormInput,
+        FormSelect,
         ActionButton,
         DataViewer,
         TinyMce,
@@ -203,6 +224,10 @@ export default {
             languages: {
                 required,
                 minLength: minLength(1),
+            },
+            settingId: {
+                required,
+                minValue: minValue(1),
             },
         },
     },
