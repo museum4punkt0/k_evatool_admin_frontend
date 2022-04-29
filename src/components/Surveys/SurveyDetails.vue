@@ -53,7 +53,7 @@
 
     <form-select
         v-model:selected="survey.settingId"
-        :options="survey.availableSettings"
+        :options="surveySettings"
         title-key="name"
         value-key="id"
         name="settingId"
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 
@@ -153,6 +153,10 @@ export default {
         const surveySaving = ref(false)
         const previewUrl = `${import.meta.env.VITE_PREVIEW_URL}`
         const [showSlug, setShowSlug] = useState(false)
+
+        const surveySettings = computed(
+            () => store.state.surveySettings.settings,
+        )
 
         watch(
             () => props.surveyId,
@@ -207,6 +211,7 @@ export default {
             previewUrl,
             showSlug,
             setShowSlug,
+            surveySettings,
         }
     },
     validations: {
