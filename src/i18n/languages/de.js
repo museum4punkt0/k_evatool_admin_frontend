@@ -114,6 +114,7 @@ export default {
     new_survey: 'Neue Umfrage',
     new_element: 'Neues Umfrage-Element',
     new_user: 'Neuer Benutzer',
+    no_steps_available: 'Keine Schritte verfügbar',
     none_selected: 'Nicht ausgewählt',
     notice_filter_has_no_results: 'Keine vergleichs Ergebnisse vorhanden.',
     notice_missing_languages: 'Fehlende Sprachen',
