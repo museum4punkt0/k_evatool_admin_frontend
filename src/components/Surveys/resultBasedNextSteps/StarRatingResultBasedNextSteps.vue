@@ -66,36 +66,39 @@
             </table>
         </div>
 
-        <div class="grid grid-cols-12 gap-4">
-            <form-input
-                v-model:value="nextStep.start"
-                class="mt-3 col-span-2"
-                :label="t('from')"
-                name="start"
-            />
-            <form-input
-                v-model:value="nextStep.end"
-                class="mt-3 col-span-2"
-                :label="t('to')"
-                name="end"
-            />
-            <form-select
-                v-model:selected="nextStep.stepId"
-                class="mt-3 col-span-5"
-                :options="surveySteps.filter((x) => x.id !== surveyStep.id)"
-                title-key="name"
-                value-key="id"
-                :default-value="-1"
-                :label="t('steps', 1)"
-            />
-            <action-button
-                class="mt-9 col-span-3"
-                :disabled="v$.$invalid"
-                @execute="addResultBasedStep"
-            >
-                <PlusIcon class="h-5 w-5" />
-            </action-button>
-        </div>
+        <template v-if="availableSteps.length > 0">
+            <div class="grid grid-cols-12 gap-4">
+                <form-input
+                    v-model:value="nextStep.start"
+                    class="mt-3 col-span-2"
+                    :label="t('from')"
+                    name="start"
+                />
+                <form-input
+                    v-model:value="nextStep.end"
+                    class="mt-3 col-span-2"
+                    :label="t('to')"
+                    name="end"
+                />
+                <form-select
+                    v-model:selected="nextStep.stepId"
+                    class="mt-3 col-span-5"
+                    :options="availableSteps"
+                    title-key="name"
+                    value-key="id"
+                    :default-value="-1"
+                    :label="t('steps', 1)"
+                />
+                <action-button
+                    class="mt-9 col-span-3"
+                    :disabled="v$.$invalid"
+                    @execute="addResultBasedStep"
+                >
+                    <PlusIcon class="h-5 w-5" />
+                </action-button>
+            </div>
+        </template>
+        <div v-else>{{ t('no_steps_available') }}</div>
     </div>
 </template>
 <script>
@@ -116,6 +119,17 @@ export default {
         const { t } = useI18n()
         const surveyStep = computed(() => store.state.surveys.surveyStep)
         const surveySteps = computed(() => store.state.surveys.survey.steps)
+        const availableSteps = computed(() => {
+            if (surveySteps.value) {
+                return surveySteps.value.filter(
+                    (x) =>
+                        x.id !== surveyStep.value.id &&
+                        x.previousSteps.length === 0 &&
+                        !x.isFirstStep,
+                )
+            }
+            return []
+        })
         const surveyElementParams = computed(
             () =>
                 store.state.surveyElements.surveyElements.find((element) => {
@@ -226,6 +240,7 @@ export default {
             addResultBasedStep,
             removeResultBasedStep,
             v$,
+            availableSteps,
         }
     },
 }
