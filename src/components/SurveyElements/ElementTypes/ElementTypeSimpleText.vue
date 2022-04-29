@@ -8,19 +8,51 @@
         :label="t('texts', 1)"
         :invalid="!v$.text?.validateLanguageLabel?.$response[language.code]"
     />
+
+    <div>
+        <img
+            class="rounded w-1/6 mr-3 mt-3"
+            :src="selectedAssetUrl"
+            @click="setAssetSelectorModalOpen(true)"
+        />
+        <button class="primary mt-3" @click="setAssetSelectorModalOpen(true)">
+            {{ t('button_choose_asset') }}
+        </button>
+    </div>
+
+    <form-input
+        v-model:value="paramsLocal.url"
+        name="url"
+        class="mt-3"
+        :label="t('qr_code_url')"
+    />
+
+    <asset-selector-modal
+        :is-open="assetSelectorModalOpen"
+        :multiple-select="false"
+        :selected-assets="paramsLocal?.assetId"
+        name="assetId"
+        mime-type-filter-prefix="image"
+        @update:is-open="setAssetSelectorModalOpen"
+        @update:selected-assets="onAssetsSelected"
+    ></asset-selector-modal>
 </template>
 
 <script>
 import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import { useState } from '@/composables/state'
 import useVuelidate from '@vuelidate/core'
-import TinyMce from '../../Common/TinyMce.vue'
 import _ from 'lodash'
+
+import AssetSelectorModal from '@/components/Assets/AssetSelectorModal.vue'
+import FormInput from '@/components/Forms/FormInput.vue'
+import TinyMce from '@/components/Common/TinyMce.vue'
 
 export default {
     name: 'ElementTypeSimpleText',
-    components: { TinyMce },
+    components: { TinyMce, AssetSelectorModal, FormInput },
     props: {
         params: {
             type: Object,
@@ -36,6 +68,9 @@ export default {
             set: (val) => emit('update:params', val),
         })
 
+        const [assetSelectorModalOpen, setAssetSelectorModalOpen] =
+            useState(false)
+
         const selectedLanguage = ref(store.state.languages.maintainLanguage)
         watch(
             () => store.state.languages.maintainLanguage,
@@ -44,6 +79,11 @@ export default {
             },
         )
 
+        const selectedAssetUrl = computed(() => {
+            return store.state.assets.assets.find(
+                (item) => item.id === paramsLocal.value?.assetId,
+            )?.urls.original
+        })
         const validateLanguageLabel = (object) => {
             const newObject = Object.assign({}, object)
             for (const [key, value] of Object.entries(object)) {
@@ -88,12 +128,24 @@ export default {
             { immediate: true },
         )
 
+        const onAssetsSelected = (assets) => {
+            assets
+                ? (paramsLocal.value.assetId = assets)
+                : delete paramsLocal.value.assetId
+
+            emit('update:params', paramsLocal.value)
+        }
+
         return {
             selectedLanguage,
             paramsLocal,
             store,
             t,
             v$: paramsValidation,
+            assetSelectorModalOpen,
+            setAssetSelectorModalOpen,
+            onAssetsSelected,
+            selectedAssetUrl,
         }
     },
 }

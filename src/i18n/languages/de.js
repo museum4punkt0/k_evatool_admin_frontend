@@ -43,6 +43,7 @@ export default {
     binary_positive_label: 'Positive Anzeigewert',
     binary_negative_label: 'Negative Anzeigewert',
     button_choose_assets: 'Bilder auswählen',
+    button_choose_asset: 'Bild auswählen',
     confirm_publish_survey: 'Wollen Sie die Umfrage wirklich veröffentlichen?',
     confirm_unpublish_survey:
         'Wollen Sie die Veröffentlichung der Umfrage wirklich aufheben?',
@@ -146,6 +147,7 @@ export default {
     parent_elements: 'Elternelemente | Elternelement | Elternelemente',
     password_confirmation: 'Passwortbestätigung',
     please_select: 'Bitte wählen',
+    qr_code_url: 'QR-Code URL',
     questions: 'Fragen | Frage | Fragen',
     results: 'Ergebnisse | Ergebnis | Ergebnisse',
     result_based_steps:

@@ -73,7 +73,7 @@
                                         }"
                                         class="flex flex-col p-1 rounded"
                                         :class="
-                                            selectedAssets.includes(asset.id)
+                                            isSelected(asset.id)
                                                 ? 'ring-2 ring-blue-500'
                                                 : ''
                                         "
@@ -106,11 +106,7 @@
                                         >
                                             <input
                                                 type="checkbox"
-                                                :checked="
-                                                    selectedAssets.includes(
-                                                        asset.id,
-                                                    )
-                                                "
+                                                :checked="isSelected(asset.id)"
                                             />
 
                                             {{
@@ -227,7 +223,10 @@ export default {
                     }
                 }
             } else {
-                selectedAssetsLocal.value = assetId
+                selectedAssetsLocal.value === assetId
+                    ? (selectedAssetsLocal.value = null)
+                    : (selectedAssetsLocal.value = assetId)
+
                 if (props.autoClose) {
                     modalIsOpen.value = false
                 }
@@ -263,6 +262,14 @@ export default {
                     }),
         })
 
+        const isSelected = (assetId) => {
+            return selectedAssetsLocal.value
+                ? typeof selectedAssetsLocal.value === 'number'
+                    ? selectedAssetsLocal.value === assetId
+                    : selectedAssetsLocal.value.includes(assetId)
+                : false
+        }
+
         return {
             assets,
             selectAsset,
@@ -281,6 +288,7 @@ export default {
                 width: '100%',
             },
             uppy,
+            isSelected,
         }
     },
 }
