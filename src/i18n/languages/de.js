@@ -40,8 +40,8 @@ export default {
     assets: 'Medien | Medium | Medien',
     binary_positive: 'Positiver Schlüsselwert',
     binary_negative: 'Negativer Schlüsselwert',
-    binary_positive_label: 'Positive Anzeigewert',
-    binary_negative_label: 'Negative Anzeigewert',
+    binary_positive_label: 'Positiver Anzeigewert',
+    binary_negative_label: 'Negativer Anzeigewert',
     button_choose_assets: 'Bilder auswählen',
     confirm_publish_survey: 'Wollen Sie die Umfrage wirklich veröffentlichen?',
     confirm_unpublish_survey:
