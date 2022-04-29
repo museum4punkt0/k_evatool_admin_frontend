@@ -290,6 +290,7 @@ export default {
             await store.dispatch('elementTypes/getElementTypes')
             await store.dispatch('surveyElements/getSurveyElements')
             await store.dispatch('assets/getAssets')
+            await store.dispatch('surveySettings/getSettings')
             loadingApp.value = false
         }
 
