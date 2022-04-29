@@ -53,6 +53,7 @@
                                     v-if="asset?.urls?.original"
                                     class="w-full rounded-lg mb-3"
                                     controls
+                                    autoplay
                                     muted
                                     preload="metadata"
                                     @timeupdate="videoTimeUpdate"
@@ -399,21 +400,21 @@ import FormSelect from '../Forms/FormSelect.vue'
 import { v4 as uuidv4 } from 'uuid'
 import ASSETS from '../../services/assetService'
 import {
-    PencilAltIcon,
-    StopIcon,
     ClockIcon,
-    TrashIcon,
+    PencilAltIcon,
     ReplyIcon,
+    StopIcon,
+    TrashIcon,
     XIcon,
 } from '@heroicons/vue/outline'
 
 import useVuelidate from '@vuelidate/core'
-import { maxLength, minValue, required, helpers } from '@vuelidate/validators'
+import { helpers, maxLength, minValue, required } from '@vuelidate/validators'
+import msToTimecode from 'ms-to-timecode'
+
 const timecodeValidator = helpers.regex(
     /^(?:(?:[0-1][0-9]|[0-2][0-3]):)(?:[0-5][0-9]:){2}(?:[0-2][0-9])$/,
 )
-
-import msToTimecode from 'ms-to-timecode'
 
 export default {
     name: 'TimeBasedStepsModal',
@@ -643,15 +644,12 @@ export default {
         })
 
         const newTimeBasedStepTimecodeValidator = () => {
-            if (
+            return (
                 selectedTimecodes.value.startTimecode <=
                     selectedTimeBasedStep.value.timecode &&
                 selectedTimecodes.value.stopTimecode >=
                     selectedTimeBasedStep.value.timecode
-            ) {
-                return true
-            }
-            return false
+            )
         }
 
         const validations = computed({
@@ -675,10 +673,7 @@ export default {
         })
 
         const timeBasedStepsMappedTimecodes = () => {
-            const timeBasedStepsTimecodes = timeBasedSteps.value.map(
-                (step) => step.timecode,
-            )
-            return timeBasedStepsTimecodes
+            return timeBasedSteps.value.map((step) => step.timecode)
         }
 
         const timeBasedStepLowestTimecode = () => {
@@ -702,28 +697,22 @@ export default {
         }
 
         const startTimecodeValidator = () => {
-            if (
+            return !(
                 selectedTimecodes.value.startTimecode >
                     timeBasedStepLowestTimecode() ||
                 selectedTimecodes.value.startTimecode >=
                     selectedTimecodes.value.stopTimecode
-            ) {
-                return false
-            }
-            return true
+            )
         }
 
         const stopTimecodeValidator = () => {
-            if (
+            return !(
                 selectedTimecodes.value.stopTimecode <
                     timeBasedStepHighestTimecode() ||
                 selectedTimecodes.value.startTimecode >=
                     selectedTimecodes.value.stopTimecode ||
                 selectedTimecodes.value.stopTimecode > videoDuration.value
-            ) {
-                return false
-            }
-            return true
+            )
         }
 
         const validateTimecodes = computed({
