@@ -7,7 +7,10 @@
                 </h1>
 
                 <div class="flex flex-row">
-                    <button class="secondary mr-3">
+                    <button
+                        class="secondary mr-3"
+                        @click="$router.push('/settings')"
+                    >
                         {{ t('action_cancel') }}
                     </button>
                     <button
@@ -161,7 +164,7 @@ import Uploader from '../Forms/Uploader.vue'
 import _ from 'lodash'
 
 export default {
-    name: 'Login',
+    name: 'Setting',
     components: {
         Uploader,
         LanguageSwitchSmall,
@@ -294,11 +297,13 @@ export default {
         const iconMetaPayload = { subType: 'icon' }
         const backgroundMetaPayload = { subType: 'background' }
 
-        const uploaderEndpoint =
-            import.meta.env.VITE_API_BASE_URL_API +
-            '/evaluation-tool/settings/' +
-            settingId.value +
-            '/settings-asset'
+        const uploaderEndpoint = computed(
+            () =>
+                import.meta.env.VITE_API_BASE_URL_API +
+                '/evaluation-tool/settings/' +
+                settingId.value +
+                '/settings-asset',
+        )
 
         return {
             store,
