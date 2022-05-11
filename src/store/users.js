@@ -7,6 +7,7 @@ export default {
         user: null,
         users: [],
         token: '',
+        roles: [],
     },
     mutations: {
         setUser(state, user) {
@@ -20,10 +21,14 @@ export default {
             localStorage.setItem('evaToken', token)
             axios.defaults.headers.Authorization = `Bearer ${token}`
         },
+        setRoles(state, roles) {
+            state.roles = roles
+        },
     },
     actions: {
         async getUsers({ commit }) {
             const users = await USERS.getUsers()
+            console.log(users)
             commit('setUsers', users)
         },
         async getUser({ commit }, userId) {
@@ -63,6 +68,10 @@ export default {
             localStorage.removeItem('evaToken')
             commit('setUser', null)
             window.location.reload()
+        },
+        async getRoles({ commit }) {
+            const roles = await USERS.getAllRoles()
+            commit('setRoles', roles)
         },
     },
 }

@@ -142,9 +142,11 @@
             </template>
         </main>
         <aside class="text-xs">
-            <pre v-if="store.state.users?.user?.admin" class="mt-6">{{
-                savedSetting
-            }}</pre>
+            <pre
+                v-if="store.state.users?.user?.role.includes('admin')"
+                class="mt-6"
+                >{{ savedSetting }}</pre
+            >
         </aside>
     </div>
 </template>

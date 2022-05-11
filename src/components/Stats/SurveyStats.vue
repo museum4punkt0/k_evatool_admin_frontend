@@ -48,7 +48,11 @@
                             <th>
                                 <div v-html="t('finished_at')"></div>
                                 <span
-                                    v-if="store.state.users.user.admin"
+                                    v-if="
+                                        store.state.users.user.role.includes(
+                                            'admin',
+                                        )
+                                    "
                                     class="text-xs text-gray-500"
                                 >
                                     UUID
@@ -100,7 +104,11 @@
                                 </div>
                                 <div>
                                     <span
-                                        v-if="store.state.users.user.admin"
+                                        v-if="
+                                            store.state.users.user.role.includes(
+                                                'admin',
+                                            )
+                                        "
                                         class="text-xs text-gray-500 mr-1"
                                     >
                                         id: {{ step.id }}
@@ -128,7 +136,11 @@
                                         .format('DD.MM.YYYY')
                                 }}
                                 <span
-                                    v-if="store.state.users.user.admin"
+                                    v-if="
+                                        store.state.users.user.role.includes(
+                                            'admin',
+                                        )
+                                    "
                                     class="text-xs text-gray-500"
                                 >
                                     <br />

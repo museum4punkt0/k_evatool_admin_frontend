@@ -56,7 +56,7 @@
                 @click.prevent.stop="previewSurvey(survey)"
             />
             <DocumentDuplicateIcon
-                v-if="store.state.users.user.admin"
+                v-if="store.state.users.user.role.includes('admin')"
                 class="mx-1 h-5 w-5 pointer"
                 @click.prevent.stop="duplicateSurvey(survey.id)"
             />

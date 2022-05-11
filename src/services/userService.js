@@ -87,4 +87,26 @@ export default {
                 return error.response
             })
     },
+    async getAllRoles() {
+        return axios
+            .get('http://localhost:8085/api/roles')
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
+    async deleteUser(userId, userToDelete) {
+        return axios
+            .delete(
+                `http://localhost:8085/api/users/${userId}/delete/${userToDelete}`,
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                return error.response
+            })
+    },
 }

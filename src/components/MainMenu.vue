@@ -16,7 +16,8 @@
                     <router-link
                         v-if="
                             !item.admin ||
-                            (item.admin && store.state.users.user.admin)
+                            (item.admin &&
+                                store.state.users.user.role.includes('admin'))
                         "
                         :to="item.href"
                         class="text-blue-100 hover:bg-blue-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium"

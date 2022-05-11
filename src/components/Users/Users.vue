@@ -29,7 +29,10 @@
                         )}, ${t('email')}`"
                     />
                     <button
-                        v-if="store.state.users.user.admin && userId < 0"
+                        v-if="
+                            store.state.users.user.role.includes('admin') ||
+                            store.state.users.user.role.includes('userCreator')
+                        "
                         class="primary ml-4 mr-1"
                         @click="setShowSideBar(true)"
                     >
@@ -43,11 +46,19 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th v-if="store.state.users.user.admin">Admin</th>
+                            <th>Rolle</th>
                             <th>
                                 {{ t('last_login') }}
                             </th>
-                            <th v-if="store.state.users.user.admin"></th>
+                            <th
+                                v-if="
+                                    store.state.users.user.role.includes(
+                                        'admin',
+                                    )
+                                "
+                            >
+                                Aktionen
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,8 +75,15 @@
                                 </p>
                             </td>
 
-                            <td v-if="store.state.users.user.admin">
-                                <check-icon v-if="user.admin" class="w-5 h-5" />
+                            <td>
+                                <p>
+                                    <span
+                                        v-for="role in user.role"
+                                        :key="user.id + '_' + role"
+                                    >
+                                        {{ role }}
+                                    </span>
+                                </p>
                             </td>
                             <td>
                                 <span class="text-xs">
@@ -73,21 +91,22 @@
                                 </span>
                             </td>
                             <td
-                                v-if="store.state.users.user.admin"
+                                v-if="
+                                    store.state.users.user.role.includes(
+                                        'admin',
+                                    )
+                                "
                                 class="px-6 py-4 flex flex-row"
                             >
                                 <PencilAltIcon
-                                    v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5"
                                     @click.prevent.stop="editUser(user.id)"
                                 />
                                 <TrashIcon
-                                    v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
                                     @click.prevent.stop="deleteUser(user.id)"
                                 />
                                 <MailIcon
-                                    v-if="store.state.users.user.admin"
                                     class="mx-1 h-5 w-5 pointer"
                                     @click.prevent.stop="inviteUser(user.id)"
                                 />
@@ -98,12 +117,7 @@
             </div>
         </main>
         <aside v-if="showSideBar">
-            <user
-                v-if="store.state.users.user.admin"
-                :user-id="userId"
-                @saved="onSave"
-                @cancel="onCancel"
-            />
+            <user :user-id="userId" @saved="onSave" @cancel="onCancel" />
         </aside>
     </div>
 </template>
@@ -148,6 +162,7 @@ export default {
         const [filteredUsers, setFilteredUsers] = useState(users.value)
         const getUsers = async () => {
             await store.dispatch('users/getUsers')
+            await store.dispatch('users/getRoles')
         }
 
         const onSave = () => {
@@ -161,13 +176,17 @@ export default {
         }
 
         const editUser = (userIdToEdit) => {
-            if (!store.state.users.user.admin) return
+            if (!store.state.users.user.role.includes('admin')) return
             userId.value = userIdToEdit
             setShowSideBar(true)
         }
 
-        const deleteUser = (userId) => {
-            console.log(userId)
+        const deleteUser = async (userToDelete) => {
+            await userService.deleteUser(
+                store.state.users.user.id,
+                userToDelete,
+            )
+            await store.dispatch('users/getUsers')
         }
 
         const inviteUser = async (userId) => {

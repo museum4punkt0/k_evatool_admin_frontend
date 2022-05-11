@@ -32,5 +32,6 @@ export default {
         "Cannot be deleted as this step is the survey's starting point.",
     archive: 'Archive this survey',
     archive_no_edit: "You cannot edit a survey while it's archived",
-    archive_explanation: 'To edit this survey, unarchive ir',
+    archive_explanation: 'To edit this survey, unarchive it',
+    role: 'Role',
 }

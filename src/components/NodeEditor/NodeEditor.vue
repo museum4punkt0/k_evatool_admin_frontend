@@ -142,7 +142,11 @@
                                     steps?.find((x) => x?.id === step?.id)?.name
                                 }}
                                 <span
-                                    v-if="store.state.users.user.admin"
+                                    v-if="
+                                        store.state.users.user.role.includes(
+                                            'admin',
+                                        )
+                                    "
                                     class="text-xs"
                                 >
                                     {{ step?.id }}
