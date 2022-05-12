@@ -1,66 +1,41 @@
-# EVA-Tool (Admin-Frontend)
+# k:evatool admin frontend
 
-## Inhaltsverzeichnis
-* [Kurzbeschreibung](#Kurzbeschreibung)
-* [Förderhinweis](#Förderhinweis)
-* [Architektur](#Architektur)
-* [Installation](#Installation)
-* [Benutzung](#Benutzung)
-* [Credits](#Credits)
-* [Lizenz](#Lizenz)
+## Project setup
 
-## Kurzbeschreibung
-Beschreibungstext einfügen.
+Please copy the file .env_example to .env and adjust the parameters:
+- VITE_API_BASE_URL_API: Set the base URL of the k:evatool backend api endpoints
+- VITE_API_BASE_URL_AUTH: Set the base URL of the k:evatool backend oauth endpoints
+- VITE_PREVIEW_URL: URL of the survey player (i.e. http://localhost:3001 for local development)
+- VITE_BASE_URL: URL of the admin frontend itself (i.e. http://localhost:3002 for local development)
+- VITE_TUS_URL: Set the base URL of the TUS server needed for file uploads
+- VITE_DEBUG: Set debug mode (should be false in production)
+- VITE_PREFILL_PASSWORD: Prefill password for local development (not needed in production)
+- VITE_PREFILL_EMAIL: Prefill email for local development (not needed in production)
+- VITE_TINY_MCE_API_KEY: TinyMCE API key. Can be obtained at https://www.tiny.cloud
 
-## Förderhinweis
-Diese Website ist entstanden im Verbundprojekt museum4punkt0 – Digitale Strategien für das Museum der Zukunft, Teilprojekt EVA-Tool. Das Projekt museum4punkt0 wird gefördert durch die Beauftragte der Bundesregierung für Kultur und Medien aufgrund eines Beschlusses des Deutschen Bundestages. Weitere Informationen: www.museum4punkt0.de
+The following needs to be run for production and development prior to building and running the dev environment
+```
+yarn
+```
 
+### Compiles and hot-reloads for development
+```
+yarn dev
+```
 
-## Architektur
-![architecture diagram](./doc/architecture.svg)
+### Compiles and serves statically
+Like on a webserver. Ideal for testing builds locally.
+```
+yarn serve
+```
 
-## Installation
+### Compiles and minifies for production
+```
+yarn build
+```
 
--   yarn install
--   cp .env.local.example .env.local
--   yarn dev
+### Lints and fixes files
+```
+yarn lint (--fix)
+```
 
-## Benutzung
-
-##Credits
-
-## Lizenz
-
-## routes
-/surveys
-/surveys/new
-/surveys/:surveyId
-/surveys/:surveyId/edit
-/surveys/:surveyId/results
-
-/survey-steps
-/survey-steps/new (?)
-/survey-steps/:surveyStepId
-
-/survey-elements
-/survey-elements/new
-/survey-elements/:surveyElementId
-
-/survey-step-results
-/survey-step-results/new (?)
-/survey-step-results/:surveyStepResultId
-/survey-step-results/:surveyStepResultId/assets (?)
-
-/languages
-/languages/new
-/languages/:languageId
-/languages/:languageId/edit
-
-/localizations
-/localizations/new (?)
-/localizations/:localizationId
-
-/users/register
-/users/login
-/users/:userId/logout
-/users/:userId/settings (?)
