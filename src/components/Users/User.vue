@@ -54,7 +54,7 @@
                             class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 sm:text-sm z-10"
                         >
                             <ListboxOption
-                                v-for="role in store.state.users.roles"
+                                v-for="role in getArray()"
                                 v-slot="{ active, selected }"
                                 :key="role.id"
                                 :value="role"
@@ -154,7 +154,9 @@ export default {
     setup(props, { emit }) {
         const { t } = useI18n()
         const store = useStore()
-        const selectedRole = ref(store.state.users.roles[0])
+        const selectedRole = ref(
+            store.state.users.roles.find((e) => e.name === 'basicUser'),
+        )
         const user = ref({
             name: '',
             email: '',
@@ -163,6 +165,18 @@ export default {
             role: selectedRole,
         })
         const savingUser = ref(false)
+
+        const getArray = () => {
+            return store.state.users.roles.filter((e) => {
+                if (store.state.users.user.role.includes('admin')) {
+                    return e
+                } else {
+                    if (e.name !== 'admin') {
+                        return e
+                    }
+                }
+            })
+        }
 
         const getUser = async (userId) => {
             user.value = await USERS.getUser(userId)
@@ -253,6 +267,7 @@ export default {
         })
 
         return {
+            getArray,
             t,
             user,
             userValidation,

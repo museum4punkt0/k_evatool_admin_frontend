@@ -104,6 +104,11 @@
                                 />
                                 <TrashIcon
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
+                                    :class="
+                                        user.id === store.state.users.user.id
+                                            ? 'disabled opacity-10'
+                                            : 'opacity-100'
+                                    "
                                     @click.prevent.stop="deleteUser(user.id)"
                                 />
                                 <MailIcon
@@ -182,11 +187,15 @@ export default {
         }
 
         const deleteUser = async (userToDelete) => {
-            await userService.deleteUser(
-                store.state.users.user.id,
-                userToDelete,
-            )
-            await store.dispatch('users/getUsers')
+            if (userToDelete !== store.state.users.user.id) {
+                await userService.deleteUser(
+                    store.state.users.user.id,
+                    userToDelete,
+                )
+                await store.dispatch('users/getUsers')
+            } else {
+                console.log('cannot delete yourself')
+            }
         }
 
         const inviteUser = async (userId) => {
