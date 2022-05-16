@@ -635,19 +635,33 @@ export default {
 
         const onMouseMove = (e) => {
             if (draggedStep.value) {
-                draggedStep.value.position.x =
-                    draggedStep.value.position.x +
-                    e.movementX * (1 / zoomFactor.value)
-
-                draggedStep.value.position.y =
-                    draggedStep.value.position.y +
-                    e.movementY * (1 / zoomFactor.value)
-
                 const indexToScrollTo = props.steps.findIndex(
                     (step) => step.id === draggedStep.value.id,
                 )
 
                 const selectedChild = nodeCanvas.value.children[indexToScrollTo]
+
+                if (
+                    draggedStep.value.position.x +
+                        e.movementX * (1 / zoomFactor.value) -
+                        selectedChild.getBoundingClientRect().width / 2 >=
+                    0
+                ) {
+                    draggedStep.value.position.x =
+                        draggedStep.value.position.x +
+                        e.movementX * (1 / zoomFactor.value)
+                }
+
+                if (
+                    draggedStep.value.position.y +
+                        e.movementY * (1 / zoomFactor.value) -
+                        selectedChild.getBoundingClientRect().height / 2 >=
+                    0
+                ) {
+                    draggedStep.value.position.y =
+                        draggedStep.value.position.y +
+                        e.movementY * (1 / zoomFactor.value)
+                }
 
                 moveCanvasToShowDragged(selectedChild)
             }

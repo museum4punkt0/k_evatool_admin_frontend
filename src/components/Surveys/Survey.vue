@@ -206,10 +206,10 @@ export default {
             setShowSurveyDetailsEdit(false)
         }
 
-        const surveyStepDeleted = () => {
-            store.dispatch('surveys/getSurvey', surveyId.value)
-            store.dispatch('surveys/getSurveySteps', surveyId.value)
-            store.dispatch('surveys/resetSurveyStep')
+        const surveyStepDeleted = async () => {
+            await store.dispatch('surveys/getSurvey', surveyId.value)
+            await store.dispatch('surveys/getSurveySteps', surveyId.value)
+            await store.dispatch('surveys/resetSurveyStep')
         }
 
         const onScroll = () => {}

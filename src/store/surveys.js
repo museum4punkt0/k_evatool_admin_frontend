@@ -53,6 +53,7 @@ export default {
         },
         async getSurvey({ commit, state }) {
             const survey = await SURVEY_SERVICE.getSurvey(state.surveyId)
+            console.log('fine till first', survey)
             commit('setSurvey', survey)
         },
         async setSurveyId({ commit }, surveyId) {
@@ -90,6 +91,7 @@ export default {
         },
         async getSurveySteps({ commit }, surveyId) {
             const surveySteps = await SURVEY_SERVICE.getSurveySteps(surveyId)
+            console.log('fine till seconds', surveySteps)
             commit('setSurveySteps', surveySteps)
         },
         async saveSurvey({ commit }, data) {
