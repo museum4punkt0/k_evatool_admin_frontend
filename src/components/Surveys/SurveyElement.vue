@@ -255,7 +255,7 @@ export default {
                 return {
                     name: {
                         required,
-                        minLength: minLength(1),
+                        minLength: minLength(2),
                     },
                     surveyElementType: {
                         required,
