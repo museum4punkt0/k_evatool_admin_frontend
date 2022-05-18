@@ -1,12 +1,8 @@
 <template>
     <div class="hidden w-28 bg-blue-900 overflow-y-auto md:block">
         <div class="w-full py-6 flex flex-col items-center">
-            <div class="flex-shrink-0 flex items-center">
-                <img
-                    class="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                    alt="Workflow"
-                />
+            <div class="flex-shrink-0 flex items-center justify-center">
+                <img class="h-12 w-auto" src="/logo.svg" alt="Workflow" />
             </div>
             <div
                 v-if="store.state.users.user"
