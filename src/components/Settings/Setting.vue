@@ -188,7 +188,7 @@ export default {
         const languages = store.state.languages.languages
         const emptyLanguageObject = {}
         languages.map((lang) => {
-            emptyLanguageObject[lang.code] = '123'
+            emptyLanguageObject[lang.code] = 'k:eva'
         })
 
         const getLanguageBasedKeys = () => {
