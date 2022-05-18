@@ -89,7 +89,7 @@ export default {
     },
     async getAllRoles() {
         return axios
-            .get('http://localhost:8085/api/roles')
+            .get('roles')
             .then((response) => {
                 return response.data
             })
@@ -99,9 +99,7 @@ export default {
     },
     async deleteUser(userId, userToDelete) {
         return axios
-            .delete(
-                `http://localhost:8085/api/users/${userId}/delete/${userToDelete}`,
-            )
+            .delete(`users/${userId}/delete/${userToDelete}`)
             .then((response) => {
                 return response.data
             })
