@@ -217,7 +217,6 @@ export default {
                 name: t('survey_settings', 2),
                 href: '/settings',
                 icon: CogIcon,
-                admin: true,
             },
         ]
 
