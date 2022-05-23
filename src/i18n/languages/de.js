@@ -49,6 +49,7 @@ export default {
         'Wollen Sie die Veröffentlichung der Umfrage wirklich aufheben?',
     config: 'Konfiguration',
     confirm_delete_asset: 'Wollen Sie die Datei wirklich löschen?',
+    confirm_delete_image: 'Wollen Sie das Bild wirklich löschen?',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     confirm_delete_setting: 'Einstellung wirklich löschen?',
     confirm_delete_survey: 'Umfrage wirklich löschen?',

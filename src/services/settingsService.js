@@ -2,7 +2,6 @@ import axios from 'axios'
 
 export default {
     saveSetting(setting) {
-        console.log(setting)
         let url = 'evaluation-tool/settings'
         let method = 'post'
         if (setting.id) {

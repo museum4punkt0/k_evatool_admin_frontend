@@ -33,11 +33,16 @@
                 name="name"
                 :label="t('names', 1)"
             />
-            <template v-if="settingId > 0">
+            <template v-if="settingId > 0 && setting.setting">
                 <hr class="mt-5 my-4" />
                 <language-switch-small />
 
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <div
+                    v-if="
+                        setting.setting.companyName && setting.setting.pageTitle
+                    "
+                    class="grid grid-cols-2 gap-4 mb-4"
+                >
                     <form-input
                         v-model:value="setting.setting.companyName[language]"
                         class="mb-4"
@@ -54,7 +59,7 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
+                    <div v-if="setting.setting.imprint">
                         <tiny-mce
                             v-model:text="setting.setting.imprint[language]"
                             :label="t('settings_imprint')"
@@ -68,7 +73,7 @@
                         />
                     </div>
 
-                    <div>
+                    <div v-if="setting.setting.privacy">
                         <tiny-mce
                             v-model:text="setting.setting.privacy[language]"
                             :label="t('settings_privacy')"
@@ -86,7 +91,17 @@
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div>
                         <h3>Logo</h3>
+                        <template v-if="setting?.setting?.logoImageUrl">
+                            <img :src="setting.setting.logoImageUrl" />
+                            <button
+                                class="btn-danger mt-2"
+                                @click="removeImage('logo')"
+                            >
+                                {{ t('action_delete') }}
+                            </button>
+                        </template>
                         <uploader
+                            v-else
                             type="settingAsset"
                             :meta="logoMetaPayload"
                             :endpoint="uploaderEndpoint"
@@ -101,7 +116,20 @@
                     </div>
                     <div>
                         <h3>Icon</h3>
+                        <template v-if="setting?.setting?.iconImageUrl">
+                            <img
+                                v-if="setting?.setting?.iconImageUrl"
+                                :src="setting.setting.iconImageUrl"
+                            />
+                            <button
+                                class="btn-danger mt-2"
+                                @click="removeImage('icon')"
+                            >
+                                {{ t('action_delete') }}
+                            </button>
+                        </template>
                         <uploader
+                            v-else
                             type="settingAsset"
                             :meta="iconMetaPayload"
                             :endpoint="uploaderEndpoint"
@@ -117,7 +145,20 @@
                     </div>
                     <div>
                         <h3>Background</h3>
+                        <template v-if="setting?.setting?.backgroundImageUrl">
+                            <img
+                                v-if="setting?.setting?.backgroundImageUrl"
+                                :src="setting.setting.backgroundImageUrl"
+                            />
+                            <button
+                                class="btn-danger mt-2"
+                                @click="removeImage('background')"
+                            >
+                                {{ t('action_delete') }}
+                            </button>
+                        </template>
                         <uploader
+                            v-else
                             type="settingAsset"
                             :meta="backgroundMetaPayload"
                             :endpoint="uploaderEndpoint"
@@ -131,7 +172,10 @@
                         />
                     </div>
                 </div>
-                <div class="pb-5">
+                <div
+                    v-if="setting.setting.surveySocialDescription"
+                    class="pb-5"
+                >
                     <tiny-mce
                         v-model:text="
                             setting.setting.surveySocialDescription[language]
@@ -288,9 +332,17 @@ export default {
         }
 
         // refresh setting data after successful asset upload
-        const refreshSetting = (response) => {
-            savedSetting.value = response.data
-            setting.value = response.data
+        const refreshSetting = () => {
+            getSetting()
+        }
+
+        const removeImage = (imageType) => {
+            const confirmImageDelete = confirm(t('confirm_delete_image'))
+            if (confirmImageDelete) {
+                setting.value.setting[imageType + 'Image'] = null
+                setting.value.setting[imageType + 'ImageUrl'] = null
+                saveSetting()
+            }
         }
 
         const validation = useVuelidate(rules, setting)
@@ -323,6 +375,7 @@ export default {
             backgroundMetaPayload,
             uploaderEndpoint,
             refreshSetting,
+            removeImage,
         }
     },
 }
