@@ -12,6 +12,7 @@
                 :class="invalid ? 'invalid' : ''"
                 :type="type"
                 :name="name"
+                :disabled="disabled"
                 autocomplete="off"
                 :placeholder="placeholder"
             />
@@ -68,6 +69,10 @@ export default {
             default: 'text',
         },
         languageSwitch: {
+            type: Boolean,
+            default: false,
+        },
+        disabled: {
             type: Boolean,
             default: false,
         },

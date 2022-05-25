@@ -5,6 +5,7 @@ export default {
     button_choose_asset: 'Select image',
     confirm_delete_image: 'Do you really want to delete this image?',
     confirm_delete_option: 'Are you sure you want to delete this Option?',
+    confirm_delete_user: 'Really delete user?',
     datepicker_date_formatter: 'YYYY-MM-DD',
     datepicker_date_separator: ' to ',
     hello: 'hello world!',

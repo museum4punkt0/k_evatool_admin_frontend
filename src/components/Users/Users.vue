@@ -54,6 +54,9 @@
                                 v-if="
                                     store.state.users.user.role.includes(
                                         'admin',
+                                    ) ||
+                                    store.state.users.user.role.includes(
+                                        'userCreator',
                                     )
                                 "
                             >
@@ -94,6 +97,9 @@
                                 v-if="
                                     store.state.users.user.role.includes(
                                         'admin',
+                                    ) ||
+                                    store.state.users.user.role.includes(
+                                        'userCreator',
                                     )
                                 "
                                 class="px-6 py-4 flex flex-row"
@@ -103,6 +109,11 @@
                                     @click.prevent.stop="editUser(user.id)"
                                 />
                                 <TrashIcon
+                                    v-if="
+                                        store.state.users.user.role.includes(
+                                            'admin',
+                                        )
+                                    "
                                     class="mx-1 h-5 w-5 text-red-500 pointer"
                                     :class="
                                         user.id === store.state.users.user.id
@@ -181,20 +192,27 @@ export default {
         }
 
         const editUser = (userIdToEdit) => {
-            if (!store.state.users.user.role.includes('admin')) return
-            userId.value = userIdToEdit
-            setShowSideBar(true)
+            if (
+                store.state.users.user.role.includes('admin') ||
+                store.state.users.user.role.includes('userCreator')
+            ) {
+                userId.value = userIdToEdit
+                setShowSideBar(true)
+            }
         }
 
         const deleteUser = async (userToDelete) => {
-            if (userToDelete !== store.state.users.user.id) {
-                await userService.deleteUser(
-                    store.state.users.user.id,
-                    userToDelete,
-                )
-                await store.dispatch('users/getUsers')
-            } else {
-                console.log('cannot delete yourself')
+            const confirmed = confirm(t('confirm_delete_user'))
+            if (confirmed) {
+                if (userToDelete !== store.state.users.user.id) {
+                    await userService.deleteUser(
+                        store.state.users.user.id,
+                        userToDelete,
+                    )
+                    await store.dispatch('users/getUsers')
+                } else {
+                    console.log('cannot delete yourself')
+                }
             }
         }
 

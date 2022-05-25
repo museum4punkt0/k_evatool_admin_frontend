@@ -6,12 +6,18 @@
             v-model:value="user.name"
             name="name"
             class="mt-3"
+            :disabled="
+                user.id && !store.state.users.user.role.includes('admin')
+            "
             :label="t('names', 1)"
         />
         <form-input
             v-model:value="user.email"
             name="email"
             class="mt-3"
+            :disabled="
+                user.id && !store.state.users.user.role.includes('admin')
+            "
             :label="t('email')"
         />
         <form-input

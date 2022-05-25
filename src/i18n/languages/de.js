@@ -52,6 +52,7 @@ export default {
     confirm_delete_image: 'Wollen Sie das Bild wirklich löschen?',
     confirm_delete_time_based_step: 'Zeitbasierten Schritt wirklich löschen?',
     confirm_delete_setting: 'Einstellung wirklich löschen?',
+    confirm_delete_user: 'Benutzer wirklich löschen?',
     confirm_delete_survey: 'Umfrage wirklich löschen?',
     confirm_delete_survey_element: 'Element wirklich löschen?',
     confirm_delete_survey_step: 'Schritt wirklich löschen?',
