@@ -168,7 +168,6 @@ export default {
             email: '',
             password: '',
             passwordConfirmation: '',
-            role: selectedRole,
         })
         const savingUser = ref(false)
 
@@ -193,6 +192,7 @@ export default {
         }
         const saveUser = async () => {
             savingUser.value = true
+            user.value.role = selectedRole.value
 
             if (store.state.users.user.role.includes('admin')) {
                 await USERS.saveUser(user.value)
