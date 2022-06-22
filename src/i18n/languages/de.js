@@ -221,7 +221,7 @@ export default {
     tooltip_survey_details_languages:
         'Umfrage in folgenden Sprachen verfügbar machen',
     tooltip_survey_details_slug:
-        'Nutzer-lesbare, eindeutige suchmaschienenfreundliche ID, Teil der URL',
+        'Nutzerlesbare, eindeutige suchmaschienenfreundliche ID, Teil der URL. Nur Kleinbuchstaben und Bindestriche',
     tooltip_time_based_steps_modal_stop_icon:
         'Video wird bei Anzeige der Frage angehalten.',
     tooltip_time_based_steps_modal_stop_time:

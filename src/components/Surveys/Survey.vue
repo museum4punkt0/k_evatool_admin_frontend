@@ -109,7 +109,7 @@
                 :survey-element-id="
                     store.state.surveyElements.surveyElement?.id
                 "
-                @saved="store.dispatch('surveyElements/setSurveyElement', null)"
+                @saved="onElementSaved"
                 @cancel="
                     store.dispatch('surveyElements/setSurveyElement', null)
                 "
@@ -246,6 +246,10 @@ export default {
             )
         }
 
+        const onElementSaved = () => {
+            store.dispatch('surveyElements/setSurveyElement', null)
+        }
+
         return {
             archived,
             id,
@@ -267,6 +271,7 @@ export default {
             setShowSurveyDetailsEdit,
             copyLiveLinkToClipboard,
             previewUrl,
+            onElementSaved,
         }
     },
 }

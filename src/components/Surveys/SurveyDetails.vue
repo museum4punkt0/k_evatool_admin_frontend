@@ -114,7 +114,7 @@ import {
     minValue,
     required,
 } from '@vuelidate/validators'
-const snakeCaseValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:_[a-z0-9]+)*$)+/)
+const slugValidator = helpers.regex(/(^[a-z][a-z0-9]+(?:-[a-z0-9]+)*$)+/)
 
 import ActionButton from '../Common/ActionButton.vue'
 import DataViewer from '../Common/DataViewer.vue'
@@ -224,7 +224,7 @@ export default {
             slug: {
                 minLength: minLength(3),
                 maxLength: maxLength(100),
-                snakeCaseValidator,
+                slugValidator,
             },
             languages: {
                 required,
