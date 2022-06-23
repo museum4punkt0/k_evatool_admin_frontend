@@ -31,6 +31,7 @@ import {
     PresentationChartLineIcon,
     UsersIcon,
     ViewGridIcon,
+    CogIcon,
 } from '@heroicons/vue/outline'
 
 export default {
@@ -69,6 +70,11 @@ export default {
                 name: t('stats', 2),
                 href: '/stats',
                 icon: ChartBarIcon,
+            },
+            {
+                name: t('survey_settings', 2),
+                href: '/settings',
+                icon: CogIcon,
             },
         ]
         return { menuElements, store, t }
