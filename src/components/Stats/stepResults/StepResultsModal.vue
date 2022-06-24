@@ -18,7 +18,7 @@
                         leave-from="opacity-100"
                         leave-to="opacity-0"
                     >
-                        <DialogOverlay class="fixed inset-0" />
+                        <DialogOverlay class="fixed inset-0 mx-4" />
                     </TransitionChild>
 
                     <span

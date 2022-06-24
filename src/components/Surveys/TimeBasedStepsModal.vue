@@ -2,7 +2,7 @@
     <TransitionRoot appear :show="isOpen" as="template">
         <Dialog as="div" @close="closeModal">
             <DialogOverlay class="fixed inset-0 bg-black opacity-70 z-10" />
-            <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="fixed inset-0 z-10 overflow-y-scroll">
                 <div class="min-h-screen px-4 text-center">
                     <TransitionChild
                         as="template"
@@ -13,7 +13,7 @@
                         leave-from="opacity-100"
                         leave-to="opacity-0"
                     >
-                        <DialogOverlay class="fixed inset-0" />
+                        <DialogOverlay class="fixed inset-0 mx-4" />
                     </TransitionChild>
 
                     <span
@@ -61,10 +61,24 @@
                                     @canplaythrough="videoCanPlay"
                                     @ended="videoEnded"
                                 >
-                                    <source
+                                    <!--source
                                         :type="asset.mime"
                                         :src="
                                             asset.urls.original +
+                                            '#t=' +
+                                            convertTimecodeToSeconds(
+                                                selectedTimecodes.startTimecode,
+                                            ) +
+                                            ',' +
+                                            convertTimecodeToSeconds(
+                                                selectedTimecodes.stopTimecode,
+                                            )
+                                        "
+                                    /http://localhost:8085/evaluation-tool/eva_tool_demo_video.mp4#t=0.0,21.23-->
+                                    <source
+                                        :type="asset.mime"
+                                        :src="
+                                            'http://192.168.179.116:8085/evaluation-tool/eva_tool_demo_video.mp4' +
                                             '#t=' +
                                             convertTimecodeToSeconds(
                                                 selectedTimecodes.startTimecode,
