@@ -11,6 +11,7 @@
                 language.code
             ]
         "
+        :language-switch="true"
     />
     <div v-if="paramsLocal.emojis.length > 0" class="table-wrap mt-3">
         <table>

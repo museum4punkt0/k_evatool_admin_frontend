@@ -9,6 +9,7 @@
         v-model:text="paramsLocal.question[language.code]"
         :label="t('questions', 1)"
         :invalid="!l$.question?.validateLanguageLabel?.$response[language.code]"
+        :language-switch="true"
     />
 
     <form-input

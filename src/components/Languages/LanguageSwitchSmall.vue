@@ -14,7 +14,7 @@
             }"
             @click="setMaintainLanguage(language)"
         >
-            {{ language.code }}
+            {{ language.code.toUpperCase() }}
         </button>
     </div>
 </template>

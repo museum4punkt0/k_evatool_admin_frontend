@@ -8,6 +8,7 @@
         :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
         :label="t('questions', 1)"
         class="my-3"
+        :language-switch="true"
     />
     <draggable
         v-if="paramsLocal.assetIds.length > 0"

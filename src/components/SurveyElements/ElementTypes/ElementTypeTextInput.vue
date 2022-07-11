@@ -7,6 +7,7 @@
         v-model:text="paramsLocal.question[language.code]"
         :label="t('questions', 1)"
         :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
+        :language-switch="true"
     />
 </template>
 

@@ -7,6 +7,7 @@
         v-model:text="paramsLocal.text[language.code]"
         :label="t('texts', 1)"
         :invalid="!v$.text?.validateLanguageLabel?.$response[language.code]"
+        :language-switch="true"
     />
 
     <div>

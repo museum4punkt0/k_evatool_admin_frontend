@@ -7,6 +7,7 @@
         v-model:text="paramsLocal.question[language.code]"
         :invalid="!v$.question?.validateLanguageLabel?.$response[language.code]"
         :label="t('questions', 1)"
+        :language-switch="true"
     />
     <div class="grid grid-cols-12 gap-4">
         <form-input
