@@ -164,6 +164,7 @@ export default {
     settings_privacy: 'Datenschutz',
     settings_privacy_url: 'Datenschutz-Link',
     settings_social_description: 'Kurzbeschreibung für soziale Medien',
+    show_archived_surveys: 'Archivierte Umfragen anzeigen',
     survey_settings:
         'Umfrage-Einstellungen | Umfrage-Einstellung | Umfrage-Einstellungen',
     single_step_access: 'Einzelzugriff',

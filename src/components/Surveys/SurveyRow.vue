@@ -25,6 +25,7 @@
         </td>
         <td>
             <published-state
+                v-if="!survey.archived"
                 class="pointer"
                 :published="survey.published"
                 @click.stop.prevent="publishSurvey(survey.id, survey.published)"

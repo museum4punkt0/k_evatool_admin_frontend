@@ -12,7 +12,11 @@
                     "
                 >
                     {{ filteredSurveys.length }} {{ t('of') }}
-                    {{ surveys.length }}
+                    {{
+                        surveys.filter(
+                            (x) => x.archived === showArchivedSurveys,
+                        ).length
+                    }}
                     {{ t('surveys', surveys.length) }}
                 </h1>
                 <h1 v-else>
@@ -20,6 +24,11 @@
                     {{ t('surveys', filteredSurveys.length) }}
                 </h1>
                 <div class="flex-1 flex flex-row justify-end">
+                    <form-toggle
+                        v-model:enabled="showArchivedSurveys"
+                        class="mr-3"
+                        :label="t('show_archived_surveys')"
+                    />
                     <form-input
                         v-model:value="searchQuery"
                         name="name"
@@ -67,7 +76,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <SurveyRow
-                            v-for="survey in surveys.filter(filter)"
+                            v-for="survey in filteredSurveys"
                             :key="'survey_' + survey.id"
                             :survey="survey"
                         />
@@ -94,7 +103,7 @@ import {
     DocumentDuplicateIcon,
 } from '@heroicons/vue/outline'
 
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import PublishedState from '../Common/PublishedState.vue'
 import { useState } from '../../composables/state'
 
@@ -106,10 +115,12 @@ import { searchForWordsInString } from '../../utils/search'
 import FormInput from '../Forms/FormInput.vue'
 import SurveyDetails from './SurveyDetails.vue'
 import SurveyRow from './SurveyRow.vue'
+import FormToggle from '../Forms/FormToggle.vue'
 
 export default {
     name: 'SurveysList',
     components: {
+        FormToggle,
         SurveyRow,
         FormInput,
         PublishedState,
@@ -124,6 +135,7 @@ export default {
         const store = useStore()
         const { t } = useI18n()
         const surveyId = ref(-1)
+        const showArchivedSurveys = ref(false)
         const [showSurveyDetailsEdit, setShowSurveyDetailsEdit] =
             useState(false)
 
@@ -131,7 +143,6 @@ export default {
             get: () => store.state.surveys.surveys,
         })
         const searchQuery = ref('')
-        const [filteredSurveys, setFilteredSurveys] = useState(surveys.value)
 
         store.dispatch('surveys/getSurveys')
 
@@ -149,9 +160,11 @@ export default {
                 ]).length > 0
             )
         }
-        watch(searchQuery, () => {
-            const filteredSurveys = surveys.value.filter(filter)
-            setFilteredSurveys(filteredSurveys)
+
+        const filteredSurveys = computed(() => {
+            return surveys.value
+                .filter(filter)
+                .filter((x) => x.archived === showArchivedSurveys.value)
         })
 
         return {
@@ -165,6 +178,7 @@ export default {
             searchQuery,
             filter,
             filteredSurveys,
+            showArchivedSurveys,
         }
     },
 }

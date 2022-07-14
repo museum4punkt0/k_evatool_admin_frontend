@@ -22,6 +22,7 @@ export default {
     participants: 'Participants | Participant | Participants',
     qr_code_url: 'QR-Code URL',
     show_demo_data_only: 'Show demo data only',
+    show_archived_surveys: 'Show archived surveys',
     steps: 'steps | step | steps',
     survey: 'surveys | survey | surveys',
     surveys_completed:
