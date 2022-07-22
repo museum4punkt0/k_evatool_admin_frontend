@@ -157,8 +157,8 @@ export default {
                 payload.surveyId,
             )
             if (deletedSurveyStep.id) {
-                dispatch('getSurvey')
-                dispatch('getSurveySteps', state.surveyId)
+                await dispatch('getSurvey')
+                await dispatch('getSurveySteps', state.surveyId)
             }
         },
         resetSurveyStep({ commit }) {
