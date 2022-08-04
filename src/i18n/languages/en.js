@@ -118,7 +118,7 @@ export default {
     new_element: 'new survey element',
     new_user: 'new user',
     no_steps_available: 'no steps available',
-    none_selected: 'bot selected',
+    none_selected: 'not selected',
     notice_filter_has_no_results: 'no comparative results available.',
     notice_missing_languages: 'missing languages',
     notice_multiple_choice_results:
