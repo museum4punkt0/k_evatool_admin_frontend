@@ -16,7 +16,18 @@
                                 store.state.users.user.role.includes('admin'))
                         "
                         :to="item.href"
-                        class="text-blue-100 hover:bg-blue-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium"
+                        class="
+                            text-blue-100
+                            hover:bg-blue-800 hover:text-white
+                            group
+                            w-full
+                            p-3
+                            rounded-md
+                            flex flex-col
+                            items-center
+                            text-xs
+                            font-medium
+                        "
                         :aria-current="item.current ? 'page' : undefined"
                     >
                         <component
@@ -24,7 +35,9 @@
                             :class="['h-6 w-6']"
                             aria-hidden="true"
                         />
-                        <span class="mt-2 text-center">{{ item.name }}</span>
+                        <span class="mt-2 text-center">
+                            {{ t(item.name, 2) }}
+                        </span>
                     </router-link>
                 </template>
             </div>
@@ -58,7 +71,15 @@
                     leave-to="-translate-x-full"
                 >
                     <div
-                        class="relative max-w-xs w-full bg-blue-900 pt-5 pb-4 flex-1 flex flex-col"
+                        class="
+                            relative
+                            max-w-xs
+                            w-full
+                            bg-blue-900
+                            pt-5
+                            pb-4
+                            flex-1 flex flex-col
+                        "
                     >
                         <TransitionChild
                             as="template"
@@ -72,7 +93,17 @@
                             <div class="absolute top-1 right-0 -mr-14 p-1">
                                 <button
                                     type="button"
-                                    class="h-12 w-12 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-white"
+                                    class="
+                                        h-12
+                                        w-12
+                                        rounded-full
+                                        flex
+                                        items-center
+                                        justify-center
+                                        focus:outline-none
+                                        focus:ring-2
+                                        focus:ring-white
+                                    "
                                     @click="mobileMenuOpen = false"
                                 >
                                     <XIcon
@@ -182,39 +213,39 @@ export default {
         const { t } = useI18n()
 
         const sidebarNavigation = [
-            { name: t('start'), href: '/', icon: HomeIcon },
+            { name: 'start', href: '/', icon: HomeIcon },
             {
-                name: t('surveys', 2),
+                name: 'surveys',
                 href: '/surveys',
                 icon: PresentationChartLineIcon,
             },
             {
-                name: t('elements', 2),
+                name: 'elements',
                 href: '/survey-elements',
                 icon: ViewGridIcon,
             },
             {
-                name: t('assets', 2),
+                name: 'assets',
                 href: '/assets',
                 icon: PhotographIcon,
             },
             {
-                name: t('languages', 2),
+                name: 'languages',
                 href: '/languages',
                 icon: GlobeAltIcon,
             },
             {
-                name: t('users', 2),
+                name: 'users',
                 href: '/users',
                 icon: UsersIcon,
             },
             {
-                name: t('stats', 2),
+                name: 'stats',
                 href: '/stats',
                 icon: ChartBarIcon,
             },
             {
-                name: t('survey_settings', 2),
+                name: 'survey_settings',
                 href: '/settings',
                 icon: CogIcon,
             },
@@ -224,6 +255,7 @@ export default {
             sidebarNavigation,
             mobileMenuOpen,
             store,
+            t,
         }
     },
 }
