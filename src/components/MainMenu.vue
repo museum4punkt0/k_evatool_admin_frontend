@@ -35,7 +35,7 @@
                             :class="['h-6 w-6']"
                             aria-hidden="true"
                         />
-                        <span class="mt-2 text-center">
+                        <span class="mt-2 text-center capitalize">
                             {{ t(item.name, 2) }}
                         </span>
                     </router-link>
@@ -261,4 +261,5 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+</style>
