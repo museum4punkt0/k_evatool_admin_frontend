@@ -12,7 +12,7 @@ The project museum4punkt0 is funded by the Federal Government Commissioner for C
 
 ## Project setup
 
-Please copy the file .env_example to .env and adjust the parameters:
+Please copy the file .env.local.example to .env and adjust the parameters:
 - VITE_API_BASE_URL_API: Set the base URL of the k:evatool backend api endpoints (i.e. http://localhost:8085/api for local development)
 - VITE_API_BASE_URL_AUTH: Set the base URL of the k:evatool backend oauth endpoints (i.e. http://localhost:8085/oauth for local development)
 - VITE_PREVIEW_URL: URL of the survey player (i.e. http://localhost:3001 for local development)
