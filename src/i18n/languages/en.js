@@ -50,7 +50,8 @@ export default {
     config: 'configuration',
     confirm_delete_asset: 'do you really want to delete the file?',
     confirm_delete_image: 'Do you really want to delete the picture',
-    confirm_delete_time_based_step: 'do you really want to delete the time-based step?',
+    confirm_delete_time_based_step:
+        'do you really want to delete the time-based step?',
     confirm_delete_setting: 'do you really want to delete the settings?',
     confirm_delete_user: 'really delete users?',
     confirm_delete_survey: 'do you really want to delete the survey?',
@@ -63,6 +64,8 @@ export default {
     confirm_reset_survey_element:
         'you have unsaved changes, do you want to reset them?',
     commentable: 'commentable',
+    copy_confirm:
+        'This links creates live data. After live data has been created the survey cannot be modified!',
     datepicker_date_formatter: 'DD-MM-YYYY',
     datepicker_date_separator: ' to ',
     days: 'days |day | days',
@@ -101,8 +104,7 @@ export default {
     last_login: 'last login',
     loading_app: 'app is loading',
     login: 'login',
-    headline_selectable:
-        'how many choices need to be selected?',
+    headline_selectable: 'how many choices need to be selected?',
     max_height: 'maximum height',
     max_selectable: 'max',
     max_width: 'maximum width',
@@ -165,8 +167,7 @@ export default {
     settings_privacy_url: 'privacy link',
     settings_social_description: 'short description for social media',
     show_archived_surveys: 'show archived polls',
-    survey_settings:
-        'survey settings | survey setting | survey settings',
+    survey_settings: 'survey settings | survey setting | survey settings',
     single_step_access: 'single step access',
     slugs: 'slugs | slug | slugs',
     speech_to_text_service: 'Speech-To-Text service',
@@ -182,10 +183,8 @@ export default {
     status_loading: 'loading straight',
     steps: 'steps | step | steps',
     stops_video: 'stops the video',
-    sub_headline_add_timebase_step:
-        'add time-based steps to video',
-    sub_headline_change_timebase_step:
-        'time-based steps to edit video',
+    sub_headline_add_timebase_step: 'add time-based steps to video',
+    sub_headline_change_timebase_step: 'time-based steps to edit video',
     sub_headline_trim_video: 'trim video',
     success_confirm_password: 'password saved successfully.',
     surveys: 'surveys | survey | surveys',
@@ -201,15 +200,13 @@ export default {
     timestamps: 'timestamps | timestamp | timestamps',
     timestamp_start: 'starting time',
     timestamp_stop: 'Stopping time',
-    time_based_steps:
-        'time-based steps | time-based step | time-based steps',
+    time_based_steps: 'time-based steps | time-based step | time-based steps',
     titles: 'titles | title | titles',
     to: 'to',
     tooltip_set_start_step: 'set starting element',
     tooltip_direct_access_link: 'copy direct link to clipboard',
     tooltip_edit_step: 'edit step',
-    tooltip_save_result_content:
-        'Saves the displayed evaluation as PNG.',
+    tooltip_save_result_content: 'Saves the displayed evaluation as PNG.',
     tooltip_set_next_step: 'set next step',
     tooltip_set_previous_step: 'set advance step',
     tooltip_set_timebased_steps: 'set time-based steps',
@@ -238,8 +235,7 @@ export default {
     validation_snake_case: 'lowercase letters and "_" only',
     videos: 'videos | video | videos',
     video_not_yet_selected: 'no video selected yet',
-    viewport_incompatible:
-        'please use a device with a higher resolution!',
+    viewport_incompatible: 'please use a device with a higher resolution!',
     warning_cannot_delete_if_first_step:
         'cannot be deleted because it is the starting point of the survey.',
     welcome: 'welcome',
@@ -249,7 +245,6 @@ export default {
     yaynay_negative_label: 'negative display value',
     archive: 'archive this survey',
     archive_no_edit: 'an archived survey cannot be edited',
-    archive_explanation:
-        'to edit the survey, restore it.',
+    archive_explanation: 'to edit the survey, restore it.',
     role: 'role',
 }

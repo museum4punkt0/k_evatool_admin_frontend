@@ -13,9 +13,9 @@
                         </strong>
                     </h1>
 
-                    <span class="text-xs text-gray-500 mr-1">
-                        {{ `${previewUrl}/#/?survey=${survey?.slug}` }}
-                    </span>
+                    <!--                    <span class="text-xs text-gray-500 mr-1">
+              {{ `${previewUrl}/#/?survey=${survey?.slug}` }}
+          </span>-->
                 </div>
                 <div class="flex-grow items-center flex justify-end">
                     <button
@@ -72,21 +72,21 @@
                         <ArchiveIcon class="h-5 w-5 pointer" />
                     </button>
                     <!--FormToggle
-                        label="archive"
-                        :enabled="Boolean(archived)"
-                        @click="archive(survey.id)"
-                    /-->
+              label="archive"
+              :enabled="Boolean(archived)"
+              @click="archive(survey.id)"
+          /-->
                 </div>
             </div>
 
             <div class="w-full h-full relative">
                 <!--p
-                    v-if="archived && noteIsOpen"
-                    class="absolute z-10 inline-flex bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-20 justify-center items-center bg-white rounded-lg mb-10 border-black border-2"
-                    @click="noteIsOpen = false"
-                >
-                    {{ $t('archive_no_edit') }}
-                </p-->
+            v-if="archived && noteIsOpen"
+            class="absolute z-10 inline-flex bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-20 justify-center items-center bg-white rounded-lg mb-10 border-black border-2"
+            @click="noteIsOpen = false"
+        >
+            {{ $t('archive_no_edit') }}
+        </p-->
                 <node-editor
                     v-if="survey?.steps"
                     :steps="survey.steps"
@@ -230,20 +230,24 @@ export default {
         }
 
         const copyLiveLinkToClipboard = () => {
-            const text = `${import.meta.env.VITE_PREVIEW_URL}/#/?survey=${
-                survey.value.slug
-            }`
-            navigator.clipboard.writeText(text).then(
-                function () {
-                    store.dispatch('notifications/add', {
-                        type: NOTIFICATION_TYPES.SUCCESS,
-                        message: 'notification_success_survey_link_copied',
-                    })
-                },
-                function (err) {
-                    console.error('Async: Could not copy text: ', err)
-                },
-            )
+            const confirmCopy = confirm(t('copy_confirm'))
+
+            if (confirmCopy) {
+                const text = `${import.meta.env.VITE_PREVIEW_URL}/#/?survey=${
+                    survey.value.slug
+                }`
+                navigator.clipboard.writeText(text).then(
+                    function () {
+                        store.dispatch('notifications/add', {
+                            type: NOTIFICATION_TYPES.SUCCESS,
+                            message: 'notification_success_survey_link_copied',
+                        })
+                    },
+                    function (err) {
+                        console.error('Async: Could not copy text: ', err)
+                    },
+                )
+            }
         }
 
         const onElementSaved = () => {

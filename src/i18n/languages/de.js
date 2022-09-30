@@ -63,6 +63,8 @@ export default {
     confirm_reset_survey_element:
         'Sie haben nicht gespeicherte Änderungen, wollen Sie diese zurücksetzen?',
     commentable: 'kommentierbar',
+    copy_confirm:
+        'Dieser Link produziert Live-Daten. Damit kann die Umfrage nicht mehr angepasst werden!',
     datepicker_date_formatter: 'DD-MM-YYYY',
     datepicker_date_separator: ' bis ',
     days: 'Tage |Tag | Tage',
