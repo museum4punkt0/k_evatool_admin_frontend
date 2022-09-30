@@ -56,11 +56,11 @@
                 class="mx-1 h-5 w-5 pointer"
                 @click.prevent.stop="previewSurvey(survey)"
             />
-            <DocumentDuplicateIcon
+            <!--            <DocumentDuplicateIcon
                 v-if="store.state.users.user.role.includes('admin')"
                 class="mx-1 h-5 w-5 pointer"
                 @click.prevent.stop="duplicateSurvey(survey.id)"
-            />
+            />-->
             <ChartBarIcon
                 class="mx-1 h-5 w-5"
                 :class="
@@ -80,7 +80,6 @@ import {
     PencilAltIcon,
     EyeIcon,
     ChartBarIcon,
-    DocumentDuplicateIcon,
     CheckIcon,
 } from '@heroicons/vue/outline'
 
@@ -100,7 +99,6 @@ export default {
         EyeIcon,
         PencilAltIcon,
         ChartBarIcon,
-        DocumentDuplicateIcon,
     },
     props: {
         survey: {
