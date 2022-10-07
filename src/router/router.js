@@ -22,6 +22,8 @@ import ConfirmInvitation from '../components/Users/ConfirmInvitation.vue'
 import Settings from '../components/Settings/Settings.vue'
 import Setting from '../components/Settings/Setting.vue'
 
+import Tutorial from '../components/Tutorial/TutorialView.vue'
+
 const routes = [
     { path: '/', component: Home },
     { path: '/login', component: Login },
@@ -50,6 +52,8 @@ const routes = [
     { path: '/settings', component: Settings },
     { path: '/settings/:setting_id', component: Setting },
     // { path: '*', redirect: '/' },
+
+    { path: '/tutorial', component: Tutorial },
 ]
 
 const router = createRouter({

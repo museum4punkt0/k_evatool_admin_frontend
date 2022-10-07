@@ -1,0 +1,105 @@
+{
+    "videos": [
+        {
+            "file": "01_Uebersicht.mp4",
+            "title": "Übersicht"
+        },
+        {
+            "file": "02_Umfrage-anlegen.mp4",
+            "title": "Umfrage anlegen"
+        },
+        {
+            "file": "03_Umfrage-Konfiguration.mp4",
+            "title": "Umfrage Konfiguration"
+        },
+        {
+            "file": "04_Umfrage-mehrsprachig.mp4",
+            "title": "Umfrage mehrsprachig"
+        },
+        {
+            "file": "05_Umfrage-Element-binaere-Auswahl-erstellen.mp4",
+            "title": "Umfrage-Element: Binäre Auswahl"
+        },
+        {
+            "file": "06_Umfrage-Element-emoji-erstellen.mp4",
+            "title": "Umfrage-Element: Emoji"
+        },
+        {
+            "file": "07_Umfrage-Element-multiple-choice-erstellen.mp4",
+            "title": "Umfrage-Element: Multiple-Choice"
+        },
+        {
+            "file": "08_Umfrage-Element-Infotext-erstellen.mp4",
+            "title": "Umfrage-Element: Infotext"
+        },
+        {
+            "file": "09_Umfrage-Element-Skalen-erstellen.mp4",
+            "title": "Umfrage-Element: Skalen"
+        },
+        {
+            "file": "10_Umfrage-Element-Freitext-Frage-erstellen.mp4",
+            "title": "Umfrage-Element: Freitext"
+        },
+        {
+            "file": "11_Umfrage-Element-Video-erstellen.mp4",
+            "title": "Umfrage-Element: Video"
+        },
+        {
+            "file": "12_Umfrage-Element-Video-zeitbasierte-Umfrage.mp4",
+            "title": "Umfrage-Element: Video mit zeitbasierten Fragen"
+        },
+        {
+            "file": "13_Umfrage-Element-Sprach-Eingabe-erstellen.mp4",
+            "title": "Umfrage-Element: Spracheingabe"
+        },
+        {
+            "file": "14_Umfrage-Element-Bilder-swipen-erstellen.mp4",
+            "title": "Umfrage-Element: Bilder swipen"
+        },
+        {
+            "file": "15_Umfrage-Elemente-antwortabhaengige-Schritte.mp4",
+            "title": "Umfrage-Elemente: Antwortabhängige Schritte"
+        },
+        {
+            "file": "16_Umfrage-Element-loeschen.mp4",
+            "title": "Umfrage-Element löschen"
+        },
+        {
+            "file": "17_Umfrage-Elemente-einer-Umfrage-hinzufuegen.mp4",
+            "title": "Umfrage-Elemente einer Umfrage hinzufügen"
+        },
+        {
+            "file": "18_Umfrage-Element-in-einer-Umfrage-aendern-loeschen.mp4",
+            "title": "Umfrage-Element in einer Umfrage ändern oder löschen"
+        },
+        {
+            "file": "19_Umfrage-bearbeiten.mp4",
+            "title": "Umfrage bearbeiten"
+        },
+        {
+            "file": "20_Vorschau-Umfrage.mp4",
+            "title": "Vorschau der Umfrage"
+        },
+        {
+            "file": "21_Demo-und-regulaerer-Modus.mp4",
+            "title": "Demo-Modus und Live-Modus"
+        },
+        {
+            "file": "22_Auswertung-Daten.mp4",
+            "title": "Auswertung der Daten"
+        },
+        {
+            "file": "23_Statistiken-anzeigen.mp4",
+            "title": "Statistiken anzeigen"
+        },
+        {
+            "file": "24_Umfragelink-slug.mp4",
+            "title": "Umfragelink"
+        },
+        {
+            "file": "25_Einzelzugriff.mp4",
+            "title": "Einzelzugriff (Integration in Apps)"
+        }
+    ]
+}
+
