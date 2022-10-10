@@ -9,4 +9,5 @@ export default createI18n({
     silentFallbackWarn: true,
     missingWarn: false,
     fallbackWarn: false,
+    legacy: false,
 })
