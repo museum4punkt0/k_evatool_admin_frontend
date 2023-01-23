@@ -47,12 +47,13 @@
 </template>
 
 <script>
-import {computed, ref} from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import FormInput from '../Forms/FormInput.vue'
 import SurveyElement from '../Surveys/SurveyElement.vue'
 import MissingLanguages from '@/components/Common/MissingLanguages.vue'
+
 export default {
     name: 'ElementContent',
     components: { MissingLanguages, FormInput, SurveyElement },
@@ -89,7 +90,6 @@ export default {
         function shortenQuestion(text) {
             const maxStringLength = 50
             const newString = htmlDecode(i18n(text))
-
             if (newString.length > maxStringLength) {
                 showToolTip.value = true
                 return newString.substring(0, maxStringLength) + '...'
@@ -105,9 +105,15 @@ export default {
         }
 
         function i18n(text) {
-            return text[store.state.languageCode]
-                ? text[store.state.languageCode]
-                : text[defaultLanguage.value.code]
+            if (store.state?.languageCode && text?.[store.state.languageCode]) {
+                return text[store.state.languageCode]
+            }
+
+            if (text?.[defaultLanguage.value.code]) {
+                return text[defaultLanguage.value.code]
+            }
+
+            return false
         }
 
         return {

@@ -70,15 +70,15 @@
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { useState } from '../../composables/state'
+import { useState } from '@/composables/state'
 import FormInput from '../Forms/FormInput.vue'
 import SurveyElement from '../Surveys/SurveyElement.vue'
 import ElementContent from './ElementContent.vue'
 import SURVEY_SERVICE from '../../services/surveyService'
 import ActionButton from '../Common/ActionButton.vue'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/outline'
-import { TYPES } from '../../store/notifications'
-import { searchForWordsInString } from '../../utils/search'
+import { TYPES } from '@/store/notifications'
+import { searchForWordsInString } from '@/utils/search'
 
 export default {
     name: 'NodeBrowser',
